@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Academic homepage of Andreas van Cranenburgh</title>
+<style type="text/css">
+body {
+	background: #fff;
+	padding: 0px;
+	margin: 5% 10%;
+	font-family: Arial, Helvetica, sans-serif; }
+div.bib {
+	text-align: left;
+	text-indent: -2em;
+	margin-left: +2em; }
+.nowrap { white-space: nowrap; }
+h1 { font: normal 2em Arial, Helvetica, sans-serif; }
+h4 { font: normal 1.5em Arial, Helvetica, sans-serif; }
+p.abstract { text-align: justify; }
+</style>
+<script type="text/javascript">
+function toggle(id) {
+	var el = document.getElementById(id);
+	if (el.style.display == 'none') el.style.display = 'block';
+	else el.style.display = 'none'; }
+</script></head>
+<body><div class="content">
+<img src="lq.png" style="float:right" width=262 height=190 alt="Parse tree of the phrase 'The Riddle of Literary Quality'">
+<h1 class="title">Academic homepage of <em>Andreas van Cranenburgh</em></h1>
+
+<p>I am a PhD candidate in the project <a href="http://literaryquality.huygens.knaw.nl">The Riddle of Literary Quality</a>.
+My primary interests are statistical parsing and syntactic patterns,
+with particular interest in tree fragments and discontinuous constituents.
+</p>
+
+<p>Mail: <a href="mailto:andreas.van.cranenburgh&#64;huygens&#46;knaw&#46;nl">andreas.van.cranenburgh&#64;huygens&#46;knaw&#46;nl</a><br>
+Code: <a href="https://github.com/andreasvc">https://github.com/andreasvc</a>
+</p>
+
+<h4>Publications</h4>
+
+<div class="bib">
+<p>Andreas van Cranenburgh, Rens Bod (2013).<br>
+	Discontinuous Parsing with an Efficient and Accurate DOP Model<br>
+	Proceedings of the International Conference on Parsing Technologies,
+	Nara, Japan, 27-29 November.<br>
+	<a href="http://acl.cs.qc.edu/iwpt2013/proceedings/Splits/9_pdfsam_IWPTproceedings.pdf">paper</a>;
+	<a href="iwpt2013pres.pdf">slides</a>;
+	<a href="https://github.com/andreasvc/disco-dop">code</a>;
+	<a href="grammars/">grammars</a>.
+	</p>
+
+<p>Kim Jautze, Corina Koolen, Andreas van Cranenburgh, Hayco de Jong (2013).<br>
+	From high heels to weed attics: a syntactic investigation of chick lit and literature.<br>
+	Proceedings of the Computational Linguistics for Literature workshop,
+	Atlanta, Georgia, June 14.<br>
+	<a href="http://aclweb.org/anthology/W/W13/W13-1410.pdf">http://aclweb.org/anthology/W/W13/W13-1410.pdf</a>
+	(<a href="https://sites.google.com/site/clfl2013/presentations/From%20high%20heels%20to%20weed%20attics%20%28Jautze%20%2B%20Koolen%20%2B%20van%20Cranenburgh%20%2B%20de%20Jong%29.pdf">slides</a>)
+</p>
+
+<p>Andreas van Cranenburgh (2012).<br>
+	Literary authorship attribution with phrase-structure fragments.<br>
+	Proceedings of the Computational Linguistics for Literature workshop,
+	Montreal, Canada, June 8.<br>
+	<a href="http://aclweb.org/anthology/W/W12/W12-2508.pdf">http://aclweb.org/anthology/W/W12/W12-2508.pdf</a>
+	(<a href="https://github.com/andreasvc/authident">code</a>,
+	<a href="symppres.pdf">slides</a>,
+	<a href="clfl2012.pdf">revised paper</a>&mdash;includes results on Federalist papers).
+	</p>
+
+<p>Andreas van Cranenburgh (2012).<br>
+	Efficient parsing with linear context-free rewriting systems.<br>
+	Proceedings of the 13th Conference of the European Chapter of the Association for Computational Linguistics (EACL), Avignon, France, <span class="nowrap">April 23&ndash;27.</span> <br>
+	<a href="http://aclweb.org/anthology/E/E12/E12-1047.pdf">http://aclweb.org/anthology/E/E12/E12-1047.pdf</a> (<a href="eacl2012poster.pdf">poster</a>, <a href="javascript:toggle('eacl2012errata');">errata</a>, <a href="eacl2012corrected.pdf">corrected version</a>, <a href="https://github.com/andreasvc/disco-dop">code</a>).
+	<div id="eacl2012errata" style="display: none; text-indent: 0em;"><ul>
+	<li>sec 3.3: mention COLLINS.prm as model for evaluation parameters.
+	<li>sec 3.3: highest parsing complexity for non-optimal markovized grammar
+	is 9, not 15 (the latter was the result before the improved punctuation
+	heuristics had been applied).
+	<li>sec 4: actually, two values for k were used; k=10,000 in the first
+	stage when parsing the PCFG approximation and the actual LCFRS; later when
+	parsing with the DOP grammar, k=50 is used, as in my previous paper on
+	discontinuous DOP. This choice was dictated by efficiency concerns, due to
+	the size of the DOP grammar, a lower value is necessary for it.
+	<li>sec 5: additional result in table 3: comparison of up to 30 words with
+	old evaluation parameters.
+	<li>sec 5: additional result in table 4: CFG-CTF with up to 25 words.
+	Clearly, the result is better than the PCFG approximation alone, but not as
+	good as the real LCFRS; perhaps it can be conjectured that the result will
+	necessarily be within the interval of the two.
+	<li>While the title of the paper refers to Linear Context-Free Rewriting
+	Systems, the paper only deals with string rewriting LCFRSs for
+	discontinuous parsing. However, the approach is more general than that;
+	e.g., as the work of Barthelemy et al. shows, the technique works for
+	Tree-Adjoining Grammars as well.
+	</ul>
+
+	Acknowledgements: Some of these changes were prompted by feedback from David Weir, Alexander Koller, and Carlos G&oacute;mez-Rodr&iacute;guez.
+	</div>
+
+<p>Maria Aloni, Andreas van Cranenburgh, Raquel Fern&aacute;ndez, Marta Sznajder (2012).<br>
+	Building a Corpus of Indefinite Uses Annotated with Fine-grained Semantic Functions.<br>
+	The eighth international conference on Language Resources and Evaluation (LREC), Istanbul, Turkey, <span class="nowrap">May 23&ndash;25.</span><br>
+	<a href="http://www.lrec-conf.org/proceedings/lrec2012/pdf/362_Paper.pdf">http://www.lrec-conf.org/proceedings/lrec2012/pdf/362_Paper.pdf</a>
+	</p>
+
+<p>Andreas van Cranenburgh, Remko Scha, Federico Sangati (2011).<br>
+	Discontinuous Data-Oriented Parsing: A mildly context-sensitive all-fragments grammar.<br>
+	Proceedings of the 2nd Workshop on Statistical Parsing of Morphologically-Rich Languages (SPMRL), <span class="nowrap">pages 34&ndash;44,</span> Dublin, Ireland, October 6.<br>
+	<a href="http://aclweb.org/anthology/W/W11/W11-3805.pdf">http://aclweb.org/anthology/W/W11/W11-3805.pdf</a>
+	(<a href="spmrlpres.pdf">slides</a>, <a href="prestempl.tex">template for slides</a>, <a href="https://github.com/andreasvc/disco-dop">code</a>).</p>
+
+<p>Andreas van Cranenburgh, Galit Sassoon, Raquel Fern&aacute;ndez (2010).<br>
+	Invented antonyms: Esperanto as a semantic lab.<br>
+	Proceedings of the 26th Annual Meeting of the Israel Association for Theoretical Linguistics (IATL 26).<br>
+	<a href="http://dare.uva.nl/en/record/371912">http://dare.uva.nl/en/record/371912</a>
+	</p>
+</div>
+
+<h4>Reports</h4>
+<div class="bib">
+<p>Andreas van Cranenburgh (2012).<br>
+	Extracting tree fragments in linear average time.<br>
+	ILLC technical report.
+	<a href="http://dare.uva.nl/en/record/421534">http://dare.uva.nl/en/record/421534</a></p>
+</div>
+
+<h4>Talks</h4>
+<ul>
+<li> Discontinuous Data-Oriented Parsing using Coarse-to-Fine methods.
+Invited talk, University of D&uuml;sseldorf, November 29th, 2012.
+(<a href="duesseldorftalk.pdf">slides</a>).
+
+<li> Estimating literary readability through lexical &amp; syntactic complexity.
+Workshop Complexity in Digital Humanities, Meertens, Amsterdam, November 7th, 2013
+(<a href="ehgcomplexity.pdf">slides</a>).
+
+</ul>
+<h4>Education</h4>
+
+<ul><li>MSc. in Logic (2011); <a href="http://www.illc.uva.nl/Research/Reports/MoL-2011-18.text.pdf">MSc. thesis</a>:
+Discontinuous Data-Oriented Parsing through Mild Context-Sensitivity
+(<a href="https://github.com/andreasvc/disco-dop">code</a>).
+<li>BSc. in Artificial Intelligence (2009); <a href="baproj/">BSc. thesis</a>: Simulating Language Games in the Two Word Stage</ul>
+</div></body></html>

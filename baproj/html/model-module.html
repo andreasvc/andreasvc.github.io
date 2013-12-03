@@ -1,0 +1,1236 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>model</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;model
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="model-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module model</h1><p class="nomargin-top"><span class="codelink"><a href="model-pysrc.html">source&nbsp;code</a></span></p>
+<pre class="literalblock">
+
+        Bachelor AI project 2009. Andreas van Cranenburgh 0440949.
+        Two-word stage dialogue simulator using a corpus of exemplars.
+
+        Interactive usage:
+        $ python model.py
+
+        Other uses:
+                - Re-enact dialogue in 01.cha (should be a text file with one utterance
+                  per line, with each line preceeded by *MOT or *CHI, as in the CHILDES
+                  corpus):
+
+                  $ python
+#                 &gt;&gt;&gt; import model
+#                 &gt;&gt;&gt; model.evaluate(open('01.cha').read())
+                  ...
+
+                - Talk to self for 25 utterances:
+
+#                 &gt;&gt;&gt; model.selftalk(25)
+                  ...
+
+                - Demonstrate some sample utterances that work (but not from corpus):
+
+#                 &gt;&gt;&gt; model.test()
+                  ...
+
+</pre>
+
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="arg"></a><span class="summary-sig-name">arg</span>(<span class="summary-sig-arg">token</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#arg">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#conciliate" class="summary-sig-name">conciliate</a>(<span class="summary-sig-arg">meaning</span>,
+        <span class="summary-sig-arg">partialmeaning</span>,
+        <span class="summary-sig-arg">subst</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Test whether meaning can be made comptabible with partialmeaning, by 
+      looking for a family resemblance with partialmeanings, if found, 
+      perform a substitution if necessary.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#conciliate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#dbg" class="summary-sig-name">dbg</a>(<span class="summary-sig-arg">*m</span>)</span><br />
+      Print debug output (also see nodbg).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#dbg">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#dialogue" class="summary-sig-name">dialogue</a>(<span class="summary-sig-arg">exemplars</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">constructions</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">lexicon</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Co-routine for dialogue.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#dialogue">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#edit_dist" class="summary-sig-name">edit_dist</a>(<span class="summary-sig-arg">source</span>,
+        <span class="summary-sig-arg">target</span>)</span><br />
+      Edit distance of two sequences.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#edit_dist">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#evaluate" class="summary-sig-name">evaluate</a>(<span class="summary-sig-arg">conv</span>,
+        <span class="summary-sig-arg">exemplars</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">n</span>=<span class="summary-sig-default">1</span>)</span><br />
+      When presented with a corpus fragment, feed parent utterances to 
+      model and generate model responses in place of child utterances.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#evaluate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="express"></a><span class="summary-sig-name">express</span>(<span class="summary-sig-arg">meaning</span>,
+        <span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">lexicon</span>)</span><br />
+      Express `meaning' by returning the most similar exemplar.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#express">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#express2" class="summary-sig-name">express2</a>(<span class="summary-sig-arg">meaning</span>,
+        <span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">constructions</span>,
+        <span class="summary-sig-arg">lexicon</span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Transform a meaning into a two word utterance using exemplars, 
+      constructions or the lexicon.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#express2">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="expressmulti"></a><span class="summary-sig-name">expressmulti</span>(<span class="summary-sig-arg">meaning</span>,
+        <span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">constructions</span>,
+        <span class="summary-sig-arg">lexicon</span>)</span><br />
+      Express `meaning' by returning a matching exemplar or construction</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#expressmulti">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="findmeaning"></a><span class="summary-sig-name">findmeaning</span>(<span class="summary-sig-arg">form</span>,
+        <span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">lexicon</span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Given the words in a construction, find the most common meaning 
+      associated with it in the corpus of exemplars.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#findmeaning">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#findtopic" class="summary-sig-name">findtopic</a>(<span class="summary-sig-arg">discourse</span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Look for a recurring element in the last two utterances, if found, 
+      this becomes the new topic.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#findtopic">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getexemplars"></a><span class="summary-sig-name">getexemplars</span>()</span><br />
+      Obtain corpus, either by importing from module `exemplars,' or by 
+      falling back to a small sample corpus.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#getexemplars">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#inferconstructions" class="summary-sig-name">inferconstructions</a>(<span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">lexicon</span>,
+        <span class="summary-sig-arg">constructions</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Build corpus of constructions from exemplars and lexicon.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#inferconstructions">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#inferlexicon" class="summary-sig-name">inferlexicon</a>(<span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">verbose</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">lexicon</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Infer lexicon from corpus of exemplars.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#inferlexicon">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#interpret" class="summary-sig-name">interpret</a>(<span class="summary-sig-arg">utterance</span>,
+        <span class="summary-sig-arg">topic</span>,
+        <span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">lexicon</span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Return semantic representation for linguistic utterance.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#interpret">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="interpretwith"></a><span class="summary-sig-name">interpretwith</span>(<span class="summary-sig-arg">words</span>,
+        <span class="summary-sig-arg">partialmeaning</span>,
+        <span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">lexicon</span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Interpretation helper function called by interpret(), work out 
+      meaning of remaining words by stitching together the best matching 
+      fragments.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#interpretwith">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="intersect"></a><span class="summary-sig-name">intersect</span>(<span class="summary-sig-arg">a</span>,
+        <span class="summary-sig-arg">b</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#intersect">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="lexiconcheck"></a><span class="summary-sig-name">lexiconcheck</span>(<span class="summary-sig-arg">utt</span>,
+        <span class="summary-sig-arg">meaning</span>,
+        <span class="summary-sig-arg">lex</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#lexiconcheck">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="main"></a><span class="summary-sig-name">main</span>()</span><br />
+      Interactive textual user interface.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#main">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="nodbg"></a><span class="summary-sig-name">nodbg</span>(<span class="summary-sig-arg">*m</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#nodbg">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="pred"></a><span class="summary-sig-name">pred</span>(<span class="summary-sig-arg">token</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#pred">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#reinforce" class="summary-sig-name">reinforce</a>(<span class="summary-sig-arg">meaning</span>,
+        <span class="summary-sig-arg">reaction</span>,
+        <span class="summary-sig-arg">reactionutt</span>,
+        <span class="summary-sig-arg">discourse</span>,
+        <span class="summary-sig-arg">exemplars</span>)</span><br />
+      Strengthen connection between last two utterances by adding a random 
+      identifier and adding or updating the resulting exemplar.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#reinforce">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#response" class="summary-sig-name">response</a>(<span class="summary-sig-arg">meaning</span>,
+        <span class="summary-sig-arg">exemplars</span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Transform a meaning into a response using adjacency pairs of speech 
+      acts.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#response">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#revdict" class="summary-sig-name">revdict</a>(<span class="summary-sig-arg">d</span>)</span><br />
+      Reverse dictionary, ie.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#revdict">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#selftalk" class="summary-sig-name">selftalk</a>(<span class="summary-sig-arg">u</span>=<span class="summary-sig-default">25</span>,
+        <span class="summary-sig-arg">e</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      Talk to oneself, picking a random utterance from the exemplars when 
+      repetition is detected.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#selftalk">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#substr_iter" class="summary-sig-name">substr_iter</a>(<span class="summary-sig-arg">seq</span>)</span><br />
+      Return all substrings of a sequence, in descending order of length.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#substr_iter">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="test"></a><span class="summary-sig-name">test</span>()</span><br />
+      Interpret some sample utterances.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#test">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#tokens" class="summary-sig-name">tokens</a>(<span class="summary-sig-arg">m</span>)</span><br />
+      Turn meaning into a list of operator, predicates and arguments.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#tokens">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#unifies" class="summary-sig-name">unifies</a>(<span class="summary-sig-arg">meaning</span>,
+        <span class="summary-sig-arg">partialmeaning</span>,
+        <span class="summary-sig-arg">debug</span>=<span class="summary-sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span><br />
+      succeed if everything in &quot;partialmeaning&quot; is compatible 
+      with &quot;meaning&quot;, substituting along the way.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#unifies">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="model-module.html#var" class="summary-sig-name">var</a>(<span class="summary-sig-arg">arg</span>)</span><br />
+      Test whether an argument string is variable:</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#var">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="varclauses"></a><span class="summary-sig-name">varclauses</span>(<span class="summary-sig-arg">m</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="model-pysrc.html#varclauses">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="lowercase"></a><span class="summary-name">lowercase</span> = <code title="'abcdefghijklmnopqrstuvwxyz'"><code class="variable-quote">'</code><code class="variable-string">abcdefghijklmnopqrstuvwxyz</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="uppercase"></a><span class="summary-name">uppercase</span> = <code title="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"><code class="variable-quote">'</code><code class="variable-string">ABCDEFGHIJKLMNOPQRSTUVWXYZ</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="conciliate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">conciliate</span>(<span class="sig-arg">meaning</span>,
+        <span class="sig-arg">partialmeaning</span>,
+        <span class="sig-arg">subst</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#conciliate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Test whether meaning can be made comptabible with partialmeaning, by 
+  looking for a family resemblance with partialmeanings, if found, perform 
+  a substitution if necessary. Returns empty string on failure.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>conciliate(<span class="py-string">'question: animal(bunny) do(X)'</span>, <span class="py-string">'assertion: point(dog) animal(dog)'</span>)
+<span class="py-output">substituted (bunny) for (dog)</span>
+<span class="py-output">'assertion: point(bunny) animal(bunny)'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>conciliate(<span class="py-string">'assertion: do(hop) animal(bunny)'</span>, <span class="py-string">'assertion: animal(bunny) do(X)'</span>)
+<span class="py-output">instantiated (X) with (hop)</span>
+<span class="py-output">'assertion: animal(bunny) do(hop)'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>conciliate(<span class="py-string">'assertion: do(hop) animal(bunny)'</span>, <span class="py-string">'assertion: point(bunny)'</span>)
+<span class="py-output">''</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="dbg"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">dbg</span>(<span class="sig-arg">*m</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#dbg">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Print debug output (also see nodbg). Takes a variable number of 
+  arguments of any type.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>dbg(<span class="py-string">'choices'</span>, range(3))
+<span class="py-output">choices [0, 1, 2]</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="dialogue"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">dialogue</span>(<span class="sig-arg">exemplars</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">constructions</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">lexicon</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#dialogue">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Co-routine for dialogue. Use send(utterance) to receive a reply. 
+  Initial input: exemplars Further input: one utterance at a time Output: 
+  one reply at a time</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="edit_dist"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">edit_dist</span>(<span class="sig-arg">source</span>,
+        <span class="sig-arg">target</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#edit_dist">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Edit distance of two sequences. Non-standard features are that all 
+  mutations have a cost of 1 (so as not to favor insertions or deletions 
+  over substitutions), as well as a decay based on index (mutations with 
+  higher indices weigh less).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>edit_dist(<span class="py-string">'foo'</span>, <span class="py-string">'bar'</span>)
+<span class="py-output">2.4890507991136213</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="evaluate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">evaluate</span>(<span class="sig-arg">conv</span>,
+        <span class="sig-arg">exemplars</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">n</span>=<span class="sig-default">1</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#evaluate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>When presented with a corpus fragment, feed parent utterances to model
+  and generate model responses in place of child utterances. n = number of 
+  iterations to perform Input: string with transcript of corpus Output: 
+  same transcript with replies from model instead of child</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="express2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">express2</span>(<span class="sig-arg">meaning</span>,
+        <span class="sig-arg">exemplars</span>,
+        <span class="sig-arg">constructions</span>,
+        <span class="sig-arg">lexicon</span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#express2">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Transform a meaning into a two word utterance using exemplars, 
+  constructions or the lexicon. Filter result according to lexical 
+  knowledge. Input: meaning representation Output: one or two word 
+  utterance</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="findtopic"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">findtopic</span>(<span class="sig-arg">discourse</span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#findtopic">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Look for a recurring element in the last two utterances, if found, 
+  this becomes the new topic. Input: discourse (list of utterances and 
+  meanings) Output: clause, or None</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="inferconstructions"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">inferconstructions</span>(<span class="sig-arg">exemplars</span>,
+        <span class="sig-arg">lexicon</span>,
+        <span class="sig-arg">constructions</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#inferconstructions">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Build corpus of constructions from exemplars and lexicon. Input: 
+  exemplars &amp; lexicon. Output: constructions, dictionary of pairings 
+  between substrings and clauses.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="inferlexicon"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">inferlexicon</span>(<span class="sig-arg">exemplars</span>,
+        <span class="sig-arg">verbose</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">lexicon</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#inferlexicon">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Infer lexicon from corpus of exemplars. Input: exemplars. Output: 
+  lexicon, dictionary of word-clause pairings.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="interpret"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">interpret</span>(<span class="sig-arg">utterance</span>,
+        <span class="sig-arg">topic</span>,
+        <span class="sig-arg">exemplars</span>,
+        <span class="sig-arg">lexicon</span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#interpret">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return semantic representation for linguistic utterance. This function
+  is in charge of backtracking over initial exemplars and picking the best 
+  result, the rest is done by interpretwith() Input: utterance Output: 
+  meaning representation</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="reinforce"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">reinforce</span>(<span class="sig-arg">meaning</span>,
+        <span class="sig-arg">reaction</span>,
+        <span class="sig-arg">reactionutt</span>,
+        <span class="sig-arg">discourse</span>,
+        <span class="sig-arg">exemplars</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#reinforce">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Strengthen connection between last two utterances by adding a random 
+  identifier and adding or updating the resulting exemplar. Input: two 
+  utterances with meanings Side-effect: updated or added exemplars</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="response"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">response</span>(<span class="sig-arg">meaning</span>,
+        <span class="sig-arg">exemplars</span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#response">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Transform a meaning into a response using adjacency pairs of speech 
+  acts. Input: meaning representation Output: meaning representation</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="revdict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">revdict</span>(<span class="sig-arg">d</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#revdict">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Reverse dictionary, ie. swap values and keys; since a value may occur 
+  with multiple keys, return a list of all keys associated with a 
+  value.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>revdict({0: 1, 1: 2})
+<span class="py-output">{1: [0], 2: [1]}</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="selftalk"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">selftalk</span>(<span class="sig-arg">u</span>=<span class="sig-default">25</span>,
+        <span class="sig-arg">e</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#selftalk">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Talk to oneself, picking a random utterance from the exemplars when 
+  repetition is detected. Input: number of utterances to generate, 
+  exemplars Output: transcript of conversation</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="substr_iter"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">substr_iter</span>(<span class="sig-arg">seq</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#substr_iter">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return all substrings of a sequence, in descending order of 
+  length.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>list(substr_iter(<span class="py-string">'abc'</span>))
+<span class="py-output">['abc', 'ab', 'bc', 'a', 'b', 'c']</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="tokens"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">tokens</span>(<span class="sig-arg">m</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#tokens">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Turn meaning into a list of operator, predicates and arguments.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>tokens(<span class="py-string">'whquestion: do(X) animal(bunny)'</span>)
+<span class="py-output">['whquestion:', 'do', '(X)', 'animal', '(bunny)']</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="unifies"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">unifies</span>(<span class="sig-arg">meaning</span>,
+        <span class="sig-arg">partialmeaning</span>,
+        <span class="sig-arg">debug</span>=<span class="sig-default">&lt;function dbg at 0x84bb64c&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#unifies">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>succeed if everything in &quot;partialmeaning&quot; is compatible with
+  &quot;meaning&quot;, substituting along the way. Similar to conciliate() 
+  but operates on the whole meaning instead of looking at individual 
+  clauses, and does not perform substitution, merely instantiation.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>unifies(<span class="py-string">'assertion: do(hop) animal(bunny)'</span>, <span class="py-string">'assertion: do(X) animal(bunny)'</span>)
+<span class="py-output">substituted (hop) for (X)</span>
+<span class="py-output">'assertion: do(hop) animal(bunny)'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>unifies(<span class="py-string">'assertion: do(hop) animal(bunny)'</span>, <span class="py-string">'assertion: animal(bunny) do(X)'</span>)
+<span class="py-output">''</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="var"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">var</span>(<span class="sig-arg">arg</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="model-pysrc.html#var">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Test whether an argument string is variable:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>var(<span class="py-string">'(bar)'</span>)
+<span class="py-output">False</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>var(<span class="py-string">'(X)'</span>)
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Jun 27 18:12:56 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

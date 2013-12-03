@@ -1,0 +1,117 @@
+\documentclass{beamer}
+\usepackage[english]{babel}
+%\usetheme{CambridgeUS}
+%\usetheme{Bergen}
+\usetheme{default}
+%\usefonttheme[onlymath]{serif}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{tgadventor}
+\usepackage{inconsolata}
+\usepackage{booktabs}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+\usepackage{tikz}
+\usepackage{url}
+\usepackage{caption}
+\hypersetup{pdfstartview={FitH}} % By default the pdf fit the width of the screen.
+\usetikzlibrary{shapes,snakes,arrows,calc}
+%\setbeamertemplate{navigation symbols}{}
+\beamertemplatenavigationsymbolsempty
+\definecolor{mycolor}{rgb}{0.51,0.0,0.0} %bordeaux
+\definecolor{bmblue}{rgb}{0.2,0.2,0.7}
+\definecolor{lightblue}{rgb}{0.8,0.9,1}
+\colorlet{bgcolor}{black}
+
+\usepackage[absolute,overlay]{textpos}
+\newenvironment{reference}{%
+\begin{textblock*}{\textwidth}(13mm,91mm)
+\centering\footnotesize\bgroup\color{gray!90!black}}{\egroup\end{textblock*}}
+
+\beamertemplatesolidbackgroundcolor{bgcolor}
+\setbeamercolor{background canvas}{bg=bgcolor}
+\setbeamercolor{normal text}{bg=bgcolor,fg=lightgray}
+\setbeamercolor{structure}{fg=white}
+\setbeamercolor{frametitle}{fg=green!60!black}
+\setbeamercolor{alerted text}{fg=red}
+\setbeamercolor{block body alerted}{bg=normal text.bg!90!black}
+\setbeamercolor{block body}{bg=normal text.bg!90!black}
+\setbeamercolor{block body example}{bg=normal text.bg!90!black}
+\setbeamercolor{block title alerted}{use={normal text,alerted text},fg=alerted text.fg!75!normal text.fg,bg=normal text.bg!75!black}
+\setbeamercolor{block title}{bg=blue}
+\setbeamercolor{block title example}{use={normal text,example text},fg=example text.fg!75!normal text.fg,bg=normal text.bg!75!black}
+\setbeamercolor{fine separation line}{}
+\setbeamercolor{item projected}{fg=gray}
+\setbeamercolor{palette sidebar primary}{use=normal text,fg=white}
+\setbeamercolor{palette sidebar quaternary}{use=structure,fg=white}
+\setbeamercolor{palette sidebar secondary}{use=structure,fg=white}
+\setbeamercolor{palette sidebar tertiary}{use=normal text,fg=white}
+\setbeamercolor{section in sidebar}{fg=gray}
+\setbeamercolor{section in sidebar shaded}{fg= gray}
+\setbeamercolor{separation line}{}
+\setbeamercolor{sidebar}{bg=gray}
+\setbeamercolor{sidebar}{parent=palette primary}
+\setbeamercolor{subsection in sidebar}{fg=yellow}
+\setbeamercolor{subsection in sidebar shaded}{fg= orange}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{titlelike}{fg=white}
+
+
+
+\newcommand{\textcode}{\textsc}
+\renewcommand{\algorithmicdo}{}
+\renewcommand{\algorithmicthen}{}
+\renewcommand{\algorithmicwhile}{\textcode{while}}
+\renewcommand{\algorithmicforall}{\textcode{for all}}
+\renewcommand{\algorithmicfor}{\textcode{for}}
+\renewcommand{\algorithmicif}{\textcode{if}}
+\renewcommand{\algorithmicelse}{\textcode{else}}
+\renewcommand{\algorithmicreturn}{\textcode{return}}
+
+
+\title[] % (optional, use only with long paper titles)
+{
+}
+
+\subtitle[]{
+}
+
+\author[] %(optional, use only with lots of authors)
+{}
+
+\institute[] % (optional, but mostly needed)
+{
+}
+
+\date[] % (optional)
+{\today}
+
+%\subject{Talks}
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command:
+
+%\beamerdefaultoverlayspecification{<+->}
+
+% or use \pause between elements
+
+
+\begin{document}
+%\section{Title}
+
+\begin{frame}
+\begin{reference}
+%Conference, Year, Location ..
+\end{reference}
+  \titlepage
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Overview}
+
+% ...
+
+\end{frame}
+
+
+\end{document}

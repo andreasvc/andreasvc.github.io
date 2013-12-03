@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" >
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://infomesh.net/pwyky/profile#">
+<title>Simulating Language Games of the Two Word Stage - index</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body text="#000000" bgcolor="#ffffff">
+<div class="content">
+<h1 id="SimulatingLanguageGamesoftheTwoWordStage47">Simulating Language Games of the Two Word Stage</h1>
+<p>Bachelor AI project 2009, Andreas van Cranenburgh, 0440949</p>
+<ul>
+<li><a href="thesis.pdf">thesis (final version)</a></li>
+<li><a href="pres.pdf">slides (final version)</a></li>
+<li><a href="model.py">code</a> (python), <a href="exemplars.py">corpus of exemplars</a></li>
+<li><a href="html/">API documentation</a> (also includes syntax highlighted <a href="html/model-pysrc.html">source code</a> for browser perusal)
+<li><a href="http://unstable.nl:8080">web interface</a> to model</li>
+<li><a href="xmpp:baproj@unstable.nl">baproj@unstable.nl</a> (chatbot on jabber / google talk)</li>
+<li><a href="https://unstable.nl/andreas/ai/baproj/prop.pdf">Project proposal</a></li>
+<li><a href="https://unstable.nl/andreas/ai/baproj/proppres.pdf">Presentation of project proposal</a></li>
+<li><a href="https://unstable.nl/andreas/ai/baproj/Project%20Planning%20Form.pdf">Project planning</a></li>
+</ul>
+<p>- <b>Abstract</b> </p>
+<p>An exemplar-based model of language acquisition is presented, based on a
+minimalist meaning representation. The model demonstrates
+that semantics and pragmatics in combination with unification and substitution
+mechanisms for recombination can account for both
+comprehension and production in the two word stage, as well as mimicking the
+discrepancy in performance between language comprehension and production of
+children in that stage. The model is evaluated by comparing its reaction to
+data from the Childes corpus, as well as by demonstrating the interpretation of
+novel utterances. Results seem to indicate that sensible utterances can be
+interpreted correctly, whereas non-sensible utterance get rejected as
+interpretation fails.</p>
+<p>Sample output:</p>
+<pre>
+ <b>Parent: what does a duckie say</b> ?
+ 	'what does a ?' in '+^ what does a bunny do ?'
+meaning initialized as: whquestion: do(X) animal(bunny)
+substituted (bunny) with (duck)
+	'duckie' in 'duckie .'
+	and 'assertion: animal(duck)' matches 'whquestion: do(X) animal(bunny)'
+	'say' in 'what does a lion say ?'
+	and 'whquestion: do(X) animal(lion)' matches 'whquestion: do(X) animal(duck)'
+	interpretation: whquestion: do(X) animal(duck)
+possible reactions: ['assertion: do(quack) animal(duck)']
+instantiated (X) with (quack)
+['assertion: do(quack) animal(duck)']
+	reaction: assertion: do(quack) animal(duck)
+reduced: quack@o .
+	topic: animal(duck)
+Child:  quack@o
+</pre>
+<p><img src="planning.png"></p>
+<h2 id="Projectjournal15">Project journal starts here </h2>
+<h2 id="Someexamplelanguagegames28">Some example language games:</h2>
+<pre>
+NewEngland.zip/20/01.cha: (child, 1;6.26, uses mainly one word utterances, naming things)
+
+[request/confirmation/acceptance]
+
+CHI:   read it [= book] .
+MOT:   you want me to read it [= book] ?
+CHI:   yeah .
+MOT:   okay .
+
+[asking description / answer / optional feedback]
+
+MOT:   what's this ?
+CHI:   apple .
+
+[naming + description]
+
+MOT:   what's this ?
+CHI:   bunny .
+MOT:   is that &lt;a rabbit> [//] a bunny ?
+MOT:   +^ what does a bunny do ?
+CHI:   it hop .
+MOT:   hop .
+MOT:   that's right .
+
+[parent requests action / child perfoms action - verbal reaction absent]
+
+MOT:   that's how you do it [= kick the ball] .
+MOT:   you kick [>] the football !
+CHI:   0 [&lt;] .
+MOT:   0 .
+CHI:   0 .
+MOT:   can you throw the ball too ?
+CHI:   0 .
+MOT:   oh (.) very good !
+CHI:   0 .
+</pre>
+<h2 id="Pilotimplementation20">Pilot implementation</h2>
+<p>I coded a simple <a href="https://unstable.nl/andreas/ai/baproj/model.py">pilot implementation</a>. Its hand-made corpus of examplars looks like this:</p>
+<pre>
+        'what does a bunny do ?': 'question: animal(bunny) do(X)',
+        'dog': 'assertion: point(dog) animal(dog)',
+        'want some juice ?': 'ynquestion: want(juice) food(juice)',
+        'chocolate': 'assertion: food(chocolate)',
+        'throw it to me': 'imperative: throw(X) toy(X)',
+        [...]
+</pre>
+<p>Responses are made in three steps: </p>
+<ul>
+<li>First an utterance is interpreted, yielding a meaning representation. </li>
+<li>Then this representation is transformed into a response using rules. </li>
+<li>Lastly this response is expressed in language by trying to match it with previous examplars</li>
+</ul>
+<p>The last two steps leave much to be desired, but interpretation already performs some useful generalizations. Interpretation works by stitching together fragments of examplars using substitution. The following examples show new variants of the utterances in the corpus being correctly interpreted:</p>
+<pre>
+Parent:  what does a dog do ?
+substituted (bunny) with (dog)
+        interpretation: question: animal(dog) do(X)
+        reaction: assertion: animal(dog) do(woof)
+Child:  woof woof
+Parent:  want some chocolate ?
+substituted (juice) with (chocolate)
+        interpretation: ynquestion: want(chocolate) food(chocolate)
+        reaction: denial
+Child:  no
+Parent:  throw the ball to me
+substituted (X) with (ball)
+        interpretation: imperative: throw(ball) toy(ball)
+        reaction: confirmation
+Child:  yes
+</pre>
+<p>The generalizations do have constraints. For example, a bunny is not a toy, so it can't be kicked:</p>
+<pre>
+Parent:  you kick the bunny
+        interpretation: 
+        reaction: 
+Child:  eh
+</pre>
+<p>However, it does not maintain a context, topic or anything else across utterances. Also, there is no link between words and their meanings, only between utterances and meanings. The result is that "want some" is interpreted as meaning "ynquestion: want(juice) food(juice)", even though the crucial word "juice" is missing.</p>
+<h2 id="Researchterritorymap22">Research territory map</h2>
+<p><img src="rtm.png"></p>
+<h2 id="Descriptionofrepresentationandalgorithms44">Description of representation and algorithms</h2>
+<p>This image shows the steps to construct the meaning of "throw the ball to me":</p>
+<p><img src="throwtheballres.png"></p>
+<p>Further details on the representation in <a href="https://unstable.nl/andreas/baproj/ai/repr.pdf">this document</a></p>
+<h2 id="Modelaccessibleonline23">Model accessible online</h2>
+<p>Using a combination of AJAX and Python, the model can now be used online: </p>
+<p><a href="https://unstable.nl/andreas/runmodel.spy">https://unstable.nl/andreas/runmodel.spy</a></p>
+<h2 id="ThesisdraftandPrologversion31">Thesis draft and Prolog version</h2>
+<p>I have written the first draft of the thesis:</p>
+<ul>
+<li><a href="https://unstable.nl/andreas/ai/baproj/draft.pdf">Thesis draft</a></li>
+<li><a href="https://unstable.nl/andreas/ai/baproj/draftpres.pdf">Presentation of thesis draft</a></li>
+</ul>
+<p>I have also started a Prolog version of the model:</p>
+<ul>
+<li><a href="https://unstable.nl/andreas/ai/baproj/model.pl">code</a> (Prolog)</li>
+<li><a href="https://unstable.nl/andreas/ai/baproj/examplars.pl">examplars</a> (Prolog)</li>
+</ul>
+<p>The prolog version does not infer a lexicon, and does not keep track of reinforcement, but the advantage is that unification and substitution is much easier and more robust (as it is not based on textual manipulation). The result is 120 lines of Prolog code, versus 530 for the current Python version.</p>
+<pre>
+?- dialogue.
+Parent: what does a cow say
+        interpretation: [whquestion, do(moo), animal(cow)]
+        reaction: [assertion, do(moo), animal(cow)]
+        reduced: [+^, moo@o, .]
+Child: [, , |_G654]
+Parent: what does a cow do
+        interpretation: [whquestion, do(moo), animal(cow)]
+        reaction: [assertion, do(moo), animal(cow)]
+        reduced: [+^, moo@o, .]
+Child: [, , |_G1020]
+</pre>
+<h2 id="Modelaccessiblethroughinstantmessaging42">Model accessible through instant messaging</h2>
+<p>I made a chatbot accessible through Jabber (XMPP) and Google Talk at <a href="xmpp:baproj@unstable.nl">baproj@unstable.nl</a>. No shortage of user interfaces...</p>
+<p>I have also been working on the <a href="https://unstable.nl/andreas/ai/baproj/draft.pdf">thesis draft</a>, which now contains the philosophical considerations. I have a strong feeling that the world would be a better place if all documents contained their philosophical considerations, but alas, they do not.</p>
+
+</div>
+
+</body>
+</html>
