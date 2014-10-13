@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.gen &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.grammar" href="discodop.grammar.html" />
+    <link rel="prev" title="discodop.fragments" href="discodop.fragments.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.grammar.html" title="discodop.grammar"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.fragments.html" title="discodop.fragments"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.gen">
+<span id="discodop-gen"></span><h1>discodop.gen<a class="headerlink" href="#module-discodop.gen" title="Permalink to this headline">¶</a></h1>
+<p>Generate random sentences with an LCFRS.</p>
+<p>Reads grammar from a text file.</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.gen.arraytoyf" title="discodop.gen.arraytoyf"><tt class="xref py py-obj docutils literal"><span class="pre">arraytoyf</span></tt></a>(args,&nbsp;lengths)</td>
+<td>Inverse of yfarray().</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.gen.chooserule" title="discodop.gen.chooserule"><tt class="xref py py-obj docutils literal"><span class="pre">chooserule</span></tt></a>(rules,&nbsp;discount,&nbsp;prodcounts)</td>
+<td>Given a list of weighted rules, choose one following the distribution.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.gen.compose" title="discodop.gen.compose"><tt class="xref py py-obj docutils literal"><span class="pre">compose</span></tt></a>(rule,&nbsp;left,&nbsp;right,&nbsp;verbose)</td>
+<td>Use rule to compose two non-terminals into a new non-terminal.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.gen.gen" title="discodop.gen.gen"><tt class="xref py py-obj docutils literal"><span class="pre">gen</span></tt></a>(grammar[,&nbsp;start,&nbsp;discount,&nbsp;prodcounts,&nbsp;...])</td>
+<td>Generate a random sentence in top-down fashion.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.gen.parsefrac" title="discodop.gen.parsefrac"><tt class="xref py py-obj docutils literal"><span class="pre">parsefrac</span></tt></a>(a)</td>
+<td>Parse a string of a fraction into a float (&#8216;1/2&#8217; =&gt; 0.5).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.gen.read_bitpar_grammar" title="discodop.gen.read_bitpar_grammar"><tt class="xref py py-obj docutils literal"><span class="pre">read_bitpar_grammar</span></tt></a>(rules,&nbsp;lexicon)</td>
+<td>Read a bitpar grammar given two file objects.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.gen.read_lcfrs_grammar" title="discodop.gen.read_lcfrs_grammar"><tt class="xref py py-obj docutils literal"><span class="pre">read_lcfrs_grammar</span></tt></a>(rules,&nbsp;lexicon)</td>
+<td>Read a grammar produced by write_lcfrs_grammar from two file objects.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.gen.splitgrammar" title="discodop.gen.splitgrammar"><tt class="xref py py-obj docutils literal"><span class="pre">splitgrammar</span></tt></a>(rules)</td>
+<td>Split a grammar into various lookup tables.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.gen.yfarray" title="discodop.gen.yfarray"><tt class="xref py py-obj docutils literal"><span class="pre">yfarray</span></tt></a>(yf)</td>
+<td>Convert yield function represented as a 2D sequence to an array object.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.gen.Grammar" title="discodop.gen.Grammar"><tt class="xref py py-obj docutils literal"><span class="pre">Grammar</span></tt></a></td>
+<td>Grammar(numrules, unary, lbinary, rbinary, bylhs, lexicalbyword, lexicalbylhs, toid, tolabel, fanout)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.gen.LexicalRule" title="discodop.gen.LexicalRule"><tt class="xref py py-obj docutils literal"><span class="pre">LexicalRule</span></tt></a></td>
+<td>LexicalRule(lhs, rhs1, rhs2, word, prob, no)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.gen.Rule" title="discodop.gen.Rule"><tt class="xref py py-obj docutils literal"><span class="pre">Rule</span></tt></a></td>
+<td>Rule(lhs, rhs1, rhs2, args, lengths, prob, no)</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="discodop.gen.Grammar">
+<em class="property">class </em><tt class="descclassname">discodop.gen.</tt><tt class="descname">Grammar</tt><a class="headerlink" href="#discodop.gen.Grammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grammar(numrules, unary, lbinary, rbinary, bylhs, lexicalbyword, lexicalbylhs, toid, tolabel, fanout)</p>
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.bylhs">
+<tt class="descname">bylhs</tt><a class="headerlink" href="#discodop.gen.Grammar.bylhs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.fanout">
+<tt class="descname">fanout</tt><a class="headerlink" href="#discodop.gen.Grammar.fanout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 9</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.lbinary">
+<tt class="descname">lbinary</tt><a class="headerlink" href="#discodop.gen.Grammar.lbinary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.lexicalbylhs">
+<tt class="descname">lexicalbylhs</tt><a class="headerlink" href="#discodop.gen.Grammar.lexicalbylhs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.lexicalbyword">
+<tt class="descname">lexicalbyword</tt><a class="headerlink" href="#discodop.gen.Grammar.lexicalbyword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.numrules">
+<tt class="descname">numrules</tt><a class="headerlink" href="#discodop.gen.Grammar.numrules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.rbinary">
+<tt class="descname">rbinary</tt><a class="headerlink" href="#discodop.gen.Grammar.rbinary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.toid">
+<tt class="descname">toid</tt><a class="headerlink" href="#discodop.gen.Grammar.toid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 7</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.tolabel">
+<tt class="descname">tolabel</tt><a class="headerlink" href="#discodop.gen.Grammar.tolabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 8</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Grammar.unary">
+<tt class="descname">unary</tt><a class="headerlink" href="#discodop.gen.Grammar.unary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.gen.LexicalRule">
+<em class="property">class </em><tt class="descclassname">discodop.gen.</tt><tt class="descname">LexicalRule</tt><a class="headerlink" href="#discodop.gen.LexicalRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>LexicalRule(lhs, rhs1, rhs2, word, prob, no)</p>
+<dl class="attribute">
+<dt id="discodop.gen.LexicalRule.lhs">
+<tt class="descname">lhs</tt><a class="headerlink" href="#discodop.gen.LexicalRule.lhs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.LexicalRule.no">
+<tt class="descname">no</tt><a class="headerlink" href="#discodop.gen.LexicalRule.no" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.LexicalRule.prob">
+<tt class="descname">prob</tt><a class="headerlink" href="#discodop.gen.LexicalRule.prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.LexicalRule.rhs1">
+<tt class="descname">rhs1</tt><a class="headerlink" href="#discodop.gen.LexicalRule.rhs1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.LexicalRule.rhs2">
+<tt class="descname">rhs2</tt><a class="headerlink" href="#discodop.gen.LexicalRule.rhs2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.LexicalRule.word">
+<tt class="descname">word</tt><a class="headerlink" href="#discodop.gen.LexicalRule.word" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.gen.Rule">
+<em class="property">class </em><tt class="descclassname">discodop.gen.</tt><tt class="descname">Rule</tt><a class="headerlink" href="#discodop.gen.Rule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rule(lhs, rhs1, rhs2, args, lengths, prob, no)</p>
+<dl class="attribute">
+<dt id="discodop.gen.Rule.args">
+<tt class="descname">args</tt><a class="headerlink" href="#discodop.gen.Rule.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Rule.lengths">
+<tt class="descname">lengths</tt><a class="headerlink" href="#discodop.gen.Rule.lengths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Rule.lhs">
+<tt class="descname">lhs</tt><a class="headerlink" href="#discodop.gen.Rule.lhs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Rule.no">
+<tt class="descname">no</tt><a class="headerlink" href="#discodop.gen.Rule.no" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Rule.prob">
+<tt class="descname">prob</tt><a class="headerlink" href="#discodop.gen.Rule.prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Rule.rhs1">
+<tt class="descname">rhs1</tt><a class="headerlink" href="#discodop.gen.Rule.rhs1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.gen.Rule.rhs2">
+<tt class="descname">rhs2</tt><a class="headerlink" href="#discodop.gen.Rule.rhs2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.arraytoyf">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">arraytoyf</tt><big>(</big><em>args</em>, <em>lengths</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#arraytoyf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.arraytoyf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse of yfarray().</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.chooserule">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">chooserule</tt><big>(</big><em>rules</em>, <em>discount</em>, <em>prodcounts</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#chooserule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.chooserule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of weighted rules, choose one following the distribution.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.compose">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">compose</tt><big>(</big><em>rule</em>, <em>left</em>, <em>right</em>, <em>verbose</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#compose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.compose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use rule to compose two non-terminals into a new non-terminal.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.gen">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">gen</tt><big>(</big><em>grammar</em>, <em>start=1</em>, <em>discount=0.75</em>, <em>prodcounts=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.gen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a random sentence in top-down fashion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>discount</strong> &#8211; a factor between 0 and 1.0; 1.0 means no discount, lower
+values introduce increasingly larger discount for repeated rules.</td>
+</tr>
+</tbody>
+</table>
+<p>Cf. <a class="reference external" href="http://eli.thegreenplace.net/2010/01/28/generating-random-sentences-from-a-context-free-grammar/">http://eli.thegreenplace.net/2010/01/28/generating-random-sentences-from-a-context-free-grammar/</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.parsefrac">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">parsefrac</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#parsefrac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.parsefrac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a string of a fraction into a float (&#8216;1/2&#8217; =&gt; 0.5).</p>
+<p>Substitute for creating Fraction objects (which is slow).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.read_bitpar_grammar">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">read_bitpar_grammar</tt><big>(</big><em>rules</em>, <em>lexicon</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#read_bitpar_grammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.read_bitpar_grammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a bitpar grammar given two file objects.</p>
+<p>Must be a binarized grammar. Integer frequencies will be converted to exact
+relative frequencies; otherwise weights are kept as-is.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.read_lcfrs_grammar">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">read_lcfrs_grammar</tt><big>(</big><em>rules</em>, <em>lexicon</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#read_lcfrs_grammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.read_lcfrs_grammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a grammar produced by write_lcfrs_grammar from two file objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.splitgrammar">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">splitgrammar</tt><big>(</big><em>rules</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#splitgrammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.splitgrammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split a grammar into various lookup tables.</p>
+<p>Also maps nonterminal labels to numeric identifiers, and turns
+probabilities into negative log-probabilities. Can only represent binary,
+monotone LCFRS rules.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.gen.yfarray">
+<tt class="descclassname">discodop.gen.</tt><tt class="descname">yfarray</tt><big>(</big><em>yf</em><big>)</big><a class="reference internal" href="../_modules/discodop/gen.html#yfarray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.gen.yfarray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert yield function represented as a 2D sequence to an array object.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.grammar.html" title="discodop.grammar"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.fragments.html" title="discodop.fragments"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

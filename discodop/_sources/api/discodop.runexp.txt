@@ -1,0 +1,34 @@
+discodop.runexp
+===============
+
+.. automodule:: discodop.runexp
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      initworker
+      startexp
+      loadtraincorpus
+      getposmodel
+      dobinarization
+      getgrammars
+      doparsing
+      worker
+      writeresults
+      oldeval
+      readtepacoc
+      parsetepacoc
+      readparam
+   
+   
+
+   
+   
+   
+
+   
+   
+   

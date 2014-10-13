@@ -1,0 +1,592 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.lexicon &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for discodop.lexicon</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: UTF-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Add rules to handle unknown words and smooth lexical probabilities.</span>
+
+<span class="sd">Rare words in the training set are replaced with word signatures, such that</span>
+<span class="sd">unknown words can receive similar tags. Given a function to produce such</span>
+<span class="sd">signatures from words, the flow is as follows:</span>
+
+<span class="sd">- Simple lexical smoothing:</span>
+
+<span class="sd">  #. getunknownwordmodel (get statistics)</span>
+<span class="sd">  #. replaceraretrainwords (adjust trees)</span>
+<span class="sd">  #. [ read off grammar ]</span>
+<span class="sd">  #. simplesmoothlexicon (add extra lexical productions)</span>
+
+<span class="sd">- Sophisticated smoothing (untested):</span>
+
+<span class="sd">  #. getunknownwordmodel</span>
+<span class="sd">  #. getlexmodel</span>
+<span class="sd">  #. replaceraretrainwords</span>
+<span class="sd">  #. [ read off grammar ]</span>
+<span class="sd">  #. smoothlexicon</span>
+
+<span class="sd">- During parsing:</span>
+
+<span class="sd">  #. replaceraretestwords (only give known words and signatures to parser)</span>
+<span class="sd">  #. restore original words in derivations</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">Counter</span> <span class="k">as</span> <span class="n">multiset</span>
+<span class="kn">from</span> <span class="nn">fractions</span> <span class="kn">import</span> <span class="n">Fraction</span>
+<span class="kn">import</span> <span class="nn">discodop.eval</span>
+
+<span class="n">UNK</span> <span class="o">=</span> <span class="s">&#39;_UNK&#39;</span>
+<span class="n">TREETAGGERHELP</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;tree tagger not found. commands to install:</span>
+<span class="s">mkdir tree-tagger &amp;&amp; cd tree-tagger</span>
+<span class="s">wget ftp://ftp.ims.uni-stuttgart.de/pub/corpora/tree-tagger-linux-3.2.tar.gz</span>
+<span class="s">tar -xzf tree-tagger-linux-3.2.tar.gz</span>
+<span class="s">wget ftp://ftp.ims.uni-stuttgart.de/pub/corpora/tagger-scripts.tar.gz</span>
+<span class="s">tar -xzf ftp://ftp.ims.uni-stuttgart.de/pub/corpora/tagger-scripts.tar.gz</span>
+<span class="s">mkdir lib &amp;&amp; cd lib &amp;&amp; wget </span><span class="se">\</span>
+<span class="s">ftp://ftp.ims.uni-stuttgart.de/pub/corpora/german-par-linux-3.2-utf8.bin.gz</span>
+<span class="s">gunzip german-par-linux-3.2-utf8.bin.gz&#39;&#39;&#39;</span>
+<span class="n">STANFORDTAGGERHELP</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;Stanford tagger not found. Commands to install:</span>
+<span class="s">wget http://nlp.stanford.edu/software/stanford-postagger-full-2012-07-09.tgz</span>
+<span class="s">tar -xzf stanford-postagger-full-2012-07-09.tgz&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="getunknownwordmodel"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.getunknownwordmodel">[docs]</a><span class="k">def</span> <span class="nf">getunknownwordmodel</span><span class="p">(</span><span class="n">tagged_sents</span><span class="p">,</span> <span class="n">unknownword</span><span class="p">,</span>
+		<span class="n">unknownthreshold</span><span class="p">,</span> <span class="n">openclassthreshold</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Collect statistics for an unknown word model.</span>
+
+<span class="sd">	:param tagged_sents: the sentences from the training set with the gold POS</span>
+<span class="sd">			tags from the treebank.</span>
+<span class="sd">	:param unknownword: a function that returns a signature for a given word;</span>
+<span class="sd">			e.g., &quot;eschewed&quot; =&gt; &quot;_UNK-L-d&quot;.</span>
+<span class="sd">	:param unknownthreshold: words with frequency lower than or equal to this</span>
+<span class="sd">			are replaced by their signature.</span>
+<span class="sd">	:param openclassthreshold: tags that rewrite to at least this much word</span>
+<span class="sd">			types are considered to be open class categories.&quot;&quot;&quot;</span>
+	<span class="n">wordsfortag</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+	<span class="n">tags</span> <span class="o">=</span> <span class="n">multiset</span><span class="p">()</span>
+	<span class="n">wordtags</span> <span class="o">=</span> <span class="n">multiset</span><span class="p">()</span>
+	<span class="n">sigs</span> <span class="o">=</span> <span class="n">multiset</span><span class="p">()</span>
+	<span class="n">sigtag</span> <span class="o">=</span> <span class="n">multiset</span><span class="p">()</span>
+	<span class="n">words</span> <span class="o">=</span> <span class="n">multiset</span><span class="p">(</span><span class="n">word</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">tagged_sents</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">)</span>
+	<span class="n">lexicon</span> <span class="o">=</span> <span class="p">{</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">words</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;</span> <span class="n">unknownthreshold</span><span class="p">}</span>
+	<span class="n">wordsig</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">tagged_sents</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sent</span><span class="p">):</span>
+			<span class="n">wordsfortag</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+			<span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+			<span class="n">wordtags</span><span class="p">[</span><span class="n">word</span><span class="p">,</span> <span class="n">tag</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+			<span class="n">sig</span> <span class="o">=</span> <span class="n">unknownword</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">)</span>
+			<span class="n">wordsig</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">sig</span>  <span class="c"># NB: sig may also depend on n and lexicon</span>
+			<span class="n">sigtag</span><span class="p">[</span><span class="n">sig</span><span class="p">,</span> <span class="n">tag</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+	<span class="k">if</span> <span class="n">openclassthreshold</span><span class="p">:</span>
+		<span class="n">openclasstags</span> <span class="o">=</span> <span class="p">{</span><span class="n">tag</span><span class="p">:</span> <span class="nb">len</span><span class="p">({</span><span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">ws</span><span class="p">})</span>
+				<span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">ws</span> <span class="ow">in</span> <span class="n">wordsfortag</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+				<span class="k">if</span> <span class="nb">len</span><span class="p">({</span><span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">ws</span><span class="p">})</span> <span class="o">&gt;=</span> <span class="n">openclassthreshold</span><span class="p">}</span>
+		<span class="n">closedclasstags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">openclasstags</span><span class="p">)</span>
+		<span class="n">closedclasswords</span> <span class="o">=</span> <span class="p">{</span><span class="n">word</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">closedclasstags</span>
+				<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">wordsfortag</span><span class="p">[</span><span class="n">tag</span><span class="p">]}</span>
+		<span class="n">openclasswords</span> <span class="o">=</span> <span class="n">lexicon</span> <span class="o">-</span> <span class="n">closedclasswords</span>
+		<span class="c"># add rare closed-class words back to lexicon</span>
+		<span class="n">lexicon</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">closedclasswords</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">openclasstags</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="n">openclasswords</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">tagged_sents</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sent</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lexicon</span><span class="p">:</span>
+				<span class="n">sig</span> <span class="o">=</span> <span class="n">unknownword</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">)</span>
+				<span class="n">sigs</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+	<span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;known words: </span><span class="si">%d</span><span class="s">, signature types seen: </span><span class="si">%d</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+			<span class="nb">len</span><span class="p">(</span><span class="n">lexicon</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">sigs</span><span class="p">))</span>
+	<span class="n">msg</span> <span class="o">+=</span> <span class="s">&quot;open class tags: {</span><span class="si">%s</span><span class="s">}</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+			<span class="s">&quot;</span><span class="si">%s</span><span class="s">:</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">openclasstags</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+	<span class="n">msg</span> <span class="o">+=</span> <span class="s">&quot;closed class tags: {</span><span class="si">%s</span><span class="s">}&quot;</span> <span class="o">%</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">closedclasstags</span><span class="p">)</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="n">words</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">,</span> <span class="n">wordsfortag</span><span class="p">,</span> <span class="n">openclasstags</span><span class="p">,</span>
+			<span class="n">openclasswords</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">wordtags</span><span class="p">,</span>
+			<span class="n">wordsig</span><span class="p">,</span> <span class="n">sigtag</span><span class="p">),</span> <span class="n">msg</span>
+
+</div>
+<div class="viewcode-block" id="replaceraretrainwords"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.replaceraretrainwords">[docs]</a><span class="k">def</span> <span class="nf">replaceraretrainwords</span><span class="p">(</span><span class="n">tagged_sents</span><span class="p">,</span> <span class="n">unknownword</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Replace train set words not in lexicon w/signature from unknownword().&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="p">[[</span><span class="n">word</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">lexicon</span> <span class="k">else</span> <span class="n">unknownword</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sent</span><span class="p">)]</span>
+			<span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">tagged_sents</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="replaceraretestwords"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.replaceraretestwords">[docs]</a><span class="k">def</span> <span class="nf">replaceraretestwords</span><span class="p">(</span><span class="n">sent</span><span class="p">,</span> <span class="n">unknownword</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">,</span> <span class="n">sigs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Replace test set words not in lexicon w/signature from unknownword().</span>
+
+<span class="sd">	If the returned signatured is not part of the grammar, a default one is</span>
+<span class="sd">	returnend.&quot;&quot;&quot;</span>
+	<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sent</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">lexicon</span><span class="p">:</span>
+			<span class="k">yield</span> <span class="n">word</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">=</span> <span class="n">unknownword</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">sigs</span><span class="p">:</span>
+				<span class="k">yield</span> <span class="n">sig</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">yield</span> <span class="n">UNK</span>
+
+</div>
+<div class="viewcode-block" id="simplesmoothlexicon"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.simplesmoothlexicon">[docs]</a><span class="k">def</span> <span class="nf">simplesmoothlexicon</span><span class="p">(</span><span class="n">lexmodel</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1.</span> <span class="o">/</span> <span class="mi">100</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Collect new lexical productions.</span>
+
+<span class="sd">	- unobserved combinations of tags with known open class words.</span>
+<span class="sd">	- unobserved signatures which are mapped to ``&#39;_UNK&#39;``.</span>
+
+<span class="sd">	:param epsilon: &#39;frequency&#39; of productions for unseen tag, word pair.&quot;&quot;&quot;</span>
+	<span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="n">wordsfortag</span><span class="p">,</span> <span class="n">openclasstags</span><span class="p">,</span>
+			<span class="n">openclasswords</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">wordtags</span><span class="p">)</span> <span class="o">=</span> <span class="n">lexmodel</span>
+	<span class="n">newrules</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="c"># rare words as signature AND as word:</span>
+	<span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">wordtags</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lexicon</span><span class="p">:</span>  <span class="c"># and word in openclasswords:</span>
+			<span class="c"># needs to be normalized later</span>
+			<span class="n">newrules</span><span class="o">.</span><span class="n">append</span><span class="p">((((</span><span class="n">tag</span><span class="p">,</span> <span class="s">&#39;Epsilon&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="p">)),</span>
+					<span class="p">(</span><span class="n">wordtags</span><span class="p">[</span><span class="n">word</span><span class="p">,</span> <span class="n">tag</span><span class="p">],</span> <span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">])))</span>
+			<span class="c"># print(newrules[-1], file=sys.stderr)</span>
+	<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">openclasstags</span><span class="p">:</span>  <span class="c"># open class tag-word pairs</span>
+		<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">openclasswords</span> <span class="o">-</span> <span class="n">wordsfortag</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">-</span> <span class="p">{</span><span class="n">UNK</span><span class="p">}:</span>
+			<span class="n">newrules</span><span class="o">.</span><span class="n">append</span><span class="p">((((</span><span class="n">tag</span><span class="p">,</span> <span class="s">&#39;Epsilon&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="p">)),</span> <span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">])))</span>
+	<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>  <span class="c"># catch all unknown signature</span>
+		<span class="n">newrules</span><span class="o">.</span><span class="n">append</span><span class="p">((((</span><span class="n">tag</span><span class="p">,</span> <span class="s">&#39;Epsilon&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">UNK</span><span class="p">,</span> <span class="p">)),</span> <span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">])))</span>
+	<span class="k">return</span> <span class="n">newrules</span>
+
+</div>
+<div class="viewcode-block" id="getlexmodel"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.getlexmodel">[docs]</a><span class="k">def</span> <span class="nf">getlexmodel</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="n">words</span><span class="p">,</span> <span class="n">_lexicon</span><span class="p">,</span> <span class="n">wordsfortag</span><span class="p">,</span> <span class="n">openclasstags</span><span class="p">,</span>
+			<span class="n">openclasswords</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">wordtags</span><span class="p">,</span> <span class="n">wordsig</span><span class="p">,</span> <span class="n">sigtag</span><span class="p">,</span>
+			<span class="n">openclassoffset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Compute a smoothed lexical model.</span>
+
+<span class="sd">	:returns: a dictionary giving P(word_or_sig | tag).</span>
+<span class="sd">	:param openclassoffset: for words that only appear with open class tags,</span>
+<span class="sd">		add unseen combinations of open class (tag, word) with this count.</span>
+<span class="sd">	:param kappa: FIXME; cf. Klein &amp; Manning (2003).&quot;&quot;&quot;</span>
+	<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">openclasstags</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">openclasswords</span> <span class="o">-</span> <span class="n">wordsfortag</span><span class="p">[</span><span class="n">tag</span><span class="p">]:</span>
+			<span class="n">wordtags</span><span class="p">[</span><span class="n">word</span><span class="p">,</span> <span class="n">tag</span><span class="p">]</span> <span class="o">+=</span> <span class="n">openclassoffset</span>
+			<span class="n">words</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">+=</span> <span class="n">openclassoffset</span>
+			<span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">+=</span> <span class="n">openclassoffset</span>
+		<span class="c"># unseen signatures</span>
+		<span class="n">sigs</span><span class="p">[</span><span class="n">UNK</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="n">sigtag</span><span class="p">[</span><span class="n">UNK</span><span class="p">,</span> <span class="n">tag</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+	<span class="c"># Compute P(tag|sig)</span>
+	<span class="n">tagtotal</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">tags</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+	<span class="n">wordstotal</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">words</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+	<span class="n">sigstotal</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sigs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+	<span class="n">P_tag</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+		<span class="n">P_tag</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">],</span> <span class="n">tagtotal</span><span class="p">)</span>
+	<span class="n">P_word</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+		<span class="n">P_word</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">word</span><span class="p">],</span> <span class="n">wordstotal</span><span class="p">)</span>
+	<span class="n">P_tagsig</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Fraction</span><span class="p">)</span>  <span class="c"># ??</span>
+	<span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">sigs</span><span class="p">:</span>
+		<span class="n">P_tagsig</span><span class="p">[</span><span class="n">tag</span><span class="p">,</span> <span class="n">sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">P_tag</span><span class="p">[</span><span class="n">tag</span><span class="p">],</span>
+				<span class="n">Fraction</span><span class="p">(</span><span class="n">sigs</span><span class="p">[</span><span class="n">sig</span><span class="p">],</span> <span class="n">sigstotal</span><span class="p">))</span>
+		<span class="c"># print(&quot;P(%s | %s) = %s &quot; % ()</span>
+		<span class="c"># 		tag, sig, P_tagsig[tag, sig], file=sys.stderr)</span>
+	<span class="c"># Klein &amp; Manning (2003) Accurate unlexicalized parsing</span>
+	<span class="c"># P(tag|word) = [count(tag, word) + kappa * P(tag|sig)]</span>
+	<span class="c"># 		/ [count(word) + kappa]</span>
+	<span class="n">P_tagword</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">wordtags</span><span class="p">:</span>
+		<span class="n">P_tagword</span><span class="p">[</span><span class="n">tag</span><span class="p">,</span> <span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">wordtags</span><span class="p">[</span><span class="n">word</span><span class="p">,</span> <span class="n">tag</span><span class="p">]</span>
+				<span class="o">+</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">P_tagsig</span><span class="p">[</span><span class="n">tag</span><span class="p">,</span> <span class="n">wordsig</span><span class="p">[</span><span class="n">word</span><span class="p">]],</span>
+				<span class="n">words</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">+</span> <span class="n">kappa</span><span class="p">)</span>
+		<span class="c"># print(&quot;P(%s | %s) = %s &quot; % ()</span>
+		<span class="c"># 		tag, word, P_tagword[tag, word], file=sys.stderr)</span>
+	<span class="c"># invert with Bayes theorem to get P(word|tag)</span>
+	<span class="n">P_wordtag</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">P_tagword</span><span class="p">:</span>
+		<span class="c"># wordorsig = word if word in lexicon else wordsig[word]</span>
+		<span class="n">wordorsig</span> <span class="o">=</span> <span class="n">word</span>
+		<span class="n">P_wordtag</span><span class="p">[</span><span class="n">wordorsig</span><span class="p">,</span> <span class="n">tag</span><span class="p">]</span> <span class="o">+=</span> <span class="n">Fraction</span><span class="p">((</span><span class="n">P_tagword</span><span class="p">[</span><span class="n">tag</span><span class="p">,</span> <span class="n">word</span><span class="p">]</span>
+				<span class="o">*</span> <span class="n">P_word</span><span class="p">[</span><span class="n">word</span><span class="p">]),</span> <span class="n">P_tag</span><span class="p">[</span><span class="n">tag</span><span class="p">])</span>
+		<span class="c"># print(&quot;P(%s | %s) = %s &quot; % ()</span>
+		<span class="c"># 		word, tag, P_wordtag[wordorsig, tag], file=sys.stderr)</span>
+	<span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;(word, tag) pairs in model: </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">P_tagword</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">P_wordtag</span><span class="p">,</span> <span class="n">msg</span>
+
+</div>
+<div class="viewcode-block" id="smoothlexicon"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.smoothlexicon">[docs]</a><span class="k">def</span> <span class="nf">smoothlexicon</span><span class="p">(</span><span class="n">grammar</span><span class="p">,</span> <span class="n">P_wordtag</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Replace lexical probabilities using given unknown word model.</span>
+<span class="sd">	Ignores lexical productions of known subtrees (tag contains &#39;@&#39;)</span>
+<span class="sd">	introduced by DOP, i.e., we only modify lexical depth 1 subtrees.&quot;&quot;&quot;</span>
+	<span class="n">newrules</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">yf</span><span class="p">),</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">grammar</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">rule</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;Epsilon&#39;</span> <span class="ow">and</span> <span class="s">&#39;@&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+			<span class="n">wordorsig</span> <span class="o">=</span> <span class="n">yf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="n">tag</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="n">newrule</span> <span class="o">=</span> <span class="p">(((</span><span class="n">tag</span><span class="p">,</span> <span class="s">&#39;Epsilon&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">wordorsig</span><span class="p">,</span> <span class="p">)),</span>
+					<span class="n">P_wordtag</span><span class="p">[</span><span class="n">wordorsig</span><span class="p">,</span> <span class="n">tag</span><span class="p">])</span>
+			<span class="n">newrules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newrule</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">newrules</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">rule</span><span class="p">,</span> <span class="n">yf</span><span class="p">),</span> <span class="n">w</span><span class="p">))</span>
+	<span class="k">return</span> <span class="n">newrules</span>
+
+
+<span class="c"># === functions for unknown word signatures ============</span>
+</div>
+<span class="n">HASDIGIT</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;\d&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+<span class="n">HASNONDIGIT</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;\D&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+<span class="c"># NB: includes &#39;-&#39;, hyphen, non-breaking hyphen</span>
+<span class="c"># does NOT include: figure-dash, em-dash, en-dash (these are punctuation,</span>
+<span class="c"># not word-combining) u2012-u2015; nb: these are hex values.</span>
+<span class="n">HASDASH</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&quot;[-</span><span class="se">\u2010\u2011</span><span class="s">]&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+<span class="c"># FIXME: exclude accented characters for model 6?</span>
+<span class="n">HASLOWER</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&#39;[a-z</span><span class="se">\xe7\xe9\xe0\xec\xf9\xe2\xea\xee\xf4\xfb\xeb</span><span class="s">&#39;</span>
+		<span class="s">u&#39;</span><span class="se">\xef\xfc\xff\u0153\xe6</span><span class="s">]&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+<span class="n">HASUPPER</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&#39;[A-Z</span><span class="se">\xc7\xc9\xc0\xcc\xd9\xc2\xca\xce\xd4\xdb\xcb</span><span class="s">&#39;</span>
+		<span class="s">u&#39;</span><span class="se">\xcf\xdc\u0178\u0152\xc6</span><span class="s">]&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+<span class="n">HASLETTER</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&#39;[A-Za-z</span><span class="se">\xe7\xe9\xe0\xec\xf9\xe2\xea\xee\xf4\xfb</span><span class="s">&#39;</span>
+		<span class="s">u&#39;</span><span class="se">\xeb\xef\xfc\xff\u0153\xe6\xc7\xc9\xc0\xcc\xd9\xc2\xca\xce\xd4</span><span class="s">&#39;</span>
+		<span class="s">u&#39;</span><span class="se">\xdb\xcb\xcf\xdc\u0178\u0152\xc6</span><span class="s">]&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+<span class="c"># Cf. http://en.wikipedia.org/wiki/French_alphabet</span>
+<span class="n">LOWER</span> <span class="o">=</span> <span class="p">(</span><span class="s">u&#39;abcdefghijklmnopqrstuvwxyz</span><span class="se">\xe7\xe9\xe0\xec\xf9\xe2\xea\xee\xf4\xfb</span><span class="s">&#39;</span>
+		<span class="s">u&#39;</span><span class="se">\xeb\xef\xfc\xff\u0153\xe6</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="n">UPPER</span> <span class="o">=</span> <span class="p">(</span><span class="s">u&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class="se">\xc7\xc9\xc0\xcc\xd9\xc2\xca\xce\xd4\xdb</span><span class="s">&#39;</span>
+		<span class="s">u&#39;</span><span class="se">\xcb\xcf\xdc\u0178\u0152\xc6</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="n">LOWERUPPER</span> <span class="o">=</span> <span class="n">LOWER</span> <span class="o">+</span> <span class="n">UPPER</span>
+
+
+<div class="viewcode-block" id="unknownword6"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.unknownword6">[docs]</a><span class="k">def</span> <span class="nf">unknownword6</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Model 6 of the Stanford parser (for WSJ treebank).&quot;&quot;&quot;</span>
+	<span class="n">wlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+	<span class="n">numcaps</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="n">sig</span> <span class="o">=</span> <span class="n">UNK</span>
+	<span class="n">numcaps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">HASUPPER</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">word</span><span class="p">))</span>
+	<span class="n">lowered</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">numcaps</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-CAPS&quot;</span>
+	<span class="k">elif</span> <span class="n">numcaps</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">loc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-INITC&quot;</span>
+			<span class="k">if</span> <span class="n">lowered</span> <span class="ow">in</span> <span class="n">lexicon</span><span class="p">:</span>
+				<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-KNOWNLC&quot;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-CAP&quot;</span>
+	<span class="k">elif</span> <span class="n">HASLOWER</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-LC&quot;</span>
+	<span class="k">if</span> <span class="n">HASDIGIT</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-NUM&quot;</span>
+	<span class="k">if</span> <span class="n">HASDASH</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-DASH&quot;</span>
+	<span class="k">if</span> <span class="n">lowered</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;s&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">wlen</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">lowered</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s">&quot;siu&quot;</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-s&quot;</span>
+	<span class="k">elif</span> <span class="n">wlen</span> <span class="o">&gt;=</span> <span class="mi">5</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">HASDASH</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span>
+			<span class="n">HASDIGIT</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="ow">and</span> <span class="n">numcaps</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+		<span class="n">suffixes</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;ed&quot;</span><span class="p">,</span> <span class="s">&quot;ing&quot;</span><span class="p">,</span> <span class="s">&quot;ion&quot;</span><span class="p">,</span> <span class="s">&quot;er&quot;</span><span class="p">,</span> <span class="s">&quot;est&quot;</span><span class="p">,</span> <span class="s">&quot;ly&quot;</span><span class="p">,</span> <span class="s">&quot;ity&quot;</span><span class="p">,</span> <span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="s">&quot;al&quot;</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">suffixes</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">lowered</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+				<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">a</span>
+	<span class="k">return</span> <span class="n">sig</span>
+
+</div>
+<div class="viewcode-block" id="unknownword4"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.unknownword4">[docs]</a><span class="k">def</span> <span class="nf">unknownword4</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Model 4 of the Stanford parser. Relatively language agnostic.&quot;&quot;&quot;</span>
+	<span class="n">sig</span> <span class="o">=</span> <span class="n">UNK</span>
+
+	<span class="c"># letters</span>
+	<span class="k">if</span> <span class="n">word</span> <span class="ow">and</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">UPPER</span><span class="p">:</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">HASLOWER</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-AC&quot;</span>
+		<span class="k">elif</span> <span class="n">loc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-SC&quot;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-C&quot;</span>
+	<span class="k">elif</span> <span class="n">HASLOWER</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-L&quot;</span>
+	<span class="k">elif</span> <span class="n">HASLETTER</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-U&quot;</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-S&quot;</span>  <span class="c"># no letter</span>
+
+	<span class="c"># digits</span>
+	<span class="k">if</span> <span class="n">HASDIGIT</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">HASNONDIGIT</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-n&quot;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-N&quot;</span>
+
+	<span class="c"># punctuation</span>
+	<span class="k">if</span> <span class="s">&quot;-&quot;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-H&quot;</span>
+	<span class="k">if</span> <span class="s">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-P&quot;</span>
+	<span class="k">if</span> <span class="s">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-C&quot;</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">LOWERUPPER</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">sig</span>
+
+</div>
+<div class="viewcode-block" id="unknownwordbase"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.unknownwordbase">[docs]</a><span class="k">def</span> <span class="nf">unknownwordbase</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">_loc</span><span class="p">,</span> <span class="n">_lexicon</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;BaseUnknownWordModel of the Stanford parser.</span>
+<span class="sd">	Relatively language agnostic.&quot;&quot;&quot;</span>
+	<span class="n">sig</span> <span class="o">=</span> <span class="n">UNK</span>
+
+	<span class="c"># letters</span>
+	<span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">UPPER</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-C&quot;</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-c&quot;</span>
+
+	<span class="c"># digits</span>
+	<span class="k">if</span> <span class="n">HASDIGIT</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">HASNONDIGIT</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-n&quot;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-N&quot;</span>
+
+	<span class="c"># punctuation</span>
+	<span class="k">if</span> <span class="s">&quot;-&quot;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-H&quot;</span>
+	<span class="k">if</span> <span class="n">word</span> <span class="o">==</span> <span class="s">&quot;.&quot;</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-P&quot;</span>
+	<span class="k">if</span> <span class="n">word</span> <span class="o">==</span> <span class="s">&quot;,&quot;</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-C&quot;</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">LOWERUPPER</span><span class="p">:</span>
+			<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">sig</span>
+</div>
+<span class="n">NOUNSUFFIX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&quot;(ier|ière|ité|ion|ison|isme|ysme|iste|esse|eur|euse&quot;</span>
+		<span class="s">u&quot;|ence|eau|erie|ng|ette|age|ade|ance|ude|ogue|aphe|ate|duc|anthe&quot;</span>
+		<span class="s">u&quot;|archie|coque|érèse|ergie|ogie|lithe|mètre|métrie|odie|pathie|phie&quot;</span>
+		<span class="s">u&quot;|phone|phore|onyme|thèque|scope|some|pole|ôme|chromie|pie)s?$&quot;</span><span class="p">)</span>
+<span class="n">ADJSUFFIX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&quot;(iste|ième|uple|issime|aire|esque|atoire|ale|al|able&quot;</span>
+		<span class="s">u&quot;|ible|atif|ique|if|ive|eux|aise|ent|ois|oise|ante|el|elle|ente|oire&quot;</span>
+		<span class="s">u&quot;|ain|aine)s?$&quot;</span><span class="p">)</span>
+<span class="n">POSSIBLEPLURAL</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&quot;(s|ux)$&quot;</span><span class="p">)</span>
+<span class="n">VERBSUFFIX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&quot;(ir|er|re|ez|ont|ent|ant|ais|ait|ra|era|eras&quot;</span>
+		<span class="s">u&quot;|é|és|ées|isse|it)$&quot;</span><span class="p">)</span>
+<span class="n">ADVSUFFIX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;(iment|ement|emment|amment)$&quot;</span><span class="p">)</span>
+<span class="n">HASPUNC</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&quot;([</span><span class="se">\u0021</span><span class="s">-</span><span class="se">\u002F\u003A</span><span class="s">-</span><span class="se">\u0040\u005B\u005C\u005D</span><span class="s">&quot;</span>
+		<span class="s">u&quot;</span><span class="se">\u005E</span><span class="s">-</span><span class="se">\u0060\u007B</span><span class="s">-</span><span class="se">\u007E\u00A1</span><span class="s">-</span><span class="se">\u00BF\u2010</span><span class="s">-</span><span class="se">\u2027\u2030</span><span class="s">-</span><span class="se">\u205E</span><span class="s">&quot;</span>
+		<span class="s">u&quot;</span><span class="se">\u20A0</span><span class="s">-</span><span class="se">\u20B5</span><span class="s">])+&quot;</span><span class="p">)</span>
+<span class="n">ISPUNC</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">u&quot;([</span><span class="se">\u0021</span><span class="s">-</span><span class="se">\u002F\u003A</span><span class="s">-</span><span class="se">\u0040\u005B\u005C\u005D</span><span class="s">&quot;</span>
+		<span class="s">u&quot;</span><span class="se">\u005E</span><span class="s">-</span><span class="se">\u0060\u007B</span><span class="s">-</span><span class="se">\u007E\u00A1</span><span class="s">-</span><span class="se">\u00BF\u2010</span><span class="s">-</span><span class="se">\u2027\u2030</span><span class="s">-</span><span class="se">\u205E</span><span class="s">&quot;</span>
+		<span class="s">u&quot;</span><span class="se">\u20A0</span><span class="s">-</span><span class="se">\u20B5</span><span class="s">])+$&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="unknownwordftb"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.unknownwordftb">[docs]</a><span class="k">def</span> <span class="nf">unknownwordftb</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Model 2 for French of the Stanford parser.&quot;&quot;&quot;</span>
+	<span class="n">sig</span> <span class="o">=</span> <span class="n">UNK</span>
+
+	<span class="k">if</span> <span class="n">ADVSUFFIX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-ADV&quot;</span>
+	<span class="k">elif</span> <span class="n">VERBSUFFIX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-VB&quot;</span>
+	<span class="k">elif</span> <span class="n">NOUNSUFFIX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-NN&quot;</span>
+
+	<span class="k">if</span> <span class="n">ADJSUFFIX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-ADV&quot;</span>
+	<span class="k">if</span> <span class="n">HASDIGIT</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-NUM&quot;</span>
+	<span class="k">if</span> <span class="n">POSSIBLEPLURAL</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-PL&quot;</span>
+
+	<span class="k">if</span> <span class="n">ISPUNC</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-ISPUNC&quot;</span>
+	<span class="k">elif</span> <span class="n">HASPUNC</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-HASPUNC&quot;</span>
+
+	<span class="k">if</span> <span class="n">loc</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">UPPER</span><span class="p">:</span>
+		<span class="n">sig</span> <span class="o">+=</span> <span class="s">&quot;-UP&quot;</span>
+
+	<span class="k">return</span> <span class="n">sig</span>
+
+</div>
+<span class="n">UNKNOWNWORDFUNC</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s">&quot;4&quot;</span><span class="p">:</span> <span class="n">unknownword4</span><span class="p">,</span>
+		<span class="s">&quot;6&quot;</span><span class="p">:</span> <span class="n">unknownword6</span><span class="p">,</span>
+		<span class="s">&quot;base&quot;</span><span class="p">:</span> <span class="n">unknownwordbase</span><span class="p">,</span>
+		<span class="s">&quot;ftb&quot;</span><span class="p">:</span> <span class="n">unknownwordftb</span><span class="p">,</span>
+		<span class="p">}</span>
+
+
+<span class="c"># === Performing POS tagging with external tools ============</span>
+<div class="viewcode-block" id="externaltagging"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.externaltagging">[docs]</a><span class="k">def</span> <span class="nf">externaltagging</span><span class="p">(</span><span class="n">usetagger</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">overridetag</span><span class="p">,</span> <span class="n">tagmap</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Use an external tool to tag a list of sentences.&quot;&quot;&quot;</span>
+	<span class="kn">from</span> <span class="nn">discodop.parser</span> <span class="kn">import</span> <span class="n">which</span>
+	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Start tagging.&#39;</span><span class="p">)</span>
+	<span class="n">goldtags</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">sents</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">usetagger</span> <span class="o">==</span> <span class="s">&#39;treetagger&#39;</span><span class="p">:</span>  <span class="c"># Tree-tagger</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">&#39;tree-tagger/bin/tree-tagger&#39;</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">TREETAGGERHELP</span><span class="p">)</span>
+		<span class="n">infile</span><span class="p">,</span> <span class="n">inname</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+		<span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">tagsent</span> <span class="ow">in</span> <span class="n">sents</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+				<span class="n">sent</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">tagsent</span><span class="p">)</span>
+				<span class="n">infile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+					<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&lt;S&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+		<span class="n">filtertags</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">:</span>
+			<span class="n">model</span> <span class="o">=</span> <span class="s">&#39;tree-tagger/lib/german-par-linux-3.2-utf8.bin&#39;</span>
+			<span class="n">filtertags</span> <span class="o">=</span> <span class="s">&#39;| tree-tagger/cmd/filter-german-tags&#39;</span>
+		<span class="n">tagger</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="s">&#39;tree-tagger/bin/tree-tagger -token -sgml&#39;</span>
+				<span class="s">&#39; </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inname</span><span class="p">,</span> <span class="n">filtertags</span><span class="p">),</span>
+				<span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+		<span class="n">tagout</span> <span class="o">=</span> <span class="n">tagger</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+				<span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;&lt;S&gt;&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">inname</span><span class="p">)</span>
+		<span class="n">taggedsents</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="p">[</span><span class="n">tagmangle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">overridetag</span><span class="p">,</span> <span class="n">tagmap</span><span class="p">)</span>
+					<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tags</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">strip</span><span class="p">()])</span>
+					<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">tags</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sents</span><span class="p">,</span> <span class="n">tagout</span><span class="p">))</span>
+	<span class="k">elif</span> <span class="n">usetagger</span> <span class="o">==</span> <span class="s">&#39;stanford&#39;</span><span class="p">:</span>  <span class="c"># Stanford Tagger</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">&#39;stanford-postagger-full-2012-07-09&#39;</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">STANFORDTAGGERHELP</span><span class="p">)</span>
+		<span class="n">infile</span><span class="p">,</span> <span class="n">inname</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+		<span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">tagsent</span> <span class="ow">in</span> <span class="n">sents</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+				<span class="n">sent</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">tagsent</span><span class="p">)</span>
+				<span class="n">infile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+					<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">:</span>
+			<span class="n">model</span> <span class="o">=</span> <span class="s">&#39;models/german-hgc.tagger&#39;</span>
+		<span class="n">tagger</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">(</span>
+				<span class="s">&#39;/usr/bin/java -mx2G -classpath stanford-postagger.jar&#39;</span>
+				<span class="s">&#39; edu.stanford.nlp.tagger.maxent.MaxentTagger&#39;</span>
+				<span class="s">&#39; -tokenize false -encoding utf-8&#39;</span>
+				<span class="s">&#39; -model </span><span class="si">%s</span><span class="s"> -textFile </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inname</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span>
+				<span class="n">cwd</span><span class="o">=</span><span class="s">&#39;stanford-postagger-full-2012-07-09&#39;</span><span class="p">,</span>
+				<span class="n">shell</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+		<span class="n">tagout</span> <span class="o">=</span> <span class="n">tagger</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+				<span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+		<span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">inname</span><span class="p">)</span>
+		<span class="n">taggedsents</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="p">[</span><span class="n">tagmangle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="n">overridetag</span><span class="p">,</span> <span class="n">tagmap</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tags</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">tags</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sents</span><span class="p">,</span> <span class="n">tagout</span><span class="p">))</span>
+	<span class="k">elif</span> <span class="n">usetagger</span> <span class="o">==</span> <span class="s">&#39;frog&#39;</span><span class="p">:</span>  <span class="c"># Dutch &#39;frog&#39; tagger</span>
+		<span class="n">tagger</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">which</span><span class="p">(</span><span class="s">&#39;frog&#39;</span><span class="p">)]</span> <span class="o">+</span>
+					<span class="s">&#39;-n --skip=tacmnp -t /dev/stdin&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span>
+				<span class="n">shell</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+		<span class="n">tagout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">tagger</span><span class="o">.</span><span class="n">communicate</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+				<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">tagsent</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+				<span class="k">for</span> <span class="n">tagsent</span> <span class="ow">in</span> <span class="n">sents</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span>
+		<span class="c"># lines consist of: &#39;idx token lemma POS score&#39;</span>
+		<span class="n">taggedsents</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">((</span><span class="n">n</span><span class="p">,</span>
+				<span class="p">[(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span>
+					<span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">,</span> <span class="s">&#39;[&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;)&#39;</span><span class="p">,</span> <span class="s">&#39;]&#39;</span><span class="p">))</span>
+					<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()])</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">lines</span>
+				<span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sents</span><span class="p">,</span> <span class="n">tagout</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="p">)))</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">taggedsents</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sents</span><span class="p">):</span>
+		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;mismatch in number of sentences after tagging.&#39;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">tags</span> <span class="ow">in</span> <span class="n">taggedsents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sents</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;mismatch in number of tokens after tagging.</span><span class="se">\n</span><span class="s">&#39;</span>
+				<span class="s">&#39;before: </span><span class="si">%r</span><span class="se">\n</span><span class="s">after: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sents</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">tags</span><span class="p">))</span>
+	<span class="n">newtags</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">taggedsents</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">]</span>
+	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Tag accuracy: </span><span class="si">%5.2f</span><span class="se">\n</span><span class="s">gold - cand: </span><span class="si">%r</span><span class="se">\n</span><span class="s">cand - gold </span><span class="si">%r</span><span class="s">&#39;</span><span class="p">,</span>
+		<span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">discodop</span><span class="o">.</span><span class="n">eval</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="n">goldtags</span><span class="p">,</span> <span class="n">newtags</span><span class="p">)),</span>
+		<span class="nb">set</span><span class="p">(</span><span class="n">goldtags</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">newtags</span><span class="p">),</span> <span class="nb">set</span><span class="p">(</span><span class="n">newtags</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">goldtags</span><span class="p">))</span>
+	<span class="k">return</span> <span class="n">taggedsents</span>
+
+</div>
+<div class="viewcode-block" id="tagmangle"><a class="viewcode-back" href="../../api/discodop.lexicon.html#discodop.lexicon.tagmangle">[docs]</a><span class="k">def</span> <span class="nf">tagmangle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">splitchar</span><span class="p">,</span> <span class="n">overridetag</span><span class="p">,</span> <span class="n">tagmap</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Function to filter tags after they are produced by the tagger.&quot;&quot;&quot;</span>
+	<span class="n">word</span><span class="p">,</span> <span class="n">tag</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="n">splitchar</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">newtag</span> <span class="ow">in</span> <span class="n">overridetag</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">overridetag</span><span class="p">[</span><span class="n">newtag</span><span class="p">]:</span>
+			<span class="n">tag</span> <span class="o">=</span> <span class="n">newtag</span>
+	<span class="k">return</span> <span class="n">word</span><span class="p">,</span> <span class="n">tagmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+
+</div>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;getunknownwordmodel&#39;</span><span class="p">,</span> <span class="s">&#39;replaceraretrainwords&#39;</span><span class="p">,</span>
+		<span class="s">&#39;replaceraretestwords&#39;</span><span class="p">,</span> <span class="s">&#39;simplesmoothlexicon&#39;</span><span class="p">,</span> <span class="s">&#39;getlexmodel&#39;</span><span class="p">,</span>
+		<span class="s">&#39;smoothlexicon&#39;</span><span class="p">,</span> <span class="s">&#39;unknownword6&#39;</span><span class="p">,</span> <span class="s">&#39;unknownword4&#39;</span><span class="p">,</span> <span class="s">&#39;unknownwordbase&#39;</span><span class="p">,</span>
+		<span class="s">&#39;unknownwordftb&#39;</span><span class="p">,</span> <span class="s">&#39;externaltagging&#39;</span><span class="p">,</span> <span class="s">&#39;tagmangle&#39;</span><span class="p">]</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

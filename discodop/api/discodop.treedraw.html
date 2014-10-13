@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.treedraw &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.treesearch" href="discodop.treesearch.html" />
+    <link rel="prev" title="discodop.treedist" href="discodop.treedist.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.treesearch.html" title="discodop.treesearch"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.treedist.html" title="discodop.treedist"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.treedraw">
+<span id="discodop-treedraw"></span><h1>discodop.treedraw<a class="headerlink" href="#module-discodop.treedraw" title="Permalink to this headline">¶</a></h1>
+<p>Discontinuous tree drawing.</p>
+<p>Interesting reference (not used for this code):
+T. Eschbach et al., Orth. Hypergraph Drawing, Journal of
+Graph Algorithms and Applications, 10(2) 141&#8211;157 (2006)149.
+<a class="reference external" href="http://jgaa.info/accepted/2006/EschbachGuentherBecker2006.10.2.pdf">http://jgaa.info/accepted/2006/EschbachGuentherBecker2006.10.2.pdf</a></p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedraw.latexlabel" title="discodop.treedraw.latexlabel"><tt class="xref py py-obj docutils literal"><span class="pre">latexlabel</span></tt></a>(label)</td>
+<td>Quote/format label for latex.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedraw.DrawTree" title="discodop.treedraw.DrawTree"><tt class="xref py py-obj docutils literal"><span class="pre">DrawTree</span></tt></a>(tree[,&nbsp;sent,&nbsp;highlight,&nbsp;abbr])</td>
+<td>Visualize a discontinuous tree in various formats.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="discodop.treedraw.DrawTree">
+<em class="property">class </em><tt class="descclassname">discodop.treedraw.</tt><tt class="descname">DrawTree</tt><big>(</big><em>tree</em>, <em>sent=None</em>, <em>highlight=()</em>, <em>abbr=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedraw.html#DrawTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedraw.DrawTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualize a discontinuous tree in various formats.</p>
+<p><tt class="docutils literal"><span class="pre">DrawTree(tree,</span> <span class="pre">sent=None,</span> <span class="pre">highlight=(),</span> <span class="pre">abbr=False)</span></tt>
+creates an object from which different visualizations can be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tree</strong> &#8211; a Tree object or a string.</li>
+<li><strong>sent</strong> &#8211; a list of words (strings). If sent is not given, and the tree
+contains non-integers as leaves, a continuous phrase-structure tree
+is assumed. If sent is not given and the tree contains only indices
+as leaves, the indices are displayed as placeholder terminals.</li>
+<li><strong>highlight</strong> &#8211; Optionally, a sequence of Tree objects in <cite>tree</cite> which
+should be highlighted. Has the effect of only applying colors to nodes
+in this sequence (nodes should be given as Tree objects, terminals as
+indices).</li>
+<li><strong>abbr</strong> &#8211; when True, abbreviate labels longer than 5 characters.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">DrawTree</span><span class="p">(</span><span class="s">&#39;(S (NP Mary) (VP walks))&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+<span class="gp">... </span>
+<span class="go">      S</span>
+<span class="go">  ____|____</span>
+<span class="go"> NP        VP</span>
+<span class="go"> |         |</span>
+<span class="go">Mary     walks</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="discodop.treedraw.DrawTree.nodecoords">
+<tt class="descname">nodecoords</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>highlight</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedraw.html#DrawTree.nodecoords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedraw.DrawTree.nodecoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce coordinates of nodes on a grid.</p>
+<p>Objective:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Produce coordinates for a non-overlapping placement of nodes and</dt>
+<dd><p class="first last">horizontal lines.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Order edges so that crossing edges cross a minimal number of previous</dt>
+<dd><p class="first last">horizontal lines (never vertical lines).</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Approach:</p>
+<ul class="simple">
+<li>bottom up level order traversal (start at terminals)</li>
+<li>at each level, identify nodes which cannot be on the same row</li>
+<li>identify nodes which cannot be in the same column</li>
+<li>place nodes into a grid at (row, column)</li>
+<li>order child-parent edges with crossing edges last</li>
+</ul>
+<p>Coordinates are (row, column); the origin (0, 0) is at the top left;
+the root node is on row 0. Coordinates do not consider the size of a
+node (which depends on font, &amp;c), so the width of a column of the grid
+should be automatically determined by the element with the greatest
+width in that column. Alternatively, the integer coordinates could be
+converted to coordinates in which the distances between adjacent nodes
+are non-uniform.</p>
+<p>Produces tuple (nodes, coords, edges) where:</p>
+<ul class="simple">
+<li>nodes[id]: Tree object for the node with this integer id</li>
+<li>coords[id]: (n, m) coordinate where to draw node with id in the grid</li>
+<li>edges[id]: parent id of node with this id (ordered dictionary)</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.treedraw.DrawTree.svg">
+<tt class="descname">svg</tt><big>(</big><em>nodecolor=u'blue'</em>, <em>leafcolor=u'red'</em>, <em>funccolor=u'green'</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedraw.html#DrawTree.svg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedraw.DrawTree.svg" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">SVG representation of a discontinuous tree.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.treedraw.DrawTree.text">
+<tt class="descname">text</tt><big>(</big><em>nodedist=1</em>, <em>unicodelines=False</em>, <em>html=False</em>, <em>ansi=False</em>, <em>nodecolor=u'blue'</em>, <em>leafcolor=u'red'</em>, <em>funccolor=u'green'</em>, <em>maxwidth=16</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedraw.html#DrawTree.text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedraw.DrawTree.text" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ASCII art for a discontinuous tree.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>unicodelines</strong> &#8211; whether to use Unicode line drawing characters
+instead of plain (7-bit) ASCII.</li>
+<li><strong>html</strong> &#8211; whether to wrap output in html code (default plain text).</li>
+<li><strong>ansi</strong> &#8211; whether to produce colors with ANSI escape sequences
+(only effective when html==False).</li>
+<li><strong>nodecolor</strong> (<em>leafcolor,</em>) &#8211; specify colors of leaves and phrasal
+nodes; effective when either html or ansi is True.</li>
+<li><strong>maxwidth</strong> &#8211; maximum number of characters before a label starts to
+wrap; pass None to disable.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.treedraw.DrawTree.tikzmatrix">
+<tt class="descname">tikzmatrix</tt><big>(</big><em>nodecolor=u'blue'</em>, <em>leafcolor=u'red'</em>, <em>funccolor=u'green'</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedraw.html#DrawTree.tikzmatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedraw.DrawTree.tikzmatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce TiKZ code for use with LaTeX.</p>
+<p>PDF can be produced with pdflatex. Uses TiKZ matrices meaning that
+nodes are put into a fixed grid. Where the cells of each column all
+have the same width.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.treedraw.DrawTree.tikznode">
+<tt class="descname">tikznode</tt><big>(</big><em>nodecolor=u'blue'</em>, <em>leafcolor=u'red'</em>, <em>funccolor=u'green'</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedraw.html#DrawTree.tikznode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedraw.DrawTree.tikznode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce TiKZ code to draw a tree.</p>
+<p>Nodes are drawn with the node command so they can have arbitrary
+coordinates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treedraw.latexlabel">
+<tt class="descclassname">discodop.treedraw.</tt><tt class="descname">latexlabel</tt><big>(</big><em>label</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedraw.html#latexlabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedraw.latexlabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quote/format label for latex.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.treesearch.html" title="discodop.treesearch"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.treedist.html" title="discodop.treedist"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

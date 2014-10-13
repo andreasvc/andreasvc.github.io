@@ -1,0 +1,551 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.eval &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.fragments" href="discodop.fragments.html" />
+    <link rel="prev" title="discodop.demos" href="discodop.demos.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.fragments.html" title="discodop.fragments"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.demos.html" title="discodop.demos"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.eval">
+<span id="discodop-eval"></span><h1>discodop.eval<a class="headerlink" href="#module-discodop.eval" title="Permalink to this headline">¶</a></h1>
+<p>Evaluation of (discontinuous) parse trees.</p>
+<p>Follows EVALB as much as possible, and provides some alternative evaluation
+metrics.</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.accuracy" title="discodop.eval.accuracy"><tt class="xref py py-obj docutils literal"><span class="pre">accuracy</span></tt></a>(reference,&nbsp;candidate)</td>
+<td>Compute fraction of equivalent pairs in two sequences.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.bracketings" title="discodop.eval.bracketings"><tt class="xref py py-obj docutils literal"><span class="pre">bracketings</span></tt></a>(tree[,&nbsp;labeled,&nbsp;dellabel,&nbsp;disconly])</td>
+<td>Return the labeled set of bracketings for a tree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.bracketing" title="discodop.eval.bracketing"><tt class="xref py py-obj docutils literal"><span class="pre">bracketing</span></tt></a>(node[,&nbsp;labeled])</td>
+<td>Generate bracketing <tt class="docutils literal"><span class="pre">(label,</span> <span class="pre">indices)</span></tt> for a given node.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.disc" title="discodop.eval.disc"><tt class="xref py py-obj docutils literal"><span class="pre">disc</span></tt></a>(node)</td>
+<td>Evaluate whether a particular node is locally discontinuous.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.editdistance" title="discodop.eval.editdistance"><tt class="xref py py-obj docutils literal"><span class="pre">editdistance</span></tt></a>(seq1,&nbsp;seq2)</td>
+<td>Calculate the Levenshtein edit-distance between two strings.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.f_measure" title="discodop.eval.f_measure"><tt class="xref py py-obj docutils literal"><span class="pre">f_measure</span></tt></a>(reference,&nbsp;candidate[,&nbsp;alpha])</td>
+<td>Get F-measure of precision and recall for two multisets.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.harmean" title="discodop.eval.harmean"><tt class="xref py py-obj docutils literal"><span class="pre">harmean</span></tt></a>(seq)</td>
+<td>Compute harmonic mean of a sequence of numbers.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.intervals" title="discodop.eval.intervals"><tt class="xref py py-obj docutils literal"><span class="pre">intervals</span></tt></a>(seq)</td>
+<td>Return a sequence of intervals corresponding to contiguous ranges.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.leafancestor" title="discodop.eval.leafancestor"><tt class="xref py py-obj docutils literal"><span class="pre">leafancestor</span></tt></a>(goldtree,&nbsp;candtree,&nbsp;dellabel)</td>
+<td>Sampson, Babarcz (2003): A test of the leaf-ancestor metric [...].</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.leafancestorpaths" title="discodop.eval.leafancestorpaths"><tt class="xref py py-obj docutils literal"><span class="pre">leafancestorpaths</span></tt></a>(tree,&nbsp;dellabel)</td>
+<td>Generate a list of ancestors for each leaf node in a tree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.mean" title="discodop.eval.mean"><tt class="xref py py-obj docutils literal"><span class="pre">mean</span></tt></a>(seq)</td>
+<td>Compute arithmetic mean of a sequence.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.nozerodiv" title="discodop.eval.nozerodiv"><tt class="xref py py-obj docutils literal"><span class="pre">nozerodiv</span></tt></a>(func)</td>
+<td>Return <tt class="docutils literal"><span class="pre">func()</span></tt> as 6-character string but catch zero division.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.parentedbracketings" title="discodop.eval.parentedbracketings"><tt class="xref py py-obj docutils literal"><span class="pre">parentedbracketings</span></tt></a>(tree[,&nbsp;labeled,&nbsp;...])</td>
+<td>Return the labeled bracketings with parents for a tree.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.pathscore" title="discodop.eval.pathscore"><tt class="xref py py-obj docutils literal"><span class="pre">pathscore</span></tt></a>(gold,&nbsp;cand)</td>
+<td>Get edit distance for two leaf-ancestor paths.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.precision" title="discodop.eval.precision"><tt class="xref py py-obj docutils literal"><span class="pre">precision</span></tt></a>(reference,&nbsp;candidate)</td>
+<td>Get precision score for two multisets.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.readparam" title="discodop.eval.readparam"><tt class="xref py py-obj docutils literal"><span class="pre">readparam</span></tt></a>(filename)</td>
+<td>Read an EVALB-style parameter file and return a dictionary.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.recall" title="discodop.eval.recall"><tt class="xref py py-obj docutils literal"><span class="pre">recall</span></tt></a>(reference,&nbsp;candidate)</td>
+<td>Get recall score for two multisets.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.strbracketings" title="discodop.eval.strbracketings"><tt class="xref py py-obj docutils literal"><span class="pre">strbracketings</span></tt></a>(brackets)</td>
+<td>Return a string with a concise representation of a bracketing.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.transform" title="discodop.eval.transform"><tt class="xref py py-obj docutils literal"><span class="pre">transform</span></tt></a>(tree,&nbsp;sent,&nbsp;pos,&nbsp;gpos,&nbsp;param,&nbsp;grootpos)</td>
+<td>Apply the transformations according to the parameter file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.transitiveclosure" title="discodop.eval.transitiveclosure"><tt class="xref py py-obj docutils literal"><span class="pre">transitiveclosure</span></tt></a>(eqpairs)</td>
+<td>Transitive closure of (undirected) EQ relations with DFS.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.treedisteval" title="discodop.eval.treedisteval"><tt class="xref py py-obj docutils literal"><span class="pre">treedisteval</span></tt></a>(a,&nbsp;b[,&nbsp;includeroot,&nbsp;debug])</td>
+<td>Get tree-distance for two trees and compute the Dice normalization.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.EvalAccumulator" title="discodop.eval.EvalAccumulator"><tt class="xref py py-obj docutils literal"><span class="pre">EvalAccumulator</span></tt></a>([disconly])</td>
+<td>Collect scores of evaluation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.Evaluator" title="discodop.eval.Evaluator"><tt class="xref py py-obj docutils literal"><span class="pre">Evaluator</span></tt></a>(param[,&nbsp;keylen])</td>
+<td>Incremental evaluator for syntactic trees.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.TreePairResult" title="discodop.eval.TreePairResult"><tt class="xref py py-obj docutils literal"><span class="pre">TreePairResult</span></tt></a>(n,&nbsp;gtree,&nbsp;gsent,&nbsp;ctree,&nbsp;...)</td>
+<td>Holds the evaluation result of a pair of trees.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="discodop.eval.EvalAccumulator">
+<em class="property">class </em><tt class="descclassname">discodop.eval.</tt><tt class="descname">EvalAccumulator</tt><big>(</big><em>disconly=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#EvalAccumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.EvalAccumulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect scores of evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>disconly</strong> &#8211; if True, only collect discontinuous bracketings.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="discodop.eval.EvalAccumulator.add">
+<tt class="descname">add</tt><big>(</big><em>pair</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#EvalAccumulator.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.EvalAccumulator.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add scores from given TreePairResult object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.EvalAccumulator.scores">
+<tt class="descname">scores</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#EvalAccumulator.scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.EvalAccumulator.scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary with running scores for all added sentences.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.eval.Evaluator">
+<em class="property">class </em><tt class="descclassname">discodop.eval.</tt><tt class="descname">Evaluator</tt><big>(</big><em>param</em>, <em>keylen=8</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#Evaluator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.Evaluator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Incremental evaluator for syntactic trees.</p>
+<p>Initialize evaluator object with given parameters.</p>
+<dl class="method">
+<dt id="discodop.eval.Evaluator.add">
+<tt class="descname">add</tt><big>(</big><em>n</em>, <em>gtree</em>, <em>gsent</em>, <em>ctree</em>, <em>csent</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#Evaluator.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.Evaluator.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a pair of gold and candidate trees to the evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> &#8211; a unique identifier for this sentence.</li>
+<li><strong>ctree</strong> (<em>gtree,</em>) &#8211; ParentedTree objects (will be modified in-place)</li>
+<li><strong>csent</strong> (<em>gsent,</em>) &#8211; lists of tokens.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <tt class="docutils literal"><span class="pre">TreePairResult</span></tt> object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.Evaluator.breakdowns">
+<tt class="descname">breakdowns</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#Evaluator.breakdowns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.Evaluator.breakdowns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print breakdowns for the most frequent rules, labels, tags.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.Evaluator.catbreakdown">
+<tt class="descname">catbreakdown</tt><big>(</big><em>limit=10</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#Evaluator.catbreakdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.Evaluator.catbreakdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print breakdowns for the most frequent labels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.Evaluator.rulebreakdowns">
+<tt class="descname">rulebreakdowns</tt><big>(</big><em>limit=10</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#Evaluator.rulebreakdowns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.Evaluator.rulebreakdowns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print breakdowns for the most frequent rule mismatches.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.Evaluator.summary">
+<tt class="descname">summary</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#Evaluator.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.Evaluator.summary" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string with an overview of scores for all sentences.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.Evaluator.tagbreakdown">
+<tt class="descname">tagbreakdown</tt><big>(</big><em>limit=10</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#Evaluator.tagbreakdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.Evaluator.tagbreakdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print breakdowns for the most frequent tags.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.eval.TreePairResult">
+<em class="property">class </em><tt class="descclassname">discodop.eval.</tt><tt class="descname">TreePairResult</tt><big>(</big><em>n</em>, <em>gtree</em>, <em>gsent</em>, <em>ctree</em>, <em>csent</em>, <em>param</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#TreePairResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.TreePairResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds the evaluation result of a pair of trees.</p>
+<p>Construct a pair of gold and candidate trees for evaluation.</p>
+<dl class="method">
+<dt id="discodop.eval.TreePairResult.bracketings">
+<tt class="descname">bracketings</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#TreePairResult.bracketings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.TreePairResult.bracketings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string representation of bracketing errors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.TreePairResult.debug">
+<tt class="descname">debug</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#TreePairResult.debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.TreePairResult.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print detailed information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.TreePairResult.info">
+<tt class="descname">info</tt><big>(</big><em>fmt='%8s  '</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#TreePairResult.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.TreePairResult.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print one line with evaluation results.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.TreePairResult.scores">
+<tt class="descname">scores</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#TreePairResult.scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.TreePairResult.scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return precision, recall, f-measure for sentence pair.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.eval.TreePairResult.visualize">
+<tt class="descname">visualize</tt><big>(</big><em>gold=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#TreePairResult.visualize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.TreePairResult.visualize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualize candidate parse, highlight matching POS, bracketings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gold</strong> &#8211; by default, the candidate tree is visualized; if True,
+visualize the gold tree instead.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.accuracy">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">accuracy</tt><big>(</big><em>reference</em>, <em>candidate</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute fraction of equivalent pairs in two sequences.</p>
+<p>In particular, return the fraction of indices
+<tt class="docutils literal"><span class="pre">0&lt;i&lt;=len(test)</span></tt> such that <tt class="docutils literal"><span class="pre">test[i]</span> <span class="pre">==</span> <span class="pre">reference[i]</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.bracketings">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">bracketings</tt><big>(</big><em>tree</em>, <em>labeled=True</em>, <em>dellabel=()</em>, <em>disconly=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#bracketings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.bracketings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the labeled set of bracketings for a tree.</p>
+<p>For each nonterminal node, the set will contain a tuple with the label and
+the set of terminals which it dominates.
+<tt class="docutils literal"><span class="pre">tree</span></tt> must have been processed by <tt class="docutils literal"><span class="pre">transform()</span></tt>.
+The argument <tt class="docutils literal"><span class="pre">dellabel</span></tt> is only used to exclude the ROOT node from the
+results (because it cannot be deleted by <tt class="docutils literal"><span class="pre">transform()</span></tt> when non-unary).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;(S (NP 1) (VP (VB 0) (JJ 2)))&#39;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;DELETE_LABEL&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span> <span class="s">&#39;DELETE_WORD&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span>
+<span class="gp">... </span><span class="s">&#39;EQ_LABEL&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="s">&#39;EQ_WORD&#39;</span><span class="p">:</span> <span class="p">{},</span>
+<span class="gp">... </span><span class="s">&#39;DELETE_ROOT_PRETERMS&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">(),</span> <span class="n">tree</span><span class="o">.</span><span class="n">pos</span><span class="p">(),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">pos</span><span class="p">()),</span>
+<span class="gp">... </span><span class="n">params</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">bracketings</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">[((&#39;S&#39;, (0, 1, 2)), 1), ((&#39;VP&#39;, (0, 2)), 1)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;(S (NP 1) (VP (VB 0) (JJ 2)))&#39;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">[</span><span class="s">&#39;DELETE_LABEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;VP&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">(),</span> <span class="n">tree</span><span class="o">.</span><span class="n">pos</span><span class="p">(),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">pos</span><span class="p">()),</span>
+<span class="gp">... </span><span class="n">params</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bracketings</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="go">Counter({(&#39;S&#39;, (0, 1, 2)): 1})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.bracketing">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">bracketing</tt><big>(</big><em>node</em>, <em>labeled=True</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#bracketing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.bracketing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate bracketing <tt class="docutils literal"><span class="pre">(label,</span> <span class="pre">indices)</span></tt> for a given node.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.disc">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">disc</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#disc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.disc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate whether a particular node is locally discontinuous.</p>
+<p>The root node of a complete tree will, by definition, be continuous. Nodes
+can be continuous even if some of their children are discontinuous.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.editdistance">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">editdistance</tt><big>(</big><em>seq1</em>, <em>seq2</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#editdistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.editdistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Levenshtein edit-distance between two strings.</p>
+<p>The edit distance is the number of characters that need to be substituted,
+inserted, or deleted, to transform seq1 into seq2.  For example,
+transforming &#8216;rain&#8217; to &#8216;shine&#8217; requires three steps, consisting of two
+substitutions and one insertion: &#8216;rain&#8217; -&gt; &#8216;sain&#8217; -&gt; &#8216;shin&#8217; -&gt; &#8216;shine&#8217;.
+These operations could have been done in other orders, but at least three
+steps are needed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.f_measure">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">f_measure</tt><big>(</big><em>reference</em>, <em>candidate</em>, <em>alpha=Decimal('0.5')</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#f_measure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.f_measure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get F-measure of precision and recall for two multisets.</p>
+<p>The default weight <tt class="docutils literal"><span class="pre">alpha=0.5</span></tt> corresponds to the F_1-measure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.harmean">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">harmean</tt><big>(</big><em>seq</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#harmean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.harmean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute harmonic mean of a sequence of numbers.</p>
+<p>Returns NaN when <tt class="docutils literal"><span class="pre">seq</span></tt> contains zero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.intervals">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">intervals</tt><big>(</big><em>seq</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#intervals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.intervals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a sequence of intervals corresponding to contiguous ranges.</p>
+<p><tt class="docutils literal"><span class="pre">seq</span></tt> is a sorted list of integers. An interval is a pair <tt class="docutils literal"><span class="pre">(a,</span> <span class="pre">b)</span></tt>,
+with <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">b</span></tt> denoting indices <tt class="docutils literal"><span class="pre">x</span></tt> in <tt class="docutils literal"><span class="pre">seq</span></tt>
+such that <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">b</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">intervals</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">)))</span>
+<span class="go">[(0, 1), (3, 4), (6, 8)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.leafancestor">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">leafancestor</tt><big>(</big><em>goldtree</em>, <em>candtree</em>, <em>dellabel</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#leafancestor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.leafancestor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sampson, Babarcz (2003): A test of the leaf-ancestor metric [...].</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.leafancestorpaths">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">leafancestorpaths</tt><big>(</big><em>tree</em>, <em>dellabel</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#leafancestorpaths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.leafancestorpaths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a list of ancestors for each leaf node in a tree.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.mean">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">mean</tt><big>(</big><em>seq</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute arithmetic mean of a sequence.</p>
+<p>Returns NaN when <tt class="docutils literal"><span class="pre">seq</span></tt> is empty.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.nozerodiv">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">nozerodiv</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#nozerodiv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.nozerodiv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">func()</span></tt> as 6-character string but catch zero division.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.parentedbracketings">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">parentedbracketings</tt><big>(</big><em>tree</em>, <em>labeled=True</em>, <em>dellabel=()</em>, <em>disconly=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#parentedbracketings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.parentedbracketings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the labeled bracketings with parents for a tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">multiset with items of the form <tt class="docutils literal"><span class="pre">((label,</span> <span class="pre">indices),</span> <span class="pre">parentlabel)</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.pathscore">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">pathscore</tt><big>(</big><em>gold</em>, <em>cand</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#pathscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.pathscore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get edit distance for two leaf-ancestor paths.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.precision">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">precision</tt><big>(</big><em>reference</em>, <em>candidate</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#precision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.precision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get precision score for two multisets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.readparam">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">readparam</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#readparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.readparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an EVALB-style parameter file and return a dictionary.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.recall">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">recall</tt><big>(</big><em>reference</em>, <em>candidate</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#recall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.recall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get recall score for two multisets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.strbracketings">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">strbracketings</tt><big>(</big><em>brackets</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#strbracketings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.strbracketings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string with a concise representation of a bracketing.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">strbracketings</span><span class="p">({(</span><span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="p">(</span><span class="s">&#39;VP&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))})</span>
+<span class="go">&#39;S[0-2], VP[0,2]&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.transform">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">transform</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>pos</em>, <em>gpos</em>, <em>param</em>, <em>grootpos</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the transformations according to the parameter file.</p>
+<p>Does not delete the root node, which is a special case because if there is
+more than one child it cannot be deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pos</strong> &#8211; a list with the contents of tree.pos(); modified in-place.</li>
+<li><strong>gpos</strong> &#8211; a dictionary of the POS tags of the original gold tree, before
+any tags/words have been deleted.</li>
+<li><strong>param</strong> &#8211; the parameters specifing which labels / words to delete</li>
+<li><strong>grootpos</strong> &#8211; the set of indices with preterminals directly under the
+root node of the gold tree.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.transitiveclosure">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">transitiveclosure</tt><big>(</big><em>eqpairs</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#transitiveclosure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.transitiveclosure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transitive closure of (undirected) EQ relations with DFS.</p>
+<p>Given a sequence of pairs denoting an equivalence relation,
+produce a dictionary with equivalence classes as values and
+arbitrary members of those classes as keys.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transitiveclosure</span><span class="p">({(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">popitem</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.eval.treedisteval">
+<tt class="descclassname">discodop.eval.</tt><tt class="descname">treedisteval</tt><big>(</big><em>a</em>, <em>b</em>, <em>includeroot=False</em>, <em>debug=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/eval.html#treedisteval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.eval.treedisteval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get tree-distance for two trees and compute the Dice normalization.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.fragments.html" title="discodop.fragments"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.demos.html" title="discodop.demos"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

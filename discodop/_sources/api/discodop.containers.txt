@@ -1,0 +1,35 @@
+discodop.containers
+===================
+
+.. automodule:: discodop.containers
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      numedges
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Chart
+      Ctrees
+      Edges
+      FatChartItem
+      Grammar
+      LexicalRule
+      RankedEdge
+      SmallChartItem
+   
+   
+
+   
+   
+   

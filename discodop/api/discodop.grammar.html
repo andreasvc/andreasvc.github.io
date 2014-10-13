@@ -1,0 +1,679 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.grammar &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.lexicon" href="discodop.lexicon.html" />
+    <link rel="prev" title="discodop.gen" href="discodop.gen.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.lexicon.html" title="discodop.lexicon"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.gen.html" title="discodop.gen"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.grammar">
+<span id="discodop-grammar"></span><h1>discodop.grammar<a class="headerlink" href="#module-discodop.grammar" title="Permalink to this headline">¶</a></h1>
+<p>Assorted functions to read off grammars from treebanks.</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.lcfrsproductions" title="discodop.grammar.lcfrsproductions"><tt class="xref py py-obj docutils literal"><span class="pre">lcfrsproductions</span></tt></a>(tree,&nbsp;sent[,&nbsp;frontiers])</td>
+<td>Read off LCFRS productions from a tree with indices and a sentence.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.treebankgrammar" title="discodop.grammar.treebankgrammar"><tt class="xref py py-obj docutils literal"><span class="pre">treebankgrammar</span></tt></a>(trees,&nbsp;sents)</td>
+<td>Induce a probabilistic LCFRS with relative frequencies of productions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.dopreduction" title="discodop.grammar.dopreduction"><tt class="xref py py-obj docutils literal"><span class="pre">dopreduction</span></tt></a>(trees,&nbsp;sents[,&nbsp;packedgraph,&nbsp;...])</td>
+<td>Induce a reduction of DOP to an LCFRS.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.doubledop" title="discodop.grammar.doubledop"><tt class="xref py py-obj docutils literal"><span class="pre">doubledop</span></tt></a>(trees,&nbsp;sents[,&nbsp;debug,&nbsp;binarized,&nbsp;...])</td>
+<td>Extract a Double-DOP grammar from a treebank.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.compiletsg" title="discodop.grammar.compiletsg"><tt class="xref py py-obj docutils literal"><span class="pre">compiletsg</span></tt></a>(fragments[,&nbsp;binarized])</td>
+<td>Compile a set of weighted fragments (i.e., a TSG) into a grammar.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.sortgrammar" title="discodop.grammar.sortgrammar"><tt class="xref py py-obj docutils literal"><span class="pre">sortgrammar</span></tt></a>(grammar[,&nbsp;altweights])</td>
+<td>Sort grammar productions in three clusters: phrasal, binarized, lexical.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.flatten" title="discodop.grammar.flatten"><tt class="xref py py-obj docutils literal"><span class="pre">flatten</span></tt></a>(tree,&nbsp;sent,&nbsp;ids,&nbsp;backtransform,&nbsp;...)</td>
+<td>Auxiliary function for Double-DOP.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.nodefreq" title="discodop.grammar.nodefreq"><tt class="xref py py-obj docutils literal"><span class="pre">nodefreq</span></tt></a>(tree,&nbsp;dectree,&nbsp;subtreefd,&nbsp;nonterminalfd)</td>
+<td>Auxiliary function for DOP reduction.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.eqtree" title="discodop.grammar.eqtree"><tt class="xref py py-obj docutils literal"><span class="pre">eqtree</span></tt></a>(tree1,&nbsp;sent1,&nbsp;tree2,&nbsp;sent2)</td>
+<td>Test whether two discontinuous trees are equivalent.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.quotelabel" title="discodop.grammar.quotelabel"><tt class="xref py py-obj docutils literal"><span class="pre">quotelabel</span></tt></a>(label)</td>
+<td>Escapes two things: parentheses and non-ascii characters.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.rangeheads" title="discodop.grammar.rangeheads"><tt class="xref py py-obj docutils literal"><span class="pre">rangeheads</span></tt></a>(s)</td>
+<td>Return first element of each range in a sorted sequence of numbers.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.ranges" title="discodop.grammar.ranges"><tt class="xref py py-obj docutils literal"><span class="pre">ranges</span></tt></a>(s)</td>
+<td>Partition s into a sequence of lists corresponding to contiguous ranges.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.defaultparse" title="discodop.grammar.defaultparse"><tt class="xref py py-obj docutils literal"><span class="pre">defaultparse</span></tt></a>(wordstags[,&nbsp;rightbranching])</td>
+<td>A default parse to generate when parsing fails.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.printrule" title="discodop.grammar.printrule"><tt class="xref py py-obj docutils literal"><span class="pre">printrule</span></tt></a>(r,&nbsp;yf[,&nbsp;w])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">a string representation of a rule.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.cartpi" title="discodop.grammar.cartpi"><tt class="xref py py-obj docutils literal"><span class="pre">cartpi</span></tt></a>(seq)</td>
+<td>The cartesian product of a sequence of iterables.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.write_lcfrs_grammar" title="discodop.grammar.write_lcfrs_grammar"><tt class="xref py py-obj docutils literal"><span class="pre">write_lcfrs_grammar</span></tt></a>(grammar[,&nbsp;bitpar])</td>
+<td>Write a grammar in a simple text file format.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.write_lncky_grammar" title="discodop.grammar.write_lncky_grammar"><tt class="xref py py-obj docutils literal"><span class="pre">write_lncky_grammar</span></tt></a>(rules,&nbsp;lexicon,&nbsp;out[,&nbsp;...])</td>
+<td>Convert a bitpar grammar to the format of Mark Jonhson&#8217;s cky parser.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.subsetgrammar" title="discodop.grammar.subsetgrammar"><tt class="xref py py-obj docutils literal"><span class="pre">subsetgrammar</span></tt></a>(a,&nbsp;b)</td>
+<td>Test whether grammar a is a subset of b.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.grammarinfo" title="discodop.grammar.grammarinfo"><tt class="xref py py-obj docutils literal"><span class="pre">grammarinfo</span></tt></a>(grammar[,&nbsp;dump])</td>
+<td>Print some statistics on a grammar, before it goes through Grammar().</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.convertweight" title="discodop.grammar.convertweight"><tt class="xref py py-obj docutils literal"><span class="pre">convertweight</span></tt></a>(weight)</td>
+<td>Convert a weight in a string to a float.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.grammarstats" title="discodop.grammar.grammarstats"><tt class="xref py py-obj docutils literal"><span class="pre">grammarstats</span></tt></a>(filename)</td>
+<td>Print statistics for PLCFRS/bitpar grammar (sorted by LHS).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.stripweight" title="discodop.grammar.stripweight"><tt class="xref py py-obj docutils literal"><span class="pre">stripweight</span></tt></a>(line)</td>
+<td>Extract rule without weight.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.sumrules" title="discodop.grammar.sumrules"><tt class="xref py py-obj docutils literal"><span class="pre">sumrules</span></tt></a>(iterable,&nbsp;n)</td>
+<td>Given a sorted iterable of rules, sum weights of identical rules.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.sumlex" title="discodop.grammar.sumlex"><tt class="xref py py-obj docutils literal"><span class="pre">sumlex</span></tt></a>(iterable,&nbsp;n)</td>
+<td>Given a sorted lexicon iterable, sum weights of word/tag pairs.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.sumfrags" title="discodop.grammar.sumfrags"><tt class="xref py py-obj docutils literal"><span class="pre">sumfrags</span></tt></a>(iterable,&nbsp;n)</td>
+<td>Sum weights for runs of identical fragments.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.merge" title="discodop.grammar.merge"><tt class="xref py py-obj docutils literal"><span class="pre">merge</span></tt></a>(filenames,&nbsp;outfilename,&nbsp;sumfunc,&nbsp;key)</td>
+<td>Interpolate weights of given files.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.TreeDecorator" title="discodop.grammar.TreeDecorator"><tt class="xref py py-obj docutils literal"><span class="pre">TreeDecorator</span></tt></a>([memoize,&nbsp;n])</td>
+<td>Auxiliary class for DOP reduction.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.DiscTree" title="discodop.grammar.DiscTree"><tt class="xref py py-obj docutils literal"><span class="pre">DiscTree</span></tt></a>(tree,&nbsp;sent)</td>
+<td>Wrap an immutable tree with indices as leaves and a sentence.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.UniqueIDs" title="discodop.grammar.UniqueIDs"><tt class="xref py py-obj docutils literal"><span class="pre">UniqueIDs</span></tt></a>()</td>
+<td>Produce numeric IDs.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="discodop.grammar.lcfrsproductions">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">lcfrsproductions</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>frontiers=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#lcfrsproductions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.lcfrsproductions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read off LCFRS productions from a tree with indices and a sentence.</p>
+<p>Tree should contain integer indices as terminals, and a sentence with the
+corresponding words for these indices. Always produces monotone LCFRS
+rules. For best results, tree should be canonicalized. When <tt class="docutils literal"><span class="pre">frontiers</span></tt>
+is <tt class="docutils literal"><span class="pre">True</span></tt>, frontier nodes will generate empty productions, by default
+they are ignored.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;(S (VP_2 (V 0) (ADJ 2)) (NP 1))&quot;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sent</span> <span class="o">=</span> <span class="s">&quot;is Mary happy&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">lcfrsproductions</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="go">((&#39;S&#39;, &#39;VP_2&#39;, &#39;NP&#39;), ((0, 1, 0),))</span>
+<span class="go">((&#39;VP_2&#39;, &#39;V&#39;, &#39;ADJ&#39;), ((0,), (1,)))</span>
+<span class="go">((&#39;V&#39;, &#39;Epsilon&#39;), (&#39;is&#39;,))</span>
+<span class="go">((&#39;ADJ&#39;, &#39;Epsilon&#39;), (&#39;happy&#39;,))</span>
+<span class="go">((&#39;NP&#39;, &#39;Epsilon&#39;), (&#39;Mary&#39;,))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.treebankgrammar">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">treebankgrammar</tt><big>(</big><em>trees</em>, <em>sents</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#treebankgrammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.treebankgrammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Induce a probabilistic LCFRS with relative frequencies of productions.</p>
+<p>When trees contain no discontinuities, the result is equivalent to a
+treebank PCFG.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.dopreduction">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">dopreduction</tt><big>(</big><em>trees</em>, <em>sents</em>, <em>packedgraph=False</em>, <em>decorater=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#dopreduction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.dopreduction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Induce a reduction of DOP to an LCFRS.</p>
+<p>Similar to how Goodman (1996, 2003) reduces DOP to a PCFG.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>packedgraph</strong> &#8211; packed graph encoding (Bansal &amp; Klein 2010).</li>
+<li><strong>decorator</strong> &#8211; a TreeDecorator instance (packedgraph is ignored if this
+is passed) .</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a set of rules with the relative frequency estimate as
+probilities, and a dictionary with alternate weights.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.doubledop">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">doubledop</tt><big>(</big><em>trees</em>, <em>sents</em>, <em>debug=False</em>, <em>binarized=True</em>, <em>complement=False</em>, <em>iterate=False</em>, <em>numproc=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#doubledop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.doubledop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a Double-DOP grammar from a treebank.</p>
+<p>That is, a fragment grammar containing fragments that occur at least twice,
+plus all individual productions needed to obtain full coverage.
+Input trees need to be binarized. A second level of binarization (a normal
+form) is needed when fragments are converted to individual grammar rules,
+which occurs through the removal of internal nodes. The binarization adds
+unique identifiers so that each grammar rule can be mapped back to its
+fragment. In fragments with terminals, we replace their POS tags with a tag
+uniquely identifying that terminal and tag: <tt class="docutils literal"><span class="pre">tag&#64;word</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>binarized</strong> &#8211; Whether the resulting grammar should be binarized.</li>
+<li><strong>complement, numproc</strong> (<em>iterate,</em>) &#8211; cf. fragments.getfragments()</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tuple (grammar, altweights, backtransform)
+altweights is a dictionary containing alternate weights.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.compiletsg">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">compiletsg</tt><big>(</big><em>fragments</em>, <em>binarized=True</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#compiletsg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.compiletsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile a set of weighted fragments (i.e., a TSG) into a grammar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fragments</strong> &#8211; a dictionary of fragments mapped to weights. The
+fragments may either consist of bracketed strings, or discontinuous
+bracketed strings as tuples of the form <tt class="docutils literal"><span class="pre">(frag,</span> <span class="pre">terminals)</span></tt>.</li>
+<li><strong>binarized</strong> &#8211; Whether the resulting grammar should be binarized.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <tt class="docutils literal"><span class="pre">(grammar,</span> <span class="pre">backtransform,</span> <span class="pre">altweights)</span></tt> tuple similar to what
+<tt class="docutils literal"><span class="pre">doubledop()</span></tt> returns; altweights will be empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.sortgrammar">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">sortgrammar</tt><big>(</big><em>grammar</em>, <em>altweights=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#sortgrammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.sortgrammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort grammar productions in three clusters: phrasal, binarized, lexical.</p>
+<ol class="arabic">
+<li><p class="first">normal phrasal rules, ordered by lhs symbol</p>
+</li>
+<li><dl class="first docutils">
+<dt>non-initial binarized 2dop rules (to align the 2dop backtransform with</dt>
+<dd><p class="first last">the rules in cluster 1 which introduce a new fragment)</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">lexical rules sorted by word</p>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.flatten">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">flatten</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>ids</em>, <em>backtransform</em>, <em>binarized</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary function for Double-DOP.</p>
+<p>Remove internal nodes from a tree and read off the (binarized)
+productions of the resulting flattened tree. Aside from returning
+productions, also return tree with lexical and frontier nodes replaced by a
+templating symbol &#8216;{n}&#8217; where n is an index.
+Input is a tree and sentence, as well as an iterator which yields
+unique IDs for non-terminals introdudced by the binarization;
+output is a tuple (prods, frag). Trees are in the form of strings.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ids</span> <span class="o">=</span> <span class="n">UniqueIDs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sent</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="s">&quot;(ROOT (S_2 0 2) (ROOT|&lt;$,&gt;_2 ($, 1) ($. 3)))&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">True</span><span class="p">)</span>  
+<span class="go">([((&#39;ROOT&#39;, &#39;ROOT}&lt;0&gt;&#39;, &#39;$.@.&#39;), ((0, 1),)),</span>
+<span class="go">((&#39;ROOT}&lt;0&gt;&#39;, &#39;S_2&#39;, &#39;$,@,&#39;), ((0, 1, 0),)),</span>
+<span class="go">((&#39;$,@,&#39;, &#39;Epsilon&#39;), (&#39;,&#39;,)), ((&#39;$.@.&#39;, &#39;Epsilon&#39;), (&#39;.&#39;,))],</span>
+<span class="go">&#39;(ROOT {0} (ROOT|&lt;$,&gt;_2 {1} {2}))&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">False</span><span class="p">)</span>  
+<span class="go">([((&#39;ROOT&#39;, &#39;S_2&#39;, &#39;$,@,&#39;, &#39;$.@.&#39;), ((0, 1, 0, 2),)),</span>
+<span class="go">         ((&#39;$,@,&#39;, &#39;Epsilon&#39;), (&#39;,&#39;,)), ((&#39;$.@.&#39;, &#39;Epsilon&#39;), (&#39;.&#39;,))],</span>
+<span class="go">&#39;(ROOT {0} (ROOT|&lt;$,&gt;_2 {1} {2}))&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.nodefreq">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">nodefreq</tt><big>(</big><em>tree</em>, <em>dectree</em>, <em>subtreefd</em>, <em>nonterminalfd</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#nodefreq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.nodefreq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary function for DOP reduction.</p>
+<p>Counts frequencies of nodes and calculate the number of
+subtrees headed by each node. updates <tt class="docutils literal"><span class="pre">subtreefd</span></tt> and <tt class="docutils literal"><span class="pre">nonterminalfd</span></tt>
+as a side effect. Expects a normal tree and a tree with IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>subtreefd</strong> &#8211; the multiset to store the counts of subtrees</li>
+<li><strong>nonterminalfd</strong> &#8211; the multiset to store the counts of non-terminals</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span> <span class="o">=</span> <span class="n">multiset</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">TreeDecorator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="s">&quot;(S (NP mary) (VP walks))&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dectree</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">decorate</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;mary&#39;</span><span class="p">,</span> <span class="s">&#39;walks&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodefreq</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">dectree</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">multiset</span><span class="p">())</span>
+<span class="go">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fd</span> <span class="o">==</span> <span class="n">multiset</span><span class="p">({</span><span class="s">&#39;S&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&#39;NP&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;VP&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;NP@1-0&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;VP@1-1&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.grammar.TreeDecorator">
+<em class="property">class </em><tt class="descclassname">discodop.grammar.</tt><tt class="descname">TreeDecorator</tt><big>(</big><em>memoize=False</em>, <em>n=1</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#TreeDecorator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.TreeDecorator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary class for DOP reduction.</p>
+<p>Adds unique identifiers to each internal non-terminal of a tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>memoize</strong> &#8211; if <tt class="docutils literal"><span class="pre">True</span></tt>, identifiers will be reused for equivalent
+subtrees (including all terminals).</li>
+<li><strong>n</strong> &#8211; the initial sentence number.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="discodop.grammar.TreeDecorator.decorate">
+<tt class="descname">decorate</tt><big>(</big><em>tree</em>, <em>sent</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#TreeDecorator.decorate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.TreeDecorator.decorate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of tree with labels decorated with IDs.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">TreeDecorator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;(S (NP (DT 0) (N 1)) (VP 2))&quot;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">decorate</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;the&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">,</span> <span class="s">&#39;walks&#39;</span><span class="p">])</span>
+<span class="gp">... </span>
+<span class="go">Tree(&#39;S&#39;, [Tree(&#39;NP@1-0&#39;, [Tree(&#39;DT@1-1&#39;, [0]),</span>
+<span class="go">        Tree(&#39;N@1-2&#39;, [1])]), Tree(&#39;VP@1-3&#39;, [2])])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">TreeDecorator</span><span class="p">(</span><span class="n">memoize</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">decorate</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;(S (NP (DT 0) (N 1)) (VP 2))&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;the&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">,</span> <span class="s">&#39;walks&#39;</span><span class="p">]))</span>
+<span class="go">(S (NP@1-1 (DT@1-2 0) (N@1-3 1)) (VP@1-4 2))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">decorate</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;(S (NP (DT 0) (N 1)) (VP 2))&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;the&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">,</span> <span class="s">&#39;barks&#39;</span><span class="p">]))</span>
+<span class="go">(S (NP@1-1 (DT@1-2 0) (N@1-3 1)) (VP@2-4 2))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.grammar.DiscTree">
+<em class="property">class </em><tt class="descclassname">discodop.grammar.</tt><tt class="descname">DiscTree</tt><big>(</big><em>tree</em>, <em>sent</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#DiscTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.DiscTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap an immutable tree with indices as leaves and a sentence.</p>
+<p>Provides hash &amp; equality.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.eqtree">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">eqtree</tt><big>(</big><em>tree1</em>, <em>sent1</em>, <em>tree2</em>, <em>sent2</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#eqtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.eqtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether two discontinuous trees are equivalent.</p>
+<p>Assumes canonicalized() ordering.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.quotelabel">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">quotelabel</tt><big>(</big><em>label</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#quotelabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.quotelabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Escapes two things: parentheses and non-ascii characters.</p>
+<p>Parentheses are replaced by square brackets. Also escapes non-ascii
+characters, so that phrasal labels can remain ascii-only.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.grammar.UniqueIDs">
+<em class="property">class </em><tt class="descclassname">discodop.grammar.</tt><tt class="descname">UniqueIDs</tt><a class="reference internal" href="../_modules/discodop/grammar.html#UniqueIDs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.UniqueIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce numeric IDs.</p>
+<p>Can be used as iterator (ID will not be re-used) and dictionary (ID will be
+re-used for same key).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ids</span> <span class="o">=</span> <span class="n">UniqueIDs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+<span class="go">&#39;0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ids</span><span class="p">[</span><span class="s">&#39;foo&#39;</span><span class="p">],</span> <span class="n">ids</span><span class="p">[</span><span class="s">&#39;bar&#39;</span><span class="p">],</span> <span class="n">ids</span><span class="p">[</span><span class="s">&#39;foo&#39;</span><span class="p">]</span>
+<span class="go">(&#39;1&#39;, &#39;2&#39;, &#39;1&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.rangeheads">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">rangeheads</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#rangeheads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.rangeheads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return first element of each range in a sorted sequence of numbers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rangeheads</span><span class="p">(</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="p">)</span>
+<span class="go">[0, 3, 6]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.ranges">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">ranges</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#ranges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.ranges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partition s into a sequence of lists corresponding to contiguous ranges.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ranges</span><span class="p">(</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="p">))</span>
+<span class="go">[[0, 1], [3, 4], [6]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.defaultparse">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">defaultparse</tt><big>(</big><em>wordstags</em>, <em>rightbranching=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#defaultparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.defaultparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default parse to generate when parsing fails.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rightbranching</strong> &#8211; when True, return a right branching tree with NPs,
+otherwise return all words under a single constituent &#8216;NOPARSE&#8217;.</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">defaultparse</span><span class="p">([(</span><span class="s">&#39;like&#39;</span><span class="p">,</span><span class="s">&#39;X&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;this&#39;</span><span class="p">,</span><span class="s">&#39;X&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;example&#39;</span><span class="p">,</span> <span class="s">&#39;NN&#39;</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">(</span><span class="s">&#39;here&#39;</span><span class="p">,</span><span class="s">&#39;X&#39;</span><span class="p">)])</span>
+<span class="go">&#39;(NOPARSE (X like) (X this) (NN example) (X here))&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">defaultparse</span><span class="p">([(</span><span class="s">&#39;like&#39;</span><span class="p">,</span><span class="s">&#39;X&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;this&#39;</span><span class="p">,</span><span class="s">&#39;X&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;example&#39;</span><span class="p">,</span> <span class="s">&#39;NN&#39;</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">(</span><span class="s">&#39;here&#39;</span><span class="p">,</span><span class="s">&#39;X&#39;</span><span class="p">)],</span> <span class="bp">True</span><span class="p">)</span>
+<span class="go">&#39;(NP (X like) (NP (X this) (NP (NN example) (NP (X here)))))&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.printrule">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">printrule</tt><big>(</big><em>r</em>, <em>yf</em>, <em>w=''</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#printrule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.printrule" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string representation of a rule.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.cartpi">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">cartpi</tt><big>(</big><em>seq</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#cartpi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.cartpi" title="Permalink to this definition">¶</a></dt>
+<dd><p>The cartesian product of a sequence of iterables.</p>
+<p>itertools.product doesn&#8217;t support infinite sequences!</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">cartpi</span><span class="p">([</span><span class="n">count</span><span class="p">(),</span> <span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)]),</span> <span class="mi">9</span><span class="p">))</span>
+<span class="go">[(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.write_lcfrs_grammar">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">write_lcfrs_grammar</tt><big>(</big><em>grammar</em>, <em>bitpar=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#write_lcfrs_grammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.write_lcfrs_grammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a grammar in a simple text file format.</p>
+<p>Rules are written in the order as they appear in the sequence <cite>grammar</cite>,
+except that the lexicon file lists words in sorted order (with tags for
+each word in the order of <cite>grammar</cite>). For a description of the file format,
+see <tt class="docutils literal"><span class="pre">docs/fileformats.rst</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grammar</strong> &#8211; a sequence of rule tuples, as produced by
+<tt class="docutils literal"><span class="pre">treebankgrammar()</span></tt>, <tt class="docutils literal"><span class="pre">dopreduction()</span></tt>, or <tt class="docutils literal"><span class="pre">doubledop()</span></tt>.</li>
+<li><strong>bitpar</strong> &#8211; when <tt class="docutils literal"><span class="pre">True</span></tt>, use bitpar format: for rules, put weight
+first and leave out the yield function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple <tt class="docutils literal"><span class="pre">(rules,</span> <span class="pre">lexicon)</span></tt>; bytes object &amp; a unicode string,
+respectively.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Weights are written in the following format:</p>
+<ul>
+<li><p class="first">if <tt class="docutils literal"><span class="pre">bitpar</span></tt> is <tt class="docutils literal"><span class="pre">False</span></tt>, write rational fractions; e.g., <tt class="docutils literal"><span class="pre">2/3</span></tt>.</p>
+</li>
+<li><dl class="first docutils">
+<dt>if <tt class="docutils literal"><span class="pre">bitpar</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>, write frequencies (e.g., <tt class="docutils literal"><span class="pre">2</span></tt>)</dt>
+<dd><p class="first last">if probabilities sum to 1, i.e., in that case probabilities can be
+re-computed as relative frequencies. Otherwise, resort to floating
+point numbers (e.g., <tt class="docutils literal"><span class="pre">0.666</span></tt>, imprecise).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.write_lncky_grammar">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">write_lncky_grammar</tt><big>(</big><em>rules</em>, <em>lexicon</em>, <em>out</em>, <em>encoding='utf-8'</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#write_lncky_grammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.write_lncky_grammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a bitpar grammar to the format of Mark Jonhson&#8217;s cky parser.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.subsetgrammar">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">subsetgrammar</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#subsetgrammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.subsetgrammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether grammar a is a subset of b.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.grammarinfo">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">grammarinfo</tt><big>(</big><em>grammar</em>, <em>dump=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#grammarinfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.grammarinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print some statistics on a grammar, before it goes through Grammar().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dump</strong> &#8211; if given a filename, will dump distribution of parsing
+complexity to a file (i.e., p.c. 3 occurs 234 times, 4 occurs 120
+times, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.grammarstats">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">grammarstats</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#grammarstats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.grammarstats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print statistics for PLCFRS/bitpar grammar (sorted by LHS).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.splitweight">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">splitweight</tt><big>(</big><em>weight</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#splitweight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.splitweight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a weight / fraction in a string to a float / tuple.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">splitweight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;0.5&#39;</span><span class="p">,</span> <span class="s">&#39;0x1.0000000000000p-1&#39;</span><span class="p">,</span> <span class="s">&#39;1/2&#39;</span><span class="p">)]</span>
+<span class="go">[0.5, 0.5, (1.0, 2.0)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.convertweight">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">convertweight</tt><big>(</big><em>weight</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#convertweight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.convertweight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a weight in a string to a float.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">convertweight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;0.5&#39;</span><span class="p">,</span> <span class="s">&#39;0x1.0000000000000p-1&#39;</span><span class="p">,</span> <span class="s">&#39;1/2&#39;</span><span class="p">)]</span>
+<span class="go">[0.5, 0.5, 0.5]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.stripweight">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">stripweight</tt><big>(</big><em>line</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#stripweight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.stripweight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract rule without weight.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.sumrules">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">sumrules</tt><big>(</big><em>iterable</em>, <em>n</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#sumrules"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.sumrules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a sorted iterable of rules, sum weights of identical rules.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.sumlex">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">sumlex</tt><big>(</big><em>iterable</em>, <em>n</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#sumlex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.sumlex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a sorted lexicon iterable, sum weights of word/tag pairs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.sumfrags">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">sumfrags</tt><big>(</big><em>iterable</em>, <em>n</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#sumfrags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.sumfrags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sum weights for runs of identical fragments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.grammar.merge">
+<tt class="descclassname">discodop.grammar.</tt><tt class="descname">merge</tt><big>(</big><em>filenames</em>, <em>outfilename</em>, <em>sumfunc</em>, <em>key</em><big>)</big><a class="reference internal" href="../_modules/discodop/grammar.html#merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolate weights of given files.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.lexicon.html" title="discodop.lexicon"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.gen.html" title="discodop.gen"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

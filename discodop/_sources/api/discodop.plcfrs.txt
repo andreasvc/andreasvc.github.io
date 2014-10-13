@@ -1,0 +1,35 @@
+discodop.plcfrs
+===============
+
+.. automodule:: discodop.plcfrs
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      getparent
+      nwaymerge
+      parse
+      parse_symbolic
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Agenda
+      DoubleAgenda
+      FatLCFRSChart
+      LCFRSChart
+      SmallLCFRSChart
+   
+   
+
+   
+   
+   

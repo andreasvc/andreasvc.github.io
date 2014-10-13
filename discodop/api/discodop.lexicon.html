@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.lexicon &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.parser" href="discodop.parser.html" />
+    <link rel="prev" title="discodop.grammar" href="discodop.grammar.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.parser.html" title="discodop.parser"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.grammar.html" title="discodop.grammar"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.lexicon">
+<span id="discodop-lexicon"></span><h1>discodop.lexicon<a class="headerlink" href="#module-discodop.lexicon" title="Permalink to this headline">¶</a></h1>
+<p>Add rules to handle unknown words and smooth lexical probabilities.</p>
+<p>Rare words in the training set are replaced with word signatures, such that
+unknown words can receive similar tags. Given a function to produce such
+signatures from words, the flow is as follows:</p>
+<ul class="simple">
+<li>Simple lexical smoothing:<ol class="arabic">
+<li>getunknownwordmodel (get statistics)</li>
+<li>replaceraretrainwords (adjust trees)</li>
+<li>[ read off grammar ]</li>
+<li>simplesmoothlexicon (add extra lexical productions)</li>
+</ol>
+</li>
+<li>Sophisticated smoothing (untested):<ol class="arabic">
+<li>getunknownwordmodel</li>
+<li>getlexmodel</li>
+<li>replaceraretrainwords</li>
+<li>[ read off grammar ]</li>
+<li>smoothlexicon</li>
+</ol>
+</li>
+<li>During parsing:<ol class="arabic">
+<li>replaceraretestwords (only give known words and signatures to parser)</li>
+<li>restore original words in derivations</li>
+</ol>
+</li>
+</ul>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.getunknownwordmodel" title="discodop.lexicon.getunknownwordmodel"><tt class="xref py py-obj docutils literal"><span class="pre">getunknownwordmodel</span></tt></a>(tagged_sents,&nbsp;...)</td>
+<td>Collect statistics for an unknown word model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.replaceraretrainwords" title="discodop.lexicon.replaceraretrainwords"><tt class="xref py py-obj docutils literal"><span class="pre">replaceraretrainwords</span></tt></a>(tagged_sents,&nbsp;...)</td>
+<td>Replace train set words not in lexicon w/signature from unknownword().</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.replaceraretestwords" title="discodop.lexicon.replaceraretestwords"><tt class="xref py py-obj docutils literal"><span class="pre">replaceraretestwords</span></tt></a>(sent,&nbsp;unknownword,&nbsp;...)</td>
+<td>Replace test set words not in lexicon w/signature from unknownword().</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.simplesmoothlexicon" title="discodop.lexicon.simplesmoothlexicon"><tt class="xref py py-obj docutils literal"><span class="pre">simplesmoothlexicon</span></tt></a>(lexmodel[,&nbsp;epsilon])</td>
+<td>Collect new lexical productions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.getlexmodel" title="discodop.lexicon.getlexmodel"><tt class="xref py py-obj docutils literal"><span class="pre">getlexmodel</span></tt></a>(sigs,&nbsp;words,&nbsp;_lexicon,&nbsp;...[,&nbsp;...])</td>
+<td>Compute a smoothed lexical model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.smoothlexicon" title="discodop.lexicon.smoothlexicon"><tt class="xref py py-obj docutils literal"><span class="pre">smoothlexicon</span></tt></a>(grammar,&nbsp;P_wordtag)</td>
+<td>Replace lexical probabilities using given unknown word model.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.unknownword6" title="discodop.lexicon.unknownword6"><tt class="xref py py-obj docutils literal"><span class="pre">unknownword6</span></tt></a>(word,&nbsp;loc,&nbsp;lexicon)</td>
+<td>Model 6 of the Stanford parser (for WSJ treebank).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.unknownword4" title="discodop.lexicon.unknownword4"><tt class="xref py py-obj docutils literal"><span class="pre">unknownword4</span></tt></a>(word,&nbsp;loc,&nbsp;_)</td>
+<td>Model 4 of the Stanford parser.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.unknownwordbase" title="discodop.lexicon.unknownwordbase"><tt class="xref py py-obj docutils literal"><span class="pre">unknownwordbase</span></tt></a>(word,&nbsp;_loc,&nbsp;_lexicon)</td>
+<td>BaseUnknownWordModel of the Stanford parser.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.unknownwordftb" title="discodop.lexicon.unknownwordftb"><tt class="xref py py-obj docutils literal"><span class="pre">unknownwordftb</span></tt></a>(word,&nbsp;loc,&nbsp;_)</td>
+<td>Model 2 for French of the Stanford parser.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.externaltagging" title="discodop.lexicon.externaltagging"><tt class="xref py py-obj docutils literal"><span class="pre">externaltagging</span></tt></a>(usetagger,&nbsp;model,&nbsp;sents,&nbsp;...)</td>
+<td>Use an external tool to tag a list of sentences.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.tagmangle" title="discodop.lexicon.tagmangle"><tt class="xref py py-obj docutils literal"><span class="pre">tagmangle</span></tt></a>(a,&nbsp;splitchar,&nbsp;overridetag,&nbsp;tagmap)</td>
+<td>Function to filter tags after they are produced by the tagger.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="discodop.lexicon.getunknownwordmodel">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">getunknownwordmodel</tt><big>(</big><em>tagged_sents</em>, <em>unknownword</em>, <em>unknownthreshold</em>, <em>openclassthreshold</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#getunknownwordmodel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.getunknownwordmodel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect statistics for an unknown word model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tagged_sents</strong> &#8211; the sentences from the training set with the gold POS
+tags from the treebank.</li>
+<li><strong>unknownword</strong> &#8211; a function that returns a signature for a given word;
+e.g., &#8220;eschewed&#8221; =&gt; &#8220;_UNK-L-d&#8221;.</li>
+<li><strong>unknownthreshold</strong> &#8211; words with frequency lower than or equal to this
+are replaced by their signature.</li>
+<li><strong>openclassthreshold</strong> &#8211; tags that rewrite to at least this much word
+types are considered to be open class categories.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.replaceraretrainwords">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">replaceraretrainwords</tt><big>(</big><em>tagged_sents</em>, <em>unknownword</em>, <em>lexicon</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#replaceraretrainwords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.replaceraretrainwords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace train set words not in lexicon w/signature from unknownword().</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.replaceraretestwords">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">replaceraretestwords</tt><big>(</big><em>sent</em>, <em>unknownword</em>, <em>lexicon</em>, <em>sigs</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#replaceraretestwords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.replaceraretestwords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace test set words not in lexicon w/signature from unknownword().</p>
+<p>If the returned signatured is not part of the grammar, a default one is
+returnend.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.simplesmoothlexicon">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">simplesmoothlexicon</tt><big>(</big><em>lexmodel</em>, <em>epsilon=0.01</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#simplesmoothlexicon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.simplesmoothlexicon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect new lexical productions.</p>
+<ul class="simple">
+<li>unobserved combinations of tags with known open class words.</li>
+<li>unobserved signatures which are mapped to <tt class="docutils literal"><span class="pre">'_UNK'</span></tt>.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>epsilon</strong> &#8211; &#8216;frequency&#8217; of productions for unseen tag, word pair.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.getlexmodel">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">getlexmodel</tt><big>(</big><em>sigs</em>, <em>words</em>, <em>_lexicon</em>, <em>wordsfortag</em>, <em>openclasstags</em>, <em>openclasswords</em>, <em>tags</em>, <em>wordtags</em>, <em>wordsig</em>, <em>sigtag</em>, <em>openclassoffset=1</em>, <em>kappa=1</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#getlexmodel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.getlexmodel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a smoothed lexical model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a dictionary giving P(word_or_sig | tag).</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>openclassoffset</strong> &#8211; for words that only appear with open class tags,
+add unseen combinations of open class (tag, word) with this count.</li>
+<li><strong>kappa</strong> &#8211; FIXME; cf. Klein &amp; Manning (2003).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.smoothlexicon">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">smoothlexicon</tt><big>(</big><em>grammar</em>, <em>P_wordtag</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#smoothlexicon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.smoothlexicon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace lexical probabilities using given unknown word model.
+Ignores lexical productions of known subtrees (tag contains &#8216;&#64;&#8217;)
+introduced by DOP, i.e., we only modify lexical depth 1 subtrees.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.unknownword6">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">unknownword6</tt><big>(</big><em>word</em>, <em>loc</em>, <em>lexicon</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#unknownword6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.unknownword6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model 6 of the Stanford parser (for WSJ treebank).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.unknownword4">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">unknownword4</tt><big>(</big><em>word</em>, <em>loc</em>, <em>_</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#unknownword4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.unknownword4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model 4 of the Stanford parser. Relatively language agnostic.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.unknownwordbase">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">unknownwordbase</tt><big>(</big><em>word</em>, <em>_loc</em>, <em>_lexicon</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#unknownwordbase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.unknownwordbase" title="Permalink to this definition">¶</a></dt>
+<dd><p>BaseUnknownWordModel of the Stanford parser.
+Relatively language agnostic.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.unknownwordftb">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">unknownwordftb</tt><big>(</big><em>word</em>, <em>loc</em>, <em>_</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#unknownwordftb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.unknownwordftb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model 2 for French of the Stanford parser.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.externaltagging">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">externaltagging</tt><big>(</big><em>usetagger</em>, <em>model</em>, <em>sents</em>, <em>overridetag</em>, <em>tagmap</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#externaltagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.externaltagging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use an external tool to tag a list of sentences.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.lexicon.tagmangle">
+<tt class="descclassname">discodop.lexicon.</tt><tt class="descname">tagmangle</tt><big>(</big><em>a</em>, <em>splitchar</em>, <em>overridetag</em>, <em>tagmap</em><big>)</big><a class="reference internal" href="../_modules/discodop/lexicon.html#tagmangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.lexicon.tagmangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to filter tags after they are produced by the tagger.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.parser.html" title="discodop.parser"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.grammar.html" title="discodop.grammar"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

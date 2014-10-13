@@ -1,0 +1,550 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.treetransforms &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop._fragments" href="discodop._fragments.html" />
+    <link rel="prev" title="discodop.treesearch" href="discodop.treesearch.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop._fragments.html" title="discodop._fragments"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.treesearch.html" title="discodop.treesearch"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.treetransforms">
+<span id="discodop-treetransforms"></span><h1>discodop.treetransforms<a class="headerlink" href="#module-discodop.treetransforms" title="Permalink to this headline">¶</a></h1>
+<p>Treebank-indenpendent tree transformations.</p>
+<p>This file contains three main transformations:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A straightforward binarization: binarize(), based on NLTK code.
+Provides some additional Markovization options.</li>
+<li>An optimal binarization for LCFRS: optimalbinarize()
+Cf. Gildea (2010): Optimal parsing strategies for linear
+context-free rewriting systems. Proc. of NAACL.</li>
+<li>Converting discontinuous trees to continuous trees and back:
+splitdiscnodes(). Cf. Boyd (2007): Discontinuity revisited.</li>
+</ul>
+</div></blockquote>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.abbr" title="discodop.treetransforms.abbr"><tt class="xref py py-obj docutils literal"><span class="pre">abbr</span></tt></a>(childlabels)</td>
+<td>Reduce sequences of identical labels.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.addbitsets" title="discodop.treetransforms.addbitsets"><tt class="xref py py-obj docutils literal"><span class="pre">addbitsets</span></tt></a>(tree)</td>
+<td>Turn tree into an ImmutableTree and add bitset attribute.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.addfanoutmarkers" title="discodop.treetransforms.addfanoutmarkers"><tt class="xref py py-obj docutils literal"><span class="pre">addfanoutmarkers</span></tt></a>(tree)</td>
+<td>Mark discontinuous constituents with &#8216;_n&#8217; where n = # gaps + 1.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.binarize" title="discodop.treetransforms.binarize"><tt class="xref py py-obj docutils literal"><span class="pre">binarize</span></tt></a>(tree[,&nbsp;factor,&nbsp;horzmarkov,&nbsp;...])</td>
+<td>Binarize a Tree object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.unbinarize" title="discodop.treetransforms.unbinarize"><tt class="xref py py-obj docutils literal"><span class="pre">unbinarize</span></tt></a>(tree[,&nbsp;expandunary,&nbsp;childchar,&nbsp;...])</td>
+<td>Restore a binarized tree to the original n-ary tree.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.canonicalize" title="discodop.treetransforms.canonicalize"><tt class="xref py py-obj docutils literal"><span class="pre">canonicalize</span></tt></a>(tree)</td>
+<td>Restore canonical linear precedence order; tree is modified in-place.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.collapseunary" title="discodop.treetransforms.collapseunary"><tt class="xref py py-obj docutils literal"><span class="pre">collapseunary</span></tt></a>(tree[,&nbsp;collapsepos,&nbsp;...])</td>
+<td>Collapse unary nodes into a new node indicated by &#8216;joinchar&#8217;.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.complexity" title="discodop.treetransforms.complexity"><tt class="xref py py-obj docutils literal"><span class="pre">complexity</span></tt></a>(tree)</td>
+<td>The degree of the time complexity of parsing with this rule.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.complexityfanout" title="discodop.treetransforms.complexityfanout"><tt class="xref py py-obj docutils literal"><span class="pre">complexityfanout</span></tt></a>(tree)</td>
+<td>Return a tuple with the complexity and fan-out of a subtree.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.contsets" title="discodop.treetransforms.contsets"><tt class="xref py py-obj docutils literal"><span class="pre">contsets</span></tt></a>(nodes)</td>
+<td>Partition children into continuous subsets.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.disc" title="discodop.treetransforms.disc"><tt class="xref py py-obj docutils literal"><span class="pre">disc</span></tt></a>(node)</td>
+<td>Test whether a particular node is discontinuous.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.factorconstituent" title="discodop.treetransforms.factorconstituent"><tt class="xref py py-obj docutils literal"><span class="pre">factorconstituent</span></tt></a>(node[,&nbsp;sep,&nbsp;h,&nbsp;factor,&nbsp;...])</td>
+<td>Binarize one constituent with a left/right factored binarization.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.fanout" title="discodop.treetransforms.fanout"><tt class="xref py py-obj docutils literal"><span class="pre">fanout</span></tt></a>(tree)</td>
+<td>Return fan-out of constituent.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.fanoutcomplexity" title="discodop.treetransforms.fanoutcomplexity"><tt class="xref py py-obj docutils literal"><span class="pre">fanoutcomplexity</span></tt></a>(tree)</td>
+<td>Return a tuple with the fan-out and complexity of a subtree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.getbits" title="discodop.treetransforms.getbits"><tt class="xref py py-obj docutils literal"><span class="pre">getbits</span></tt></a>(bitset)</td>
+<td>Iterate over the indices of set bits in a bitset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.getyf" title="discodop.treetransforms.getyf"><tt class="xref py py-obj docutils literal"><span class="pre">getyf</span></tt></a>(left,&nbsp;right)</td>
+<td>Return the yield function for two subtrees with bitsets.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.introducepreterminals" title="discodop.treetransforms.introducepreterminals"><tt class="xref py py-obj docutils literal"><span class="pre">introducepreterminals</span></tt></a>(tree[,&nbsp;ids])</td>
+<td>Add preterminals with artificial POS-tags for terminals with siblings.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.mergediscnodes" title="discodop.treetransforms.mergediscnodes"><tt class="xref py py-obj docutils literal"><span class="pre">mergediscnodes</span></tt></a>(tree)</td>
+<td>Reverse transformation of <tt class="docutils literal"><span class="pre">splitdiscnodes()</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.minimalbinarization" title="discodop.treetransforms.minimalbinarization"><tt class="xref py py-obj docutils literal"><span class="pre">minimalbinarization</span></tt></a>(tree,&nbsp;score[,&nbsp;sep,&nbsp;...])</td>
+<td>Find optimal binarization according to a scoring function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.optimalbinarize" title="discodop.treetransforms.optimalbinarize"><tt class="xref py py-obj docutils literal"><span class="pre">optimalbinarize</span></tt></a>(tree[,&nbsp;sep,&nbsp;headdriven,&nbsp;h,&nbsp;...])</td>
+<td>Recursively binarize a tree, optimizing for given function.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.postorder" title="discodop.treetransforms.postorder"><tt class="xref py py-obj docutils literal"><span class="pre">postorder</span></tt></a>(tree[,&nbsp;f])</td>
+<td>A generator that does a postorder traversal of tree.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.removefanoutmarkers" title="discodop.treetransforms.removefanoutmarkers"><tt class="xref py py-obj docutils literal"><span class="pre">removefanoutmarkers</span></tt></a>(tree)</td>
+<td>Remove fanout marks.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.splitdiscnodes" title="discodop.treetransforms.splitdiscnodes"><tt class="xref py py-obj docutils literal"><span class="pre">splitdiscnodes</span></tt></a>(tree[,&nbsp;markorigin])</td>
+<td>Boyd (2007): Discontinuity revisited.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.OrderedSet" title="discodop.treetransforms.OrderedSet"><tt class="xref py py-obj docutils literal"><span class="pre">OrderedSet</span></tt></a>([iterable])</td>
+<td>A frozen, ordered set which maintains a regular list/tuple and set.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="discodop.treetransforms.OrderedSet">
+<em class="property">class </em><tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">OrderedSet</tt><big>(</big><em>iterable=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#OrderedSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.OrderedSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>A frozen, ordered set which maintains a regular list/tuple and set.</p>
+<p>The set is indexable. Equality is defined _without_ regard for order.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.abbr">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">abbr</tt><big>(</big><em>childlabels</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#abbr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.abbr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce sequences of identical labels.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">abbr</span><span class="p">([</span><span class="s">&#39;mwp&#39;</span><span class="p">,</span> <span class="s">&#39;mwp&#39;</span><span class="p">,</span> <span class="s">&#39;mwp&#39;</span><span class="p">,</span> <span class="s">&#39;mwp&#39;</span><span class="p">])</span>
+<span class="go">[&#39;mwp+&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.addbitsets">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">addbitsets</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#addbitsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.addbitsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn tree into an ImmutableTree and add bitset attribute.</p>
+<p>The bitset attribute is a Python integer corresponding to the information
+that leaves() would return for that node.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.addfanoutmarkers">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">addfanoutmarkers</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#addfanoutmarkers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.addfanoutmarkers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark discontinuous constituents with &#8216;_n&#8217; where n = # gaps + 1.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.binarize">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">binarize</tt><big>(</big><em>tree</em>, <em>factor='right'</em>, <em>horzmarkov=999</em>, <em>vertmarkov=1</em>, <em>childchar='|'</em>, <em>parentchar='^'</em>, <em>headmarked=None</em>, <em>headidx=None</em>, <em>tailmarker=''</em>, <em>leftmostunary=False</em>, <em>rightmostunary=False</em>, <em>threshold=2</em>, <em>artpa=True</em>, <em>reverse=False</em>, <em>ids=None</em>, <em>filterfuncs=()</em>, <em>labelfun=&lt;operator.attrgetter object at 0x7f20cc541250&gt;</em>, <em>dot=False</em>, <em>abbrrepetition=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#binarize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.binarize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binarize a Tree object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>factor</strong> &#8211; &#8220;left&#8221; or &#8220;right&#8221;. Determines whether binarization proceeds
+from left to right or vice versa.</li>
+<li><strong>horzmarkov</strong> &#8211; amount of horizontal context in labels. Default is
+infinity, such that now new generalization are introduced by the
+binarization.</li>
+<li><strong>vertmarkov</strong> &#8211; number of ancestors to include in labels.
+NB: 1 means only the direct parent, as in a normal tree.</li>
+<li><strong>headidx</strong> &#8211; if specified, the label of the head node is always included
+as an additional horizontal sibling; use 0 or -1 for first or last
+node respectively.</li>
+<li><strong>headmarked</strong> &#8211; when given a string, the occurrence of this string in a
+label signifies that thte node is the head; the direction of
+binarization will be switched when it is encountered, to enable a
+head-outward binarization. NB: for discontinuous trees this is not
+necessary, as the order of children can be freely adjusted to
+achieve the same effect.</li>
+<li><strong>rightmostunary</strong> (<em>leftmostunary,</em>) &#8211; introduce a unary production for the
+first/last child. When h=1, this enables the same generalizations
+for the first &amp; last non-terminals as for other siblings.</li>
+<li><strong>tailmarker</strong> &#8211; when given a non-empty string, add this to artificial
+nodes introducing the last symbol. This is useful when the last
+symbol is the head node, ensuring that it is not exchangeable with
+other non-terminals.</li>
+<li><strong>reverse</strong> &#8211; <p>reverse direction of the horizontal markovization; e.g.:
+<tt class="docutils literal"><span class="pre">(A</span> <span class="pre">(B</span> <span class="pre">)</span> <span class="pre">(C</span> <span class="pre">)</span> <span class="pre">(D</span> <span class="pre">))</span></tt> ...becomes:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">left:</th><td class="field-body"><tt class="docutils literal"><span class="pre">(A</span> <span class="pre">(A|&lt;D&gt;</span> <span class="pre">(A|&lt;C-D&gt;</span> <span class="pre">(A|&lt;B-C&gt;</span> <span class="pre">(B</span> <span class="pre">))</span> <span class="pre">(C</span> <span class="pre">))</span> <span class="pre">(D</span> <span class="pre">)))</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">right:</th><td class="field-body"><tt class="docutils literal"><span class="pre">(A</span> <span class="pre">(A|&lt;B&gt;</span> <span class="pre">(B</span> <span class="pre">)</span> <span class="pre">(A|&lt;B-C&gt;</span> <span class="pre">(C</span> <span class="pre">)</span> <span class="pre">(A|&lt;C-D&gt;</span> <span class="pre">(D</span> <span class="pre">)))))</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p>in this way the markovization represents the history of the
+nonterminals that have <em>already</em> been parsed, instead of those
+still to come (assuming bottom-up parsing).</p>
+</li>
+<li><strong>dot</strong> &#8211; if True, horizontal context will include all siblings not yet
+generated, separated with a dot from the siblings that have been.</li>
+<li><strong>artpa</strong> &#8211; whether to add parent annotation to the artificial nodes
+introduced by the binarization.</li>
+<li><strong>ids</strong> &#8211; abbreviate artificial node labels using numeric IDs from this
+object; must have dictionary-like interface.</li>
+<li><strong>threshold</strong> &#8211; constituents with more than this number of children are
+factored; i.e., for a value of 2, do a normal binarization; for a
+value of 1, also factor binary productions to include an artificial
+node, etc.</li>
+<li><strong>filterfuncs</strong> &#8211; n-ary branches contain children with grammatical
+functions for labels (optionally with parent annotation of the form
+<tt class="docutils literal"><span class="pre">FUNC/PARENT</span></tt>). Any function in the sequence <tt class="docutils literal"><span class="pre">filterfuncs</span></tt> will
+not become part of the horizontal context of the labels. Can be
+used to filter out adjunctions from this context.</li>
+<li><strong>labelfun</strong> &#8211; a function to derive a label from a node to be used for
+the horizontal markovization context; the default is to use
+<tt class="docutils literal"><span class="pre">child.label</span></tt> for a given child node.</li>
+<li><strong>abbrrepetition</strong> &#8211; in horizontal context, reduce sequences of
+identical labels: e.g., &lt;mwp,mwp,mwp,mwp&gt; becomes &lt;mwp+&gt;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="s">&#39;(S (VP (PDS 0) (ADV 3) (VVINF 4)) (PIS 2) (VMFIN 1))&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sent</span> <span class="o">=</span> <span class="s">&#39;das muss man jetzt machen&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">binarize</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">horzmarkov</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tailmarker</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">))</span>
+<span class="go">(S (VP (PDS 0) (VP|&lt;ADV&gt; (ADV 3) (VVINF 4))) (S|&lt;PIS&gt; (PIS 2) (VMFIN 1)))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.unbinarize">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">unbinarize</tt><big>(</big><em>tree</em>, <em>expandunary=True</em>, <em>childchar='|'</em>, <em>parentchar='^'</em>, <em>unarychar='+'</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#unbinarize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.unbinarize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore a binarized tree to the original n-ary tree.</p>
+<p>Modifies tree in-place. Tree should not be a ParentedTree.
+NB: a malformed node such as <tt class="docutils literal"><span class="pre">(X|&lt;Y&gt;</span> <span class="pre">)</span></tt> which is not supposed to be empty
+will be silently discarded.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.canonicalize">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">canonicalize</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#canonicalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.canonicalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore canonical linear precedence order; tree is modified in-place.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.collapseunary">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">collapseunary</tt><big>(</big><em>tree</em>, <em>collapsepos=False</em>, <em>collapseroot=False</em>, <em>joinchar='+'</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#collapseunary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.collapseunary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collapse unary nodes into a new node indicated by &#8216;joinchar&#8217;.</p>
+<p>For example``(NP (NN John))`` becomes <tt class="docutils literal"><span class="pre">(NP+NN</span> <span class="pre">John)</span></tt>.
+The tree is modified in-place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>collapsepos</strong> &#8211; when False (default), do not collapse preterminals</li>
+<li><strong>collapseroot</strong> &#8211; when False (default) do not modify the root production
+if it is unary; e.g., TOP -&gt; productions for the Penn WSJ treebank</li>
+<li><strong>joinchar</strong> &#8211; A string used to connect collapsed node values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.complexity">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">complexity</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#complexity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>The degree of the time complexity of parsing with this rule.
+Cf. Gildea (2010).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.complexityfanout">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">complexityfanout</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#complexityfanout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.complexityfanout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple with the complexity and fan-out of a subtree.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.contsets">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">contsets</tt><big>(</big><em>nodes</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#contsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.contsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partition children into continuous subsets.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+<span class="gp">... </span><span class="s">&quot;(VP (PP (APPR 0) (ART 1) (NN 2)) (CARD 4) (VVPP 5))&quot;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">contsets</span><span class="p">(</span><span class="n">tree</span><span class="p">)))</span>  
+<span class="go">[[Tree(&#39;PP&#39;, [Tree(&#39;APPR&#39;, [0]), Tree(&#39;ART&#39;, [1]), Tree(&#39;NN&#39;, [2])])],</span>
+<span class="go">[Tree(&#39;CARD&#39;, [4]), Tree(&#39;VVPP&#39;, [5])]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.disc">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">disc</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#disc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.disc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether a particular node is discontinuous.</p>
+<p>i.e., test whether its yield contains two or more non-adjacent strings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.factorconstituent">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">factorconstituent</tt><big>(</big><em>node</em>, <em>sep='|'</em>, <em>h=999</em>, <em>factor='right'</em>, <em>markfanout=False</em>, <em>markyf=False</em>, <em>ids=None</em>, <em>threshold=2</em>, <em>filterfuncs=()</em>, <em>labelfun=&lt;operator.attrgetter object at 0x7f20cc541290&gt;</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#factorconstituent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.factorconstituent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binarize one constituent with a left/right factored binarization.</p>
+<p>Children remain unmodified. Nodes must be immutable and contain bitsets;
+use <tt class="docutils literal"><span class="pre">addbitsets()</span></tt>. By default construct artificial labels using labels
+of child nodes. When markyf is True, each artificial label will include the
+yield function; this is necessary for a &#8216;normal form&#8217; binarization that is
+equivalent to the original. When ids is given, it is used both as an
+interator (for new unique labels) and as a dictionary (to re-use labels).
+The first ID in a binarization will always be unique, while the others will
+be re-used for the same combination of labels and yield function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.fanout">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">fanout</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#fanout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.fanout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return fan-out of constituent. Requires <tt class="docutils literal"><span class="pre">bitset</span></tt> attribute.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.fanoutcomplexity">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">fanoutcomplexity</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#fanoutcomplexity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.fanoutcomplexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple with the fan-out and complexity of a subtree.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.getbits">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">getbits</tt><big>(</big><em>bitset</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#getbits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.getbits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over the indices of set bits in a bitset.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.getyf">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">getyf</tt><big>(</big><em>left</em>, <em>right</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#getyf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.getyf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the yield function for two subtrees with bitsets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string representation of yield function; e.g., &#8216;;01,10&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.introducepreterminals">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">introducepreterminals</tt><big>(</big><em>tree</em>, <em>ids=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#introducepreterminals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.introducepreterminals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add preterminals with artificial POS-tags for terminals with siblings.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="s">&#39;(S (X a b (CD c d) e))&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">introducepreterminals</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span>
+<span class="go">(S (X (X/a a) (X/b b) (CD (CD/c c) (CD/d d)) (X/e e)))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.mergediscnodes">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">mergediscnodes</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#mergediscnodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.mergediscnodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse transformation of <tt class="docutils literal"><span class="pre">splitdiscnodes()</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.minimalbinarization">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">minimalbinarization</tt><big>(</big><em>tree</em>, <em>score</em>, <em>sep='|'</em>, <em>head=None</em>, <em>parentstr=''</em>, <em>h=999</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#minimalbinarization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.minimalbinarization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find optimal binarization according to a scoring function.</p>
+<p>Implementation of Gildea (2010): Optimal parsing strategies for linear
+context-free rewriting systems.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tree</strong> &#8211; ImmutableTree for which the optimal binarization of its top
+production will be searched. Nodes need to have a .bitset attribute,
+as produced by <tt class="docutils literal"><span class="pre">addbitsets()</span></tt>.</li>
+<li><strong>score</strong> &#8211; a function from binarized trees to scores, where lower is
+better (the scores can be anything else which supports comparisons).</li>
+<li><strong>head</strong> &#8211; an optional index of the head node, specifying it enables
+head-driven binarization (which constrains the possible binarizations).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="s">&#39;(X (A 0) (B 1) (C 2) (D 3) (E 4))&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree2</span> <span class="o">=</span> <span class="n">binarize</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">minimalbinarization</span><span class="p">(</span><span class="n">addbitsets</span><span class="p">(</span><span class="n">tree</span><span class="p">),</span> <span class="n">complexityfanout</span><span class="p">,</span> <span class="n">head</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="n">tree2</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">addbitsets</span><span class="p">(</span><span class="s">&#39;(A (B1 (t 6) (t 13)) (B2 (t 3) (t 7) (t 10)) &#39;</span>
+<span class="gp">... </span><span class="s">&#39;(B3 (t 1) (t 9) (t 11) (t 14) (t 16)) (B4 (t 0) (t 5) (t 8)))&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">minimalbinarization</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">complexityfanout</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">minimalbinarization</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">fanoutcomplexity</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">complexityfanout</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">subtrees</span><span class="p">())))</span>
+<span class="go">(14, 6)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">complexityfanout</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">subtrees</span><span class="p">())))</span>
+<span class="go">(15, 5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.optimalbinarize">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">optimalbinarize</tt><big>(</big><em>tree</em>, <em>sep='|'</em>, <em>headdriven=False</em>, <em>h=None</em>, <em>v=1</em>, <em>fun=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#optimalbinarize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.optimalbinarize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively binarize a tree, optimizing for given function.</p>
+<p><tt class="docutils literal"><span class="pre">v=0</span></tt> is not implemented. Setting h to a nonzero integer restricts the
+possible binarizations to head driven binarizations.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.postorder">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">postorder</tt><big>(</big><em>tree</em>, <em>f=&lt;function &lt;lambda&gt; at 0x7f20cc5426e0&gt;</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#postorder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.postorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generator that does a postorder traversal of tree.</p>
+<p>Similar to Tree.subtrees() which does a preorder traversal.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.removefanoutmarkers">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">removefanoutmarkers</tt><big>(</big><em>tree</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#removefanoutmarkers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.removefanoutmarkers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove fanout marks.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treetransforms.splitdiscnodes">
+<tt class="descclassname">discodop.treetransforms.</tt><tt class="descname">splitdiscnodes</tt><big>(</big><em>tree</em>, <em>markorigin=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treetransforms.html#splitdiscnodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treetransforms.splitdiscnodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boyd (2007): Discontinuity revisited.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Markorigin=False:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">VP* (bare label)</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Markorigin=True:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">VP*1 (add index)</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;(S (VP (VP (PP (APPR 0) (ART 1) (NN 2)) (CARD 4)&#39;</span>
+<span class="gp">... </span><span class="s">&#39;(VVPP 5)) (VAINF 6)) (VMFIN 3))&#39;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">splitdiscnodes</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">True</span><span class="p">)))</span>
+<span class="gp">... </span> 
+<span class="go">(S (VP* (VP* (PP (APPR 0) (ART 1) (NN 2)))) (VMFIN 3) (VP* (VP* (CARD 4)</span>
+<span class="go">        (VVPP 5)) (VAINF 6)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">splitdiscnodes</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">markorigin</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<span class="gp">... </span> 
+<span class="go">(S (VP*0 (VP*0 (PP (APPR 0) (ART 1) (NN 2)))) (VMFIN 3) (VP*1 (VP*1</span>
+<span class="go">        (CARD 4) (VVPP 5)) (VAINF 6)))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop._fragments.html" title="discodop._fragments"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.treesearch.html" title="discodop.treesearch"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

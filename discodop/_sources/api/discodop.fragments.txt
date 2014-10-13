@@ -1,0 +1,36 @@
+discodop.fragments
+==================
+
+.. automodule:: discodop.fragments
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      altrepr
+      batch
+      coverfragworker
+      debinarize
+      exactcountworker
+      getfragments
+      initworker
+      initworkersimple
+      iteratefragments
+      printfragments
+      read2ndtreebank
+      readtreebanks
+      regular
+      worker
+      workload
+   
+   
+
+   
+   
+   
+
+   
+   
+   

@@ -1,0 +1,32 @@
+discodop.treesearch
+===================
+
+.. automodule:: discodop.treesearch
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      filterlabels
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CorpusSearcher
+      TgrepSearcher
+      DactSearcher
+      RegexSearcher
+      NoFuture
+   
+   
+
+   
+   
+   

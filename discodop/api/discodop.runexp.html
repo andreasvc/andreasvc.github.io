@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.runexp &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.tree" href="discodop.tree.html" />
+    <link rel="prev" title="discodop.parser" href="discodop.parser.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.tree.html" title="discodop.tree"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.parser.html" title="discodop.parser"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.runexp">
+<span id="discodop-runexp"></span><h1>discodop.runexp<a class="headerlink" href="#module-discodop.runexp" title="Permalink to this headline">¶</a></h1>
+<p>Run an experiment given a parameter file.</p>
+<p>Does grammar extraction, parsing, and evaluation.</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.initworker" title="discodop.runexp.initworker"><tt class="xref py py-obj docutils literal"><span class="pre">initworker</span></tt></a>(params)</td>
+<td>Set global parameter object.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">startexp</span></tt>(...)</td>
+<td>Execute an experiment.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.loadtraincorpus" title="discodop.runexp.loadtraincorpus"><tt class="xref py py-obj docutils literal"><span class="pre">loadtraincorpus</span></tt></a>(corpusfmt,&nbsp;traincorpus,&nbsp;...)</td>
+<td>Load the training corpus.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.getposmodel" title="discodop.runexp.getposmodel"><tt class="xref py py-obj docutils literal"><span class="pre">getposmodel</span></tt></a>(postagging,&nbsp;train_tagged_sents)</td>
+<td>Apply unknown word model to sentences before extracting grammar.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.dobinarization" title="discodop.runexp.dobinarization"><tt class="xref py py-obj docutils literal"><span class="pre">dobinarization</span></tt></a>(trees,&nbsp;sents,&nbsp;binarization,&nbsp;...)</td>
+<td>Apply binarization.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.getgrammars" title="discodop.runexp.getgrammars"><tt class="xref py py-obj docutils literal"><span class="pre">getgrammars</span></tt></a>(trees,&nbsp;sents,&nbsp;stages,&nbsp;...)</td>
+<td>Read off the requested grammars.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.doparsing" title="discodop.runexp.doparsing"><tt class="xref py py-obj docutils literal"><span class="pre">doparsing</span></tt></a>(**kwds)</td>
+<td>Parse a set of sentences using worker processes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.worker" title="discodop.runexp.worker"><tt class="xref py py-obj docutils literal"><span class="pre">worker</span></tt></a>(*args,&nbsp;**kwds)</td>
+<td>Parse a sentence using global Parser object, and evaluate incrementally.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.writeresults" title="discodop.runexp.writeresults"><tt class="xref py py-obj docutils literal"><span class="pre">writeresults</span></tt></a>(results,&nbsp;params)</td>
+<td>Write parsing results to files in same format as the original corpus.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.oldeval" title="discodop.runexp.oldeval"><tt class="xref py py-obj docutils literal"><span class="pre">oldeval</span></tt></a>(results,&nbsp;goldbrackets)</td>
+<td>Simple evaluation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.readtepacoc" title="discodop.runexp.readtepacoc"><tt class="xref py py-obj docutils literal"><span class="pre">readtepacoc</span></tt></a>()</td>
+<td>Read the tepacoc test set.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">parsetepacoc</span></tt>((stages=({:&nbsp;True,&nbsp;:&nbsp;True,&nbsp;:&nbsp;},&nbsp;...)</td>
+<td>Parse the tepacoc test set.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.readparam" title="discodop.runexp.readparam"><tt class="xref py py-obj docutils literal"><span class="pre">readparam</span></tt></a>(filename)</td>
+<td>Parse a parameter file.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="discodop.runexp.initworker">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">initworker</tt><big>(</big><em>params</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#initworker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.initworker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set global parameter object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<tt class="descname">startexp(stages=(DictObj(binarized=True,</tt></dt>
+<dt>
+<tt class="descname">sldop_n=7,</tt></dt>
+<dt>
+<tt class="descname">packedgraph=False,</tt></dt>
+<dt>
+<tt class="descname">sample=False,</tt></dt>
+<dt>
+<tt class="descname">collapselabels=None,</tt></dt>
+<dt>
+<tt class="descname">iterate=False,</tt></dt>
+<dt>
+<tt class="descname">splitprune=False,</tt></dt>
+<dt>
+<tt class="descname">usedoubledop=False,</tt></dt>
+<dt>
+<tt class="descname">useestimates=None,</tt></dt>
+<dt>
+<tt class="descname">prune=False,</tt></dt>
+<dt>
+<tt class="descname">mcc_labels=None,</tt></dt>
+<dt>
+<tt class="descname">getestimates=None,</tt></dt>
+<dt>
+<tt class="descname">mode='plcfrs',</tt></dt>
+<dt>
+<tt class="descname">k=50,</tt></dt>
+<dt>
+<tt class="descname">markorigin=False,</tt></dt>
+<dt>
+<tt class="descname">m=10,</tt></dt>
+<dt>
+<tt class="descname">name='stage1',</tt></dt>
+<dt>
+<tt class="descname">mcc_labda=1.0,</tt></dt>
+<dt>
+<tt class="descname">kbest=True,</tt></dt>
+<dt>
+<tt class="descname">neverblockre=None,</tt></dt>
+<dt>
+<tt class="descname">estimator='rfe',</tt></dt>
+<dt>
+<tt class="descname">objective='mpp',</tt></dt>
+<dt>
+<tt class="descname">dop=False,</tt></dt>
+<dt>
+<tt class="descname">complement=False,</tt></dt>
+<dt>
+<tt class="descname">split=False),), corpusfmt='export', traincorpus=DictObj(maxwords=40,</tt></dt>
+<dt>
+<tt class="descname">path='alpinosample.export',</tt></dt>
+<dt>
+<tt class="descname">numsents=2,</tt></dt>
+<dt>
+<tt class="descname">encoding='utf-8'), testcorpus=DictObj(maxwords=40,</tt></dt>
+<dt>
+<tt class="descname">numsents=1,</tt></dt>
+<dt>
+<tt class="descname">encoding='utf-8',</tt></dt>
+<dt>
+<tt class="descname">skip=0,</tt></dt>
+<dt>
+<tt class="descname">path='alpinosample.export',</tt></dt>
+<dt>
+<tt class="descname">skiptrain=True), binarization=DictObj(tailmarker='',</tt></dt>
+<dt>
+<tt class="descname">h=2,</tt></dt>
+<dt>
+<tt class="descname">revmarkov=True,</tt></dt>
+<dt>
+<tt class="descname">factor='right',</tt></dt>
+<dt>
+<tt class="descname">rightmostunary=True,</tt></dt>
+<dt>
+<tt class="descname">headrules=None,</tt></dt>
+<dt>
+<tt class="descname">method='default',</tt></dt>
+<dt>
+<tt class="descname">v=1,</tt></dt>
+<dt>
+<tt class="descname">fanout_marks_before_bin=False,</tt></dt>
+<dt>
+<tt class="descname">markhead=False,</tt></dt>
+<dt>
+<tt class="descname">leftmostunary=True), removeempty=False, punct=None, functions=None, morphology=None, transformations=None, postagging=None, relationalrealizational=None, evalparam='proper.prm', verbosity=2, numproc=1, resultdir='results', rerun=False)</tt></dt>
+<dd><p>Execute an experiment.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.loadtraincorpus">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">loadtraincorpus</tt><big>(</big><em>corpusfmt</em>, <em>traincorpus</em>, <em>binarization</em>, <em>punct</em>, <em>functions</em>, <em>morphology</em>, <em>removeempty</em>, <em>transformations</em>, <em>relationalrealizational</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#loadtraincorpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.loadtraincorpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the training corpus.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.getposmodel">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">getposmodel</tt><big>(</big><em>postagging</em>, <em>train_tagged_sents</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#getposmodel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.getposmodel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply unknown word model to sentences before extracting grammar.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.dobinarization">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">dobinarization</tt><big>(</big><em>trees</em>, <em>sents</em>, <em>binarization</em>, <em>relationalrealizational</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#dobinarization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.dobinarization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply binarization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.getgrammars">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">getgrammars</tt><big>(</big><em>trees</em>, <em>sents</em>, <em>stages</em>, <em>testmaxwords</em>, <em>resultdir</em>, <em>numproc</em>, <em>lexmodel</em>, <em>simplelexsmooth</em>, <em>top</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#getgrammars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.getgrammars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read off the requested grammars.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.doparsing">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">doparsing</tt><big>(</big><em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#doparsing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.doparsing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a set of sentences using worker processes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.worker">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">worker</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.worker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a sentence using global Parser object, and evaluate incrementally.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string with diagnostic information, as well as a list of
+DictObj instances with the results for each stage.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.writeresults">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">writeresults</tt><big>(</big><em>results</em>, <em>params</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#writeresults"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.writeresults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write parsing results to files in same format as the original corpus.
+(Or export if writer not implemented).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.oldeval">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">oldeval</tt><big>(</big><em>results</em>, <em>goldbrackets</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#oldeval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.oldeval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple evaluation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.readtepacoc">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">readtepacoc</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#readtepacoc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.readtepacoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the tepacoc test set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<tt class="descname">parsetepacoc(stages=({'markorigin': True, 'split': True, 'mode': 'pcfg'}, {'k': 10000, 'splitprune': True, 'mode': 'plcfrs', 'prune': True}, {'prune': True, 'k': 5000, 'usedoubledop': True, 'sample': False, 'estimator': 'rfe', 'kbest': True, 'mode': 'plcfrs', 'objective': 'mpp', 'dop': True}), trainmaxwords=999, trainnumsents=25005, testmaxwords=999, binarization=DictObj(rightmostunary=True,</tt></dt>
+<dt>
+<tt class="descname">h=1,</tt></dt>
+<dt>
+<tt class="descname">revmarkov=False,</tt></dt>
+<dt>
+<tt class="descname">v=1,</tt></dt>
+<dt>
+<tt class="descname">tailmarker='',</tt></dt>
+<dt>
+<tt class="descname">headrules='negra.headrules',</tt></dt>
+<dt>
+<tt class="descname">method='default',</tt></dt>
+<dt>
+<tt class="descname">factor='right',</tt></dt>
+<dt>
+<tt class="descname">fanout_marks_before_bin=False,</tt></dt>
+<dt>
+<tt class="descname">markhead=False,</tt></dt>
+<dt>
+<tt class="descname">leftmostunary=True), transformations=None, usetagger='stanford', resultdir='tepacoc', numproc=1)</tt></dt>
+<dd><p>Parse the tepacoc test set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.runexp.readparam">
+<tt class="descclassname">discodop.runexp.</tt><tt class="descname">readparam</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/discodop/runexp.html#readparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.runexp.readparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a parameter file.</p>
+<p>The file should contain a list of comma-separated <tt class="docutils literal"><span class="pre">attribute=value</span></tt> pairs
+and will be read using <tt class="docutils literal"><span class="pre">eval('dict(%s)'</span> <span class="pre">%</span> <span class="pre">open(file).read())</span></tt>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.tree.html" title="discodop.tree"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.parser.html" title="discodop.parser"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.bit &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.coarsetofine" href="discodop.coarsetofine.html" />
+    <link rel="prev" title="discodop._fragments" href="discodop._fragments.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.coarsetofine.html" title="discodop.coarsetofine"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop._fragments.html" title="discodop._fragments"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.bit">
+<span id="discodop-bit"></span><h1>discodop.bit<a class="headerlink" href="#module-discodop.bit" title="Permalink to this headline">¶</a></h1>
+<p>Functions for working with bitvectors.</p>
+<p>NB: most functions are in bit.pxd to facilitate function inlining.</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.bit.bitcount" title="discodop.bit.bitcount"><tt class="xref py py-obj docutils literal"><span class="pre">bitcount</span></tt></a>((ULLong&nbsp;vec)&nbsp;-&gt;&nbsp;int)</td>
+<td>Return number of set bits (1s).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.bit.fanout" title="discodop.bit.fanout"><tt class="xref py py-obj docutils literal"><span class="pre">fanout</span></tt></a>((arg)&nbsp;-&gt;&nbsp;int)</td>
+<td>Return number of contiguous components in bit vector (gaps plus one).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.bit.pyintbitcount" title="discodop.bit.pyintbitcount"><tt class="xref py py-obj docutils literal"><span class="pre">pyintbitcount</span></tt></a>(a)</td>
+<td>Return number of set bits (1s) in a Python integer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.bit.pyintnextset" title="discodop.bit.pyintnextset"><tt class="xref py py-obj docutils literal"><span class="pre">pyintnextset</span></tt></a>((a,&nbsp;int&nbsp;pos)&nbsp;-&gt;&nbsp;int)</td>
+<td>Return index of first set bit, starting from pos.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="discodop.bit.bitcount">
+<tt class="descclassname">discodop.bit.</tt><tt class="descname">bitcount</tt><big>(</big><em>ULLong vec</em><big>)</big> &rarr; int<a class="headerlink" href="#discodop.bit.bitcount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of set bits (1s).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bitcount</span><span class="p">(</span><span class="mi">0</span><span class="n">b0011101</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.bit.fanout">
+<tt class="descclassname">discodop.bit.</tt><tt class="descname">fanout</tt><big>(</big><em>arg</em><big>)</big> &rarr; int<a class="headerlink" href="#discodop.bit.fanout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of contiguous components in bit vector (gaps plus one).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fanout</span><span class="p">(</span><span class="mi">0</span><span class="n">b011011011</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.bit.pyintbitcount">
+<tt class="descclassname">discodop.bit.</tt><tt class="descname">pyintbitcount</tt><big>(</big><em>a</em><big>)</big><a class="headerlink" href="#discodop.bit.pyintbitcount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of set bits (1s) in a Python integer.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bitcount</span><span class="p">(</span><span class="mi">0</span><span class="n">b0011101</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.bit.pyintnextset">
+<tt class="descclassname">discodop.bit.</tt><tt class="descname">pyintnextset</tt><big>(</big><em>a</em>, <em>int pos</em><big>)</big> &rarr; int<a class="headerlink" href="#discodop.bit.pyintnextset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index of first set bit, starting from pos.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pyintnextset</span><span class="p">(</span><span class="mi">0</span><span class="n">b001101</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.coarsetofine.html" title="discodop.coarsetofine"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop._fragments.html" title="discodop._fragments"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

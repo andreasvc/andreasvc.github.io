@@ -1,0 +1,611 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parser parameters &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="index.html" />
+    <link rel="up" title="Reference" href="ref.html" />
+    <link rel="next" title="File formats" href="fileformats.html" />
+    <link rel="prev" title="Command line options" href="discodop.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="fileformats.html" title="File formats"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.html" title="Command line options"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="ref.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="parser-parameters">
+<span id="params"></span><h1>Parser parameters<a class="headerlink" href="#parser-parameters" title="Permalink to this headline">¶</a></h1>
+<p>A parser is defined by a sequence of stages, and a set of
+global options:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stages</span><span class="o">=</span><span class="p">[</span>
+    <span class="n">stage1</span><span class="p">,</span>
+    <span class="n">stage2</span><span class="p">,</span>
+<span class="p">],</span>
+<span class="n">corpusfmt</span><span class="o">=</span><span class="s">&#39;...&#39;</span><span class="p">,</span>
+<span class="n">traincorpus</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+<span class="n">testcorpus</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+<span class="n">binarization</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+<span class="n">key1</span><span class="o">=</span><span class="n">val1</span><span class="p">,</span>
+<span class="n">key2</span><span class="o">=</span><span class="n">val2</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>The parameters consist of a Python expression surrounded by an implicit
+<tt class="docutils literal"><span class="pre">'dict('</span></tt> and <tt class="docutils literal"><span class="pre">')'</span></tt>.</p>
+<div class="section" id="corpora">
+<h2>Corpora<a class="headerlink" href="#corpora" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">corpusfmt:</th><td class="field-body"><p class="first">The corpus format; choices:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">export:</th><td class="field-body">Negra export format</td>
+</tr>
+<tr class="field-even field"><th class="field-name">bracket:</th><td class="field-body">Penn treebank style bracketed trees.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">discbracket:</th><td class="field-body">Bracketed parse trees with numeric indices and words of
+sentence specified separately.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpino:</th><td class="field-body">Alpino XML format</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">tiger:</th><td class="field-body">Tiger XML format</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">traincorpus:</th><td class="field-body"><p class="first">a dictionary with the following keys:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">path:</th><td class="field-body">filename of training corpus; may include globbing characters * and ?.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">encoding:</th><td class="field-body">encoding of training corpus (defaults to &#8216;utf-8&#8217;)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">maxwords:</th><td class="field-body">maximum sentence length to base grammar on</td>
+</tr>
+<tr class="field-even field"><th class="field-name">numsents:</th><td class="field-body">number of sentence to use from training corpus</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">testcorpus:</th><td class="field-body"><p class="first">a dictionary with the following keys:</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">path:</th><td class="field-body">filename of test corpus (may be same as traincorpus, set
+<cite>skiptrain</cite> to True in that case).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">encoding:</th><td class="field-body">encoding of test corpus (defaults to &#8216;utf-8&#8217;)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">maxwords:</th><td class="field-body">maximum sentence length to parse from test set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">numsents:</th><td class="field-body">number of sentences to parse</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">skiptrain:</th><td class="field-body">when training &amp; test corpus are from same file, start reading
+test set after training set sentences</td>
+</tr>
+<tr class="field-even field"><th class="field-name">skip:</th><td class="field-body">number of (additional) sentences to skip before test corpus starts</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="binarization">
+<h2>Binarization<a class="headerlink" href="#binarization" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">binarization:</th><td class="field-body"><p class="first">a dictionary with the following keys:</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">method:</th><td class="field-body"><p class="first">Binarization method; choices:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">Treebank is already binarized.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;default&#8217;:</th><td class="field-body">basic binarization (recommended).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;optimal&#8217;:</th><td class="field-body">binarization which optimizes for lowest fan-out or parsing complexity.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;optimalhead&#8217;:</th><td class="field-body">like <tt class="docutils literal"><span class="pre">optimal</span></tt>, but only considers head-driven binarizations.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">factor:</th><td class="field-body"><p class="first">&#8216;left&#8217; or &#8216;right&#8217;. The direction of binarization when using <tt class="docutils literal"><span class="pre">default</span></tt>.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">headrules:</th><td class="field-body"><p class="first">file with rules for finding heads of constituents</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">revmarkov:</th><td class="field-body"><p class="first">whether to reverse the horizontal markovization context when using <tt class="docutils literal"><span class="pre">default</span></tt>.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">v:</th><td class="field-body"><p class="first">vertical markovization context; default 1; 2 means 1 extra level of parent annotation.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">h:</th><td class="field-body"><p class="first">horizontal markovization context</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">markhead:</th><td class="field-body"><p class="first">whether to prepend head to siblings labels</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">leftmostunary:</th><td class="field-body"><p class="first">whether to start binarization with unary node</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rightmostunary:</th><td class="field-body"><p class="first">whether to end binarization with unary node</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">tailmarker:</th><td class="field-body"><p class="first">with headrules, head is last node and can be marked</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">fanout_marks_before_bin:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">whether to add fanout markers before binarization</p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="stages">
+<h2>Stages<a class="headerlink" href="#stages" title="Permalink to this headline">¶</a></h2>
+<p>Through the use of stages it is possible to run multiple parsers on the
+same test set, or to exploit coarse-to-fine pruning.</p>
+<p>A stage has the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">key1</span><span class="o">=</span><span class="n">val1</span><span class="p">,</span>
+    <span class="n">key2</span><span class="o">=</span><span class="n">val2</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Where the keys and values are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">identifier, used for filenames</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">mode:</th><td class="field-body"><p class="first">The type of parser to use</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">&#8216;pcfg&#8217;:</th><td class="field-body">CKY parser</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;plcfrs&#8217;:</th><td class="field-body">use the agenda-based PLCFRS parser</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">&#8216;pcfg-posterior&#8217;:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Compute inside-outside probabilities (does not produce
+parse trees, can only be used for pruning of next stage).</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">&#8216;pcfg-bitpar-nbest&#8217;:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Use external bitpar parser. Produces n-best list
+(up to n=1000) without producing a parse forest; works with
+non-binarized grammars (experimental).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">&#8216;pcfg-bitpar-forest&#8217;:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Use external bitpar parser (experimental).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;dop-rerank&#8217;:</th><td class="field-body">Rerank parse trees from previous stage with DOP reduction (experimental).</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">prune:</th><td class="field-body"><p class="first">whether to use previous chart to prune this stage</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">split:</th><td class="field-body"><p class="first">split disc. nodes <tt class="docutils literal"><span class="pre">VP_2[101]</span></tt> as <tt class="docutils literal"><span class="pre">{</span> <span class="pre">VP*[100],</span> <span class="pre">VP*[001]</span> <span class="pre">}</span></tt></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">splitprune:</th><td class="field-body"><p class="first">treat <tt class="docutils literal"><span class="pre">VP_2[101]</span></tt> as <tt class="docutils literal"><span class="pre">{VP*[100],</span> <span class="pre">VP*[001]}</span></tt> for pruning</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">markorigin:</th><td class="field-body"><p class="first">mark origin of split nodes: <tt class="docutils literal"><span class="pre">VP_2</span> <span class="pre">=&gt;</span> <span class="pre">{VP*1,</span> <span class="pre">VP*2}</span></tt></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">k:</th><td class="field-body"><p class="first">pruning parameter:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">k &gt; 1:</th><td class="field-body">no. of coarse pcfg derivations to prune with</td>
+</tr>
+<tr class="field-even field"><th class="field-name">k=0:</th><td class="field-body">filter only (only prune items that do not lead to a complete derivation)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">0 &lt; k &lt; 1:</th><td class="field-body">posterior threshold for inside-outside probabilities</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">neverblockre:</th><td class="field-body"><p class="first">do not prune nodes with label that match this regex</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">getestimates:</th><td class="field-body"><p class="first">compute &amp; store context-summary estimates</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">useestimates:</th><td class="field-body"><p class="first">load &amp; use estimates</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">binarized:</th><td class="field-body"><p class="first">when using <tt class="docutils literal"><span class="pre">mode='pcfg-bitpar-nbest'</span></tt>, this option can be set to
+<tt class="docutils literal"><span class="pre">False</span></tt>, to disable the two auxiliary binarizations needed for Double-DOP.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">dop:</th><td class="field-body"><p class="first">enable DOP mode (DOP reduction / double DOP)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">packedgraph:</th><td class="field-body"><p class="first">use packed graph encoding for DOP reduction</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">usedoubledop:</th><td class="field-body"><p class="first">when True, use Double-DOP instead of DOP reduction</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">iterate:</th><td class="field-body"><p class="first">for Double-DOP, whether to add fragments of fragments</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">complement:</th><td class="field-body"><p class="first">for Double-DOP, whether to include fragments which
+form the complement of the maximal recurring fragments extracted</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">m:</th><td class="field-body"><p class="first">number of derivations to sample / enumerate.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">sample:</th><td class="field-body"><p class="first">sample <em>m</em> derivations from chart</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">kbest:</th><td class="field-body"><p class="first">extract <em>m</em>-best derivations from chart</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">estimator:</th><td class="field-body"><p class="first">DOP estimator. Choices:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">rfe:</th><td class="field-body">relative frequencies.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">ewe:</th><td class="field-body">equal weights estimate; relative frequencies with correction factor
+to remove bias for larger fragments; useful with DOP reduction.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">bon:</th><td class="field-body">Bonnema estimator; another correction factor approach.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">objective:</th><td class="field-body"><p class="first">Objective function to choose DOP parse tree. Choices:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">mpp:</th><td class="field-body">Most Probable Parse. Marginalizes over multiple derivations.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">mpd:</th><td class="field-body">Most Probable Derivation.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">shortest:</th><td class="field-body">Most Probable Shortest Derivation; i.e., shortest derivation
+(with minimal number of fragments), where ties are broken using
+probabilities specified by <tt class="docutils literal"><span class="pre">estimator</span></tt>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">mcc:</th><td class="field-body">Maximum Constituents Parse (Goodman 1996);
+approximation as in Sangati &amp; Zuidema (2011); experimental.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">sl-dop:</th><td class="field-body">Simplicity-Likelihood. Simplest Tree from the n most Likely trees.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">sl-dop-simple:</th><td class="field-body">An approximation which does not require parsing the sentence twice.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">sldop_n:</th><td class="field-body"><p class="first last">When using sl-dop or sl-dop-simple,
+number of most likely parse trees to consider.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="other-options">
+<h2>Other options<a class="headerlink" href="#other-options" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">postagging:</th><td class="field-body"><p class="first">POS tagging; see <a class="reference internal" href="api/discodop.lexicon.html#module-discodop.lexicon" title="discodop.lexicon"><tt class="xref py py-mod docutils literal"><span class="pre">discodop.lexicon</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">method:</th><td class="field-body"><p class="first">one of:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">&#8216;unknownword&#8217;:</th><td class="field-body">incorporate unknown word model in grammar</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;stanford&#8217;:</th><td class="field-body">use external Stanford tagger</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;treetagger&#8217;:</th><td class="field-body">use external tagger &#8216;treetagger&#8217;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;frog&#8217;:</th><td class="field-body">use external tagger &#8216;frog&#8217; for Dutch; produces CGN tags, use morphology=&#8217;replace&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">model:</th><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">with &#8216;unknownword&#8217;, one of:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">4:</th><td class="field-body">Stanford model 4; language agnostic</td>
+</tr>
+<tr class="field-even field"><th class="field-name">6:</th><td class="field-body">Stanford model 6, for Penn treebank</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">base:</th><td class="field-body">Stanford &#8216;base&#8217; model; language agnostic</td>
+</tr>
+<tr class="field-even field"><th class="field-name">ftb:</th><td class="field-body">Stanford model 2 for French treebank</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">with external taggers:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first last">filename of tagger model (not applicable to &#8216;frog&#8217;)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">retag:</th><td class="field-body"><p class="first">if True, re-tag the training corpus using the external tagger.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">unknownthreshold:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">use probabilities of words that occur this number of times or less for unknown words</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">openclassthreshold:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">add unseen tags for known words when tag rewrites
+at least this number of words. 0 to disable.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">simplelexsmooth:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first last">enable/disable sophisticated smoothing (untested)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">transformations:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">apply treebank transformations;
+see source of <a class="reference internal" href="api/discodop.treebanktransforms.html#discodop.treebanktransforms.transform" title="discodop.treebanktransforms.transform"><tt class="xref py py-func docutils literal"><span class="pre">discodop.treebanktransforms.transform()</span></tt></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">relationalrealizational:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">apply RR-transform; see <a class="reference internal" href="api/discodop.treebanktransforms.html#discodop.treebanktransforms.rrtransform" title="discodop.treebanktransforms.rrtransform"><tt class="xref py py-func docutils literal"><span class="pre">discodop.treebanktransforms.rrtransform()</span></tt></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">punct:</th><td class="field-body"><p class="first">one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">move punctuation to appropriate constituents using heuristics.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;moveall&#8217;:</th><td class="field-body">same as &#8216;move&#8217;, but moves all preterminals under root,
+instead of only recognized punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root (as in original Negra/Tiger
+treebanks).</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">functions:</th><td class="field-body"><p class="first">one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave syntactic labels as is.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate grammatical function to syntactic label,
+separated by a hypen: e.g., NP =&gt; NP-SBJ</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated grammatical function,
+e.g., NP-SBJ =&gt; NP</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic label with grammatical function,
+e.g., NP =&gt; SBJ</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">morphology:</th><td class="field-body"><p class="first">one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">use POS tags as preterminals</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
+e.g., DET/sg.def</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">add node with morphological information between
+POS tag and word, e.g., (DET (sg.def the))</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">lemmas:</th><td class="field-body"><p class="first">one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert lemma as node between POS tag and word.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">removeempty:</th><td class="field-body"><p class="first">True or False; whether to remove empty terminals from train, test sets.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">evalparam:</th><td class="field-body"><p class="first">EVALB-style parameter file to use for reporting F-scores</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">verbosity:</th><td class="field-body"><p class="first">control the amount of output to console;
+a logfile <tt class="docutils literal"><span class="pre">output.log</span></tt> is also kept with a fixed log level of 2.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">0:</th><td class="field-body">silent</td>
+</tr>
+<tr class="field-even field"><th class="field-name">1:</th><td class="field-body">summary report</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">2:</th><td class="field-body">per sentence results</td>
+</tr>
+<tr class="field-even field"><th class="field-name">3:</th><td class="field-body">dump derivations/parse trees</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">4:</th><td class="field-body">dump chart</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">numproc:</th><td class="field-body"><p class="first last">default 1; increase to use multiple CPUs; None: use all CPUs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="discodop.html">Command line options</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fileformats.html">File formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="fileformats.html" title="File formats"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.html" title="Command line options"
+             >previous</a> |</li>
+        <li><a href="index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="ref.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

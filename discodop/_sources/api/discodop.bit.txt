@@ -1,0 +1,25 @@
+discodop.bit
+============
+
+.. automodule:: discodop.bit
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      bitcount
+      fanout
+      pyintbitcount
+      pyintnextset
+   
+   
+
+   
+   
+   
+
+   
+   
+   

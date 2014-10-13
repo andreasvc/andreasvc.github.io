@@ -1,0 +1,623 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.tree &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.treebank" href="discodop.treebank.html" />
+    <link rel="prev" title="discodop.runexp" href="discodop.runexp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.treebank.html" title="discodop.treebank"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.runexp.html" title="discodop.runexp"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.tree">
+<span id="discodop-tree"></span><h1>discodop.tree<a class="headerlink" href="#module-discodop.tree" title="Permalink to this headline">¶</a></h1>
+<p>Various Tree objects for representing syntax or morphological trees.</p>
+<p>This is an adaptation of the original tree.py file from NLTK.
+Removed: probabilistic trees, binarization, reading off CFG productions, &amp;c.</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.tree.slice_bounds" title="discodop.tree.slice_bounds"><tt class="xref py py-obj docutils literal"><span class="pre">slice_bounds</span></tt></a>(seq,&nbsp;slice_obj[,&nbsp;allow_step])</td>
+<td>Calculate the effective (start, stop) bounds of a slice.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.tree.Tree" title="discodop.tree.Tree"><tt class="xref py py-obj docutils literal"><span class="pre">Tree</span></tt></a>(label_or_str[,&nbsp;children])</td>
+<td>A mutable, labeled, n-ary tree structure.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.tree.ImmutableTree" title="discodop.tree.ImmutableTree"><tt class="xref py py-obj docutils literal"><span class="pre">ImmutableTree</span></tt></a>(label_or_str[,&nbsp;children])</td>
+<td>A tree which may not be modified.; has a hash() value.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">AbstractParentedTree</span></tt>(label_or_str[,&nbsp;children])</td>
+<td>An abstract base class for Trees that maintain parent pointers.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.tree.ParentedTree" title="discodop.tree.ParentedTree"><tt class="xref py py-obj docutils literal"><span class="pre">ParentedTree</span></tt></a>(label_or_str[,&nbsp;children])</td>
+<td>A Tree that maintains parent pointers for single-parented trees.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.tree.ImmutableParentedTree" title="discodop.tree.ImmutableParentedTree"><tt class="xref py py-obj docutils literal"><span class="pre">ImmutableParentedTree</span></tt></a>(label_or_str[,&nbsp;children])</td>
+<td>Combination of an Immutable and Parented Tree.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.tree.MultiParentedTree" title="discodop.tree.MultiParentedTree"><tt class="xref py py-obj docutils literal"><span class="pre">MultiParentedTree</span></tt></a>(label_or_str[,&nbsp;children])</td>
+<td>A Tree that maintains parent pointers for multi-parented trees.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.tree.ImmutableMultiParentedTree" title="discodop.tree.ImmutableMultiParentedTree"><tt class="xref py py-obj docutils literal"><span class="pre">ImmutableMultiParentedTree</span></tt></a>(label_or_str[,&nbsp;...])</td>
+<td>Combination of an Immutable and Multi Parented Tree.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="discodop.tree.Tree">
+<em class="property">class </em><tt class="descclassname">discodop.tree.</tt><tt class="descname">Tree</tt><big>(</big><em>label_or_str</em>, <em>children=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mutable, labeled, n-ary tree structure.</p>
+<p>Each Tree represents a single hierarchical grouping of leaves and subtrees.
+A tree&#8217;s children are encoded as a list of leaves and subtrees, where
+a leaf is a basic (non-tree) value; and a subtree is a nested Tree. Any
+other properties that a Tree defines are known as node properties, and are
+used to add information about individual hierarchical groupings. For
+example, syntax trees use a label property to label syntactic constituents
+with phrase labels, such as &#8220;NP&#8221; and &#8220;VP&#8221;.
+Several Tree methods use tree positions to specify children or descendants
+of a tree. Tree positions are defined as follows:</p>
+<ul>
+<li><p class="first">The tree position <tt class="docutils literal"><span class="pre">i</span></tt> specifies a Tree&#8217;s ith child.</p>
+</li>
+<li><p class="first">The tree position () specifies the Tree itself.</p>
+</li>
+<li><dl class="first docutils">
+<dt>If <tt class="docutils literal"><span class="pre">p</span></tt> is the tree position of descendant <tt class="docutils literal"><span class="pre">d</span></tt>, then</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">p</span> <span class="pre">+</span> <span class="pre">(i,)</span></tt> specifies the ith child of <tt class="docutils literal"><span class="pre">d</span></tt>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>i.e., every tree position is either a single index <tt class="docutils literal"><span class="pre">i</span></tt>,
+specifying <tt class="docutils literal"><span class="pre">self[i]</span></tt>; or a sequence <tt class="docutils literal"><span class="pre">(i1,</span> <span class="pre">i2,</span> <span class="pre">...,</span> <span class="pre">iN)</span></tt>,
+specifying <tt class="docutils literal"><span class="pre">self[i1][i2]...[iN]</span></tt>.</p>
+<p>The constructor can be called in two ways:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">Tree(label,</span> <span class="pre">children)</span></tt> constructs a new tree with the specified label</dt>
+<dd><p class="first last">and list of children.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">Tree(s)</span></tt> constructs a new tree by parsing the string s. Equivalent to</dt>
+<dd><p class="first last">calling the class method <tt class="docutils literal"><span class="pre">Tree.parse(s)</span></tt>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="method">
+<dt id="discodop.tree.Tree.leaves">
+<tt class="descname">leaves</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.leaves" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list containing this tree&#8217;s leaves.</td>
+</tr>
+</tbody>
+</table>
+<p>The order reflects the order of the tree&#8217;s hierarchical structure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.height">
+<tt class="descname">height</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.height"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.height" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The longest distance from this node to a leaf node.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p class="first">The height of a tree containing no children is 1;</p>
+</li>
+<li><p class="first">the height of a tree containing only leaves is 2;</p>
+</li>
+<li><dl class="first docutils">
+<dt>the height of any other tree is one plus the maximum of its</dt>
+<dd><p class="first last">children&#8217;s heights.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.treepositions">
+<tt class="descname">treepositions</tt><big>(</big><em>order=u'preorder'</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.treepositions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.treepositions" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>order</strong> &#8211; One of preorder, postorder, bothorder, leaves.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.subtrees">
+<tt class="descname">subtrees</tt><big>(</big><em>condition=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.subtrees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.subtrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Traverse and generate subtrees of this tree in depth-first order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>condition</strong> &#8211; a function to filter which nodes are generated.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.pos">
+<tt class="descname">pos</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.pos" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of tuples containing leaves and pre-terminals
+(part-of-speech tags). The order reflects the order of the tree&#8217;s
+hierarchical structure.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.leaf_treeposition">
+<tt class="descname">leaf_treeposition</tt><big>(</big><em>index</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.leaf_treeposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.leaf_treeposition" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The tree position of the index-th leaf in this tree;
+i.e., if <tt class="docutils literal"><span class="pre">tp=self.leaf_treeposition(i)</span></tt>, then
+<tt class="docutils literal"><span class="pre">self[tp]==self.leaves()[i]</span></tt>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises IndexError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if this tree contains fewer than <tt class="docutils literal"><span class="pre">index</span> <span class="pre">+</span> <span class="pre">1</span></tt>
+leaves, or if <tt class="docutils literal"><span class="pre">index</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.treeposition_spanning_leaves">
+<tt class="descname">treeposition_spanning_leaves</tt><big>(</big><em>start</em>, <em>end</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.treeposition_spanning_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.treeposition_spanning_leaves" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The tree position of the lowest descendant of this tree
+that dominates <tt class="docutils literal"><span class="pre">self.leaves()[start:end]</span></tt>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if <tt class="docutils literal"><span class="pre">end</span> <span class="pre">&lt;=</span> <span class="pre">start</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="discodop.tree.Tree.convert">
+<em class="property">classmethod </em><tt class="descname">convert</tt><big>(</big><em>val</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a tree between different subtypes of Tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cls</strong> &#8211; the class that will be used for the new tree.</li>
+<li><strong>val</strong> &#8211; The tree that should be converted.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.copy">
+<tt class="descname">copy</tt><big>(</big><em>deep=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a copy of this tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.freeze">
+<tt class="descname">freeze</tt><big>(</big><em>leaf_freezer=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an immutable version of this tree.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="discodop.tree.Tree.parse">
+<em class="property">classmethod </em><tt class="descname">parse</tt><big>(</big><em>s</em>, <em>brackets=u'()'</em>, <em>parse_label=None</em>, <em>parse_leaf=None</em>, <em>label_pattern=None</em>, <em>leaf_pattern=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a bracketed tree string and return the resulting tree.
+Trees are represented as nested brackettings, such as:
+<tt class="docutils literal"><span class="pre">(S</span> <span class="pre">(NP</span> <span class="pre">(NNP</span> <span class="pre">John))</span> <span class="pre">(VP</span> <span class="pre">(V</span> <span class="pre">runs)))</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>s</strong> &#8211; The string to parse</li>
+<li><strong>brackets</strong> &#8211; The two bracket characters used to mark the
+beginning and end of trees and subtrees.</li>
+<li><strong>parse_leaf</strong> (<em>parse_label,</em>) &#8211; If specified, these functions are
+applied to the substrings of s corresponding to labels and leaves
+(respectively) to obtain the values for those labels and leaves.
+They should have the following signature: parse_label(str) -&gt; value</li>
+<li><strong>leaf_pattern</strong> (<em>label_pattern,</em>) &#8211; Regular expression patterns used to
+find label and leaf substrings in s. By default, both label and
+leaf patterns are defined to match any sequence of non-whitespace
+non-bracket characters.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tree corresponding to the string representation s.
+If this class method is called using a subclass of Tree, then it
+will return a tree of that type.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.pprint">
+<tt class="descname">pprint</tt><big>(</big><em>margin=70</em>, <em>indent=0</em>, <em>labelsep=u''</em>, <em>brackets=u'()'</em>, <em>quotes=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.pprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.pprint" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A pretty-printed string representation of this tree.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>margin</strong> &#8211; The right margin at which to do line-wrapping.</li>
+<li><strong>indent</strong> &#8211; The indentation level at which printing begins. This
+number is used to decide how far to indent subsequent lines.</li>
+<li><strong>labelsep</strong> &#8211; <p>A string that is used to separate the label from the
+children; e.g., the value &#8216;:&#8217; gives trees like:</p>
+<div class="highlight-python"><div class="highlight"><pre>(S: (NP: I) (VP: (V: saw) (NP: it))).
+</pre></div>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.Tree.draw">
+<tt class="descname">draw</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#Tree.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.Tree.draw" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an ASCII art visualization of tree.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.tree.ImmutableTree">
+<em class="property">class </em><tt class="descclassname">discodop.tree.</tt><tt class="descname">ImmutableTree</tt><big>(</big><em>label_or_str</em>, <em>children=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#ImmutableTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.ImmutableTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tree which may not be modified.; has a hash() value.</p>
+<dl class="attribute">
+<dt id="discodop.tree.ImmutableTree.label">
+<tt class="descname">label</tt><a class="headerlink" href="#discodop.tree.ImmutableTree.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get node label.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.tree.ParentedTree">
+<em class="property">class </em><tt class="descclassname">discodop.tree.</tt><tt class="descname">ParentedTree</tt><big>(</big><em>label_or_str</em>, <em>children=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#ParentedTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.ParentedTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Tree that maintains parent pointers for single-parented trees.</p>
+<p>The following read-only property values are automatically updated
+whenever the structure of a parented tree is modified: parent,
+parent_index, left_sibling, right_sibling, root, treeposition.
+Each ParentedTree may have at most one parent; i.e., subtrees may not be
+shared. Any attempt to reuse a single ParentedTree as a child of more than
+one parent (or as multiple children of the same parent) will cause a
+ValueError exception to be raised. ParentedTrees should never be used in
+the same tree as Trees or MultiParentedTrees. Mixing tree implementations
+may result in incorrect parent pointers and in TypeError exceptions.</p>
+<dl class="attribute">
+<dt id="discodop.tree.ParentedTree.parent">
+<tt class="descname">parent</tt><a class="headerlink" href="#discodop.tree.ParentedTree.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent of this tree, or None if it has no parent.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.tree.ParentedTree.parent_index">
+<tt class="descname">parent_index</tt><a class="headerlink" href="#discodop.tree.ParentedTree.parent_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of this tree in its parent.</p>
+<p>i.e., ptree.parent[ptree.parent_index] is ptree.
+Note that ptree.parent_index is not necessarily equal to
+ptree.parent.index(ptree), since the index() method
+returns the first child that is _equal_ to its argument.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.tree.ParentedTree.left_sibling">
+<tt class="descname">left_sibling</tt><a class="headerlink" href="#discodop.tree.ParentedTree.left_sibling" title="Permalink to this definition">¶</a></dt>
+<dd><p>The left sibling of this tree, or None if it has none.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.tree.ParentedTree.right_sibling">
+<tt class="descname">right_sibling</tt><a class="headerlink" href="#discodop.tree.ParentedTree.right_sibling" title="Permalink to this definition">¶</a></dt>
+<dd><p>The right sibling of this tree, or None if it has none.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.tree.ParentedTree.root">
+<tt class="descname">root</tt><a class="headerlink" href="#discodop.tree.ParentedTree.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>The root of this tree.</p>
+<p>i.e., the unique ancestor of this tree whose parent is None.
+If ptree.parent is None, then ptree is its own root.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.tree.ParentedTree.treeposition">
+<tt class="descname">treeposition</tt><a class="headerlink" href="#discodop.tree.ParentedTree.treeposition" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tree position of this tree, relative to the root of the tree.</p>
+<p>i.e., ptree.root[ptree.treeposition] is ptree.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.tree.ImmutableParentedTree">
+<em class="property">class </em><tt class="descclassname">discodop.tree.</tt><tt class="descname">ImmutableParentedTree</tt><big>(</big><em>label_or_str</em>, <em>children=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#ImmutableParentedTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.ImmutableParentedTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combination of an Immutable and Parented Tree.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.tree.MultiParentedTree">
+<em class="property">class </em><tt class="descclassname">discodop.tree.</tt><tt class="descname">MultiParentedTree</tt><big>(</big><em>label_or_str</em>, <em>children=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#MultiParentedTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.MultiParentedTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Tree that maintains parent pointers for multi-parented trees.</p>
+<p>The following read-only property values are automatically updated
+whenever the structure of a multi-parented tree is modified: parents,
+parent_indices, left_siblings, right_siblings, roots, treepositions. Each
+MultiParentedTree may have zero or more parents. In particular, subtrees
+may be shared. If a single MultiParentedTree is used as multiple children
+of the same parent, then that parent will appear multiple times in its
+parents property. MultiParentedTrees should never be used in the same tree
+as Trees or ParentedTrees. Mixing tree implementations may result in
+incorrect parent pointers and in TypeError exceptions.</p>
+<dl class="attribute">
+<dt id="discodop.tree.MultiParentedTree.parents">
+<tt class="descname">parents</tt><a class="headerlink" href="#discodop.tree.MultiParentedTree.parents" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of parents of this tree.</p>
+<p>If this tree has no parents, then parents is the empty set. To check if
+a tree is used as multiple children of the same parent, use the
+parent_indices property.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.tree.MultiParentedTree.left_siblings">
+<tt class="descname">left_siblings</tt><a class="headerlink" href="#discodop.tree.MultiParentedTree.left_siblings" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of left siblings of this tree, in any of its parent trees.</p>
+<p>A tree may be its own left sibling if it is used as multiple
+contiguous children of the same parent. A tree may appear multiple
+times in this list if it is the left sibling of this tree with respect
+to multiple parents.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.tree.MultiParentedTree.right_siblings">
+<tt class="descname">right_siblings</tt><a class="headerlink" href="#discodop.tree.MultiParentedTree.right_siblings" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of right siblings of this tree, in any of its parent trees.</p>
+<p>A tree may be its own right sibling if it is used as multiple
+contiguous children of the same parent. A tree may appear multiple
+times in this list if it is the right sibling of this tree with respect
+to multiple parents.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="discodop.tree.MultiParentedTree.roots">
+<tt class="descname">roots</tt><a class="headerlink" href="#discodop.tree.MultiParentedTree.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of all roots of this tree.</p>
+<p>This set is formed by tracing all possible parent paths until trees
+with no parents are found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.MultiParentedTree.parent_indices">
+<tt class="descname">parent_indices</tt><big>(</big><em>parent</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#MultiParentedTree.parent_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.MultiParentedTree.parent_indices" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of indices where this tree occurs as child of parent.</td>
+</tr>
+</tbody>
+</table>
+<p>If this child does not occur as a child of parent, then the
+empty list is returned. The following is always true:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">parent_index</span> <span class="ow">in</span> <span class="n">ptree</span><span class="o">.</span><span class="n">parent_indices</span><span class="p">(</span><span class="n">parent</span><span class="p">):</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">parent_index</span><span class="p">]</span> <span class="ow">is</span> <span class="n">ptree</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.tree.MultiParentedTree.treepositions">
+<tt class="descname">treepositions</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#MultiParentedTree.treepositions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.MultiParentedTree.treepositions" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of all tree positions that can be used to reach
+this multi-parented tree starting from root.</td>
+</tr>
+</tbody>
+</table>
+<p>i.e., the following holds:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">treepos</span> <span class="ow">in</span> <span class="n">ptree</span><span class="o">.</span><span class="n">treepositions</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+        <span class="n">root</span><span class="p">[</span><span class="n">treepos</span><span class="p">]</span> <span class="ow">is</span> <span class="n">ptree</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.tree.ImmutableMultiParentedTree">
+<em class="property">class </em><tt class="descclassname">discodop.tree.</tt><tt class="descname">ImmutableMultiParentedTree</tt><big>(</big><em>label_or_str</em>, <em>children=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#ImmutableMultiParentedTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.ImmutableMultiParentedTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combination of an Immutable and Multi Parented Tree.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.tree.slice_bounds">
+<tt class="descclassname">discodop.tree.</tt><tt class="descname">slice_bounds</tt><big>(</big><em>seq</em>, <em>slice_obj</em>, <em>allow_step=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/tree.html#slice_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.tree.slice_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the effective (start, stop) bounds of a slice.</p>
+<p>Takes into account <tt class="docutils literal"><span class="pre">None</span></tt> indices and negative indices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tuple <tt class="docutils literal"><span class="pre">(start,</span> <span class="pre">stop,</span> <span class="pre">1)</span></tt>, s.t. <tt class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">start</span> <span class="pre">&lt;=</span> <span class="pre">stop</span> <span class="pre">&lt;=</span> <span class="pre">len(seq)</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if slice_obj.step is not None.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>allow_step</strong> &#8211; If true, then the slice object may have a non-None step.
+If it does, then return a tuple (start, stop, step).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.treebank.html" title="discodop.treebank"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.runexp.html" title="discodop.runexp"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

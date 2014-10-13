@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.pcfg &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.plcfrs" href="discodop.plcfrs.html" />
+    <link rel="prev" title="discodop.kbest" href="discodop.kbest.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.plcfrs.html" title="discodop.plcfrs"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.kbest.html" title="discodop.kbest"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.pcfg">
+<span id="discodop-pcfg"></span><h1>discodop.pcfg<a class="headerlink" href="#module-discodop.pcfg" title="Permalink to this headline">¶</a></h1>
+<p>CKY parser for Probabilistic Context-Free Grammar (PCFG).</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.bitpar_nbest" title="discodop.pcfg.bitpar_nbest"><tt class="xref py py-obj docutils literal"><span class="pre">bitpar_nbest</span></tt></a>(nbest,&nbsp;SparseCFGChart&nbsp;chart)</td>
+<td>Put bitpar&#8217;s list of n-best derivations into the chart.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.bitpar_yap_forest" title="discodop.pcfg.bitpar_yap_forest"><tt class="xref py py-obj docutils literal"><span class="pre">bitpar_yap_forest</span></tt></a>(forest,&nbsp;SparseCFGChart&nbsp;chart)</td>
+<td>Read bitpar YAP parse forest (-y option) into a Chart object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.chartmatrix" title="discodop.pcfg.chartmatrix"><tt class="xref py py-obj docutils literal"><span class="pre">chartmatrix</span></tt></a>(nonterminals,&nbsp;lensent)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.doinsideoutside" title="discodop.pcfg.doinsideoutside"><tt class="xref py py-obj docutils literal"><span class="pre">doinsideoutside</span></tt></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.insidescores" title="discodop.pcfg.insidescores"><tt class="xref py py-obj docutils literal"><span class="pre">insidescores</span></tt></a>(sent,&nbsp;Grammar&nbsp;grammar,&nbsp;...[,&nbsp;tags])</td>
+<td>Compute inside scores.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.minmaxmatrices" title="discodop.pcfg.minmaxmatrices"><tt class="xref py py-obj docutils literal"><span class="pre">minmaxmatrices</span></tt></a>(nonterminals,&nbsp;lensent)</td>
+<td>Create matrices to track minima and maxima for binary splits.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.outsidescores" title="discodop.pcfg.outsidescores"><tt class="xref py py-obj docutils literal"><span class="pre">outsidescores</span></tt></a>(Grammar&nbsp;grammar,&nbsp;sent,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.parse" title="discodop.pcfg.parse"><tt class="xref py py-obj docutils literal"><span class="pre">parse</span></tt></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;tags,&nbsp;start])</td>
+<td>A CKY parser modeled after Bodenstab&#8217;s &#8216;fast grammar loop&#8217;.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.parse_bitpar" title="discodop.pcfg.parse_bitpar"><tt class="xref py py-obj docutils literal"><span class="pre">parse_bitpar</span></tt></a>(grammar,&nbsp;rulesfile,&nbsp;...[,&nbsp;tags])</td>
+<td>Parse a sentence with bitpar, given filenames of rules and lexicon.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.parse_symbolic" title="discodop.pcfg.parse_symbolic"><tt class="xref py py-obj docutils literal"><span class="pre">parse_symbolic</span></tt></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;...])</td>
+<td>Parse sentence without regard for probabilities.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.pprint_matrix" title="discodop.pcfg.pprint_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">pprint_matrix</span></tt></a>(matrix,&nbsp;sent,&nbsp;tolabel[,&nbsp;matrix2])</td>
+<td>Print a numpy matrix chart; optionally in parallel with another.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.renumber" title="discodop.pcfg.renumber"><tt class="xref py py-obj docutils literal"><span class="pre">renumber</span></tt></a>(deriv)</td>
+<td>Replace terminals of CF-derivation (string) with indices.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.CFGChart" title="discodop.pcfg.CFGChart"><tt class="xref py py-obj docutils literal"><span class="pre">CFGChart</span></tt></a></td>
+<td>CFGChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True) A Chart for context-free grammars (CFG).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.DenseCFGChart" title="discodop.pcfg.DenseCFGChart"><tt class="xref py py-obj docutils literal"><span class="pre">DenseCFGChart</span></tt></a></td>
+<td>DenseCFGChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.SparseCFGChart" title="discodop.pcfg.SparseCFGChart"><tt class="xref py py-obj docutils literal"><span class="pre">SparseCFGChart</span></tt></a></td>
+<td>SparseCFGChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True)</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="discodop.pcfg.CFGChart">
+<em class="property">class </em><tt class="descclassname">discodop.pcfg.</tt><tt class="descname">CFGChart</tt><a class="headerlink" href="#discodop.pcfg.CFGChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>CFGChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True)
+A Chart for context-free grammars (CFG).</p>
+<blockquote>
+<div>An item is a Python integer made up of <tt class="docutils literal"><span class="pre">start</span></tt>, <tt class="docutils literal"><span class="pre">end</span></tt>, <tt class="docutils literal"><span class="pre">lhs</span></tt> indices.</div></blockquote>
+<dl class="method">
+<dt id="discodop.pcfg.CFGChart.indices">
+<tt class="descname">indices</tt><big>(</big><em>self</em>, <em>item</em><big>)</big><a class="headerlink" href="#discodop.pcfg.CFGChart.indices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="discodop.pcfg.CFGChart.itemstr">
+<tt class="descname">itemstr</tt><big>(</big><em>self</em>, <em>item</em><big>)</big><a class="headerlink" href="#discodop.pcfg.CFGChart.itemstr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="discodop.pcfg.CFGChart.label">
+<tt class="descname">label</tt><big>(</big><em>self</em>, <em>item</em><big>)</big><a class="headerlink" href="#discodop.pcfg.CFGChart.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="discodop.pcfg.CFGChart.root">
+<tt class="descname">root</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.pcfg.CFGChart.root" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.pcfg.DenseCFGChart">
+<em class="property">class </em><tt class="descclassname">discodop.pcfg.</tt><tt class="descname">DenseCFGChart</tt><a class="headerlink" href="#discodop.pcfg.DenseCFGChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>DenseCFGChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True)</p>
+<p>A CFG chart in which edges and probabilities are stored in a dense
+array; i.e., array is contiguous and all valid combinations of indices
+<tt class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">start</span> <span class="pre">&lt;=</span> <span class="pre">mid</span> <span class="pre">&lt;=</span> <span class="pre">end</span></tt> and <tt class="docutils literal"><span class="pre">label</span></tt> can be addressed. Whether it is
+feasible to use this chart depends on the grammar constant, specifically
+the number of non-terminal labels.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.pcfg.SparseCFGChart">
+<em class="property">class </em><tt class="descclassname">discodop.pcfg.</tt><tt class="descname">SparseCFGChart</tt><a class="headerlink" href="#discodop.pcfg.SparseCFGChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>SparseCFGChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True)</p>
+<p>A CFG chart which uses a dictionary for each cell so that grammars
+with a large number of non-terminal labels can be handled.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.bitpar_nbest">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">bitpar_nbest</tt><big>(</big><em>nbest</em>, <em>SparseCFGChart chart</em><big>)</big><a class="headerlink" href="#discodop.pcfg.bitpar_nbest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put bitpar&#8217;s list of n-best derivations into the chart.
+Parse forest is not converted.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.bitpar_yap_forest">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">bitpar_yap_forest</tt><big>(</big><em>forest</em>, <em>SparseCFGChart chart</em><big>)</big><a class="headerlink" href="#discodop.pcfg.bitpar_yap_forest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read bitpar YAP parse forest (-y option) into a Chart object.</p>
+<dl class="docutils">
+<dt>The forest has lines of the form::</dt>
+<dd>label start end     prob [edge1] % prob [edge2] % .. %%</dd>
+</dl>
+<p>where an edge is either a quoted &#8220;word&#8221;, or a rule number and one or two
+line numbers in the parse forest referring to children.
+Assumes binarized grammar. Assumes chart&#8217;s Grammar object has same order of
+grammar rules as the grammar that was presented to bitpar.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.chartmatrix">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">chartmatrix</tt><big>(</big><em>nonterminals</em>, <em>lensent</em><big>)</big><a class="headerlink" href="#discodop.pcfg.chartmatrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.doinsideoutside">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">doinsideoutside</tt><big>(</big><em>sent</em>, <em>Grammar grammar</em>, <em>inside=None</em>, <em>outside=None</em>, <em>tags=None</em>, <em>startid=None</em><big>)</big><a class="headerlink" href="#discodop.pcfg.doinsideoutside" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.insidescores">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">insidescores</tt><big>(</big><em>sent</em>, <em>Grammar grammar</em>, <em>__Pyx_memviewslice inside</em>, <em>tags=None</em><big>)</big><a class="headerlink" href="#discodop.pcfg.insidescores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute inside scores.</p>
+<p>NB: These are not Viterbi scores, but sums of all derivations headed by a
+certain <tt class="docutils literal"><span class="pre">(label,</span> <span class="pre">span)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.minmaxmatrices">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">minmaxmatrices</tt><big>(</big><em>nonterminals</em>, <em>lensent</em><big>)</big><a class="headerlink" href="#discodop.pcfg.minmaxmatrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create matrices to track minima and maxima for binary splits.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.outsidescores">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">outsidescores</tt><big>(</big><em>Grammar grammar</em>, <em>sent</em>, <em>UInt start</em>, <em>__Pyx_memviewslice inside</em>, <em>__Pyx_memviewslice outside</em>, <em>__Pyx_memviewslice minleft</em>, <em>__Pyx_memviewslice maxleft</em>, <em>__Pyx_memviewslice minright</em>, <em>__Pyx_memviewslice maxright</em><big>)</big><a class="headerlink" href="#discodop.pcfg.outsidescores" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.parse">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">parse</tt><big>(</big><em>sent</em>, <em>Grammar grammar</em>, <em>tags=None</em>, <em>start=None</em>, <em>dict whitelist=None</em><big>)</big><a class="headerlink" href="#discodop.pcfg.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>A CKY parser modeled after Bodenstab&#8217;s &#8216;fast grammar loop&#8217;.</p>
+<p>If <tt class="docutils literal"><span class="pre">whitelist</span></tt> is given, the loop is filtered by the allowed items.
+The whitelist is of the form: whitelist = {cell: {label: None}};
+cell is a represenattion of a span as used by the CFGChart, label is an
+integer for a non-terminal label; the value of the inner dict is not used.
+The presence of a label means the span with that label will not be pruned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.parse_bitpar">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">parse_bitpar</tt><big>(</big><em>grammar</em>, <em>rulesfile</em>, <em>lexiconfile</em>, <em>sent</em>, <em>n</em>, <em>startlabel</em>, <em>startid</em>, <em>tags=None</em><big>)</big><a class="headerlink" href="#discodop.pcfg.parse_bitpar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a sentence with bitpar, given filenames of rules and lexicon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> &#8211; the number of derivations to return (max 1000); if n == 0, return
+parse forest instead of n-best list (requires binarized grammar).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary of derivations with their probabilities.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.parse_symbolic">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">parse_symbolic</tt><big>(</big><em>sent</em>, <em>Grammar grammar</em>, <em>tags=None</em>, <em>start=None</em><big>)</big><a class="headerlink" href="#discodop.pcfg.parse_symbolic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse sentence without regard for probabilities.</p>
+<p>Currently this calls the normal probabilistic CKY parser producing
+viterbi probabilities, but a more efficient non-probabilistic algorithm
+for producing a parse forest may be possible.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.pprint_matrix">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">pprint_matrix</tt><big>(</big><em>matrix</em>, <em>sent</em>, <em>tolabel</em>, <em>matrix2=None</em><big>)</big><a class="headerlink" href="#discodop.pcfg.pprint_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a numpy matrix chart; optionally in parallel with another.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.pcfg.renumber">
+<tt class="descclassname">discodop.pcfg.</tt><tt class="descname">renumber</tt><big>(</big><em>deriv</em><big>)</big><a class="headerlink" href="#discodop.pcfg.renumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace terminals of CF-derivation (string) with indices.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.plcfrs.html" title="discodop.plcfrs"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.kbest.html" title="discodop.kbest"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

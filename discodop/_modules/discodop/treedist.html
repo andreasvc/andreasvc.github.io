@@ -1,0 +1,414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.treedist &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for discodop.treedist</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Tree edit distance implementations.</span>
+
+<span class="sd">- Implementation following Zhang &amp; Shasha (1989);</span>
+<span class="sd">  Licensed under a BSD style license.</span>
+<span class="sd">- Implementation following Billie (2005); records edit script.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c"># Notice for the Zhang-Shasha implementation:</span>
+<span class="c">#</span>
+<span class="c"># Copyright (c) 2012, Tim Henderson and Stephen Johnson</span>
+<span class="c"># All rights reserved.</span>
+<span class="c">#</span>
+<span class="c"># Redistribution and use in source and binary forms, with or without</span>
+<span class="c"># modification, are permitted provided that the following conditions are met:</span>
+<span class="c">#</span>
+<span class="c">#     * Redistributions of source code must retain the above copyright notice,</span>
+<span class="c">#       this list of conditions and the following disclaimer.</span>
+<span class="c">#     * Redistributions in binary form must reproduce the above copyright</span>
+<span class="c">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c">#     * Neither the name of this software nor the names of its contributors may</span>
+<span class="c">#       be used to endorse or promote products derived from this software</span>
+<span class="c">#       without specific prior written permission.</span>
+<span class="c">#</span>
+<span class="c"># THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;</span>
+<span class="c"># AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</span>
+<span class="c"># IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</span>
+<span class="c"># ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE</span>
+<span class="c"># LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</span>
+<span class="c"># CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</span>
+<span class="c"># SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</span>
+<span class="c"># INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</span>
+<span class="c"># CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</span>
+<span class="c"># ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</span>
+<span class="c"># POSSIBILITY OF SUCH DAMAGE.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">discodop.tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+
+
+<div class="viewcode-block" id="Terminal"><a class="viewcode-back" href="../../api/discodop.treedist.html#discodop.treedist.Terminal">[docs]</a><span class="k">class</span> <span class="nc">Terminal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Auxiliary class to add indices to terminal nodes of Tree objects.&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">prod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">node</span>
+
+	<span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(())</span>
+
+	<span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="mi">0</span>
+
+	<span class="k">def</span> <span class="nf">__index__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+
+	<span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+			<span class="k">return</span> <span class="p">()</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&quot;A terminal has zero children.&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="prepare"><a class="viewcode-back" href="../../api/discodop.treedist.html#discodop.treedist.prepare">[docs]</a><span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">includeterms</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Return a copy of tree prepared for tree edit distance calculation.</span>
+
+<span class="sd">	- sort children to have canonical order</span>
+<span class="sd">	- merge preterminals and terminals in single nodes</span>
+<span class="sd">		(unless ``includeterms=True``).&quot;&quot;&quot;</span>
+	<span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+	<span class="c"># canonical order of children</span>
+	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Tree</span><span class="p">)):</span>
+		<span class="n">a</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">leaves</span><span class="p">()))</span>
+	<span class="k">if</span> <span class="n">includeterms</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">treepositions</span><span class="p">(</span><span class="s">&#39;leaves&#39;</span><span class="p">):</span>
+			<span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">Terminal</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">treepositions</span><span class="p">(</span><span class="s">&#39;leaves&#39;</span><span class="p">):</span>
+			<span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">label</span> <span class="o">+=</span> <span class="s">&quot;-</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+			<span class="k">del</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">tree</span>
+
+
+<span class="c"># begin Zhang-Shasha Tree Edit Distance Implementation.</span></div>
+<div class="viewcode-block" id="AnnotatedTree"><a class="viewcode-back" href="../../api/discodop.treedist.html#discodop.treedist.AnnotatedTree">[docs]</a><span class="k">class</span> <span class="nc">AnnotatedTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Wrap a tree to add some extra information.&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># a pre-order enumeration of the nodes in the tree</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">leftmostdescendents</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># left most descendents</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">keyroots</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="c"># k and k&#39; are nodes specified in the pre-order enumeration.</span>
+		<span class="c"># keyroots = {k | there exists no k&#39;&gt;k such that lmd(k) == lmd(k&#39;)}</span>
+		<span class="c"># see paper for more on keyroots</span>
+
+		<span class="n">stack</span> <span class="o">=</span> <span class="p">[(</span><span class="n">root</span><span class="p">,</span> <span class="n">deque</span><span class="p">())]</span>
+		<span class="n">pstack</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+			<span class="n">n</span><span class="p">,</span> <span class="n">anc</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+			<span class="n">n</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">j</span>
+			<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">n</span><span class="p">:</span>
+				<span class="n">a</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">anc</span><span class="p">)</span>
+				<span class="n">a</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+				<span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>
+			<span class="n">pstack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">anc</span><span class="p">))</span>
+			<span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="n">leftmostdescendents</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+		<span class="n">keyroots</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+		<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">while</span> <span class="n">pstack</span><span class="p">:</span>
+			<span class="n">n</span><span class="p">,</span> <span class="n">anc</span> <span class="o">=</span> <span class="n">pstack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">lmd</span> <span class="o">=</span> <span class="n">i</span>
+				<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">anc</span><span class="p">:</span>
+					<span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">leftmostdescendents</span><span class="p">:</span>
+						<span class="k">break</span>
+					<span class="k">else</span><span class="p">:</span>
+						<span class="n">leftmostdescendents</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">lmd</span> <span class="o">=</span> <span class="n">leftmostdescendents</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">leftmostdescendents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lmd</span><span class="p">)</span>
+			<span class="n">keyroots</span><span class="p">[</span><span class="n">lmd</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+			<span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">keyroots</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keyroots</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+</div>
+<div class="viewcode-block" id="strdist"><a class="viewcode-back" href="../../api/discodop.treedist.html#discodop.treedist.strdist">[docs]</a><span class="k">def</span> <span class="nf">strdist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Default categorical distance function.&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="k">else</span> <span class="mi">1</span>
+
+</div>
+<div class="viewcode-block" id="treedist"><a class="viewcode-back" href="../../api/discodop.treedist.html#discodop.treedist.treedist">[docs]</a><span class="k">def</span> <span class="nf">treedist</span><span class="p">(</span><span class="n">tree1</span><span class="p">,</span> <span class="n">tree2</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Zhang-Shasha tree edit distance.&quot;&quot;&quot;</span>
+	<span class="n">tree1</span> <span class="o">=</span> <span class="n">AnnotatedTree</span><span class="p">(</span><span class="n">prepare</span><span class="p">(</span><span class="n">tree1</span><span class="p">))</span>
+	<span class="n">tree2</span> <span class="o">=</span> <span class="n">AnnotatedTree</span><span class="p">(</span><span class="n">prepare</span><span class="p">(</span><span class="n">tree2</span><span class="p">))</span>
+	<span class="n">tree1lmd</span> <span class="o">=</span> <span class="n">tree1</span><span class="o">.</span><span class="n">leftmostdescendents</span>
+	<span class="n">tree2lmd</span> <span class="o">=</span> <span class="n">tree2</span><span class="o">.</span><span class="n">leftmostdescendents</span>
+	<span class="n">tree1nodes</span> <span class="o">=</span> <span class="n">tree1</span><span class="o">.</span><span class="n">nodes</span>
+	<span class="n">tree2nodes</span> <span class="o">=</span> <span class="n">tree2</span><span class="o">.</span><span class="n">nodes</span>
+	<span class="kn">import</span> <span class="nn">numpy</span>
+	<span class="n">treedists</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>  <span class="c"># pylint: disable=no-member</span>
+			<span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tree1</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">tree2</span><span class="o">.</span><span class="n">nodes</span><span class="p">)),</span> <span class="nb">int</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tree1</span><span class="o">.</span><span class="n">keyroots</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">tree2</span><span class="o">.</span><span class="n">keyroots</span><span class="p">:</span>
+			<span class="n">m</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">tree1lmd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span>
+			<span class="n">n</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">tree2lmd</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span>
+			<span class="n">table</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="nb">int</span><span class="p">)</span>  <span class="c"># pylint: disable=no-member</span>
+			<span class="n">ioff</span> <span class="o">=</span> <span class="n">tree1lmd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+			<span class="n">joff</span> <span class="o">=</span> <span class="n">tree2lmd</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+			<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>  <span class="c"># δ(l(i1)..i, θ) = δ(l(1i)..1-1, θ) + γ(v → λ)</span>
+				<span class="n">table</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+			<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>  <span class="c"># δ(θ, l(j1)..j) = δ(θ, l(j1)..j-1) + γ(λ → w)</span>
+				<span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+			<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+				<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+					<span class="c"># only need to check if x is an ancestor of i</span>
+					<span class="c"># and y is an ancestor of j</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">tree1lmd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">tree1lmd</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">ioff</span><span class="p">]</span>
+							<span class="ow">and</span> <span class="n">tree2lmd</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">tree2lmd</span><span class="p">[</span><span class="n">y</span> <span class="o">+</span> <span class="n">joff</span><span class="p">]):</span>
+						<span class="c">#                 +-</span>
+						<span class="c">#                 | δ(l(i1)..i-1, l(j1)..j) + γ(v → λ)</span>
+						<span class="c"># δ(F1, F2) = min-+ δ(l(i1)..i , l(j1)..j-1) + γ(λ → w)</span>
+						<span class="c">#                 | δ(l(i1)..i-1, l(j1)..j-1) + γ(v → w)</span>
+						<span class="c">#                 +-</span>
+						<span class="n">labeldist</span> <span class="o">=</span> <span class="n">strdist</span><span class="p">(</span><span class="n">tree1nodes</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">ioff</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
+								<span class="n">tree2nodes</span><span class="p">[</span><span class="n">y</span> <span class="o">+</span> <span class="n">joff</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+						<span class="n">table</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+								<span class="n">table</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+								<span class="n">table</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">labeldist</span><span class="p">)</span>
+						<span class="n">treedists</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">ioff</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">joff</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+					<span class="k">else</span><span class="p">:</span>
+						<span class="c">#                 +-</span>
+						<span class="c">#                 | δ(l(i1)..i-1, l(j1)..j) + γ(v → λ)</span>
+						<span class="c"># δ(F1, F2) = min-+ δ(l(i1)..i , l(j1)..j-1) + γ(λ → w)</span>
+						<span class="c">#                 | δ(l(i1)..l(i)-1, l(j1)..l(j)-1)</span>
+						<span class="c">#                 |                   + treedist(i1,j1)</span>
+						<span class="c">#                 +-</span>
+						<span class="n">a</span> <span class="o">=</span> <span class="n">tree1lmd</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">ioff</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">ioff</span>
+						<span class="n">b</span> <span class="o">=</span> <span class="n">tree2lmd</span><span class="p">[</span><span class="n">y</span> <span class="o">+</span> <span class="n">joff</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">joff</span>
+						<span class="n">table</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+								<span class="n">table</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+								<span class="n">table</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="o">+</span> <span class="n">treedists</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">ioff</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">joff</span><span class="p">])</span>
+		<span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree1nodes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Tree</span><span class="p">):</span>
+				<span class="n">astr</span> <span class="o">=</span> <span class="n">tree1nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">label</span>  <span class="c"># pprint()</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">astr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tree1nodes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+			<span class="n">j</span> <span class="o">=</span> <span class="n">treedists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree2nodes</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">Tree</span><span class="p">):</span>
+				<span class="n">bstr</span> <span class="o">=</span> <span class="n">tree2nodes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">label</span>  <span class="c"># pprint()</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">bstr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tree2nodes</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+			<span class="k">if</span> <span class="n">treedists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]:</span>
+				<span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">[</span><span class="si">%d</span><span class="s">] </span><span class="si">%s</span><span class="s">[</span><span class="si">%d</span><span class="s">] </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">astr</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">bstr</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">treedists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]))</span>
+	<span class="k">return</span> <span class="n">treedists</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">tree1</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tree2</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+<span class="c"># end Zhang-Shasha Tree Edit Distance Implementation.</span>
+
+</div>
+<div class="viewcode-block" id="newtreedist"><a class="viewcode-back" href="../../api/discodop.treedist.html#discodop.treedist.newtreedist">[docs]</a><span class="k">def</span> <span class="nf">newtreedist</span><span class="p">(</span><span class="n">tree1</span><span class="p">,</span> <span class="n">tree2</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Tree edit distance implementation as in Billie (2005).</span>
+
+<span class="sd">	Based on rparse code. Slower than ``treedist()`` but records edit script.</span>
+<span class="sd">	Should be rewritten to use a set of matrices as dynamic programming</span>
+<span class="sd">	tables.&quot;&quot;&quot;</span>
+	<span class="n">tree1</span> <span class="o">=</span> <span class="n">prepare</span><span class="p">(</span><span class="n">tree1</span><span class="p">)</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+	<span class="n">tree2</span> <span class="o">=</span> <span class="n">prepare</span><span class="p">(</span><span class="n">tree2</span><span class="p">)</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tree1</span><span class="o">.</span><span class="n">subtrees</span><span class="p">()):</span>
+		<span class="n">a</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">n</span>
+	<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tree2</span><span class="o">.</span><span class="n">subtrees</span><span class="p">()):</span>
+		<span class="n">a</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">n</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="n">geteditstats</span><span class="p">((</span><span class="n">tree1</span><span class="p">,),</span> <span class="p">(</span><span class="n">tree2</span><span class="p">,))</span>
+	<span class="n">geteditstats</span><span class="o">.</span><span class="n">mem</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">distance</span>
+
+</div>
+<div class="viewcode-block" id="EditStats"><a class="viewcode-back" href="../../api/discodop.treedist.html#discodop.treedist.EditStats">[docs]</a><span class="k">class</span> <span class="nc">EditStats</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Collect edit operations on a tree.&quot;&quot;&quot;</span>
+	<span class="n">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;distance&#39;</span><span class="p">,</span> <span class="s">&#39;matched&#39;</span><span class="p">,</span> <span class="s">&#39;editscript&#39;</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">matched</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">editscript</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">editscript</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">editscript</span> <span class="o">=</span> <span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">matched</span> <span class="o">=</span> <span class="n">matched</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">editscript</span> <span class="o">=</span> <span class="n">editscript</span>
+
+	<span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">EditStats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">distance</span><span class="p">,</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">matched</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">matched</span><span class="p">,</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">editscript</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">editscript</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">distance</span>
+
+	<span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">(distance=</span><span class="si">%d</span><span class="s">, matched=</span><span class="si">%d</span><span class="s">, [</span><span class="se">\n\t</span><span class="si">%s</span><span class="s">])&quot;</span> <span class="o">%</span> <span class="p">(</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matched</span><span class="p">,</span>
+				<span class="s">&quot;,</span><span class="se">\n\t</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">(</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+					<span class="s">&quot;</span><span class="si">%s</span><span class="s">[</span><span class="si">%d</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+						<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+					<span class="s">&quot;</span><span class="si">%s</span><span class="s">[</span><span class="si">%d</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+						<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+					<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">editscript</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="geteditstats"><a class="viewcode-back" href="../../api/discodop.treedist.html#discodop.treedist.geteditstats">[docs]</a><span class="k">def</span> <span class="nf">geteditstats</span><span class="p">(</span><span class="n">forest1</span><span class="p">,</span> <span class="n">forest2</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Recursively get edit distance.&quot;&quot;&quot;</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">geteditstats</span><span class="o">.</span><span class="n">mem</span><span class="p">[</span><span class="n">forest1</span><span class="p">,</span> <span class="n">forest2</span><span class="p">]</span>
+	<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+		<span class="k">pass</span>
+	<span class="n">flatforest1</span> <span class="o">=</span> <span class="n">forest1</span> <span class="k">if</span> <span class="n">forest1</span> <span class="o">==</span> <span class="p">()</span> <span class="k">else</span> <span class="p">(</span>
+			<span class="n">forest1</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">forest1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:]))</span>
+	<span class="n">flatforest2</span> <span class="o">=</span> <span class="n">forest2</span> <span class="k">if</span> <span class="n">forest2</span> <span class="o">==</span> <span class="p">()</span> <span class="k">else</span> <span class="p">(</span>
+			<span class="n">forest2</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">forest2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:]))</span>
+	<span class="k">if</span> <span class="n">forest2</span> <span class="o">==</span> <span class="p">():</span>
+		<span class="k">if</span> <span class="n">forest1</span> <span class="o">==</span> <span class="p">():</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">EditStats</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">())</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">tmp</span> <span class="o">=</span> <span class="n">geteditstats</span><span class="p">(</span><span class="n">flatforest1</span><span class="p">,</span> <span class="p">())</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">EditStats</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tmp</span><span class="o">.</span><span class="n">matched</span><span class="p">,</span>
+				<span class="p">((</span><span class="s">&#39;D&#39;</span><span class="p">,</span> <span class="n">forest1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">None</span><span class="p">),</span> <span class="p">)</span> <span class="o">+</span> <span class="n">tmp</span><span class="o">.</span><span class="n">editscript</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">forest1</span> <span class="o">==</span> <span class="p">():</span>
+		<span class="n">tmp</span> <span class="o">=</span> <span class="n">geteditstats</span><span class="p">((),</span> <span class="n">flatforest2</span><span class="p">)</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">EditStats</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tmp</span><span class="o">.</span><span class="n">matched</span><span class="p">,</span>
+			<span class="p">((</span><span class="s">&#39;I&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">forest2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="p">)</span> <span class="o">+</span> <span class="n">tmp</span><span class="o">.</span><span class="n">editscript</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">node1</span> <span class="o">=</span> <span class="n">forest1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">node2</span> <span class="o">=</span> <span class="n">forest2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">tmp</span> <span class="o">=</span> <span class="n">geteditstats</span><span class="p">(</span><span class="n">flatforest1</span><span class="p">,</span> <span class="n">forest2</span><span class="p">)</span>
+		<span class="n">deletestats</span> <span class="o">=</span> <span class="n">EditStats</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tmp</span><span class="o">.</span><span class="n">matched</span><span class="p">,</span>
+				<span class="p">((</span><span class="s">&#39;D&#39;</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="bp">None</span><span class="p">),)</span> <span class="o">+</span> <span class="n">tmp</span><span class="o">.</span><span class="n">editscript</span><span class="p">)</span>
+		<span class="n">tmp</span> <span class="o">=</span> <span class="n">geteditstats</span><span class="p">(</span><span class="n">forest1</span><span class="p">,</span> <span class="n">flatforest2</span><span class="p">)</span>
+		<span class="n">insertstats</span> <span class="o">=</span> <span class="n">EditStats</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tmp</span><span class="o">.</span><span class="n">matched</span><span class="p">,</span>
+				<span class="p">((</span><span class="s">&#39;I&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">node2</span><span class="p">),</span> <span class="p">)</span> <span class="o">+</span> <span class="n">tmp</span><span class="o">.</span><span class="n">editscript</span><span class="p">)</span>
+		<span class="n">matchorswapstats</span> <span class="o">=</span> <span class="p">(</span><span class="n">geteditstats</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">node1</span><span class="p">[:]),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">node2</span><span class="p">[:]))</span>
+				<span class="o">+</span> <span class="n">geteditstats</span><span class="p">(</span><span class="n">forest1</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">forest2</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+		<span class="k">if</span> <span class="n">node1</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">node2</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
+			<span class="n">matchorswapstats</span> <span class="o">=</span> <span class="n">EditStats</span><span class="p">(</span><span class="n">matchorswapstats</span><span class="o">.</span><span class="n">distance</span><span class="p">,</span>
+				<span class="n">matchorswapstats</span><span class="o">.</span><span class="n">matched</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">matchorswapstats</span><span class="o">.</span><span class="n">editscript</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">matchorswapstats</span> <span class="o">=</span> <span class="n">EditStats</span><span class="p">(</span><span class="n">matchorswapstats</span><span class="o">.</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+				<span class="n">matchorswapstats</span><span class="o">.</span><span class="n">matched</span><span class="p">,</span>
+				<span class="p">((</span><span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">),</span> <span class="p">)</span> <span class="o">+</span> <span class="n">matchorswapstats</span><span class="o">.</span><span class="n">editscript</span><span class="p">)</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">deletestats</span><span class="p">,</span> <span class="n">insertstats</span><span class="p">,</span> <span class="n">matchorswapstats</span><span class="p">)</span>
+	<span class="n">geteditstats</span><span class="o">.</span><span class="n">mem</span><span class="p">[</span><span class="n">forest1</span><span class="p">,</span> <span class="n">forest2</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+	<span class="k">return</span> <span class="n">result</span></div>
+<span class="n">geteditstats</span><span class="o">.</span><span class="n">mem</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;Tree edit distance demonstration.&quot;&quot;&quot;</span>
+	<span class="n">a</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;(f (d (a 0) (c (b 1))) (e 2))&quot;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+	<span class="n">b</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;(f (c (d (a 0) (b 1)) (e 2)))&quot;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+	<span class="n">result1</span> <span class="o">=</span> <span class="n">treedist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">result1</span> <span class="o">==</span> <span class="mi">2</span>
+	<span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">distance: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">result1</span><span class="p">))</span>
+	<span class="n">result2</span> <span class="o">=</span> <span class="n">newtreedist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">result2</span> <span class="o">==</span> <span class="mi">2</span>
+	<span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">distance: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">result2</span><span class="p">))</span>
+	<span class="n">a</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;(f (d (x (a 0)) (b 1) (c 2)) (z 3))&quot;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+	<span class="n">b</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;(f (c (d (a 0) (x (b 1)) (c 2)) (z 3)))&quot;</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+	<span class="n">result1</span> <span class="o">=</span> <span class="n">treedist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">result1</span> <span class="o">==</span> <span class="mi">3</span>
+	<span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">distance: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">result1</span><span class="p">))</span>
+	<span class="n">result2</span> <span class="o">=</span> <span class="n">newtreedist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">result2</span> <span class="o">==</span> <span class="mi">3</span>
+	<span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">distance: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">result2</span><span class="p">))</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Terminal&#39;</span><span class="p">,</span> <span class="s">&#39;prepare&#39;</span><span class="p">,</span> <span class="s">&#39;AnnotatedTree&#39;</span><span class="p">,</span> <span class="s">&#39;strdist&#39;</span><span class="p">,</span> <span class="s">&#39;treedist&#39;</span><span class="p">,</span>
+		<span class="s">&#39;newtreedist&#39;</span><span class="p">,</span> <span class="s">&#39;EditStats&#39;</span><span class="p">,</span> <span class="s">&#39;geteditstats&#39;</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">test</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

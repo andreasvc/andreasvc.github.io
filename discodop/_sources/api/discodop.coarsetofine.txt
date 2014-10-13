@@ -1,0 +1,29 @@
+discodop.coarsetofine
+=====================
+
+.. automodule:: discodop.coarsetofine
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      bitparkbestitems
+      doctf
+      getinside
+      getoutside
+      posteriorthreshold
+      prunechart
+      whitelistfromposteriors
+      whitelistfromposteriors_matrix
+   
+   
+
+   
+   
+   
+
+   
+   
+   

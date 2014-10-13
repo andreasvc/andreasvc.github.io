@@ -1,0 +1,33 @@
+discodop.estimates
+==================
+
+.. automodule:: discodop.estimates
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      getestimates
+      getpcfgestimates
+      getpcfgestimates
+      inside
+      outsidelr
+      simpleinside
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Item
+   
+   
+
+   
+   
+   

@@ -1,0 +1,24 @@
+discodop.demos
+==============
+
+.. automodule:: discodop.demos
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      tree_adjoining_grammar
+      dependencygrammar
+      bitext
+   
+   
+
+   
+   
+   
+
+   
+   
+   

@@ -1,0 +1,33 @@
+discodop.lexicon
+================
+
+.. automodule:: discodop.lexicon
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      getunknownwordmodel
+      replaceraretrainwords
+      replaceraretestwords
+      simplesmoothlexicon
+      getlexmodel
+      smoothlexicon
+      unknownword6
+      unknownword4
+      unknownwordbase
+      unknownwordftb
+      externaltagging
+      tagmangle
+   
+   
+
+   
+   
+   
+
+   
+   
+   

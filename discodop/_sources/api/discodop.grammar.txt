@@ -1,0 +1,55 @@
+discodop.grammar
+================
+
+.. automodule:: discodop.grammar
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      lcfrsproductions
+      treebankgrammar
+      dopreduction
+      doubledop
+      compiletsg
+      sortgrammar
+      flatten
+      nodefreq
+      eqtree
+      quotelabel
+      rangeheads
+      ranges
+      defaultparse
+      printrule
+      cartpi
+      write_lcfrs_grammar
+      write_lncky_grammar
+      subsetgrammar
+      grammarinfo
+      convertweight
+      grammarstats
+      stripweight
+      sumrules
+      sumlex
+      sumfrags
+      merge
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      TreeDecorator
+      DiscTree
+      UniqueIDs
+   
+   
+
+   
+   
+   

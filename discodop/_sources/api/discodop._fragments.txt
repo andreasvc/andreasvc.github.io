@@ -1,0 +1,34 @@
+discodop._fragments
+===================
+
+.. automodule:: discodop._fragments
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      addprods
+      completebitsets
+      coverbitsets
+      exactcounts
+      extractfragments
+      getctrees
+      getlabelsprods
+      getprodid
+      nonfrontier
+      pygetsent
+      readtreebank
+      repl
+      tolist
+   
+   
+
+   
+   
+   
+
+   
+   
+   

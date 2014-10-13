@@ -1,0 +1,34 @@
+discodop.treedist
+=================
+
+.. automodule:: discodop.treedist
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      prepare
+      strdist
+      treedist
+      newtreedist
+      geteditstats
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Terminal
+      AnnotatedTree
+      EditStats
+   
+   
+
+   
+   
+   

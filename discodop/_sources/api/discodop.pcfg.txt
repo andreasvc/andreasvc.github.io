@@ -1,0 +1,41 @@
+discodop.pcfg
+=============
+
+.. automodule:: discodop.pcfg
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      bitpar_nbest
+      bitpar_yap_forest
+      chartmatrix
+      doinsideoutside
+      insidescores
+      minmaxmatrices
+      outsidescores
+      parse
+      parse_bitpar
+      parse_symbolic
+      pprint_matrix
+      renumber
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CFGChart
+      DenseCFGChart
+      SparseCFGChart
+   
+   
+
+   
+   
+   

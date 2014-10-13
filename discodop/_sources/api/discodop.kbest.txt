@@ -1,0 +1,24 @@
+discodop.kbest
+==============
+
+.. automodule:: discodop.kbest
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      getderiv
+      lazykbest
+      lazykthbest
+   
+   
+
+   
+   
+   
+
+   
+   
+   

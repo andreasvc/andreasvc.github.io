@@ -1,0 +1,53 @@
+discodop.treebanktransforms
+===========================
+
+.. automodule:: discodop.treebanktransforms
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      transform
+      negratransforms
+      wsjtransforms
+      ftbtransforms
+      reversetransform
+      collapselabels
+      unifymorphfeat
+      rrtransform
+      rrbacktransform
+      removeterminals
+      removeemptynodes
+      ispunct
+      punctremove
+      punctremove
+      punctlower
+      punctraise
+      balancedpunctraise
+      function
+      ishead
+      rindex
+      labels
+      pop
+      strip
+      ancestors
+      bracketings
+      readheadrules
+      headfinder
+      sethead
+      headmark
+      headorder
+      saveheads
+      headstats
+   
+   
+
+   
+   
+   
+
+   
+   
+   

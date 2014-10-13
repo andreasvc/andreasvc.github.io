@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API documentation &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="index.html" />
+    <link rel="up" title="Reference" href="ref.html" />
+    <link rel="next" title="discodop.demos" href="api/discodop.demos.html" />
+    <link rel="prev" title="File formats" href="fileformats.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="api/discodop.demos.html" title="discodop.demos"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="fileformats.html" title="File formats"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="ref.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop">
+<span id="api-documentation"></span><h1>API documentation<a class="headerlink" href="#module-discodop" title="Permalink to this headline">¶</a></h1>
+<p>Discontinuous Data-Oriented Parsing (disco-dop).</p>
+<p>Main components:</p>
+<ul class="simple">
+<li>A parser for Probalistic Linear Context-Free Rewriting Systems (LCFRS),
+as well as Probabilistic Context-Free Grammars (PCFG).</li>
+<li>Facilities to extract and parse with tree fragments using data-oriented
+parsing (DOP) grammars.</li>
+</ul>
+<div class="section" id="python-modules">
+<h2>Python modules<a class="headerlink" href="#python-modules" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.demos.html#module-discodop.demos" title="discodop.demos"><tt class="xref py py-obj docutils literal"><span class="pre">demos</span></tt></a></td>
+<td>Examples of various formalisms encoded in LCFRS grammars.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.eval.html#module-discodop.eval" title="discodop.eval"><tt class="xref py py-obj docutils literal"><span class="pre">eval</span></tt></a></td>
+<td>Evaluation of (discontinuous) parse trees.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.fragments.html#module-discodop.fragments" title="discodop.fragments"><tt class="xref py py-obj docutils literal"><span class="pre">fragments</span></tt></a></td>
+<td>Extract recurring tree fragments from constituency treebanks.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.gen.html#module-discodop.gen" title="discodop.gen"><tt class="xref py py-obj docutils literal"><span class="pre">gen</span></tt></a></td>
+<td>Generate random sentences with an LCFRS.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.grammar.html#module-discodop.grammar" title="discodop.grammar"><tt class="xref py py-obj docutils literal"><span class="pre">grammar</span></tt></a></td>
+<td>Assorted functions to read off grammars from treebanks.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.lexicon.html#module-discodop.lexicon" title="discodop.lexicon"><tt class="xref py py-obj docutils literal"><span class="pre">lexicon</span></tt></a></td>
+<td>Add rules to handle unknown words and smooth lexical probabilities.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.parser.html#module-discodop.parser" title="discodop.parser"><tt class="xref py py-obj docutils literal"><span class="pre">parser</span></tt></a></td>
+<td>Parser object that performs coarse-to-fine and postprocessing.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.runexp.html#module-discodop.runexp" title="discodop.runexp"><tt class="xref py py-obj docutils literal"><span class="pre">runexp</span></tt></a></td>
+<td>Run an experiment given a parameter file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.tree.html#module-discodop.tree" title="discodop.tree"><tt class="xref py py-obj docutils literal"><span class="pre">tree</span></tt></a></td>
+<td>Various Tree objects for representing syntax or morphological trees.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.treebank.html#module-discodop.treebank" title="discodop.treebank"><tt class="xref py py-obj docutils literal"><span class="pre">treebank</span></tt></a></td>
+<td>Read and write treebanks.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.treebanktransforms.html#module-discodop.treebanktransforms" title="discodop.treebanktransforms"><tt class="xref py py-obj docutils literal"><span class="pre">treebanktransforms</span></tt></a></td>
+<td>Treebank transformations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.treedist.html#module-discodop.treedist" title="discodop.treedist"><tt class="xref py py-obj docutils literal"><span class="pre">treedist</span></tt></a></td>
+<td>Tree edit distance implementations.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.treedraw.html#module-discodop.treedraw" title="discodop.treedraw"><tt class="xref py py-obj docutils literal"><span class="pre">treedraw</span></tt></a></td>
+<td>Discontinuous tree drawing.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.treesearch.html#module-discodop.treesearch" title="discodop.treesearch"><tt class="xref py py-obj docutils literal"><span class="pre">treesearch</span></tt></a></td>
+<td>Objects for searching through collections of trees.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.treetransforms.html#module-discodop.treetransforms" title="discodop.treetransforms"><tt class="xref py py-obj docutils literal"><span class="pre">treetransforms</span></tt></a></td>
+<td>Treebank-indenpendent tree transformations.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cython-modules">
+<h2>Cython modules<a class="headerlink" href="#cython-modules" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop._fragments.html#module-discodop._fragments" title="discodop._fragments"><tt class="xref py py-obj docutils literal"><span class="pre">_fragments</span></tt></a></td>
+<td>Fragment extraction with tree kernels.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.bit.html#module-discodop.bit" title="discodop.bit"><tt class="xref py py-obj docutils literal"><span class="pre">bit</span></tt></a></td>
+<td>Functions for working with bitvectors.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.coarsetofine.html#module-discodop.coarsetofine" title="discodop.coarsetofine"><tt class="xref py py-obj docutils literal"><span class="pre">coarsetofine</span></tt></a></td>
+<td>Project selected items from a chart to corresponding items in next grammar.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.containers.html#module-discodop.containers" title="discodop.containers"><tt class="xref py py-obj docutils literal"><span class="pre">containers</span></tt></a></td>
+<td>Data types for chart items, edges, &amp;c.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.disambiguation.html#module-discodop.disambiguation" title="discodop.disambiguation"><tt class="xref py py-obj docutils literal"><span class="pre">disambiguation</span></tt></a></td>
+<td>Disambiguate parse forests with various methods for parse selection.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.estimates.html#module-discodop.estimates" title="discodop.estimates"><tt class="xref py py-obj docutils literal"><span class="pre">estimates</span></tt></a></td>
+<td>Computation of outside estimates for best-first or A* parsing.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.kbest.html#module-discodop.kbest" title="discodop.kbest"><tt class="xref py py-obj docutils literal"><span class="pre">kbest</span></tt></a></td>
+<td>Extract the k-best derivations from a probabilistic parse forest.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="api/discodop.pcfg.html#module-discodop.pcfg" title="discodop.pcfg"><tt class="xref py py-obj docutils literal"><span class="pre">pcfg</span></tt></a></td>
+<td>CKY parser for Probabilistic Context-Free Grammar (PCFG).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="api/discodop.plcfrs.html#module-discodop.plcfrs" title="discodop.plcfrs"><tt class="xref py py-obj docutils literal"><span class="pre">plcfrs</span></tt></a></td>
+<td>Parser for string-rewriting Linear Context-Free Rewriting Systems.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="api/discodop.demos.html" title="discodop.demos"
+             >next</a></li>
+        <li class="right" >
+          <a href="fileformats.html" title="File formats"
+             >previous</a> |</li>
+        <li><a href="index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="ref.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

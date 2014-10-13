@@ -1,0 +1,52 @@
+discodop.treebank
+=================
+
+.. automodule:: discodop.treebank
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      brackettree
+      exporttree
+      exportsplit
+      alpinotree
+      writetree
+      writeexporttree
+      writealpinotree
+      writedependencies
+      dependencies
+      makedep
+      handlefunctions
+      handlemorphology
+      incrementaltreereader
+      segmentbrackets
+      segmentexport
+      quote
+      unquote
+      treebankfanout
+      numbase
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CorpusReader
+      BracketCorpusReader
+      DiscBracketCorpusReader
+      NegraCorpusReader
+      AlpinoCorpusReader
+      TigerXMLCorpusReader
+      DactCorpusReader
+   
+   
+
+   
+   
+   

@@ -1,0 +1,800 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.parser &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for discodop.parser</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Parser object that performs coarse-to-fine and postprocessing.</span>
+
+<span class="sd">Additionally, a simple command line interface similar to bitpar.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">string</span>  <span class="c"># pylint: disable=W0402</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="s">&#39;2&#39;</span><span class="p">:</span>
+	<span class="n">imap</span> <span class="o">=</span> <span class="nb">map</span>
+<span class="k">else</span><span class="p">:</span>
+	<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">imap</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">nlargest</span>
+<span class="kn">from</span> <span class="nn">getopt</span> <span class="kn">import</span> <span class="n">gnu_getopt</span><span class="p">,</span> <span class="n">GetoptError</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">discodop</span> <span class="kn">import</span> <span class="n">plcfrs</span><span class="p">,</span> <span class="n">pcfg</span>
+<span class="kn">from</span> <span class="nn">discodop.grammar</span> <span class="kn">import</span> <span class="n">defaultparse</span>
+<span class="kn">from</span> <span class="nn">discodop.containers</span> <span class="kn">import</span> <span class="n">Grammar</span>
+<span class="kn">from</span> <span class="nn">discodop.coarsetofine</span> <span class="kn">import</span> <span class="n">prunechart</span><span class="p">,</span> <span class="n">whitelistfromposteriors</span>
+<span class="kn">from</span> <span class="nn">discodop.disambiguation</span> <span class="kn">import</span> <span class="n">getderivations</span><span class="p">,</span> <span class="n">marginalize</span><span class="p">,</span> <span class="n">doprerank</span>
+<span class="kn">from</span> <span class="nn">discodop.tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="kn">from</span> <span class="nn">discodop.lexicon</span> <span class="kn">import</span> <span class="n">replaceraretestwords</span><span class="p">,</span> <span class="n">UNKNOWNWORDFUNC</span><span class="p">,</span> <span class="n">UNK</span>
+<span class="kn">from</span> <span class="nn">discodop.treebank</span> <span class="kn">import</span> <span class="n">WRITERS</span><span class="p">,</span> <span class="n">writetree</span>
+<span class="kn">from</span> <span class="nn">discodop.treebanktransforms</span> <span class="kn">import</span> <span class="n">reversetransform</span><span class="p">,</span> <span class="n">rrbacktransform</span><span class="p">,</span> \
+		<span class="n">saveheads</span><span class="p">,</span> <span class="n">NUMBERRE</span><span class="p">,</span> <span class="n">readheadrules</span>
+<span class="kn">from</span> <span class="nn">discodop.treetransforms</span> <span class="kn">import</span> <span class="n">mergediscnodes</span><span class="p">,</span> <span class="n">unbinarize</span><span class="p">,</span> \
+		<span class="n">removefanoutmarkers</span>
+
+<span class="n">USAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">usage: </span><span class="si">%(cmd)s</span><span class="s"> [options] &lt;grammar/&gt; [input [output]]</span>
+<span class="s">or:    </span><span class="si">%(cmd)s</span><span class="s"> --simple [options] &lt;rules&gt; &lt;lexicon&gt; [input [output]]</span>
+
+<span class="s">&#39;grammar/&#39; is a directory with a model produced by &quot;discodop runexp&quot;.</span>
+<span class="s">When no filename is given, input is read from standard input and the results</span>
+<span class="s">are written to standard output. Input should contain one sentence per line</span>
+<span class="s">with space-delimited tokens. Output consists of bracketed trees in</span>
+<span class="s">selected format. Files must be encoded in UTF-8.</span>
+
+<span class="s">General options:</span>
+<span class="s">  -x           Input is one token per line, sentences separated by two</span>
+<span class="s">               newlines (like bitpar).</span>
+<span class="s">  -b k         Return the k-best parses instead of just 1.</span>
+<span class="s">  --prob       Print probabilities as well as parse trees.</span>
+<span class="s">  --tags       Tokens are of the form &quot;word/POS&quot;; give both to parser.</span>
+<span class="s">  --fmt=[export|bracket|discbracket|alpino|conll|mst|wordpos]</span>
+<span class="s">               Format of output [default: discbracket].</span>
+<span class="s">  --numproc=k  Launch k processes, to exploit multiple cores.</span>
+<span class="s">  --simple     Parse with a single grammar and input file; similar interface</span>
+<span class="s">               to bitpar. The files &#39;rules&#39; and &#39;lexicon&#39; define a binarized</span>
+<span class="s">               grammar in bitpar or PLCFRS format.</span>
+
+<span class="s">Options for simple mode:</span>
+<span class="s">  -s x         Use &quot;x&quot; as start symbol instead of default &quot;TOP&quot;.</span>
+<span class="s">  --bt=file    Apply backtransform table to recover TSG derivations.</span>
+<span class="s">  --obj=&lt;*mpd|mpp|mcc|shortest|sl-dop&gt;</span>
+<span class="s">               Objective function to maximize.</span>
+<span class="s">  -m x         Use x derivations to approximate objective functions;</span>
+<span class="s">               mpd and shortest require only 1.</span>
+<span class="s">  --bitpar     Use bitpar to parse with an unbinarized grammar.</span>
+<span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">WRITERS</span><span class="p">))</span>
+
+<span class="n">DEFAULTSTAGE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+		<span class="n">name</span><span class="o">=</span><span class="s">&#39;stage1&#39;</span><span class="p">,</span>  <span class="c"># identifier, used for filenames</span>
+		<span class="n">mode</span><span class="o">=</span><span class="s">&#39;plcfrs&#39;</span><span class="p">,</span>  <span class="c"># use the agenda-based PLCFRS parser</span>
+		<span class="n">prune</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># whether to use previous chart to prune this stage</span>
+		<span class="n">split</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># split disc. nodes VP_2[101] as { VP*[100], VP*[001] }</span>
+		<span class="n">splitprune</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># treat VP_2[101] as {VP*[100], VP*[001]} for pruning</span>
+		<span class="n">markorigin</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># mark origin of split nodes: VP_2 =&gt; {VP*1, VP*2}</span>
+		<span class="n">collapselabels</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>  <span class="c"># options: None, &#39;head&#39;, &#39;all&#39;. TODO: implement.</span>
+		<span class="n">k</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>  <span class="c"># no. of coarse pcfg derivations to prune with; k=0: filter only</span>
+		<span class="n">neverblockre</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>  <span class="c"># do not prune nodes with label that match regex</span>
+		<span class="n">getestimates</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>  <span class="c"># compute &amp; store estimates</span>
+		<span class="n">useestimates</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>  <span class="c"># load &amp; use estimates</span>
+		<span class="n">dop</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># enable DOP mode (DOP reduction / double DOP)</span>
+		<span class="n">packedgraph</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># use packed graph encoding for DOP reduction</span>
+		<span class="n">usedoubledop</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># when False, use DOP reduction instead</span>
+		<span class="n">binarized</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="c"># for double dop, whether to binarize extracted grammar</span>
+			<span class="c"># (False requires use of bitpar)</span>
+		<span class="n">iterate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># for double dop, whether to add fragments of fragments</span>
+		<span class="n">complement</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>  <span class="c"># for double dop, whether to include fragments which</span>
+			<span class="c"># form the complement of the maximal recurring fragments extracted</span>
+		<span class="n">sample</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">kbest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="n">m</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c"># number of derivations to sample/enumerate</span>
+		<span class="n">estimator</span><span class="o">=</span><span class="s">&#39;rfe&#39;</span><span class="p">,</span>  <span class="c"># choices: rfe, ewe</span>
+		<span class="n">objective</span><span class="o">=</span><span class="s">&#39;mpp&#39;</span><span class="p">,</span>  <span class="c"># choices: mpp, mpd, shortest, sl-dop[-simple]</span>
+			<span class="c"># NB: w/shortest derivation, estimator only affects tie breaking.</span>
+		<span class="n">sldop_n</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>  <span class="c"># number of trees to consider when using sl-dop[-simple]</span>
+		<span class="n">mcc_labda</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>  <span class="c"># weight to assign to recall vs. mistake rate with mcc</span>
+		<span class="n">mcc_labels</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>  <span class="c"># optionally, set of labels to optimize for with mcc</span>
+		<span class="p">)</span>
+
+
+<div class="viewcode-block" id="DictObj"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.DictObj">[docs]</a><span class="k">class</span> <span class="nc">DictObj</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Trivial class to wrap a dictionary for reasons of syntactic sugar.&quot;&quot;&quot;</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DictObj.update"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.DictObj.update">[docs]</a>	<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Update/add more attributes.&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</div>
+	<span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Dummy function for suppressing pylint E1101 errors.&quot;&quot;&quot;</span>
+		<span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%r</span><span class="s"> instance has no attribute </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
+	<span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">(</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+			<span class="s">&#39;,</span><span class="se">\n\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
+</div>
+<span class="n">PARAMS</span> <span class="o">=</span> <span class="n">DictObj</span><span class="p">()</span>  <span class="c"># used for multiprocessing when using CLI of this module</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;Handle command line arguments.&quot;&quot;&quot;</span>
+	<span class="n">options</span> <span class="o">=</span> <span class="s">&#39;prob tags bitpar simple obj= bt= numproc= fmt=&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;b:s:m:x&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+	<span class="k">except</span> <span class="n">GetoptError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&#39;ERROR: incorrect number of arguments&#39;</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;file </span><span class="si">%d</span><span class="s"> not found: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+	<span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+	<span class="n">numparses</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+	<span class="n">top</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-s&#39;</span><span class="p">,</span> <span class="s">&#39;TOP&#39;</span><span class="p">)</span>
+	<span class="n">prob</span> <span class="o">=</span> <span class="s">&#39;--prob&#39;</span> <span class="ow">in</span> <span class="n">opts</span>
+	<span class="n">tags</span> <span class="o">=</span> <span class="s">&#39;--tags&#39;</span> <span class="ow">in</span> <span class="n">opts</span>
+	<span class="n">oneline</span> <span class="o">=</span> <span class="s">&#39;-x&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span>
+	<span class="k">if</span> <span class="s">&#39;--simple&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+			<span class="k">print</span><span class="p">(</span><span class="s">&#39;ERROR: incorrect number of arguments&#39;</span><span class="p">)</span>
+			<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="n">rules</span> <span class="o">=</span> <span class="p">(</span><span class="n">gzip</span><span class="o">.</span><span class="n">open</span> <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.gz&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">open</span><span class="p">)(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+		<span class="n">lexicon</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getreader</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)((</span><span class="n">gzip</span><span class="o">.</span><span class="n">open</span> <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.gz&#39;</span><span class="p">)</span>
+				<span class="k">else</span> <span class="nb">open</span><span class="p">)(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+		<span class="n">bitpar</span> <span class="o">=</span> <span class="n">rules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span>
+		<span class="k">if</span> <span class="s">&#39;--bitpar&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">bitpar</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;bitpar requires bitpar grammar format.&#39;</span><span class="p">)</span>
+			<span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;pcfg-bitpar-nbest&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;pcfg&#39;</span> <span class="k">if</span> <span class="n">bitpar</span> <span class="k">else</span> <span class="s">&#39;plcfrs&#39;</span>
+		<span class="n">grammar</span> <span class="o">=</span> <span class="n">Grammar</span><span class="p">(</span><span class="n">rules</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">top</span><span class="p">,</span> <span class="n">bitpar</span><span class="o">=</span><span class="n">bitpar</span><span class="p">,</span>
+				<span class="n">binarized</span><span class="o">=</span><span class="s">&#39;--bitpar&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">)</span>
+		<span class="n">stages</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">stage</span> <span class="o">=</span> <span class="n">DEFAULTSTAGE</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="n">backtransform</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--bt&#39;</span><span class="p">):</span>
+			<span class="n">backtransform</span> <span class="o">=</span> <span class="p">(</span><span class="n">gzip</span><span class="o">.</span><span class="n">open</span> <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--bt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.gz&#39;</span><span class="p">)</span>
+					<span class="k">else</span> <span class="nb">open</span><span class="p">)(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--bt&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+		<span class="n">stage</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+				<span class="n">name</span><span class="o">=</span><span class="s">&#39;grammar&#39;</span><span class="p">,</span>
+				<span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+				<span class="n">grammar</span><span class="o">=</span><span class="n">grammar</span><span class="p">,</span>
+				<span class="n">binarized</span><span class="o">=</span><span class="s">&#39;--bitpar&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+				<span class="n">backtransform</span><span class="o">=</span><span class="n">backtransform</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
+				<span class="n">m</span><span class="o">=</span><span class="n">numparses</span><span class="p">,</span>
+				<span class="n">objective</span><span class="o">=</span><span class="s">&#39;mpd&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="s">&#39;--obj&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+			<span class="n">stage</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dop</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">objective</span><span class="o">=</span><span class="n">opts</span><span class="p">[</span><span class="s">&#39;--obj&#39;</span><span class="p">],</span>
+					<span class="n">m</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+		<span class="n">stages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DictObj</span><span class="p">(</span><span class="n">stage</span><span class="p">))</span>
+		<span class="k">if</span> <span class="n">backtransform</span><span class="p">:</span>
+			<span class="n">_</span> <span class="o">=</span> <span class="n">stages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">getmapping</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span>
+				<span class="n">neverblockre</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;.+}&lt;&#39;</span><span class="p">))</span>
+		<span class="n">parser</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">stages</span><span class="p">)</span>
+		<span class="n">morph</span> <span class="o">=</span> <span class="bp">None</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="kn">from</span> <span class="nn">discodop.runexp</span> <span class="kn">import</span> <span class="n">readparam</span>
+		<span class="n">directory</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;expected directory produced by &quot;discodop runexp&quot;&#39;</span><span class="p">)</span>
+		<span class="n">params</span> <span class="o">=</span> <span class="n">readparam</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s">&#39;params.prm&#39;</span><span class="p">))</span>
+		<span class="n">params</span><span class="p">[</span><span class="s">&#39;resultdir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">directory</span>
+		<span class="n">stages</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;stages&#39;</span><span class="p">]</span>
+		<span class="n">postagging</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;postagging&#39;</span><span class="p">]</span>
+		<span class="n">readgrammars</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">stages</span><span class="p">,</span> <span class="n">postagging</span><span class="p">,</span>
+				<span class="n">top</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;top&#39;</span><span class="p">,</span> <span class="n">top</span><span class="p">))</span>
+		<span class="n">parser</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">(</span><span class="n">stages</span><span class="p">,</span>
+				<span class="n">transformations</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;transformations&#39;</span><span class="p">),</span>
+				<span class="n">binarization</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;binarization&#39;</span><span class="p">],</span>
+				<span class="n">postagging</span><span class="o">=</span><span class="n">postagging</span> <span class="k">if</span> <span class="n">postagging</span> <span class="ow">and</span>
+				<span class="n">postagging</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;unknownword&#39;</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
+				<span class="n">relationalrealizational</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;relationalrealizational&#39;</span><span class="p">),</span>
+				<span class="n">verbosity</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;verbosity&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+		<span class="n">morph</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;morphology&#39;</span><span class="p">]</span>
+	<span class="n">infile</span> <span class="o">=</span> <span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)</span>
+	<span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span> <span class="k">else</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+	<span class="n">doparsing</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">infile</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">oneline</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">numparses</span><span class="p">,</span>
+			<span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numproc&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--fmt&#39;</span><span class="p">,</span> <span class="s">&#39;discbracket&#39;</span><span class="p">),</span>
+			<span class="n">morph</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="doparsing"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.doparsing">[docs]</a><span class="k">def</span> <span class="nf">doparsing</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">infile</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">printprob</span><span class="p">,</span> <span class="n">oneline</span><span class="p">,</span> <span class="n">usetags</span><span class="p">,</span> <span class="n">numparses</span><span class="p">,</span>
+		<span class="n">numproc</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">morphology</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Parse sentences from file and write results to file, log to stdout.&quot;&quot;&quot;</span>
+	<span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">unparsed</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">oneline</span><span class="p">:</span>
+		<span class="n">infile</span> <span class="o">=</span> <span class="n">readinputbitparstyle</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+	<span class="n">infile</span> <span class="o">=</span> <span class="p">(</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">infile</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+	<span class="k">if</span> <span class="n">numproc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">initworker</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">printprob</span><span class="p">,</span> <span class="n">usetags</span><span class="p">,</span> <span class="n">numparses</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">morphology</span><span class="p">)</span>
+		<span class="n">mymap</span> <span class="o">=</span> <span class="n">imap</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">numproc</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">initworker</span><span class="p">,</span>
+				<span class="n">initargs</span><span class="o">=</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">printprob</span><span class="p">,</span> <span class="n">usetags</span><span class="p">,</span> <span class="n">numparses</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span>
+					<span class="n">morphology</span><span class="p">))</span>
+		<span class="n">mymap</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap</span>
+	<span class="k">for</span> <span class="n">output</span><span class="p">,</span> <span class="n">noparse</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">mymap</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">infile</span><span class="p">)):</span>
+		<span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+			<span class="k">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">noparse</span><span class="p">:</span>
+				<span class="n">unparsed</span> <span class="o">+=</span> <span class="mi">1</span>
+			<span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+			<span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+	<span class="k">print</span><span class="p">(</span><span class="s">&#39;average time per sentence&#39;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">),</span>
+			<span class="s">&#39;</span><span class="se">\n</span><span class="s">unparsed sentences:&#39;</span><span class="p">,</span> <span class="n">unparsed</span><span class="p">,</span>
+			<span class="s">&#39;</span><span class="se">\n</span><span class="s">finished&#39;</span><span class="p">,</span>
+			<span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+	<span class="n">out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="initworker"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.initworker">[docs]</a><span class="k">def</span> <span class="nf">initworker</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">printprob</span><span class="p">,</span> <span class="n">usetags</span><span class="p">,</span> <span class="n">numparses</span><span class="p">,</span>
+		<span class="n">fmt</span><span class="p">,</span> <span class="n">morphology</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Load parser for a worker process.&quot;&quot;&quot;</span>
+	<span class="n">headrules</span> <span class="o">=</span> <span class="bp">None</span>
+	<span class="k">if</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;mst&#39;</span><span class="p">,</span> <span class="s">&#39;conll&#39;</span><span class="p">):</span>
+		<span class="n">headrules</span> <span class="o">=</span> <span class="n">readheadrules</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">binarization</span><span class="o">.</span><span class="n">headrules</span><span class="p">)</span>
+	<span class="n">PARAMS</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parser</span><span class="o">=</span><span class="n">parser</span><span class="p">,</span> <span class="n">printprob</span><span class="o">=</span><span class="n">printprob</span><span class="p">,</span>
+			<span class="n">usetags</span><span class="o">=</span><span class="n">usetags</span><span class="p">,</span> <span class="n">numparses</span><span class="o">=</span><span class="n">numparses</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span>
+			<span class="n">morphology</span><span class="o">=</span><span class="n">morphology</span><span class="p">,</span> <span class="n">headrules</span><span class="o">=</span><span class="n">headrules</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="workerfunc"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.workerfunc">[docs]</a><span class="k">def</span> <span class="nf">workerfunc</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Wrap a multiprocessing worker function to produce a full traceback.&quot;&quot;&quot;</span>
+	<span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Apply decorated function.&quot;&quot;&quot;</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="kn">import</span> <span class="nn">faulthandler</span>
+			<span class="n">faulthandler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>  <span class="c"># Dump information on segfault.</span>
+		<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+			<span class="k">pass</span>
+		<span class="c"># NB: only concurrent.futures on Python 3.3+ will exit gracefully.</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+		<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c"># pylint: disable=W0703</span>
+			<span class="c"># Put traceback as string into an exception and raise that</span>
+			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;in worker process</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span>
+					<span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exception</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())))</span>
+	<span class="k">return</span> <span class="n">wrapper</span>
+
+</div>
+<span class="nd">@workerfunc</span>
+<div class="viewcode-block" id="worker"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.worker">[docs]</a><span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Parse a single sentence.&quot;&quot;&quot;</span>
+	<span class="n">n</span><span class="p">,</span> <span class="n">line</span> <span class="o">=</span> <span class="n">args</span>
+	<span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;&#39;</span>
+	<span class="n">begin</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+	<span class="n">sent</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+	<span class="n">tags</span> <span class="o">=</span> <span class="bp">None</span>
+	<span class="k">if</span> <span class="n">PARAMS</span><span class="o">.</span><span class="n">usetags</span><span class="p">:</span>
+		<span class="n">sent</span><span class="p">,</span> <span class="n">tags</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">))</span>
+	<span class="n">lexicon</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">lexicalbyword</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">PARAMS</span><span class="o">.</span><span class="n">usetags</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">lexicon</span><span class="p">):</span>
+		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown words and no tags or unknown word model &#39;</span>
+				<span class="s">&#39;supplied.</span><span class="se">\n</span><span class="s">sentence: </span><span class="si">%r</span><span class="se">\n</span><span class="s">unknown words:</span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+				<span class="n">sent</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">lexicon</span><span class="p">))))</span>
+	<span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;parsing </span><span class="si">%d</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">))</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">PARAMS</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">sent</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">))[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">output</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+	<span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">noparse</span><span class="p">:</span>
+		<span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">No parse for &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">PARAMS</span><span class="o">.</span><span class="n">printprob</span><span class="p">:</span>
+			<span class="n">output</span> <span class="o">+=</span> <span class="s">&#39;prob=</span><span class="si">%.16g</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">result</span><span class="o">.</span><span class="n">prob</span>
+		<span class="n">output</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">parsetree</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">))</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">output</span> <span class="o">+=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+				<span class="n">writetree</span><span class="p">(</span>
+					<span class="n">PARAMS</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">postprocess</span><span class="p">(</span><span class="n">tree</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sent</span><span class="p">,</span>
+					<span class="n">n</span> <span class="k">if</span> <span class="n">PARAMS</span><span class="o">.</span><span class="n">numparses</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="p">(</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">-</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)),</span>
+					<span class="n">PARAMS</span><span class="o">.</span><span class="n">fmt</span><span class="p">,</span> <span class="n">headrules</span><span class="o">=</span><span class="n">PARAMS</span><span class="o">.</span><span class="n">headrules</span><span class="p">,</span>
+					<span class="n">morphology</span><span class="o">=</span><span class="n">PARAMS</span><span class="o">.</span><span class="n">morphology</span><span class="p">,</span>
+					<span class="n">comment</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;prob=</span><span class="si">%.16g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">prob</span><span class="p">)</span> <span class="k">if</span> <span class="n">PARAMS</span><span class="o">.</span><span class="n">printprob</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nlargest</span><span class="p">(</span>
+					<span class="n">PARAMS</span><span class="o">.</span><span class="n">numparses</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">parsetrees</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))))</span>
+	<span class="n">sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">begin</span>
+	<span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="si">%g</span><span class="s"> s&#39;</span> <span class="o">%</span> <span class="n">sec</span>
+	<span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">noparse</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">msg</span>
+
+</div>
+<div class="viewcode-block" id="readinputbitparstyle"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.readinputbitparstyle">[docs]</a><span class="k">def</span> <span class="nf">readinputbitparstyle</span><span class="p">(</span><span class="n">infile</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Yields lists of tokens, where &#39;\\n\\n&#39; identifies a sentence break.</span>
+
+<span class="sd">	Lazy version of ``infile.read().split(&#39;\\n\\n&#39;)``.&quot;&quot;&quot;</span>
+	<span class="n">sent</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">infile</span><span class="p">:</span>
+		<span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+			<span class="k">yield</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span>
+			<span class="n">sent</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">sent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">sent</span><span class="p">:</span>
+		<span class="k">yield</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="Parser"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.Parser">[docs]</a><span class="k">class</span> <span class="nc">Parser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;A coarse-to-fine parser based on a given set of parameters.</span>
+
+<span class="sd">	:param stages: a list of coarse-to-fine stages containing grammars and</span>
+<span class="sd">		parameters.</span>
+<span class="sd">	:param transformations: treebank transformations to reverse on parses.</span>
+<span class="sd">	:param binarization: settings used for binarization; used for the</span>
+<span class="sd">		tailmarker attribute which identifies heads in parser output.</span>
+<span class="sd">	:param postagging: if given, an unknown word model is used to assign POS</span>
+<span class="sd">		tags during parsing. The model consists of a DictObj with (at least)</span>
+<span class="sd">		the following attributes:</span>
+
+<span class="sd">		- unknownwordfun: function to produces signatures for unknown words.</span>
+<span class="sd">		- lexicon: the set of known words in the grammar.</span>
+<span class="sd">		- sigs: the set of word signatures occurring in the grammar.</span>
+<span class="sd">	:param relationalrealizational: whether to reverse the RR-transform.&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stages</span><span class="p">,</span> <span class="n">transformations</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">postagging</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+			<span class="n">binarization</span><span class="o">=</span><span class="n">DictObj</span><span class="p">(</span><span class="n">tailmarker</span><span class="o">=</span><span class="bp">None</span><span class="p">),</span>
+			<span class="n">relationalrealizational</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">stages</span> <span class="o">=</span> <span class="n">stages</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">transformations</span> <span class="o">=</span> <span class="n">transformations</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">binarization</span> <span class="o">=</span> <span class="n">binarization</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">postagging</span> <span class="o">=</span> <span class="n">postagging</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">relationalrealizational</span> <span class="o">=</span> <span class="n">relationalrealizational</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">verbosity</span>
+		<span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="n">stages</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;pcfg-bitpar&#39;</span><span class="p">):</span>
+				<span class="n">exportbitpargrammar</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+			<span class="n">model</span> <span class="o">=</span> <span class="s">u&#39;default&#39;</span>
+			<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">dop</span><span class="p">:</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">estimator</span> <span class="o">==</span> <span class="s">&#39;ewe&#39;</span>
+						<span class="ow">or</span> <span class="n">stage</span><span class="o">.</span><span class="n">objective</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;sl-dop&#39;</span><span class="p">)):</span>
+					<span class="n">model</span> <span class="o">=</span> <span class="s">u&#39;ewe&#39;</span>
+				<span class="k">elif</span> <span class="n">stage</span><span class="o">.</span><span class="n">estimator</span> <span class="o">==</span> <span class="s">&#39;bon&#39;</span><span class="p">:</span>
+					<span class="n">model</span> <span class="o">=</span> <span class="s">u&#39;bon&#39;</span>
+				<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">objective</span> <span class="o">==</span> <span class="s">&#39;shortest&#39;</span><span class="p">:</span>
+					<span class="n">model</span> <span class="o">=</span> <span class="s">u&#39;shortest&#39;</span>
+			<span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">logprob</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s">&#39;pcfg-posterior&#39;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+				<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+				<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Parser.parse"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.Parser.parse">[docs]</a>	<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Parse a sentence and perform postprocessing.</span>
+
+<span class="sd">		Yields a dictionary from parse trees to probabilities for each stage.</span>
+
+<span class="sd">		:param sent: a sequence of tokens.</span>
+<span class="sd">		:param tags: if given, will be given to the parser instead of trying</span>
+<span class="sd">			all possible tags.&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">postagging</span><span class="p">:</span>
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformations</span> <span class="ow">and</span> <span class="s">&#39;FOLD-NUMBERS&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformations</span><span class="p">:</span>
+				<span class="n">sent</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;000&#39;</span> <span class="k">if</span> <span class="n">NUMBERRE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">else</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">]</span>
+			<span class="n">sent</span> <span class="o">=</span> <span class="n">replaceraretestwords</span><span class="p">(</span><span class="n">sent</span><span class="p">,</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">postagging</span><span class="o">.</span><span class="n">unknownwordfun</span><span class="p">,</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">postagging</span><span class="o">.</span><span class="n">lexicon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">postagging</span><span class="o">.</span><span class="n">sigs</span><span class="p">)</span>
+		<span class="n">sent</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">tags</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">tags</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span>
+		<span class="n">chart</span> <span class="o">=</span> <span class="n">start</span> <span class="o">=</span> <span class="n">inside</span> <span class="o">=</span> <span class="n">outside</span> <span class="o">=</span> <span class="n">lastsuccessfulparse</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">stage</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">):</span>
+			<span class="n">begin</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+			<span class="n">noparse</span> <span class="o">=</span> <span class="bp">False</span>
+			<span class="n">parsetrees</span> <span class="o">=</span> <span class="n">fragments</span> <span class="o">=</span> <span class="bp">None</span>
+			<span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+			<span class="n">model</span> <span class="o">=</span> <span class="s">u&#39;default&#39;</span>
+			<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">dop</span><span class="p">:</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">estimator</span> <span class="o">==</span> <span class="s">&#39;ewe&#39;</span>
+						<span class="ow">or</span> <span class="n">stage</span><span class="o">.</span><span class="n">objective</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;sl-dop&#39;</span><span class="p">)):</span>
+					<span class="n">model</span> <span class="o">=</span> <span class="s">u&#39;ewe&#39;</span>
+				<span class="k">elif</span> <span class="n">stage</span><span class="o">.</span><span class="n">estimator</span> <span class="o">==</span> <span class="s">&#39;bon&#39;</span><span class="p">:</span>
+					<span class="n">model</span> <span class="o">=</span> <span class="s">u&#39;bon&#39;</span>
+				<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">objective</span> <span class="o">==</span> <span class="s">&#39;shortest&#39;</span><span class="p">:</span>
+					<span class="n">model</span> <span class="o">=</span> <span class="s">u&#39;shortest&#39;</span>
+			<span class="n">x</span> <span class="o">=</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">currentmodel</span>
+			<span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">logprob</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s">&#39;pcfg-posterior&#39;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;pcfg-bitpar&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+					<span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">stage</span><span class="p">,</span> <span class="s">&#39;rulesfile&#39;</span><span class="p">)</span>
+					<span class="ow">or</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">currentmodel</span><span class="p">):</span>
+				<span class="n">exportbitpargrammar</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">stage</span><span class="o">.</span><span class="n">binarized</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;pcfg-bitpar&#39;</span><span class="p">):</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;non-binarized grammar requires use of bitpar&#39;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">stage</span><span class="o">.</span><span class="n">prune</span> <span class="ow">or</span> <span class="n">chart</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">stage</span><span class="o">.</span><span class="n">prune</span> <span class="ow">and</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s">&#39;dop-rerank&#39;</span><span class="p">:</span>
+					<span class="n">beginprune</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;pcfg-posterior&#39;</span><span class="p">:</span>
+						<span class="n">whitelist</span><span class="p">,</span> <span class="n">msg1</span> <span class="o">=</span> <span class="n">whitelistfromposteriors</span><span class="p">(</span>
+								<span class="n">inside</span><span class="p">,</span> <span class="n">outside</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span>
+								<span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span>
+								<span class="n">stage</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">splitprune</span><span class="p">,</span>
+								<span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">markorigin</span><span class="p">,</span>
+								<span class="n">stage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;pcfg&#39;</span><span class="p">))</span>
+					<span class="k">else</span><span class="p">:</span>
+						<span class="n">whitelist</span><span class="p">,</span> <span class="n">msg1</span> <span class="o">=</span> <span class="n">prunechart</span><span class="p">(</span>
+								<span class="n">chart</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+								<span class="n">stage</span><span class="o">.</span><span class="n">splitprune</span><span class="p">,</span>
+								<span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">markorigin</span><span class="p">,</span>
+								<span class="n">stage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;pcfg&#39;</span><span class="p">),</span>
+								<span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;pcfg-bitpar-nbest&#39;</span><span class="p">)</span>
+					<span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">; </span><span class="si">%g</span><span class="s">s</span><span class="se">\n\t</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">msg1</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">beginprune</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">whitelist</span> <span class="o">=</span> <span class="bp">None</span>
+				<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;pcfg&#39;</span><span class="p">:</span>
+					<span class="n">chart</span><span class="p">,</span> <span class="n">msg1</span> <span class="o">=</span> <span class="n">pcfg</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+							<span class="n">sent</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span>
+							<span class="n">whitelist</span><span class="o">=</span><span class="n">whitelist</span> <span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">prune</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
+				<span class="k">elif</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;pcfg-posterior&#39;</span><span class="p">:</span>
+					<span class="n">inside</span><span class="p">,</span> <span class="n">outside</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">msg1</span> <span class="o">=</span> <span class="n">pcfg</span><span class="o">.</span><span class="n">doinsideoutside</span><span class="p">(</span>
+							<span class="n">sent</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">)</span>
+					<span class="n">chart</span> <span class="o">=</span> <span class="n">start</span>
+				<span class="k">elif</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;pcfg-bitpar&#39;</span><span class="p">):</span>
+					<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;pcfg-bitpar-forest&#39;</span><span class="p">:</span>
+						<span class="n">numderivs</span> <span class="o">=</span> <span class="mi">0</span>
+					<span class="k">elif</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+							<span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">prune</span><span class="p">):</span>
+						<span class="n">numderivs</span> <span class="o">=</span> <span class="n">stage</span><span class="o">.</span><span class="n">m</span>
+					<span class="k">else</span><span class="p">:</span>  <span class="c"># request 1000 nbest parses for CTF pruning</span>
+						<span class="n">numderivs</span> <span class="o">=</span> <span class="mi">1000</span>
+					<span class="n">chart</span><span class="p">,</span> <span class="n">cputime</span><span class="p">,</span> <span class="n">msg1</span> <span class="o">=</span> <span class="n">pcfg</span><span class="o">.</span><span class="n">parse_bitpar</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span>
+							<span class="n">stage</span><span class="o">.</span><span class="n">rulesfile</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">lexiconfile</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+							<span class="n">sent</span><span class="p">,</span> <span class="n">numderivs</span><span class="p">,</span>
+							<span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+							<span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">toid</span><span class="p">[</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">start</span><span class="p">],</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">)</span>
+					<span class="n">begin</span> <span class="o">-=</span> <span class="n">cputime</span>
+				<span class="k">elif</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;plcfrs&#39;</span><span class="p">:</span>
+					<span class="n">chart</span><span class="p">,</span> <span class="n">msg1</span> <span class="o">=</span> <span class="n">plcfrs</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+							<span class="n">sent</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span>
+							<span class="n">exhaustive</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">dop</span> <span class="ow">or</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">)</span>
+								<span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">prune</span><span class="p">),</span>
+							<span class="n">whitelist</span><span class="o">=</span><span class="n">whitelist</span><span class="p">,</span>
+							<span class="n">splitprune</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">splitprune</span>
+								<span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">,</span>
+							<span class="n">markorigin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">markorigin</span><span class="p">,</span>
+							<span class="n">estimates</span><span class="o">=</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">useestimates</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">outside</span><span class="p">)</span>
+								<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">useestimates</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;SX&#39;</span><span class="p">,</span> <span class="s">&#39;SXlrgaps&#39;</span><span class="p">)</span>
+								<span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
+				<span class="k">elif</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;dop-rerank&#39;</span><span class="p">:</span>
+					<span class="k">if</span> <span class="n">chart</span><span class="p">:</span>
+						<span class="n">parsetrees</span> <span class="o">=</span> <span class="n">doprerank</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+								<span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="p">)</span>
+						<span class="n">msg1</span> <span class="o">=</span> <span class="s">&#39;re-ranked </span><span class="si">%d</span><span class="s"> parse trees. &#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">parsetrees</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown mode specified.&#39;</span><span class="p">)</span>
+				<span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\n\t</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">msg1</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">chart</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">noparse</span>
+						<span class="ow">and</span> <span class="n">stage</span><span class="o">.</span><span class="n">split</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">):</span>
+					<span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;ERROR: expected successful parse. &#39;</span>
+							<span class="s">&#39;sent: </span><span class="si">%s</span><span class="se">\n</span><span class="s">stage: </span><span class="si">%s</span><span class="s">.&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">),</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+					<span class="c"># raise ValueError(&#39;ERROR: expected successful parse. &#39;</span>
+					<span class="c"># 		&#39;sent %s, %s.&#39; % (nsent, stage.name))</span>
+			<span class="k">if</span> <span class="n">chart</span> <span class="ow">and</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;pcfg-posterior&#39;</span><span class="p">,</span> <span class="s">&#39;dop-rerank&#39;</span>
+					<span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">relationalrealizational</span> <span class="ow">and</span> <span class="n">stage</span><span class="o">.</span><span class="n">split</span><span class="p">):</span>
+				<span class="n">begindisamb</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+				<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;pcfg-bitpar-nbest&#39;</span><span class="p">:</span>
+					<span class="k">if</span> <span class="ow">not</span> <span class="n">stage</span><span class="o">.</span><span class="n">kbest</span> <span class="ow">or</span> <span class="n">stage</span><span class="o">.</span><span class="n">sample</span><span class="p">:</span>
+						<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;sampling not possible with bitpar &#39;</span>
+								<span class="s">&#39;in nbest mode.&#39;</span><span class="p">)</span>
+					<span class="n">derivations</span> <span class="o">=</span> <span class="n">chart</span><span class="o">.</span><span class="n">rankededges</span><span class="p">[</span><span class="n">chart</span><span class="o">.</span><span class="n">root</span><span class="p">()]</span>
+					<span class="n">entries</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">derivations</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">derivations</span><span class="p">,</span> <span class="n">entries</span> <span class="o">=</span> <span class="n">getderivations</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+							<span class="n">kbest</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">kbest</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">sample</span><span class="p">,</span>
+							<span class="n">derivstrings</span><span class="o">=</span><span class="ow">not</span> <span class="n">stage</span><span class="o">.</span><span class="n">usedoubledop</span>
+									<span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">3</span>
+									<span class="ow">or</span> <span class="n">stage</span><span class="o">.</span><span class="n">objective</span> <span class="o">==</span> <span class="s">&#39;mcc&#39;</span><span class="p">)</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+					<span class="k">print</span><span class="p">(</span><span class="s">&#39;sent: </span><span class="si">%s</span><span class="se">\n</span><span class="s">stage: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">),</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+					<span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">-best derivations:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+						<span class="nb">min</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+						<span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">. </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+							<span class="p">(</span><span class="s">&#39;subtrees=</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">prob</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))))</span>
+							<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">objective</span> <span class="o">==</span> <span class="s">&#39;shortest&#39;</span>
+							<span class="k">else</span> <span class="p">(</span><span class="s">&#39;p=</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">prob</span><span class="p">)),</span> <span class="n">deriv</span><span class="p">)</span>
+						<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">deriv</span><span class="p">,</span> <span class="n">prob</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">derivations</span><span class="p">[:</span><span class="mi">100</span><span class="p">]))))</span>
+					<span class="k">print</span><span class="p">(</span><span class="s">&#39;sum of probabitilies: </span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span>
+							<span class="nb">sum</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">prob</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">prob</span> <span class="ow">in</span> <span class="n">derivations</span><span class="p">[:</span><span class="mi">100</span><span class="p">]))</span>
+				<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">objective</span> <span class="o">==</span> <span class="s">&#39;shortest&#39;</span><span class="p">:</span>
+					<span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="s">u&#39;ewe&#39;</span> <span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">estimator</span> <span class="o">==</span> <span class="s">&#39;ewe&#39;</span>
+							<span class="k">else</span> <span class="s">u&#39;default&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+				<span class="n">parsetrees</span><span class="p">,</span> <span class="n">msg1</span> <span class="o">=</span> <span class="n">marginalize</span><span class="p">(</span>
+						<span class="n">stage</span><span class="o">.</span><span class="n">objective</span> <span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">dop</span> <span class="k">else</span> <span class="s">&#39;mpd&#39;</span><span class="p">,</span>
+						<span class="n">derivations</span><span class="p">,</span> <span class="n">entries</span><span class="p">,</span> <span class="n">chart</span><span class="p">,</span>
+						<span class="n">sent</span><span class="o">=</span><span class="n">sent</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span>
+						<span class="n">backtransform</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">backtransform</span><span class="p">,</span>
+						<span class="n">k</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">sldop_n</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">sldop_n</span><span class="p">,</span>
+						<span class="n">mcc_labda</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">mcc_labda</span><span class="p">,</span> <span class="n">mcc_labels</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">mcc_labels</span><span class="p">,</span>
+						<span class="n">bitpar</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;pcfg-bitpar-nbest&#39;</span><span class="p">)</span>
+				<span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;disambiguation: </span><span class="si">%s</span><span class="s">, </span><span class="si">%g</span><span class="s">s</span><span class="se">\n\t</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+						<span class="n">msg1</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">begindisamb</span><span class="p">)</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+					<span class="n">besttrees</span> <span class="o">=</span> <span class="n">nlargest</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">parsetrees</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+					<span class="k">print</span><span class="p">(</span><span class="s">&#39;100-best parse trees:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+							<span class="s">&#39;</span><span class="si">%d</span><span class="s">. </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">probstr</span><span class="p">(</span><span class="n">prob</span><span class="p">),</span> <span class="n">treestr</span><span class="p">)</span>
+							<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">treestr</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">besttrees</span><span class="p">)))</span>
+					<span class="k">print</span><span class="p">(</span><span class="s">&#39;sum of probabitilies: </span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span>
+							<span class="nb">sum</span><span class="p">((</span><span class="n">prob</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">prob</span><span class="p">)</span>
+								<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">besttrees</span><span class="p">))</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+					<span class="k">print</span><span class="p">(</span><span class="s">&#39;Chart:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">chart</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">parsetrees</span><span class="p">:</span>
+				<span class="k">try</span><span class="p">:</span>
+					<span class="n">resultstr</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">fragments</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+							<span class="n">parsetrees</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+					<span class="n">parsetree</span><span class="p">,</span> <span class="n">noparse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocess</span><span class="p">(</span><span class="n">resultstr</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+					<span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">parsetree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">()):</span>
+						<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;empty nodes in tree: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">parsetree</span><span class="p">)</span>
+					<span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">parsetree</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">):</span>
+						<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;leaves missing. original tree: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span>
+							<span class="s">&#39;postprocessed: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">resultstr</span><span class="p">,</span> <span class="n">parsetree</span><span class="p">))</span>
+				<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>  <span class="c"># pylint: disable=W0703</span>
+					<span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;something&#39;s amiss. </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+					<span class="n">parsetree</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">noparse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noparse</span><span class="p">(</span>
+							<span class="n">stage</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">lastsuccessfulparse</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">lastsuccessfulparse</span> <span class="o">=</span> <span class="n">parsetree</span>
+				<span class="n">msg</span> <span class="o">+=</span> <span class="n">probstr</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">fragments</span> <span class="o">=</span> <span class="bp">None</span>
+				<span class="n">parsetree</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">noparse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noparse</span><span class="p">(</span>
+						<span class="n">stage</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">lastsuccessfulparse</span><span class="p">)</span>
+			<span class="n">elapsedtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">begin</span>
+			<span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%.2f</span><span class="s">s cpu time elapsed</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">elapsedtime</span><span class="p">)</span>
+			<span class="k">yield</span> <span class="n">DictObj</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">parsetree</span><span class="o">=</span><span class="n">parsetree</span><span class="p">,</span> <span class="n">prob</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span>
+					<span class="n">parsetrees</span><span class="o">=</span><span class="n">parsetrees</span><span class="p">,</span> <span class="n">fragments</span><span class="o">=</span><span class="n">fragments</span><span class="p">,</span>
+					<span class="n">noparse</span><span class="o">=</span><span class="n">noparse</span><span class="p">,</span> <span class="n">elapsedtime</span><span class="o">=</span><span class="n">elapsedtime</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Parser.postprocess"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.Parser.postprocess">[docs]</a>	<span class="k">def</span> <span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">treestr</span><span class="p">,</span> <span class="n">stage</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Take parse tree and apply postprocessing.&quot;&quot;&quot;</span>
+		<span class="n">parsetree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">treestr</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">stage</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">:</span>
+			<span class="n">mergediscnodes</span><span class="p">(</span><span class="n">unbinarize</span><span class="p">(</span><span class="n">parsetree</span><span class="p">,</span> <span class="n">childchar</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span>
+					<span class="n">expandunary</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+		<span class="n">saveheads</span><span class="p">(</span><span class="n">parsetree</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">binarization</span><span class="o">.</span><span class="n">tailmarker</span><span class="p">)</span>
+		<span class="n">unbinarize</span><span class="p">(</span><span class="n">parsetree</span><span class="p">,</span> <span class="n">expandunary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+		<span class="n">removefanoutmarkers</span><span class="p">(</span><span class="n">parsetree</span><span class="p">)</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">relationalrealizational</span><span class="p">:</span>
+			<span class="n">parsetree</span> <span class="o">=</span> <span class="n">rrbacktransform</span><span class="p">(</span><span class="n">parsetree</span><span class="p">,</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">relationalrealizational</span><span class="p">[</span><span class="s">&#39;adjunctionlabel&#39;</span><span class="p">])</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformations</span><span class="p">:</span>
+			<span class="n">reversetransform</span><span class="p">(</span><span class="n">parsetree</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformations</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">parsetree</span><span class="p">,</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="Parser.noparse"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.Parser.noparse">[docs]</a>	<span class="k">def</span> <span class="nf">noparse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">lastsuccessfulparse</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Return parse from previous stage or a dummy parse.&quot;&quot;&quot;</span>
+		<span class="c"># use successful parse from earlier stage if available</span>
+		<span class="k">if</span> <span class="n">lastsuccessfulparse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">parsetree</span> <span class="o">=</span> <span class="n">lastsuccessfulparse</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>  <span class="c"># Produce a dummy parse for evaluation purposes.</span>
+			<span class="n">default</span> <span class="o">=</span> <span class="n">defaultparse</span><span class="p">([(</span><span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span>
+					<span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="s">&#39;NONE&#39;</span><span class="p">]))])</span>
+			<span class="n">parsetree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;(</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+					<span class="n">default</span><span class="p">),</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+		<span class="n">noparse</span> <span class="o">=</span> <span class="bp">True</span>
+		<span class="n">prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+		<span class="k">return</span> <span class="n">parsetree</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">noparse</span>
+
+</div></div>
+<div class="viewcode-block" id="readgrammars"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.readgrammars">[docs]</a><span class="k">def</span> <span class="nf">readgrammars</span><span class="p">(</span><span class="n">resultdir</span><span class="p">,</span> <span class="n">stages</span><span class="p">,</span> <span class="n">postagging</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="s">&#39;ROOT&#39;</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Read the grammars from a previous experiment.</span>
+
+<span class="sd">	Expects a directory ``resultdir`` which contains the relevant grammars and</span>
+<span class="sd">	the parameter file ``params.prm``, as produced by ``runexp``.&quot;&quot;&quot;</span>
+	<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">stage</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">stages</span><span class="p">):</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;reading: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+		<span class="n">rules</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">.rules.gz&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">resultdir</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+		<span class="n">lexicon</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getreader</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)(</span><span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">.lex.gz&#39;</span> <span class="o">%</span> <span class="p">(</span>
+				<span class="n">resultdir</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">)))</span>
+		<span class="n">grammar</span> <span class="o">=</span> <span class="n">Grammar</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">lexicon</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+				<span class="n">start</span><span class="o">=</span><span class="n">top</span><span class="p">,</span> <span class="n">bitpar</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;pcfg&#39;</span><span class="p">),</span>
+				<span class="n">binarized</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">binarized</span><span class="p">)</span>
+		<span class="n">backtransform</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">dop</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">useestimates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;not supported&#39;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">usedoubledop</span><span class="p">:</span>
+				<span class="n">backtransform</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">.backtransform.gz&#39;</span> <span class="o">%</span> <span class="p">(</span>
+						<span class="n">resultdir</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+				<span class="k">if</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">stage</span><span class="o">.</span><span class="n">prune</span><span class="p">:</span>
+					<span class="n">_</span> <span class="o">=</span> <span class="n">grammar</span><span class="o">.</span><span class="n">getmapping</span><span class="p">(</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span>
+						<span class="n">striplabelre</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;@.+$&#39;</span><span class="p">),</span>
+						<span class="n">neverblockre</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;^#[0-9]+|.+}&lt;&#39;</span><span class="p">),</span>
+						<span class="n">splitprune</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">splitprune</span> <span class="ow">and</span> <span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">,</span>
+						<span class="n">markorigin</span><span class="o">=</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">markorigin</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="c"># recoverfragments() relies on this mapping to identify</span>
+					<span class="c"># binarization nodes</span>
+					<span class="n">_</span> <span class="o">=</span> <span class="n">grammar</span><span class="o">.</span><span class="n">getmapping</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span>
+						<span class="n">neverblockre</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;.+}&lt;&#39;</span><span class="p">))</span>
+			<span class="k">elif</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">stage</span><span class="o">.</span><span class="n">prune</span><span class="p">:</span>  <span class="c"># dop reduction</span>
+				<span class="n">_</span> <span class="o">=</span> <span class="n">grammar</span><span class="o">.</span><span class="n">getmapping</span><span class="p">(</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span>
+					<span class="n">striplabelre</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;@[-0-9]+$&#39;</span><span class="p">),</span>
+					<span class="n">neverblockre</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">neverblockre</span><span class="p">)</span>
+						<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">neverblockre</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
+					<span class="n">splitprune</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">splitprune</span> <span class="ow">and</span> <span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">,</span>
+					<span class="n">markorigin</span><span class="o">=</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">markorigin</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;dop-rerank&#39;</span><span class="p">:</span>
+					<span class="n">grammar</span><span class="o">.</span><span class="n">getrulemapping</span><span class="p">(</span>
+							<span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">br</span><span class="s">&#39;@[-0-9]+</span><span class="se">\b</span><span class="s">&#39;</span><span class="p">))</span>
+			<span class="n">probsfile</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">.probs.npz&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">resultdir</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">probsfile</span><span class="p">):</span>
+				<span class="n">probmodels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">probsfile</span><span class="p">)</span>  <span class="c"># pylint: disable=no-member</span>
+				<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">probmodels</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+					<span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s">&#39;default&#39;</span><span class="p">:</span>
+						<span class="n">grammar</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">probmodels</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+		<span class="k">else</span><span class="p">:</span>  <span class="c"># not stage.dop</span>
+			<span class="k">if</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">stage</span><span class="o">.</span><span class="n">prune</span><span class="p">:</span>
+				<span class="n">_</span> <span class="o">=</span> <span class="n">grammar</span><span class="o">.</span><span class="n">getmapping</span><span class="p">(</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span>
+					<span class="n">neverblockre</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">neverblockre</span><span class="p">)</span>
+						<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">neverblockre</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
+					<span class="n">splitprune</span><span class="o">=</span><span class="n">stage</span><span class="o">.</span><span class="n">splitprune</span> <span class="ow">and</span> <span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">,</span>
+					<span class="n">markorigin</span><span class="o">=</span><span class="n">stages</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">markorigin</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;pcfg-bitpar&#39;</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">grammar</span><span class="o">.</span><span class="n">maxfanout</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;bitpar requires a PCFG.&#39;</span><span class="p">)</span>
+		<span class="n">_sumsto1</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">grammar</span><span class="o">.</span><span class="n">testgrammar</span><span class="p">()</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">stage</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+		<span class="n">stage</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grammar</span><span class="o">=</span><span class="n">grammar</span><span class="p">,</span> <span class="n">backtransform</span><span class="o">=</span><span class="n">backtransform</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">postagging</span> <span class="ow">and</span> <span class="n">postagging</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;unknownword&#39;</span><span class="p">:</span>
+		<span class="n">postagging</span><span class="o">.</span><span class="n">unknownwordfun</span> <span class="o">=</span> <span class="n">UNKNOWNWORDFUNC</span><span class="p">[</span><span class="n">postagging</span><span class="o">.</span><span class="n">model</span><span class="p">]</span>
+		<span class="n">postagging</span><span class="o">.</span><span class="n">lexicon</span> <span class="o">=</span> <span class="p">{</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">stages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">lexicalbyword</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="n">w</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">UNK</span><span class="p">)}</span>
+		<span class="n">postagging</span><span class="o">.</span><span class="n">sigs</span> <span class="o">=</span> <span class="p">{</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">stages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">lexicalbyword</span>
+				<span class="k">if</span> <span class="n">w</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">UNK</span><span class="p">)}</span>
+
+</div>
+<div class="viewcode-block" id="exportbitpargrammar"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.exportbitpargrammar">[docs]</a><span class="k">def</span> <span class="nf">exportbitpargrammar</span><span class="p">(</span><span class="n">stage</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;(re-)export bitpar grammar with current weights.&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">stage</span><span class="p">,</span> <span class="s">&#39;rulesfile&#39;</span><span class="p">):</span>
+		<span class="n">stage</span><span class="o">.</span><span class="n">rulesfile</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span>
+		<span class="n">stage</span><span class="o">.</span><span class="n">lexiconfile</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span>
+	<span class="n">stage</span><span class="o">.</span><span class="n">rulesfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">stage</span><span class="o">.</span><span class="n">rulesfile</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">currentmodel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">stage</span><span class="o">.</span><span class="n">rulesfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">origrules</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">stage</span><span class="o">.</span><span class="n">rulesfile</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span>
+				<span class="s">&#39;</span><span class="si">%g</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+				<span class="k">for</span> <span class="n">weight</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span>
+				<span class="nb">zip</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">currentmodel</span><span class="p">],</span>
+					<span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">origrules</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()))</span>
+	<span class="n">stage</span><span class="o">.</span><span class="n">rulesfile</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+	<span class="n">stage</span><span class="o">.</span><span class="n">lexiconfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">stage</span><span class="o">.</span><span class="n">lexiconfile</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>
+	<span class="n">lexicon</span> <span class="o">=</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">origlexicon</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+			<span class="s">&#39;(&#39;</span><span class="p">,</span> <span class="s">&#39;-LRB-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;)&#39;</span><span class="p">,</span> <span class="s">&#39;-RRB-&#39;</span><span class="p">)</span>
+	<span class="n">lexiconfile</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)(</span><span class="n">stage</span><span class="o">.</span><span class="n">lexiconfile</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">currentmodel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">lexiconfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lexicon</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">weights</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">currentmodel</span><span class="p">,</span>
+				<span class="n">stage</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">numrules</span><span class="p">:])</span>
+		<span class="n">lexiconfile</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+				<span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">next</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span>
+					<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]))</span>
+				<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lexicon</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+	<span class="n">stage</span><span class="o">.</span><span class="n">lexiconfile</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="probstr"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.probstr">[docs]</a><span class="k">def</span> <span class="nf">probstr</span><span class="p">(</span><span class="n">prob</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Render probability / number of subtrees as string.&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s">&#39;subtrees=</span><span class="si">%d</span><span class="s">, p=</span><span class="si">%.4g</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">prob</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">prob</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+	<span class="k">return</span> <span class="s">&#39;p=</span><span class="si">%.4g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">prob</span>
+
+</div>
+<div class="viewcode-block" id="which"><a class="viewcode-back" href="../../api/discodop.parser.html#discodop.parser.which">[docs]</a><span class="k">def</span> <span class="nf">which</span><span class="p">(</span><span class="n">program</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Return first match for program in search path.&quot;&quot;&quot;</span>
+	<span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;PATH&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">defpath</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;:&quot;</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">path</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">program</span><span class="p">)):</span>
+			<span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">program</span><span class="p">)</span>
+	<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%r</span><span class="s"> not found in path; please install it.&#39;</span> <span class="o">%</span> <span class="n">program</span><span class="p">)</span>
+
+</div>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;DictObj&#39;</span><span class="p">,</span> <span class="s">&#39;Parser&#39;</span><span class="p">,</span> <span class="s">&#39;doparsing&#39;</span><span class="p">,</span> <span class="s">&#39;exportbitpargrammar&#39;</span><span class="p">,</span>
+		<span class="s">&#39;initworker&#39;</span><span class="p">,</span> <span class="s">&#39;probstr&#39;</span><span class="p">,</span> <span class="s">&#39;readgrammars&#39;</span><span class="p">,</span> <span class="s">&#39;readinputbitparstyle&#39;</span><span class="p">,</span>
+		<span class="s">&#39;which&#39;</span><span class="p">,</span> <span class="s">&#39;worker&#39;</span><span class="p">,</span> <span class="s">&#39;workerfunc&#39;</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

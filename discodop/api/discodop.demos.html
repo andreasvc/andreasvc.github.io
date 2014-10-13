@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.demos &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="up" title="API documentation" href="../api.html" />
+    <link rel="next" title="discodop.eval" href="discodop.eval.html" />
+    <link rel="prev" title="discodop.plcfrs" href="discodop.plcfrs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.eval.html" title="discodop.eval"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="discodop.plcfrs.html" title="discodop.plcfrs"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-discodop.demos">
+<span id="discodop-demos"></span><h1>discodop.demos<a class="headerlink" href="#module-discodop.demos" title="Permalink to this headline">¶</a></h1>
+<p>Examples of various formalisms encoded in LCFRS grammars.</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.demos.tree_adjoining_grammar" title="discodop.demos.tree_adjoining_grammar"><tt class="xref py py-obj docutils literal"><span class="pre">tree_adjoining_grammar</span></tt></a>()</td>
+<td>Example of a tree-adjoining grammar (TAG) encoded as an LCFRS.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.demos.dependencygrammar" title="discodop.demos.dependencygrammar"><tt class="xref py py-obj docutils literal"><span class="pre">dependencygrammar</span></tt></a>()</td>
+<td>An example dependency structure encoded in an LCFRS grammar.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.demos.bitext" title="discodop.demos.bitext"><tt class="xref py py-obj docutils literal"><span class="pre">bitext</span></tt></a>()</td>
+<td>Bitext parsing with a synchronous CFG.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="discodop.demos.tree_adjoining_grammar">
+<tt class="descclassname">discodop.demos.</tt><tt class="descname">tree_adjoining_grammar</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/demos.html#tree_adjoining_grammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.demos.tree_adjoining_grammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example of a tree-adjoining grammar (TAG) encoded as an LCFRS.
+Taken from: Chen &amp; Vijay-Shanker (2000), Automated extraction of TAGs
+from the Penn treebank.
+Limitations:
+- no epsilon productions
+Non-terminals have identifiers to encode elementary trees of depth &gt; 2.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.demos.dependencygrammar">
+<tt class="descclassname">discodop.demos.</tt><tt class="descname">dependencygrammar</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/demos.html#dependencygrammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.demos.dependencygrammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>An example dependency structure encoded in an LCFRS grammar.</p>
+<p>Taken from: Gildea (2010, fig. 4), Optimal Parsing Strategies for Linear
+Context-Free Rewriting Systems.
+Limitations:
+- rules have to be binarized
+- lexical rules have to be unary
+These have been dealt with by introducing nodes w/underscores.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.demos.bitext">
+<tt class="descclassname">discodop.demos.</tt><tt class="descname">bitext</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/demos.html#bitext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.demos.bitext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bitext parsing with a synchronous CFG.</p>
+<p>Translation would require a special decoder (instead of normal kbest
+derivations where the whole sentence is given).</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ref.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../discodop.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../params.html">Parser parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fileformats.html">File formats</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html">API documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="discodop.eval.html" title="discodop.eval"
+             >next</a></li>
+        <li class="right" >
+          <a href="discodop.plcfrs.html" title="discodop.plcfrs"
+             >previous</a> |</li>
+        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
+          <li><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+discodop.disambiguation
+=======================
+
+.. automodule:: discodop.disambiguation
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      dopparseprob
+      doprerank
+      fragmentsinderiv
+      frontiernt
+      getderivations
+      getsamples
+      gettree
+      marginalize
+      recoverfragments
+      splitfrag
+      treeparsing
+      viterbiderivation
+   
+   
+
+   
+   
+   
+
+   
+   
+   

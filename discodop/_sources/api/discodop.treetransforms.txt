@@ -1,0 +1,50 @@
+discodop.treetransforms
+=======================
+
+.. automodule:: discodop.treetransforms
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      abbr
+      addbitsets
+      addfanoutmarkers
+      binarize
+      unbinarize
+      canonicalize
+      collapseunary
+      complexity
+      complexityfanout
+      contsets
+      disc
+      factorconstituent
+      fanout
+      fanoutcomplexity
+      getbits
+      getyf
+      introducepreterminals
+      mergediscnodes
+      minimalbinarization
+      optimalbinarize
+      postorder
+      removefanoutmarkers
+      splitdiscnodes
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      OrderedSet
+   
+   
+
+   
+   
+   

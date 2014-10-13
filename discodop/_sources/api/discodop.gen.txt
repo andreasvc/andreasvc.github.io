@@ -1,0 +1,38 @@
+discodop.gen
+============
+
+.. automodule:: discodop.gen
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      arraytoyf
+      chooserule
+      compose
+      gen
+      parsefrac
+      read_bitpar_grammar
+      read_lcfrs_grammar
+      splitgrammar
+      yfarray
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Grammar
+      LexicalRule
+      Rule
+   
+   
+
+   
+   
+   

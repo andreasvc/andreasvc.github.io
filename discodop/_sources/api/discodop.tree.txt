@@ -1,0 +1,34 @@
+discodop.tree
+=============
+
+.. automodule:: discodop.tree
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      slice_bounds
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Tree
+      ImmutableTree
+      AbstractParentedTree
+      ParentedTree
+      ImmutableParentedTree
+      MultiParentedTree
+      ImmutableMultiParentedTree
+   
+   
+
+   
+   
+   

@@ -1,0 +1,37 @@
+discodop.parser
+===============
+
+.. automodule:: discodop.parser
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      doparsing
+      exportbitpargrammar
+      initworker
+      probstr
+      readgrammars
+      readinputbitparstyle
+      which
+      worker
+      workerfunc
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DictObj
+      Parser
+   
+   
+
+   
+   
+   

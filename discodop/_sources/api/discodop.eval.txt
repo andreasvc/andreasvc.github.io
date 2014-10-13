@@ -1,0 +1,50 @@
+discodop.eval
+=============
+
+.. automodule:: discodop.eval
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      accuracy
+      bracketings
+      bracketing
+      disc
+      editdistance
+      f_measure
+      harmean
+      intervals
+      leafancestor
+      leafancestorpaths
+      mean
+      nozerodiv
+      parentedbracketings
+      pathscore
+      precision
+      readparam
+      recall
+      strbracketings
+      transform
+      transitiveclosure
+      treedisteval
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      EvalAccumulator
+      Evaluator
+      TreePairResult
+   
+   
+
+   
+   
+   
