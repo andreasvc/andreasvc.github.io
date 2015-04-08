@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.disambiguation &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.disambiguation &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.estimates" href="discodop.estimates.html" />
     <link rel="prev" title="discodop.containers" href="discodop.containers.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,23 +38,23 @@
         <li class="right" >
           <a href="discodop.containers.html" title="discodop.containers"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.disambiguation">
 <span id="discodop-disambiguation"></span><h1>discodop.disambiguation<a class="headerlink" href="#module-discodop.disambiguation" title="Permalink to this headline">¶</a></h1>
 <p>Disambiguate parse forests with various methods for parse selection.</p>
 <p>Use as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">derivs</span><span class="p">,</span> <span class="n">entries</span> <span class="o">=</span> <span class="n">getderivations</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parses</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">marginalize</span><span class="p">(</span><span class="s">&quot;mpp&quot;</span><span class="p">,</span> <span class="n">derivs</span><span class="p">,</span> <span class="n">entries</span><span class="p">,</span> <span class="n">chart</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parses</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">marginalize</span><span class="p">(</span><span class="s">&#39;mpp&#39;</span><span class="p">,</span> <span class="n">derivs</span><span class="p">,</span> <span class="n">entries</span><span class="p">,</span> <span class="n">chart</span><span class="p">)</span>  
 </pre></div>
 </div>
 <p class="rubric">Functions</p>
@@ -64,99 +64,47 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.dopparseprob" title="discodop.disambiguation.dopparseprob"><tt class="xref py py-obj docutils literal"><span class="pre">dopparseprob</span></tt></a>(tree,&nbsp;sent,&nbsp;Grammar&nbsp;coarse,&nbsp;...)</td>
-<td>Compute the exact DOP parse probability of a Tree in a DOP reduction.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.doprerank" title="discodop.disambiguation.doprerank"><tt class="xref py py-obj docutils literal"><span class="pre">doprerank</span></tt></a>(chart,&nbsp;sent,&nbsp;k,&nbsp;Grammar&nbsp;coarse,&nbsp;...)</td>
-<td>Rerank <em>k</em>-best coarse trees w/parse probabilities of DOP reduction.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.fragmentsinderiv" title="discodop.disambiguation.fragmentsinderiv"><tt class="xref py py-obj docutils literal"><span class="pre">fragmentsinderiv</span></tt></a>(deriv,&nbsp;chart,&nbsp;...)</td>
-<td>Extract the list of fragments that were used in a given derivation.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.frontiernt" title="discodop.disambiguation.frontiernt"><tt class="xref py py-obj docutils literal"><span class="pre">frontiernt</span></tt></a>(node)</td>
-<td>Test whether node from a DOP derivation is a frontier nonterminal.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.getderivations" title="discodop.disambiguation.getderivations"><tt class="xref py py-obj docutils literal"><span class="pre">getderivations</span></tt></a>(Chart&nbsp;chart,&nbsp;int&nbsp;k,&nbsp;...[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.getderivations" title="discodop.disambiguation.getderivations"><code class="xref py py-obj docutils literal"><span class="pre">getderivations</span></code></a>(Chart&nbsp;chart,&nbsp;int&nbsp;k,&nbsp;...[,&nbsp;...])</td>
 <td>Get <em>k</em>-best and/or sampled derivations from chart.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.getsamples" title="discodop.disambiguation.getsamples"><tt class="xref py py-obj docutils literal"><span class="pre">getsamples</span></tt></a>(Chart&nbsp;chart,&nbsp;k[,&nbsp;debin])</td>
-<td>Samples <em>k</em> derivations from a chart.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.gettree" title="discodop.disambiguation.gettree"><tt class="xref py py-obj docutils literal"><span class="pre">gettree</span></tt></a>(cells,&nbsp;span)</td>
-<td>Extract parse tree from most constituents correct table.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.marginalize" title="discodop.disambiguation.marginalize"><tt class="xref py py-obj docutils literal"><span class="pre">marginalize</span></tt></a>(method,&nbsp;list&nbsp;derivations,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.marginalize" title="discodop.disambiguation.marginalize"><code class="xref py py-obj docutils literal"><span class="pre">marginalize</span></code></a>(method,&nbsp;list&nbsp;derivations,&nbsp;...)</td>
 <td>Take a list of derivations and optimize a given objective function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.recoverfragments" title="discodop.disambiguation.recoverfragments"><tt class="xref py py-obj docutils literal"><span class="pre">recoverfragments</span></tt></a>((deriv,&nbsp;Chart&nbsp;chart,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.gettree" title="discodop.disambiguation.gettree"><code class="xref py py-obj docutils literal"><span class="pre">gettree</span></code></a>(cells,&nbsp;span)</td>
+<td>Extract parse tree from most constituents correct table.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.recoverfragments" title="discodop.disambiguation.recoverfragments"><code class="xref py py-obj docutils literal"><span class="pre">recoverfragments</span></code></a>((deriv,&nbsp;Chart&nbsp;chart,&nbsp;...)</td>
 <td>Reconstruct a DOP derivation from a derivation with flattened fragments.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.splitfrag" title="discodop.disambiguation.splitfrag"><tt class="xref py py-obj docutils literal"><span class="pre">splitfrag</span></tt></a>(node)</td>
-<td>Return a copy of a tree with subtrees labeled without &#8216;&#64;&#8217; removed.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.fragmentsinderiv" title="discodop.disambiguation.fragmentsinderiv"><code class="xref py py-obj docutils literal"><span class="pre">fragmentsinderiv</span></code></a>(deriv,&nbsp;chart,&nbsp;...)</td>
+<td>Extract the list of fragments that were used in a given derivation.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.treeparsing" title="discodop.disambiguation.treeparsing"><tt class="xref py py-obj docutils literal"><span class="pre">treeparsing</span></tt></a>(trees,&nbsp;sent,&nbsp;Grammar&nbsp;grammar,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.treeparsing" title="discodop.disambiguation.treeparsing"><code class="xref py py-obj docutils literal"><span class="pre">treeparsing</span></code></a>(trees,&nbsp;sent,&nbsp;Grammar&nbsp;grammar,&nbsp;...)</td>
 <td>Assign probabilities to a sequence of trees with a DOP grammar.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.viterbiderivation" title="discodop.disambiguation.viterbiderivation"><tt class="xref py py-obj docutils literal"><span class="pre">viterbiderivation</span></tt></a>(Chart&nbsp;chart)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.viterbiderivation" title="discodop.disambiguation.viterbiderivation"><code class="xref py py-obj docutils literal"><span class="pre">viterbiderivation</span></code></a>(Chart&nbsp;chart)</td>
 <td>Wrapper to get Viterbi derivation from chart.</td>
 </tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="discodop.disambiguation.dopparseprob">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">dopparseprob</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>Grammar coarse</em>, <em>Grammar fine</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.dopparseprob" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the exact DOP parse probability of a Tree in a DOP reduction.</p>
-<p>This follows up on a suggestion made by Goodman (2003, p. 143) of
-calculating DOP probabilities of given parse trees, although I&#8217;m not sure
-it has complexity <em>O(nP)</em> as he suggests (with <em>n</em> as number of nodes in
-input, and <em>P</em> as max number of rules consistent with a node in the input).
-Furthermore, the idea of sampling trees &#8220;long enough&#8221; until we have the MPP
-is no faster than sampling without applying this procedure, because to
-determine that some probability <em>p</em> is the maximal probability, we need to
-collect the probability mass <em>p_seen</em> of enough parse trees such that we
-have some parsetree with probability <em>p</em> &gt; (1 - <em>p_seen</em>), which requires
-first seeing almost all parse trees, unless <em>p</em> is exceptionally high.
-Hence, this method is mostly useful in a reranking framework where it is
-known in advance that a small set of trees is of interest.</p>
-<p>Expects a mapping which gives a list of consistent rules from the reduction
-as produced by <tt class="docutils literal"><span class="pre">fine.getrulemapping(coarse,</span> <span class="pre">re.compile(b'&#64;[-0-9]+$'))</span></tt>.</p>
-<p>NB: this algorithm could also be used to determine the probability of
-derivations, but then the input would have to distinguish whether nodes are
-internal nodes of fragments, or whether they join two fragments.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.disambiguation.doprerank">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">doprerank</tt><big>(</big><em>chart</em>, <em>sent</em>, <em>k</em>, <em>Grammar coarse</em>, <em>Grammar fine</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.doprerank" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rerank <em>k</em>-best coarse trees w/parse probabilities of DOP reduction.</p>
-<p>cf. <tt class="docutils literal"><span class="pre">dopparseprob()</span></tt>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.disambiguation.fragmentsinderiv">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">fragmentsinderiv</tt><big>(</big><em>deriv</em>, <em>chart</em>, <em>list backtransform</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.fragmentsinderiv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract the list of fragments that were used in a given derivation.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of fragments of the form <tt class="docutils literal"><span class="pre">(frag,</span> <span class="pre">sent)</span></tt> where frag is a
-string and sent is a list of tokens; in <tt class="docutils literal"><span class="pre">sent</span></tt>, <tt class="docutils literal"><span class="pre">None</span></tt> indicates a
-frontier non-terminal, and a string indicates a token.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.getsamples" title="discodop.disambiguation.getsamples"><code class="xref py py-obj docutils literal"><span class="pre">getsamples</span></code></a>(Chart&nbsp;chart,&nbsp;k[,&nbsp;debin])</td>
+<td>Samples <em>k</em> derivations from a chart.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.doprerank" title="discodop.disambiguation.doprerank"><code class="xref py py-obj docutils literal"><span class="pre">doprerank</span></code></a>(chart,&nbsp;sent,&nbsp;k,&nbsp;Grammar&nbsp;coarse,&nbsp;...)</td>
+<td>Rerank <em>k</em>-best coarse trees w/parse probabilities of DOP reduction.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.dopparseprob" title="discodop.disambiguation.dopparseprob"><code class="xref py py-obj docutils literal"><span class="pre">dopparseprob</span></code></a>(tree,&nbsp;sent,&nbsp;Grammar&nbsp;coarse,&nbsp;...)</td>
+<td>Compute the exact DOP parse probability of a Tree in a DOP reduction.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.disambiguation.frontiernt" title="discodop.disambiguation.frontiernt"><code class="xref py py-obj docutils literal"><span class="pre">frontiernt</span></code></a>(node)</td>
+<td>Test whether node from a DOP derivation is a frontier nonterminal.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.disambiguation.splitfrag" title="discodop.disambiguation.splitfrag"><code class="xref py py-obj docutils literal"><span class="pre">splitfrag</span></code></a>(node)</td>
+<td>Return a copy of a tree with subtrees labeled without &#8216;&#64;&#8217; removed.</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.disambiguation.frontiernt">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">frontiernt</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.frontiernt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test whether node from a DOP derivation is a frontier nonterminal.</p>
-</dd></dl>
-
 <dl class="function">
 <dt id="discodop.disambiguation.getderivations">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">getderivations</tt><big>(</big><em>Chart chart</em>, <em>int k</em>, <em>bool kbest=True</em>, <em>bool sample=False</em>, <em>derivstrings=True</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.getderivations" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">getderivations</code><span class="sig-paren">(</span><em>Chart chart</em>, <em>int k</em>, <em>bool kbest=True</em>, <em>bool sample=False</em>, <em>derivstrings=True</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.getderivations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get <em>k</em>-best and/or sampled derivations from chart.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -170,13 +118,13 @@ frontier non-terminal, and a string indicates a token.</td>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>tuple <tt class="docutils literal"><span class="pre">(derivations,</span> <span class="pre">entries)</span></tt>; two lists of equal length:</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>tuple <code class="docutils literal"><span class="pre">(derivations,</span> <span class="pre">entries)</span></code>; two lists of equal length:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">derivations:</th><td class="field-body">list of tuples <tt class="docutils literal"><span class="pre">(deriv,</span> <span class="pre">logprob)</span></tt> where deriv is a
-string; or list of None if <tt class="docutils literal"><span class="pre">derivstrings==False</span></tt></td>
+<tr class="field-odd field"><th class="field-name">derivations:</th><td class="field-body">list of tuples <code class="docutils literal"><span class="pre">(deriv,</span> <span class="pre">logprob)</span></code> where deriv is a
+string; or list of None if <code class="docutils literal"><span class="pre">derivstrings==False</span></code></td>
 </tr>
 <tr class="field-even field"><th class="field-name">entries:</th><td class="field-body">list of RankedEdge objects.</td>
 </tr>
@@ -190,20 +138,8 @@ string; or list of None if <tt class="docutils literal"><span class="pre">derivs
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop.disambiguation.getsamples">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">getsamples</tt><big>(</big><em>Chart chart</em>, <em>k</em>, <em>debin=None</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.getsamples" title="Permalink to this definition">¶</a></dt>
-<dd><p>Samples <em>k</em> derivations from a chart.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.disambiguation.gettree">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">gettree</tt><big>(</big><em>cells</em>, <em>span</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.gettree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract parse tree from most constituents correct table.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="discodop.disambiguation.marginalize">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">marginalize</tt><big>(</big><em>method</em>, <em>list derivations</em>, <em>list entries</em>, <em>Chart chart</em>, <em>list backtransform=None</em>, <em>list sent=None</em>, <em>list tags=None</em>, <em>int k=1000</em>, <em>int sldop_n=7</em>, <em>double mcc_labda=1.0</em>, <em>set mcc_labels=None</em>, <em>bool bitpar=False</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.marginalize" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">marginalize</code><span class="sig-paren">(</span><em>method</em>, <em>list derivations</em>, <em>list entries</em>, <em>Chart chart</em>, <em>list backtransform=None</em>, <em>list sent=None</em>, <em>list tags=None</em>, <em>int k=1000</em>, <em>int sldop_n=7</em>, <em>double mcc_labda=1.0</em>, <em>set mcc_labels=None</em>, <em>bool bitpar=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.marginalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a list of derivations and optimize a given objective function.</p>
 <ol class="arabic simple">
 <li>Rewrites derivations into the intended parse trees.</li>
@@ -227,7 +163,7 @@ string; or list of None if <tt class="docutils literal"><span class="pre">derivs
 <tr class="field-odd field"><th class="field-name">&#8216;shortest&#8217;:</th><td class="field-body">Most Probable Shortest Derivation</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;sl-dop&#8217;:</th><td class="field-body">Simplicity-Likelihood DOP; select most likely parse from the
-<tt class="docutils literal"><span class="pre">sldop_n</span></tt> parse trees with the shortest derivations.</td>
+<code class="docutils literal"><span class="pre">sldop_n</span></code> parse trees with the shortest derivations.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">&#8216;sl-dop-simple&#8217;:</th></tr>
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Approximation of Simplicity-Likelihood DOP</td>
@@ -241,8 +177,8 @@ employed to turn derivations into parse trees:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name"><tt class="docutils literal"><span class="pre">None</span></tt>:</th><td class="field-body">assume derivations are from DOP reduction and strip
-annotations of the form <tt class="docutils literal"><span class="pre">&#64;123</span></tt> from labels. This option is also
+<tr class="field-odd field"><th class="field-name"><code class="docutils literal"><span class="pre">None</span></code>:</th><td class="field-body">assume derivations are from DOP reduction and strip
+annotations of the form <code class="docutils literal"><span class="pre">&#64;123</span></code> from labels. This option is also
 applicable when the grammar is not a TSG and derivations already
 coincide with parse trees.</td>
 </tr>
@@ -254,21 +190,21 @@ derivations.</td>
 </tbody>
 </table>
 </li>
-<li><strong>k</strong> &#8211; when <tt class="docutils literal"><span class="pre">method='sl-dop</span></tt>, number of derivations to consider.</li>
+<li><strong>k</strong> &#8211; when <code class="docutils literal"><span class="pre">method='sl-dop</span></code>, number of derivations to consider.</li>
 <li><strong>bitpar</strong> &#8211; whether bitpar was used in nbest mode.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p><tt class="docutils literal"><span class="pre">(parses,</span> <span class="pre">msg)</span></tt>.</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p><code class="docutils literal"><span class="pre">(parses,</span> <span class="pre">msg)</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">parses:</th><td class="field-body">a list of tuples <tt class="docutils literal"><span class="pre">(parsetree,</span> <span class="pre">probability,</span> <span class="pre">fragments)</span></tt>
-where <tt class="docutils literal"><span class="pre">parsetree</span></tt> is a string, probabilities is a float
-(0 &lt; p &lt;= 1), or a tuple for shortest derivation parsing, and
-fragments is a list of fragments in the most probable derivation
-for this parse.</td>
+<tr class="field-odd field"><th class="field-name">parses:</th><td class="field-body">a list of tuples <code class="docutils literal"><span class="pre">(parsetree,</span> <span class="pre">probability,</span> <span class="pre">fragments)</span></code>
+where <code class="docutils literal"><span class="pre">parsetree</span></code> is a string, <code class="docutils literal"><span class="pre">probability</span></code> is a float
+(0 &lt; p &lt;= 1), or a tuple <code class="docutils literal"><span class="pre">(numfrags,</span> <span class="pre">p)</span></code> for shortest derivation
+parsing, and <code class="docutils literal"><span class="pre">fragments</span></code> is a list of fragments in the most
+probable derivation for this parse.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">msg:</th><td class="field-body">a message reporting the number of derivations / parses.</td>
 </tr>
@@ -282,8 +218,14 @@ for this parse.</td>
 </dd></dl>
 
 <dl class="function">
+<dt id="discodop.disambiguation.gettree">
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">gettree</code><span class="sig-paren">(</span><em>cells</em>, <em>span</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.gettree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract parse tree from most constituents correct table.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="discodop.disambiguation.recoverfragments">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">recoverfragments</tt><big>(</big><em>deriv</em>, <em>Chart chart</em>, <em>list backtransform</em><big>)</big> &rarr; str<a class="headerlink" href="#discodop.disambiguation.recoverfragments" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">recoverfragments</code><span class="sig-paren">(</span><em>deriv</em>, <em>Chart chart</em>, <em>list backtransform</em><span class="sig-paren">)</span> &rarr; unicode<a class="headerlink" href="#discodop.disambiguation.recoverfragments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reconstruct a DOP derivation from a derivation with flattened fragments.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -302,7 +244,7 @@ corresponding to grammar rules.</li>
 </tbody>
 </table>
 <p>The flattened fragments in the derivation should be left-binarized, expect
-when <tt class="docutils literal"><span class="pre">deriv</span></tt> is a string in which case the derivation does not have to be
+when <code class="docutils literal"><span class="pre">deriv</span></code> is a string in which case the derivation does not have to be
 binarized.</p>
 <p>Does on-the-fly debinarization following labels that are not mapped to a
 label in the coarse grammar, i.e., it assumes that neverblockre is only
@@ -313,14 +255,24 @@ parsing.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop.disambiguation.splitfrag">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">splitfrag</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.splitfrag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a copy of a tree with subtrees labeled without &#8216;&#64;&#8217; removed.</p>
+<dt id="discodop.disambiguation.fragmentsinderiv">
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">fragmentsinderiv</code><span class="sig-paren">(</span><em>deriv</em>, <em>chart</em>, <em>list backtransform</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.fragmentsinderiv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the list of fragments that were used in a given derivation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of fragments of the form <code class="docutils literal"><span class="pre">(frag,</span> <span class="pre">sent)</span></code> where frag is a
+string and sent is a list of tokens; in <code class="docutils literal"><span class="pre">sent</span></code>, <code class="docutils literal"><span class="pre">None</span></code> indicates a
+frontier non-terminal, and a string indicates a token.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.disambiguation.treeparsing">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">treeparsing</tt><big>(</big><em>trees</em>, <em>sent</em>, <em>Grammar grammar</em>, <em>int m</em>, <em>backtransform</em>, <em>tags=None</em>, <em>maskrules=False</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.treeparsing" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">treeparsing</code><span class="sig-paren">(</span><em>trees</em>, <em>sent</em>, <em>Grammar grammar</em>, <em>int m</em>, <em>backtransform</em>, <em>tags=None</em>, <em>maskrules=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.treeparsing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign probabilities to a sequence of trees with a DOP grammar.</p>
 <p>Given a sequence of trees (as strings), parse them with a DOP grammar
 to get parse tree probabilities; will consider multiple derivations.</p>
@@ -331,7 +283,7 @@ to get parse tree probabilities; will consider multiple derivations.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>maskrules</strong> &#8211; If True, prune any grammar rule not in the trees.
 Exploits rulemapping of grammar which should be mapped to itself;
 e.g., &#8216;NP&#64;2 =&gt; DT&#64;3 NN&#8217; should be mapped to &#8216;NP =&gt; DT NN&#8217; in the
-same grammar. To remove the mask, issue <tt class="docutils literal"><span class="pre">grammar.setmask(None)</span></tt></td>
+same grammar. To remove the mask, issue <code class="docutils literal"><span class="pre">grammar.setmask(None)</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -339,8 +291,56 @@ same grammar. To remove the mask, issue <tt class="docutils literal"><span class
 
 <dl class="function">
 <dt id="discodop.disambiguation.viterbiderivation">
-<tt class="descclassname">discodop.disambiguation.</tt><tt class="descname">viterbiderivation</tt><big>(</big><em>Chart chart</em><big>)</big><a class="headerlink" href="#discodop.disambiguation.viterbiderivation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">viterbiderivation</code><span class="sig-paren">(</span><em>Chart chart</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.viterbiderivation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper to get Viterbi derivation from chart.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.disambiguation.getsamples">
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">getsamples</code><span class="sig-paren">(</span><em>Chart chart</em>, <em>k</em>, <em>debin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.getsamples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples <em>k</em> derivations from a chart.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.disambiguation.doprerank">
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">doprerank</code><span class="sig-paren">(</span><em>chart</em>, <em>sent</em>, <em>k</em>, <em>Grammar coarse</em>, <em>Grammar fine</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.doprerank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rerank <em>k</em>-best coarse trees w/parse probabilities of DOP reduction.</p>
+<p>cf. <code class="docutils literal"><span class="pre">dopparseprob()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.disambiguation.dopparseprob">
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">dopparseprob</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em>, <em>Grammar coarse</em>, <em>Grammar fine</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.dopparseprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the exact DOP parse probability of a Tree in a DOP reduction.</p>
+<p>This follows up on a suggestion made by Goodman (2003, p. 143) of
+calculating DOP probabilities of given parse trees, although I&#8217;m not sure
+it has complexity <em>O(nP)</em> as he suggests (with <em>n</em> as number of nodes in
+input, and <em>P</em> as max number of rules consistent with a node in the input).
+Furthermore, the idea of sampling trees &#8220;long enough&#8221; until we have the MPP
+is no faster than sampling without applying this procedure, because to
+determine that some probability <em>p</em> is the maximal probability, we need to
+collect the probability mass <em>p_seen</em> of enough parse trees such that we
+have some parsetree with probability <em>p</em> &gt; (1 - <em>p_seen</em>), which requires
+first seeing almost all parse trees, unless <em>p</em> is exceptionally high.
+Hence, this method is mostly useful in a reranking framework where it is
+known in advance that a small set of trees is of interest.</p>
+<p>Expects a mapping which gives a list of consistent rules from the reduction
+as produced by <code class="docutils literal"><span class="pre">fine.getrulemapping(coarse,</span> <span class="pre">re.compile('&#64;[-0-9]+$'))</span></code>.</p>
+<p>NB: this algorithm could also be used to determine the probability of
+derivations, but then the input would have to distinguish whether nodes are
+internal nodes of fragments, or whether they join two fragments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.disambiguation.frontiernt">
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">frontiernt</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.frontiernt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether node from a DOP derivation is a frontier nonterminal.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.disambiguation.splitfrag">
+<code class="descclassname">discodop.disambiguation.</code><code class="descname">splitfrag</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.disambiguation.splitfrag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of a tree with subtrees labeled without &#8216;&#64;&#8217; removed.</p>
 </dd></dl>
 
 </div>
@@ -349,7 +349,7 @@ same grammar. To remove the mask, issue <tt class="docutils literal"><span class
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -365,7 +365,7 @@ same grammar. To remove the mask, issue <tt class="docutils literal"><span class
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -382,7 +382,7 @@ same grammar. To remove the mask, issue <tt class="docutils literal"><span class
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -391,14 +391,14 @@ same grammar. To remove the mask, issue <tt class="docutils literal"><span class
         <li class="right" >
           <a href="discodop.containers.html" title="discodop.containers"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

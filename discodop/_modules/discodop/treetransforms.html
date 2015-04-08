@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.treetransforms &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.treetransforms &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,22 +23,22 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for discodop.treetransforms</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;Treebank-indenpendent tree transformations.</span>
@@ -59,17 +59,18 @@
 <span class="c"># Author: Nathan Bodenstab &lt;bodenstab@cslu.ogi.edu&gt;</span>
 <span class="c"># URL: &lt;http://www.nltk.org/&gt;</span>
 <span class="c"># For license information, see LICENSE.TXT</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span><span class="p">,</span> \
+		<span class="n">unicode_literals</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Counter</span>
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="s">&#39;3&#39;</span><span class="p">:</span>
 	<span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>  <span class="c"># pylint: disable=W0622,C0103</span>
+<span class="kn">from</span> <span class="nn">discodop</span> <span class="kn">import</span> <span class="n">treebank</span>
 <span class="kn">from</span> <span class="nn">discodop.tree</span> <span class="kn">import</span> <span class="n">Tree</span><span class="p">,</span> <span class="n">ImmutableTree</span>
-<span class="kn">from</span> <span class="nn">discodop.treebank</span> <span class="kn">import</span> <span class="n">READERS</span><span class="p">,</span> <span class="n">WRITERS</span><span class="p">,</span> <span class="n">writetree</span>
-<span class="kn">from</span> <span class="nn">discodop.grammar</span> <span class="kn">import</span> <span class="n">ranges</span>
+<span class="kn">from</span> <span class="nn">discodop.heads</span> <span class="kn">import</span> <span class="n">ishead</span>
 <span class="k">try</span><span class="p">:</span>
 	<span class="kn">from</span> <span class="nn">discodop.bit</span> <span class="kn">import</span> <span class="n">fanout</span> <span class="k">as</span> <span class="n">bitfanout</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -94,14 +95,17 @@
 <span class="s">    introducepreterminals</span>
 <span class="s">    splitdisc [--markorigin]</span>
 <span class="s">    mergedisc</span>
-<span class="s">    transform [--reverse] [--transforms=&lt;NAME1,NAME2...&gt;]</span>
+<span class="s">    transform [--reverse] [--transforms=(NAME1,NAME2...)]</span>
 
 <span class="s">options may consist of:</span>
-<span class="s">  --inputfmt=[</span><span class="si">%s</span><span class="s">]</span>
-<span class="s">  --outputfmt=[</span><span class="si">%s</span><span class="s">]</span>
+<span class="s">  --inputfmt=(</span><span class="si">%s</span><span class="s">)</span>
+<span class="s">  --outputfmt=(</span><span class="si">%s</span><span class="s">)</span>
 <span class="s">                 Treebank format [default: export].</span>
+<span class="s">                 Selecting the formats &#39;conll&#39; or &#39;mst&#39; results in an unlabeled</span>
+<span class="s">                 dependency conversion and requires the use of heuristic head</span>
+<span class="s">                 rules (--headrules).</span>
 <span class="s">  --fmt=x        Shortcut to specify both input and output formats.</span>
-<span class="s">  --inputenc|--outputenc|--enc=[utf-8|iso-8859-1|...]</span>
+<span class="s">  --inputenc|--outputenc|--enc=(utf-8|iso-8859-1|...)</span>
 <span class="s">                 Treebank encoding [default: utf-8].</span>
 <span class="s">  --slice=n:m    select a range of sentences from input starting with n,</span>
 <span class="s">                 up to but not including m; as in Python, n or m can be left</span>
@@ -109,122 +113,123 @@
 <span class="s">  --renumber     Replace sentence IDs with numbers starting from 1,</span>
 <span class="s">                 padded with 8 spaces.</span>
 <span class="s">  --maxlen=n     only select sentences with up to n tokens.</span>
-<span class="s">  --punct=x      possible options:</span>
-<span class="s">                 &#39;remove&#39;: remove any punctuation.</span>
+<span class="s">  --punct=x      &#39;leave&#39;: (default): leave punctuation as is</span>
+<span class="s">                 &#39;remove&#39;: remove any punctuation</span>
 <span class="s">                 &#39;move&#39;: re-attach punctuation to nearest constituent</span>
-<span class="s">                       to minimize discontinuity.</span>
-<span class="s">                 &#39;restore&#39;: attach punctuation under root node.</span>
-<span class="s">  --functions=x  &#39;leave&#39;: (default): leave syntactic labels as is,</span>
+<span class="s">                       to minimize discontinuity</span>
+<span class="s">                 &#39;restore&#39;: attach punctuation under root node</span>
+<span class="s">  --functions=x  &#39;leave&#39;: (default): leave syntactic labels as is</span>
 <span class="s">                 &#39;remove&#39;: strip away hyphen-separated function labels</span>
-<span class="s">                 &#39;add&#39;: concatenate syntactic categories with functions,</span>
-<span class="s">                 &#39;replace&#39;: replace syntactic labels w/grammatical functions.</span>
+<span class="s">                 &#39;add&#39;: concatenate syntactic categories with functions</span>
+<span class="s">                 &#39;replace&#39;: replace syntactic labels w/grammatical functions</span>
 <span class="s">  --morphology=x &#39;no&#39; (default): use POS tags as preterminals</span>
 <span class="s">                 &#39;add&#39;: concatenate morphological information to POS tags,</span>
 <span class="s">                     e.g., DET/sg.def</span>
 <span class="s">                 &#39;replace&#39;: use morphological information as preterminal label</span>
 <span class="s">                 &#39;between&#39;: insert node with morphological information between</span>
 <span class="s">                     POS tag and word, e.g., (DET (sg.def the))</span>
-<span class="s">  --lemmas=x     &#39;no&#39; (default): do not use lemmas.</span>
+<span class="s">  --lemmas=x     &#39;no&#39; (default): do not use lemmas</span>
 <span class="s">                 &#39;add&#39;: concatenate lemmas to terminals, e.g., word/lemma</span>
 <span class="s">                 &#39;replace&#39;: use lemma instead of terminals</span>
 <span class="s">                 &#39;between&#39;: insert node with lemma between POS tag and word,</span>
 <span class="s">                     e.g., (NN (man men))</span>
 <span class="s">  --ensureroot=x add root node labeled &#39;x&#39; to trees if not already present.</span>
-<span class="s">  --factor=[left|right]</span>
+<span class="s">  --headrules=x  turn on head finding; affects binarization.</span>
+<span class="s">                 reads rules from file &quot;x&quot; (e.g., &quot;negra.headrules&quot;).</span>
+<span class="s">  --extraheadrules=(ptb|dptb)</span>
+<span class="s">                 turn on additional, built-in head rules; requires previous</span>
+<span class="s">                 option; [default: disabled].</span>
+<span class="s">  --factor=(left|right)</span>
 <span class="s">                 specify left- or right-factored binarization [default: right].</span>
 <span class="s">  -h n           horizontal markovization. default: infinite (all siblings)</span>
 <span class="s">  -v n           vertical markovization. default: 1 (immediate parent only)</span>
+<span class="s">  --markhead     prepend head to markovized labels.</span>
 <span class="s">  --leftunary    make initial / final productions of binarized constituents</span>
 <span class="s">  --rightunary   ... unary productions.</span>
 <span class="s">  --tailmarker   mark rightmost child (the head if headrules are applied), to</span>
 <span class="s">                 avoid cyclic rules when --leftunary and --rightunary are used.</span>
-<span class="s">  --headrules=x  turn on head finding; affects binarization.</span>
-<span class="s">                 reads rules from file &quot;x&quot; (e.g., &quot;negra.headrules&quot;).</span>
-<span class="s">  --markheads    mark heads by adding &#39;-HD&#39; to phrasal labels.</span>
-<span class="s">  --reverse      reverse the transformations given by --transform;</span>
-<span class="s">  --transforms   specify names of tree transformations to apply; for possible</span>
+<span class="s">  --transforms=x specify names of tree transformations to apply; for possible</span>
 <span class="s">                 names, cf. treebanktransforms module.</span>
-
-
-<span class="s">Note: selecting the formats &#39;conll&#39; or &#39;mst&#39; results in an unlabeled dependency</span>
-<span class="s">    conversion and requires the use of heuristic head rules (--headrules),</span>
-<span class="s">    to ensure that all constituents have a child marked as head.&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span>
-			<span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">READERS</span><span class="p">),</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">WRITERS</span><span class="p">))</span>
+<span class="s">  --reverse      reverse the transformations given by --transforms&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+			<span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">treebank</span><span class="o">.</span><span class="n">READERS</span><span class="p">),</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">treebank</span><span class="o">.</span><span class="n">WRITERS</span><span class="p">))</span>
 
 <span class="c"># e.g., &#39;VP_2*0&#39; group 1: &#39;VP_2&#39;; group 2: &#39;0&#39;; group 3: &#39;&#39;</span>
 <span class="n">SPLITLABELRE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;(.*)\*(?:([0-9]+)([^!]+![^!]+)?)?$&#39;</span><span class="p">)</span>
+<span class="n">MARKOVRE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;^(.*)\|&lt;(.*;)?(.*)&gt;(\^&lt;.*&gt;)?(.*)?$&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="binarize"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.binarize">[docs]</a><span class="k">def</span> <span class="nf">binarize</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">,</span> <span class="n">horzmarkov</span><span class="o">=</span><span class="mi">999</span><span class="p">,</span> <span class="n">vertmarkov</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-		<span class="n">childchar</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">parentchar</span><span class="o">=</span><span class="s">&#39;^&#39;</span><span class="p">,</span> <span class="n">headmarked</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">headidx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-		<span class="n">tailmarker</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">leftmostunary</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">rightmostunary</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-		<span class="n">artpa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">filterfuncs</span><span class="o">=</span><span class="p">(),</span>
-		<span class="n">labelfun</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">),</span> <span class="n">dot</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">abbrrepetition</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;Binarize a Tree object.</span>
+<div class="viewcode-block" id="binarize"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.binarize">[docs]</a><span class="k">def</span> <span class="nf">binarize</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">,</span> <span class="n">horzmarkov</span><span class="o">=</span><span class="mi">999</span><span class="p">,</span> <span class="n">vertmarkov</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+		<span class="n">revhorzmarkov</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">markhead</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">headoutward</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="n">childchar</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">parentchar</span><span class="o">=</span><span class="s">&#39;^&#39;</span><span class="p">,</span> <span class="n">tailmarker</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+		<span class="n">leftmostunary</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">rightmostunary</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+		<span class="n">artpa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">filterfuncs</span><span class="o">=</span><span class="p">(),</span>
+		<span class="n">labelfun</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dot</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">abbrrepetition</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="n">direction</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Binarize a Tree object.</span>
 
 <span class="sd">	:param factor: &quot;left&quot; or &quot;right&quot;. Determines whether binarization proceeds</span>
-<span class="sd">			from left to right or vice versa.</span>
+<span class="sd">		from left to right or vice versa.</span>
 <span class="sd">	:param horzmarkov: amount of horizontal context in labels. Default is</span>
-<span class="sd">			infinity, such that now new generalization are introduced by the</span>
-<span class="sd">			binarization.</span>
+<span class="sd">		infinity, such that now new generalization are introduced by the</span>
+<span class="sd">		binarization.</span>
 <span class="sd">	:param vertmarkov: number of ancestors to include in labels.</span>
-<span class="sd">			NB: 1 means only the direct parent, as in a normal tree.</span>
-<span class="sd">	:param headidx: if specified, the label of the head node is always included</span>
-<span class="sd">			as an additional horizontal sibling; use 0 or -1 for first or last</span>
-<span class="sd">			node respectively.</span>
-<span class="sd">	:param headmarked: when given a string, the occurrence of this string in a</span>
-<span class="sd">			label signifies that thte node is the head; the direction of</span>
-<span class="sd">			binarization will be switched when it is encountered, to enable a</span>
-<span class="sd">			head-outward binarization. NB: for discontinuous trees this is not</span>
-<span class="sd">			necessary, as the order of children can be freely adjusted to</span>
-<span class="sd">			achieve the same effect.</span>
+<span class="sd">		NB: 1 means only the direct parent, as in a normal tree.</span>
+<span class="sd">	:param revhorzmarkov: like ``horzmarkov``, but looks backwards.</span>
+<span class="sd">	:param headoutward: nodes are marked as head in their function tags;</span>
+<span class="sd">		the direction of binarization will be switched when it is</span>
+<span class="sd">		encountered, to enable a head-outward binarization.</span>
+
+<span class="sd">	:param markhead: include label of the head child in all auxiliary labels.</span>
 <span class="sd">	:param leftmostunary, rightmostunary: introduce a unary production for the</span>
-<span class="sd">			first/last child. When h=1, this enables the same generalizations</span>
-<span class="sd">			for the first &amp; last non-terminals as for other siblings.</span>
+<span class="sd">		first/last child. When h=1, this enables the same generalizations</span>
+<span class="sd">		for the first &amp; last non-terminals as for other siblings.</span>
 <span class="sd">	:param tailmarker: when given a non-empty string, add this to artificial</span>
-<span class="sd">			nodes introducing the last symbol. This is useful when the last</span>
-<span class="sd">			symbol is the head node, ensuring that it is not exchangeable with</span>
-<span class="sd">			other non-terminals.</span>
-<span class="sd">	:param reverse: reverse direction of the horizontal markovization; e.g.:</span>
-<span class="sd">			``(A (B ) (C ) (D ))`` ...becomes:</span>
-
-<span class="sd">			:left:  ``(A (A|&lt;D&gt; (A|&lt;C-D&gt; (A|&lt;B-C&gt; (B )) (C )) (D )))``</span>
-<span class="sd">			:right: ``(A (A|&lt;B&gt; (B ) (A|&lt;B-C&gt; (C ) (A|&lt;C-D&gt; (D )))))``</span>
-
-<span class="sd">			in this way the markovization represents the history of the</span>
-<span class="sd">			nonterminals that have *already* been parsed, instead of those</span>
-<span class="sd">			still to come (assuming bottom-up parsing).</span>
+<span class="sd">		nodes introducing the last symbol. This is useful when the last</span>
+<span class="sd">		symbol is the head node, ensuring that it is not exchangeable with</span>
+<span class="sd">		other non-terminals.</span>
 <span class="sd">	:param dot: if True, horizontal context will include all siblings not yet</span>
-<span class="sd">			generated, separated with a dot from the siblings that have been.</span>
+<span class="sd">		generated, separated with a dot from the siblings that have been.</span>
 <span class="sd">	:param artpa: whether to add parent annotation to the artificial nodes</span>
-<span class="sd">			introduced by the binarization.</span>
+<span class="sd">		introduced by the binarization.</span>
 <span class="sd">	:param ids: abbreviate artificial node labels using numeric IDs from this</span>
-<span class="sd">			object; must have dictionary-like interface.</span>
+<span class="sd">		object; must have dictionary-like interface.</span>
 <span class="sd">	:param threshold: constituents with more than this number of children are</span>
-<span class="sd">			factored; i.e., for a value of 2, do a normal binarization; for a</span>
-<span class="sd">			value of 1, also factor binary productions to include an artificial</span>
-<span class="sd">			node, etc.</span>
+<span class="sd">		factored; i.e., for a value of 2, do a normal binarization; for a</span>
+<span class="sd">		value of 1, also factor binary productions to include an artificial</span>
+<span class="sd">		node, etc.</span>
 <span class="sd">	:param filterfuncs: n-ary branches contain children with grammatical</span>
-<span class="sd">			functions for labels (optionally with parent annotation of the form</span>
-<span class="sd">			``FUNC/PARENT``). Any function in the sequence ``filterfuncs`` will</span>
-<span class="sd">			not become part of the horizontal context of the labels. Can be</span>
-<span class="sd">			used to filter out adjunctions from this context.</span>
+<span class="sd">		functions for labels (optionally with parent annotation of the form</span>
+<span class="sd">		``FUNC/PARENT``). Any function in the sequence ``filterfuncs`` will</span>
+<span class="sd">		not become part of the horizontal context of the labels. Can be</span>
+<span class="sd">		used to filter out adjunctions from this context.</span>
 <span class="sd">	:param labelfun: a function to derive a label from a node to be used for</span>
-<span class="sd">			the horizontal markovization context; the default is to use</span>
-<span class="sd">			``child.label`` for a given child node.</span>
+<span class="sd">		the horizontal markovization context; the default is to use</span>
+<span class="sd">		``child.label`` for a given child node.</span>
 <span class="sd">	:param abbrrepetition: in horizontal context, reduce sequences of</span>
-<span class="sd">			identical labels: e.g., &lt;mwp,mwp,mwp,mwp&gt; becomes &lt;mwp+&gt;</span>
+<span class="sd">		identical labels: e.g., ``&lt;mwp,mwp,mwp,mwp&gt;`` becomes ``&lt;mwp+&gt;``</span>
 
-<span class="sd">	&gt;&gt;&gt; tree = Tree(&#39;(S (VP (PDS 0) (ADV 3) (VVINF 4)) (PIS 2) (VMFIN 1))&#39;)</span>
+<span class="sd">	&gt;&gt;&gt; from discodop.heads import sethead</span>
+<span class="sd">	&gt;&gt;&gt; tree = Tree(&#39;(S (VP (PDS 0) (ADV 3) (VVINF 4)) (VMFIN 1) (PIS 2))&#39;)</span>
+<span class="sd">	&gt;&gt;&gt; sethead(tree[1])</span>
 <span class="sd">	&gt;&gt;&gt; sent = &#39;das muss man jetzt machen&#39;.split()</span>
-<span class="sd">	&gt;&gt;&gt; print(binarize(tree, horzmarkov=1, tailmarker=&#39;&#39;))</span>
-<span class="sd">	(S (VP (PDS 0) (VP|&lt;ADV&gt; (ADV 3) (VVINF 4))) (S|&lt;PIS&gt; (PIS 2) (VMFIN 1)))</span>
+<span class="sd">	&gt;&gt;&gt; print(binarize(tree, horzmarkov=1, headoutward=True))</span>
+<span class="sd">	(S (VP (PDS 0) (VP|&lt;ADV&gt; (ADV 3) (VVINF 4))) (S|&lt;VMFIN&gt; (VMFIN 1) (PIS 2)))</span>
+<span class="sd">	&gt;&gt;&gt; tree = Tree(&#39;(S (X (A 0) (B 3) (C 4)) (D 1) (E 2))&#39;)</span>
+<span class="sd">	&gt;&gt;&gt; sethead(tree[1])</span>
+<span class="sd">	&gt;&gt;&gt; print(binarize(tree, headoutward=True, leftmostunary=True,</span>
+<span class="sd">	... rightmostunary=True))</span>
+<span class="sd">	(S (S|&lt;X,D,E&gt; (X (X|&lt;A,B,C&gt; (A 0) (X|&lt;B,C&gt; (B 3) (X|&lt;C&gt; (C 4))))) \</span>
+<span class="sd">(S|&lt;D,E&gt; (S|&lt;D&gt; (D 1)) (E 2))))</span>
 <span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c"># FIXME: combination of factor=&#39;left&#39; and headoutward=True is broken.</span>
 	<span class="c"># assume all nodes have homogeneous children, terminals have no siblings</span>
 	<span class="k">if</span> <span class="n">factor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;left&#39;</span><span class="p">,</span> <span class="s">&#39;right&#39;</span><span class="p">):</span>
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;factor should be &#39;left&#39; or &#39;right&#39;.&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">labelfun</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+		<span class="n">labelfun</span> <span class="o">=</span> <span class="n">attrgetter</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">)</span>
 	<span class="n">treeclass</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">__class__</span>
-	<span class="n">leftmostunary</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">leftmostunary</span> <span class="k">else</span> <span class="mi">0</span>
+	<span class="n">origfactor</span> <span class="o">=</span> <span class="n">factor</span>
 
 	<span class="c"># Traverse tree depth-first keeping a list of ancestor nodes to the root.</span>
 	<span class="n">agenda</span> <span class="o">=</span> <span class="p">[(</span><span class="n">tree</span><span class="p">,</span> <span class="p">[</span><span class="n">tree</span><span class="o">.</span><span class="n">label</span><span class="p">])]</span>
@@ -234,7 +239,8 @@
 			<span class="k">continue</span>
 		<span class="c"># parent annotation</span>
 		<span class="n">parents</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-		<span class="n">origlabel</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">vertmarkov</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+		<span class="n">origlabel</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">vertmarkov</span> <span class="k">else</span> <span class="s">&#39;_&#39;</span>
+		<span class="n">factor</span> <span class="o">=</span> <span class="n">origfactor</span>
 		<span class="k">if</span> <span class="n">vertmarkov</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">tree</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Tree</span><span class="p">):</span>
 			<span class="n">parents</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">&lt;</span><span class="si">%s</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parentchar</span><span class="p">,</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent</span><span class="p">))</span>
 			<span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="o">+=</span> <span class="n">parents</span>
@@ -243,6 +249,12 @@
 				<span class="n">parents</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
 		<span class="c"># add children to the agenda before we mess with them</span>
 		<span class="n">agenda</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="n">child</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="p">)</span>
+		<span class="n">headidx</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="k">if</span> <span class="n">headoutward</span> <span class="ow">or</span> <span class="n">markhead</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ishead</span><span class="p">(</span><span class="n">child</span><span class="p">):</span>
+					<span class="n">headidx</span> <span class="o">=</span> <span class="n">i</span>
+					<span class="k">break</span>
 		<span class="c"># binary form factorization</span>
 		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">:</span>
 			<span class="k">continue</span>
@@ -250,7 +262,13 @@
 			<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Tree</span><span class="p">):</span>
 				<span class="k">continue</span>
 			<span class="c"># insert an initial artificial nonterminal</span>
-			<span class="n">siblings</span> <span class="o">=</span> <span class="s">&#39;&#39;</span> <span class="k">if</span> <span class="n">headidx</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">node</span><span class="p">[</span><span class="n">headidx</span><span class="p">]</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span>
+			<span class="n">siblings</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+			<span class="k">if</span> <span class="n">direction</span> <span class="ow">and</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span><span class="p">:</span>
+				<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;r:&#39;</span>
+			<span class="k">elif</span> <span class="n">direction</span> <span class="ow">and</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;right&#39;</span><span class="p">:</span>
+				<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;l:&#39;</span>
+			<span class="k">if</span> <span class="n">markhead</span> <span class="ow">and</span> <span class="n">headidx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+				<span class="n">siblings</span> <span class="o">+=</span> <span class="n">node</span><span class="p">[</span><span class="n">headidx</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span>
 			<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">labelfun</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[:</span><span class="n">horzmarkov</span><span class="p">]</span>
 					<span class="k">if</span> <span class="n">labelfun</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filterfuncs</span><span class="p">)</span>
 			<span class="k">if</span> <span class="n">dot</span><span class="p">:</span>
@@ -272,20 +290,27 @@
 				<span class="n">childlabels</span> <span class="o">=</span> <span class="p">[]</span>
 			<span class="n">childnodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 			<span class="n">numchildren</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">childnodes</span><span class="p">)</span>
-			<span class="k">assert</span> <span class="ow">not</span> <span class="n">headmarked</span> <span class="ow">or</span> <span class="n">headidx</span> <span class="ow">is</span> <span class="bp">None</span>
-			<span class="n">headmarkedidx</span> <span class="o">=</span> <span class="mi">0</span>
 
 			<span class="c"># insert an initial artificial nonterminal</span>
 			<span class="n">node</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+			<span class="k">if</span> <span class="n">headoutward</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="n">headidx</span><span class="p">:</span>
+				<span class="n">factor</span> <span class="o">=</span> <span class="s">&#39;right&#39;</span> <span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span> <span class="k">else</span> <span class="s">&#39;left&#39;</span>
 			<span class="k">if</span> <span class="n">leftmostunary</span><span class="p">:</span>
 				<span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;right&#39;</span><span class="p">:</span>
-					<span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
-					<span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">horzmarkov</span><span class="p">)</span> <span class="k">if</span> <span class="n">reverse</span> <span class="k">else</span> <span class="n">horzmarkov</span>
+					<span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+					<span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">horzmarkov</span>
 				<span class="k">else</span><span class="p">:</span>  <span class="c"># factor == &#39;left&#39;</span>
-					<span class="n">start</span> <span class="o">=</span> <span class="p">((</span><span class="n">numchildren</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">horzmarkov</span><span class="p">))</span>
-							<span class="k">if</span> <span class="n">reverse</span> <span class="k">else</span> <span class="n">horzmarkov</span><span class="p">)</span>
-					<span class="n">end</span> <span class="o">=</span> <span class="n">numchildren</span>
-				<span class="n">siblings</span> <span class="o">=</span> <span class="s">&#39;&#39;</span> <span class="k">if</span> <span class="n">headidx</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">childlabels</span><span class="p">[</span><span class="n">headidx</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span>
+					<span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">numchildren</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">horzmarkov</span> <span class="o">+</span> <span class="p">(</span><span class="n">headidx</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">),</span>
+							<span class="mi">0</span><span class="p">)</span>
+					<span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">numchildren</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="n">headidx</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">),</span> <span class="n">numchildren</span><span class="p">)</span>
+				<span class="n">siblings</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+				<span class="k">if</span> <span class="n">direction</span> <span class="ow">and</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span><span class="p">:</span>
+					<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;r:&#39;</span>
+				<span class="k">elif</span> <span class="n">direction</span> <span class="ow">and</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;right&#39;</span><span class="p">:</span>
+					<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;l:&#39;</span>
+				<span class="k">if</span> <span class="n">markhead</span> <span class="ow">and</span> <span class="n">headidx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+					<span class="n">siblings</span> <span class="o">+=</span> <span class="n">childlabels</span><span class="p">[</span><span class="n">headidx</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span>
 				<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">childlabels</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
 				<span class="k">if</span> <span class="n">dot</span><span class="p">:</span>
 					<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;.&#39;</span>
@@ -301,52 +326,71 @@
 				<span class="n">marktail</span> <span class="o">=</span> <span class="n">tailmarker</span> <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">numchildren</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
 				<span class="n">newnode</span> <span class="o">=</span> <span class="n">treeclass</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="p">[])</span>
 				<span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;right&#39;</span><span class="p">:</span>
-					<span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
-						<span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">horzmarkov</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-						<span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-					<span class="k">else</span><span class="p">:</span>
-						<span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
-						<span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">horzmarkov</span>
+					<span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+					<span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">horzmarkov</span>
+				<span class="k">else</span><span class="p">:</span>  <span class="c"># factor == &#39;left&#39;:</span>
+					<span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">numchildren</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">horzmarkov</span> <span class="o">+</span> <span class="p">(</span><span class="n">headidx</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">),</span>
+							<span class="p">(</span><span class="n">headidx</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">))</span>
+					<span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">numchildren</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="n">headidx</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">),</span>
+							<span class="n">numchildren</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;right&#39;</span><span class="p">:</span>
 					<span class="n">curnode</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">childnodes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">newnode</span><span class="p">]</span>
 				<span class="k">else</span><span class="p">:</span>  <span class="c"># factor == &#39;left&#39;:</span>
-					<span class="n">start</span> <span class="o">=</span> <span class="n">headmarkedidx</span> <span class="o">+</span> <span class="n">numchildren</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
-					<span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">horzmarkov</span>
 					<span class="n">curnode</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">newnode</span><span class="p">,</span> <span class="n">childnodes</span><span class="o">.</span><span class="n">pop</span><span class="p">()]</span>
-				<span class="c"># switch direction upon encountering the head</span>
-				<span class="k">if</span> <span class="n">headmarked</span> <span class="ow">and</span> <span class="n">headmarked</span> <span class="ow">in</span> <span class="n">childlabels</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-					<span class="n">headmarkedidx</span> <span class="o">=</span> <span class="n">i</span>
-					<span class="n">factor</span> <span class="o">=</span> <span class="s">&#39;right&#39;</span> <span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span> <span class="k">else</span> <span class="s">&#39;left&#39;</span>
-					<span class="n">start</span> <span class="o">=</span> <span class="n">headmarkedidx</span> <span class="o">+</span> <span class="n">numchildren</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
-					<span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">horzmarkov</span>
-				<span class="n">siblings</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;&#39;</span> <span class="k">if</span> <span class="n">headidx</span> <span class="ow">is</span> <span class="bp">None</span>
-						<span class="k">else</span> <span class="n">childlabels</span><span class="p">[</span><span class="n">headidx</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span><span class="p">)</span>
-				<span class="k">if</span> <span class="n">dot</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">reverse</span><span class="p">:</span>
+				<span class="n">siblings</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+				<span class="k">if</span> <span class="n">direction</span> <span class="ow">and</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span><span class="p">:</span>
+					<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;r:&#39;</span>
+				<span class="k">elif</span> <span class="n">direction</span> <span class="ow">and</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;right&#39;</span><span class="p">:</span>
+					<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;l:&#39;</span>
+				<span class="k">if</span> <span class="n">markhead</span> <span class="ow">and</span> <span class="n">headidx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+					<span class="n">siblings</span> <span class="o">+=</span> <span class="n">childlabels</span><span class="p">[</span><span class="n">headidx</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span>
+				<span class="k">if</span> <span class="n">dot</span><span class="p">:</span>
 					<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">childlabels</span><span class="p">[:</span><span class="n">start</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span>
+				<span class="k">if</span> <span class="n">revhorzmarkov</span><span class="p">:</span>
+					<span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;right&#39;</span><span class="p">:</span>
+						<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">childlabels</span><span class="p">[</span>
+								<span class="nb">max</span><span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">revhorzmarkov</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span><span class="n">start</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span>
+					<span class="k">else</span><span class="p">:</span>  <span class="c"># factor == &#39;left&#39;:</span>
+						<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">childlabels</span><span class="p">[</span>
+								<span class="n">end</span><span class="p">:</span><span class="n">end</span> <span class="o">+</span> <span class="n">revhorzmarkov</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span>
 				<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">childlabels</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
-				<span class="k">if</span> <span class="n">dot</span> <span class="ow">and</span> <span class="n">reverse</span><span class="p">:</span>
-					<span class="n">siblings</span> <span class="o">+=</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">childlabels</span><span class="p">[</span><span class="n">end</span><span class="p">:])</span>
 				<span class="n">mark</span> <span class="o">=</span> <span class="s">&#39;&lt;</span><span class="si">%s</span><span class="s">&gt;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">siblings</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
 				<span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># numeric identifier</span>
 					<span class="n">mark</span> <span class="o">=</span> <span class="s">&#39;&lt;</span><span class="si">%s</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="n">ids</span><span class="p">[</span><span class="n">mark</span><span class="p">]</span>
 				<span class="n">newnode</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">origlabel</span><span class="p">,</span> <span class="n">childchar</span><span class="p">,</span> <span class="n">marktail</span><span class="p">,</span> <span class="n">mark</span><span class="p">))</span>
 				<span class="n">curnode</span> <span class="o">=</span> <span class="n">newnode</span>
+				<span class="c"># switch direction upon encountering the head</span>
+				<span class="k">if</span> <span class="n">headoutward</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="n">headidx</span><span class="p">:</span>
+					<span class="n">factor</span> <span class="o">=</span> <span class="s">&#39;right&#39;</span> <span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span> <span class="k">else</span> <span class="s">&#39;left&#39;</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">headoutward</span> <span class="ow">and</span> <span class="n">direction</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="n">headidx</span>
+						<span class="ow">and</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="n">numchildren</span><span class="p">):</span>
+					<span class="c"># insert unary for switch of direction</span>
+					<span class="n">newnode</span> <span class="o">=</span> <span class="n">treeclass</span><span class="p">(</span><span class="n">curnode</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">curnode</span><span class="p">[:])</span>
+					<span class="n">curnode</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">newnode</span><span class="p">]</span>
+					<span class="c"># direction is &#39;m&#39;, no horz. markovization</span>
+					<span class="n">newnode</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">origlabel</span><span class="p">,</span> <span class="n">childchar</span><span class="p">,</span> <span class="s">&#39;&lt;&#39;</span><span class="p">,</span>
+							<span class="s">&#39;m:&#39;</span> <span class="k">if</span> <span class="n">direction</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+							<span class="n">childlabels</span><span class="p">[</span><span class="n">headidx</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span>
+								<span class="k">if</span> <span class="n">markhead</span> <span class="ow">and</span> <span class="n">headidx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+							<span class="s">&#39;&gt;&#39;</span><span class="p">,</span> <span class="n">parents</span><span class="p">))</span>
+					<span class="n">curnode</span> <span class="o">=</span> <span class="n">newnode</span>
 			<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">childnodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="ow">not</span> <span class="n">rightmostunary</span><span class="p">)</span>
 			<span class="n">curnode</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">childnodes</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">tree</span>
 
 </div>
-<div class="viewcode-block" id="unbinarize"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.unbinarize">[docs]</a><span class="k">def</span> <span class="nf">unbinarize</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">expandunary</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">childchar</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">parentchar</span><span class="o">=</span><span class="s">&#39;^&#39;</span><span class="p">,</span>
-		<span class="n">unarychar</span><span class="o">=</span><span class="s">&#39;+&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="unbinarize"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.unbinarize">[docs]</a><span class="k">def</span> <span class="nf">unbinarize</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">_sent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">expandunary</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="n">childchar</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">parentchar</span><span class="o">=</span><span class="s">&#39;^&#39;</span><span class="p">,</span> <span class="n">unarychar</span><span class="o">=</span><span class="s">&#39;+&#39;</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Restore a binarized tree to the original n-ary tree.</span>
 
-<span class="sd">	Modifies tree in-place. Tree should not be a ParentedTree.</span>
+<span class="sd">	Modifies tree in-place.</span>
 <span class="sd">	NB: a malformed node such as ``(X|&lt;Y&gt; )`` which is not supposed to be empty</span>
 <span class="sd">	will be silently discarded.&quot;&quot;&quot;</span>
 	<span class="c"># increase robustness</span>
 	<span class="n">childchar</span> <span class="o">+=</span> <span class="s">&#39;&lt;&#39;</span>
 	<span class="n">parentchar</span> <span class="o">+=</span> <span class="s">&#39;&lt;&#39;</span>
 	<span class="n">treeclass</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">__class__</span>
-	<span class="c"># Traverse the tree-depth first keeping a pointer to the parent for</span>
+	<span class="c"># Traverse the tree depth-first keeping a pointer to the parent for</span>
 	<span class="c"># modification purposes.</span>
 	<span class="n">agenda</span> <span class="o">=</span> <span class="p">[(</span><span class="n">tree</span><span class="p">,</span> <span class="p">[])]</span>
 	<span class="k">while</span> <span class="n">agenda</span><span class="p">:</span>
@@ -358,8 +402,17 @@
 			<span class="n">childindex</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">childchar</span><span class="p">)</span>
 			<span class="k">if</span> <span class="n">childindex</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
 				<span class="c"># go by identity instead of equality</span>
-				<span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">parent</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
-				<span class="n">parent</span><span class="p">[</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+				<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">parent</span><span class="p">):</span>
+					<span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">node</span><span class="p">:</span>
+						<span class="c"># convert node to list so that its children may</span>
+						<span class="c"># get new parents.</span>
+						<span class="n">tmp</span> <span class="o">=</span> <span class="n">node</span><span class="p">[:]</span>
+						<span class="n">node</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[]</span>
+						<span class="n">node</span> <span class="o">=</span> <span class="n">tmp</span>
+						<span class="n">parent</span><span class="p">[</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+						<span class="k">break</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">raise</span> <span class="ne">IndexError</span>
 			<span class="k">else</span><span class="p">:</span>
 				<span class="n">parentindex</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">parentchar</span><span class="p">)</span>
 				<span class="k">if</span> <span class="n">parentindex</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
@@ -378,7 +431,7 @@
 	<span class="k">return</span> <span class="n">tree</span>
 
 </div>
-<div class="viewcode-block" id="collapseunary"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.collapseunary">[docs]</a><span class="k">def</span> <span class="nf">collapseunary</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">collapsepos</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">collapseroot</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">joinchar</span><span class="o">=</span><span class="s">&#39;+&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="collapseunary"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.collapseunary">[docs]</a><span class="k">def</span> <span class="nf">collapseunary</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">collapsepos</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">collapseroot</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">joinchar</span><span class="o">=</span><span class="s">&#39;+&#39;</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Collapse unary nodes into a new node indicated by &#39;joinchar&#39;.</span>
 
 <span class="sd">	For example``(NP (NN John))`` becomes ``(NP+NN John)``.</span>
@@ -407,12 +460,12 @@
 	<span class="k">return</span> <span class="n">tree</span>
 
 </div>
-<div class="viewcode-block" id="introducepreterminals"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.introducepreterminals">[docs]</a><span class="k">def</span> <span class="nf">introducepreterminals</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="introducepreterminals"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.introducepreterminals">[docs]</a><span class="k">def</span> <span class="nf">introducepreterminals</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Add preterminals with artificial POS-tags for terminals with siblings.</span>
 
-<span class="sd">	&gt;&gt;&gt; tree = Tree(&#39;(S (X a b (CD c d) e))&#39;)</span>
-<span class="sd">	&gt;&gt;&gt; print(introducepreterminals(tree))</span>
-<span class="sd">	(S (X (X/a a) (X/b b) (CD (CD/c c) (CD/d d)) (X/e e)))&quot;&quot;&quot;</span>
+<span class="sd">	&gt;&gt;&gt; tree = Tree(&#39;(S (X 0 1 (CD 2 3) 4))&#39;)</span>
+<span class="sd">	&gt;&gt;&gt; print(introducepreterminals(tree, [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;]))</span>
+<span class="sd">	(S (X (X/a 0) (X/b 1) (CD (CD/c 2) (CD/d 3)) (X/e 4)))&quot;&quot;&quot;</span>
 	<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span>
 	<span class="n">treeclass</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">__class__</span>
 	<span class="n">agenda</span> <span class="o">=</span> <span class="p">[</span><span class="n">tree</span><span class="p">]</span>
@@ -424,11 +477,13 @@
 				<span class="n">agenda</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
 			<span class="k">elif</span> <span class="n">hassiblings</span><span class="p">:</span>
 				<span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">treeclass</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
-					<span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">next</span><span class="p">(</span><span class="n">ids</span><span class="p">),</span> <span class="n">child</span><span class="p">),</span> <span class="p">[</span><span class="n">child</span><span class="p">])</span>
+							<span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">next</span><span class="p">(</span><span class="n">ids</span><span class="p">),</span>
+							<span class="n">sent</span><span class="p">[</span><span class="n">child</span><span class="p">]),</span>
+						<span class="p">[</span><span class="n">child</span><span class="p">])</span>
 	<span class="k">return</span> <span class="n">tree</span>
 
 </div>
-<div class="viewcode-block" id="factorconstituent"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.factorconstituent">[docs]</a><span class="k">def</span> <span class="nf">factorconstituent</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">999</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="factorconstituent"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.factorconstituent">[docs]</a><span class="k">def</span> <span class="nf">factorconstituent</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">999</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">,</span>
 		<span class="n">markfanout</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">markyf</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 		<span class="n">filterfuncs</span><span class="o">=</span><span class="p">(),</span> <span class="n">labelfun</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">)):</span>
 	<span class="sd">&quot;&quot;&quot;Binarize one constituent with a left/right factored binarization.</span>
@@ -486,7 +541,7 @@
 			<span class="k">if</span> <span class="n">markfanout</span><span class="p">:</span>
 				<span class="n">nodefanout</span> <span class="o">=</span> <span class="n">bitfanout</span><span class="p">(</span><span class="n">newbitset</span><span class="p">)</span>
 				<span class="k">if</span> <span class="n">nodefanout</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-					<span class="n">newlabel</span> <span class="o">+=</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nodefanout</span><span class="p">)</span>
+					<span class="n">newlabel</span> <span class="o">+=</span> <span class="s">&#39;_</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">nodefanout</span>
 			<span class="n">prev</span> <span class="o">=</span> <span class="n">ImmutableTree</span><span class="p">(</span><span class="n">newlabel</span><span class="p">,</span>
 					<span class="p">[</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prev</span><span class="p">]</span> <span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="s">&#39;right&#39;</span> <span class="k">else</span> <span class="p">[</span><span class="n">prev</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
 			<span class="n">prev</span><span class="o">.</span><span class="n">bitset</span> <span class="o">=</span> <span class="n">newbitset</span>
@@ -497,14 +552,42 @@
 	<span class="k">return</span> <span class="n">result</span>
 
 </div>
-<div class="viewcode-block" id="splitdiscnodes"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.splitdiscnodes">[docs]</a><span class="k">def</span> <span class="nf">splitdiscnodes</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">markorigin</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="markovthreshold"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.markovthreshold">[docs]</a><span class="k">def</span> <span class="nf">markovthreshold</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">horzmarkov</span><span class="p">,</span> <span class="n">vertmarkov</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Reduce Markov order of binarization labels occurring &lt; n times.&quot;&quot;&quot;</span>
+	<span class="n">freqs</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">trees</span>
+			<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">()</span>
+			<span class="k">if</span> <span class="n">MARKOVRE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="p">))</span>
+	<span class="n">newlabels</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">freqs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+		<span class="k">if</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+			<span class="n">match</span> <span class="o">=</span> <span class="n">MARKOVRE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+				<span class="k">continue</span>
+			<span class="n">newlabel</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">|&lt;</span><span class="si">%s%s</span><span class="s">,&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+					<span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+					<span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+					<span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[:</span><span class="n">horzmarkov</span><span class="p">]))</span>
+			<span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+				<span class="n">newlabel</span> <span class="o">+=</span> <span class="s">&#39;^&lt;</span><span class="si">%s</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+						<span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[:</span><span class="n">vertmarkov</span><span class="p">])</span>
+			<span class="n">newlabels</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">newlabel</span> <span class="o">+</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">newlabels</span><span class="p">):</span>
+			<span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">newlabels</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="p">]</span>
+	<span class="k">return</span> <span class="p">(</span><span class="s">&#39;markovization for labels with freq &lt; </span><span class="si">%d</span><span class="s"> reduced to h=</span><span class="si">%d</span><span class="s"> v=</span><span class="si">%d</span><span class="s">.</span><span class="se">\n</span><span class="s">&#39;</span>
+			<span class="s">&#39;# labels before </span><span class="si">%d</span><span class="s">, after </span><span class="si">%d</span><span class="s">. </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">horzmarkov</span><span class="p">,</span> <span class="n">vertmarkov</span><span class="p">,</span>
+			<span class="nb">len</span><span class="p">(</span><span class="n">newlabels</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">newlabels</span><span class="o">.</span><span class="n">values</span><span class="p">())),</span>
+			<span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> -&gt; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="n">newlabels</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="mi">5</span><span class="p">))))</span>
+
+</div>
+<div class="viewcode-block" id="splitdiscnodes"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.splitdiscnodes">[docs]</a><span class="k">def</span> <span class="nf">splitdiscnodes</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">markorigin</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Boyd (2007): Discontinuity revisited.</span>
 
 <span class="sd">	:markorigin=False: VP* (bare label)</span>
 <span class="sd">	:markorigin=True: VP*1 (add index)</span>
 
-<span class="sd">	&gt;&gt;&gt; tree = Tree.parse(&#39;(S (VP (VP (PP (APPR 0) (ART 1) (NN 2)) (CARD 4)&#39;</span>
-<span class="sd">	... &#39;(VVPP 5)) (VAINF 6)) (VMFIN 3))&#39;, parse_leaf=int)</span>
+<span class="sd">	&gt;&gt;&gt; tree = Tree(&#39;(S (VP (VP (PP (APPR 0) (ART 1) (NN 2)) (CARD 4)&#39;</span>
+<span class="sd">	... &#39;(VVPP 5)) (VAINF 6)) (VMFIN 3))&#39;)</span>
 <span class="sd">	&gt;&gt;&gt; print(splitdiscnodes(tree.copy(True)))</span>
 <span class="sd">	...  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">	(S (VP* (VP* (PP (APPR 0) (ART 1) (NN 2)))) (VMFIN 3) (VP* (VP* (CARD 4)</span>
@@ -514,7 +597,7 @@
 <span class="sd">	(S (VP*0 (VP*0 (PP (APPR 0) (ART 1) (NN 2)))) (VMFIN 3) (VP*1 (VP*1</span>
 <span class="sd">		(CARD 4) (VVPP 5)) (VAINF 6)))&quot;&quot;&quot;</span>
 	<span class="n">treeclass</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">__class__</span>
-	<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">postorder</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+	<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">postorder</span><span class="p">():</span>
 		<span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 		<span class="n">node</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[]</span>
 		<span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
@@ -529,7 +612,7 @@
 	<span class="k">return</span> <span class="n">canonicalize</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="mergediscnodes"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.mergediscnodes">[docs]</a><span class="k">def</span> <span class="nf">mergediscnodes</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="mergediscnodes"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.mergediscnodes">[docs]</a><span class="k">def</span> <span class="nf">mergediscnodes</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Reverse transformation of ``splitdiscnodes()``.&quot;&quot;&quot;</span>
 	<span class="n">treeclass</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">__class__</span>
 	<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">():</span>
@@ -560,7 +643,7 @@
 	<span class="k">return</span> <span class="n">tree</span>
 
 </div>
-<div class="viewcode-block" id="addfanoutmarkers"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.addfanoutmarkers">[docs]</a><span class="k">def</span> <span class="nf">addfanoutmarkers</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="addfanoutmarkers"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.addfanoutmarkers">[docs]</a><span class="k">def</span> <span class="nf">addfanoutmarkers</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Mark discontinuous constituents with &#39;_n&#39; where n = # gaps + 1.&quot;&quot;&quot;</span>
 	<span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">():</span>
 		<span class="n">leaves</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span>
@@ -570,30 +653,37 @@
 	<span class="k">return</span> <span class="n">tree</span>
 
 </div>
-<div class="viewcode-block" id="removefanoutmarkers"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.removefanoutmarkers">[docs]</a><span class="k">def</span> <span class="nf">removefanoutmarkers</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="removefanoutmarkers"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.removefanoutmarkers">[docs]</a><span class="k">def</span> <span class="nf">removefanoutmarkers</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Remove fanout marks.&quot;&quot;&quot;</span>
 	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s">&#39;_&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">label</span><span class="p">):</span>
 		<span class="n">a</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 	<span class="k">return</span> <span class="n">tree</span>
 
 </div>
-<div class="viewcode-block" id="canonicalize"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.canonicalize">[docs]</a><span class="k">def</span> <span class="nf">canonicalize</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="treebankfanout"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.treebankfanout">[docs]</a><span class="k">def</span> <span class="nf">treebankfanout</span><span class="p">(</span><span class="n">trees</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Get maximal fan-out of a list of trees.&quot;&quot;&quot;</span>
+	<span class="k">try</span><span class="p">:</span>  <span class="c"># avoid max over empty sequence: &#39;treebank&#39; may only have unary prods</span>
+		<span class="k">return</span> <span class="nb">max</span><span class="p">((</span><span class="n">fanout</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">tree</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">addbitsets</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">))</span>
+	<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+
+</div>
+<div class="viewcode-block" id="canonicalize"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.canonicalize">[docs]</a><span class="k">def</span> <span class="nf">canonicalize</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Restore canonical linear precedence order; tree is modified in-place.&quot;&quot;&quot;</span>
-	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">postorder</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
-		<span class="n">a</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span>
+	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">postorder</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+		<span class="n">a</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span>
 	<span class="k">return</span> <span class="n">tree</span>
 
 </div>
-<div class="viewcode-block" id="optimalbinarize"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.optimalbinarize">[docs]</a><span class="k">def</span> <span class="nf">optimalbinarize</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">headdriven</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<div class="viewcode-block" id="optimalbinarize"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.optimalbinarize">[docs]</a><span class="k">def</span> <span class="nf">optimalbinarize</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">headdriven</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
 		<span class="n">h</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Recursively binarize a tree, optimizing for given function.</span>
 
 <span class="sd">	``v=0`` is not implemented. Setting h to a nonzero integer restricts the</span>
 <span class="sd">	possible binarizations to head driven binarizations.&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="n">h</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-		<span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
-		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-			<span class="n">a</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span>
+		<span class="n">tree</span> <span class="o">=</span> <span class="n">canonicalize</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span>
 	<span class="k">return</span> <span class="n">optimalbinarize_</span><span class="p">(</span><span class="n">addbitsets</span><span class="p">(</span><span class="n">tree</span><span class="p">),</span> <span class="n">fun</span> <span class="ow">or</span> <span class="n">complexityfanout</span><span class="p">,</span> <span class="n">sep</span><span class="p">,</span>
 			<span class="n">headdriven</span><span class="p">,</span> <span class="n">h</span> <span class="ow">or</span> <span class="mi">999</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="p">())</span>
 
@@ -611,7 +701,7 @@
 			<span class="n">head</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">headdriven</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="minimalbinarization"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.minimalbinarization">[docs]</a><span class="k">def</span> <span class="nf">minimalbinarization</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">head</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parentstr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+<div class="viewcode-block" id="minimalbinarization"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.minimalbinarization">[docs]</a><span class="k">def</span> <span class="nf">minimalbinarization</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">head</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parentstr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Find optimal binarization according to a scoring function.</span>
 
 <span class="sd">	Implementation of Gildea (2010): Optimal parsing strategies for linear</span>
@@ -626,7 +716,7 @@
 <span class="sd">		head-driven binarization (which constrains the possible binarizations).</span>
 
 <span class="sd">	&gt;&gt;&gt; tree = &#39;(X (A 0) (B 1) (C 2) (D 3) (E 4))&#39;</span>
-<span class="sd">	&gt;&gt;&gt; tree2 = binarize(Tree.parse(tree, parse_leaf=int))</span>
+<span class="sd">	&gt;&gt;&gt; tree2 = binarize(Tree(tree))</span>
 <span class="sd">	&gt;&gt;&gt; minimalbinarization(addbitsets(tree), complexityfanout, head=2) == tree2</span>
 <span class="sd">	True</span>
 <span class="sd">	&gt;&gt;&gt; tree = addbitsets(&#39;(A (B1 (t 6) (t 13)) (B2 (t 3) (t 7) (t 10)) &#39;</span>
@@ -743,35 +833,35 @@
 	<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;agenda exhausted without finding binarization.&#39;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="fanout"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.fanout">[docs]</a><span class="k">def</span> <span class="nf">fanout</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="fanout"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.fanout">[docs]</a><span class="k">def</span> <span class="nf">fanout</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Return fan-out of constituent. Requires ``bitset`` attribute.&quot;&quot;&quot;</span>
 	<span class="k">return</span> <span class="n">bitfanout</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">bitset</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
 
 </div>
-<div class="viewcode-block" id="complexity"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.complexity">[docs]</a><span class="k">def</span> <span class="nf">complexity</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="complexity"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.complexity">[docs]</a><span class="k">def</span> <span class="nf">complexity</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;The degree of the time complexity of parsing with this rule.</span>
 <span class="sd">	Cf. Gildea (2010).&quot;&quot;&quot;</span>
 	<span class="k">return</span> <span class="n">fanout</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">fanout</span><span class="p">,</span> <span class="n">tree</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="complexityfanout"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.complexityfanout">[docs]</a><span class="k">def</span> <span class="nf">complexityfanout</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="complexityfanout"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.complexityfanout">[docs]</a><span class="k">def</span> <span class="nf">complexityfanout</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Return a tuple with the complexity and fan-out of a subtree.&quot;&quot;&quot;</span>
 	<span class="k">return</span> <span class="p">(</span><span class="n">fanout</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">fanout</span><span class="p">,</span> <span class="n">tree</span><span class="p">)),</span> <span class="n">fanout</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="fanoutcomplexity"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.fanoutcomplexity">[docs]</a><span class="k">def</span> <span class="nf">fanoutcomplexity</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="fanoutcomplexity"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.fanoutcomplexity">[docs]</a><span class="k">def</span> <span class="nf">fanoutcomplexity</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Return a tuple with the fan-out and complexity of a subtree.&quot;&quot;&quot;</span>
 	<span class="k">return</span> <span class="p">(</span><span class="n">fanout</span><span class="p">(</span><span class="n">tree</span><span class="p">),</span> <span class="n">fanout</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">fanout</span><span class="p">,</span> <span class="n">tree</span><span class="p">)))</span>
 
 </div>
-<div class="viewcode-block" id="contsets"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.contsets">[docs]</a><span class="k">def</span> <span class="nf">contsets</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
+<div class="viewcode-block" id="contsets"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.contsets">[docs]</a><span class="k">def</span> <span class="nf">contsets</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Partition children into continuous subsets.</span>
 
-<span class="sd">	&gt;&gt;&gt; tree = Tree.parse(</span>
-<span class="sd">	... &quot;(VP (PP (APPR 0) (ART 1) (NN 2)) (CARD 4) (VVPP 5))&quot;, parse_leaf=int)</span>
-<span class="sd">	&gt;&gt;&gt; print(list(contsets(tree)))  # doctest: +NORMALIZE_WHITESPACE</span>
-<span class="sd">	[[Tree(&#39;PP&#39;, [Tree(&#39;APPR&#39;, [0]), Tree(&#39;ART&#39;, [1]), Tree(&#39;NN&#39;, [2])])],</span>
-<span class="sd">	[Tree(&#39;CARD&#39;, [4]), Tree(&#39;VVPP&#39;, [5])]]&quot;&quot;&quot;</span>
+<span class="sd">	&gt;&gt;&gt; tree = Tree(&#39;(VP (PP (APPR 0) (ART 1) (NN 2)) (CARD 4) (VVPP 5))&#39;)</span>
+<span class="sd">	&gt;&gt;&gt; for a in contsets(tree):</span>
+<span class="sd">	...		print(&#39; / &#39;.join(&#39;%s&#39; % b for b in a))</span>
+<span class="sd">	(PP (APPR 0) (ART 1) (NN 2))</span>
+<span class="sd">	(CARD 4) / (VVPP 5)&quot;&quot;&quot;</span>
 	<span class="n">rng</span><span class="p">,</span> <span class="n">subset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">[]</span>
 	<span class="n">mins</span> <span class="o">=</span> <span class="p">{</span><span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
 	<span class="n">leaves</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">leaves</span><span class="p">()]</span>
@@ -786,23 +876,11 @@
 		<span class="k">yield</span> <span class="n">subset</span>
 
 </div>
-<div class="viewcode-block" id="postorder"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.postorder">[docs]</a><span class="k">def</span> <span class="nf">postorder</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="bp">True</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;A generator that does a postorder traversal of tree.</span>
-
-<span class="sd">	Similar to Tree.subtrees() which does a preorder traversal.&quot;&quot;&quot;</span>
-	<span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">tree</span><span class="p">:</span>
-		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">Tree</span><span class="p">):</span>
-			<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">postorder</span><span class="p">(</span><span class="n">child</span><span class="p">)):</span>
-				<span class="k">yield</span> <span class="n">a</span>
-	<span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
-		<span class="k">yield</span> <span class="n">tree</span>
-
-</div>
-<div class="viewcode-block" id="abbr"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.abbr">[docs]</a><span class="k">def</span> <span class="nf">abbr</span><span class="p">(</span><span class="n">childlabels</span><span class="p">):</span>
+<div class="viewcode-block" id="abbr"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.abbr">[docs]</a><span class="k">def</span> <span class="nf">abbr</span><span class="p">(</span><span class="n">childlabels</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Reduce sequences of identical labels.</span>
 
-<span class="sd">	&gt;&gt;&gt; abbr([&#39;mwp&#39;, &#39;mwp&#39;, &#39;mwp&#39;, &#39;mwp&#39;])</span>
-<span class="sd">	[&#39;mwp+&#39;]&quot;&quot;&quot;</span>
+<span class="sd">	&gt;&gt;&gt; print(&#39; &#39;.join(abbr([&#39;mwp&#39;, &#39;mwp&#39;, &#39;mwp&#39;, &#39;mwp&#39;])))</span>
+<span class="sd">	mwp+&quot;&quot;&quot;</span>
 	<span class="n">result</span><span class="p">,</span> <span class="n">inrun</span> <span class="o">=</span> <span class="p">[],</span> <span class="s">&#39;&#39;</span>
 	<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">childlabels</span><span class="p">,</span> <span class="n">childlabels</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">None</span><span class="p">]):</span>
 		<span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">:</span>
@@ -813,7 +891,7 @@
 	<span class="k">return</span> <span class="n">result</span>
 
 </div>
-<div class="viewcode-block" id="getbits"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.getbits">[docs]</a><span class="k">def</span> <span class="nf">getbits</span><span class="p">(</span><span class="n">bitset</span><span class="p">):</span>
+<div class="viewcode-block" id="getbits"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.getbits">[docs]</a><span class="k">def</span> <span class="nf">getbits</span><span class="p">(</span><span class="n">bitset</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Iterate over the indices of set bits in a bitset.&quot;&quot;&quot;</span>
 	<span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
 	<span class="k">while</span> <span class="n">bitset</span><span class="p">:</span>
@@ -825,20 +903,17 @@
 		<span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
 
 </div>
-<div class="viewcode-block" id="addbitsets"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.addbitsets">[docs]</a><span class="k">def</span> <span class="nf">addbitsets</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<div class="viewcode-block" id="addbitsets"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.addbitsets">[docs]</a><span class="k">def</span> <span class="nf">addbitsets</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Turn tree into an ImmutableTree and add bitset attribute.</span>
 
 <span class="sd">	The bitset attribute is a Python integer corresponding to the information</span>
 <span class="sd">	that leaves() would return for that node.&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
-		<span class="n">result</span> <span class="o">=</span> <span class="n">ImmutableTree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">ImmutableTree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 	<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ImmutableTree</span><span class="p">):</span>
 		<span class="n">result</span> <span class="o">=</span> <span class="n">tree</span>
 	<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">Tree</span><span class="p">):</span>
 		<span class="n">result</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
-		<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(),</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">()):</span>
-			<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">):</span>
-				<span class="n">a</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">source</span>
 	<span class="k">else</span><span class="p">:</span>
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;expected string or tree object&#39;</span><span class="p">)</span>
 	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">subtrees</span><span class="p">():</span>
@@ -846,7 +921,7 @@
 	<span class="k">return</span> <span class="n">result</span>
 
 </div>
-<div class="viewcode-block" id="getyf"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.getyf">[docs]</a><span class="k">def</span> <span class="nf">getyf</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+<div class="viewcode-block" id="getyf"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.getyf">[docs]</a><span class="k">def</span> <span class="nf">getyf</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Return the yield function for two subtrees with bitsets.</span>
 
 <span class="sd">	:returns: string representation of yield function; e.g., &#39;;01,10&#39;.&quot;&quot;&quot;</span>
@@ -871,18 +946,28 @@
 	<span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="disc"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.disc">[docs]</a><span class="k">def</span> <span class="nf">disc</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;Test whether a particular node is discontinuous.</span>
+<div class="viewcode-block" id="disc"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.disc">[docs]</a><span class="k">def</span> <span class="nf">disc</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Test whether a particular node has a discontinuous yield.</span>
 
-<span class="sd">	i.e., test whether its yield contains two or more non-adjacent strings.&quot;&quot;&quot;</span>
+<span class="sd">	i.e., test whether its yield contains two or more non-adjacent strings.</span>
+<span class="sd">	Nodes can be continuous even if some of their children are</span>
+<span class="sd">	discontinuous.&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">):</span>
 		<span class="k">return</span> <span class="bp">False</span>
-	<span class="k">elif</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s">&#39;bitset&#39;</span><span class="p">):</span>
+	<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ImmutableTree</span><span class="p">):</span>
 		<span class="k">return</span> <span class="n">bitfanout</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">bitset</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
-	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ranges</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">leaves</span><span class="p">()))))</span> <span class="o">&gt;</span> <span class="mi">1</span>
+	<span class="n">start</span> <span class="o">=</span> <span class="n">prev</span> <span class="o">=</span> <span class="bp">None</span>
+	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">leaves</span><span class="p">()):</span>
+		<span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">start</span> <span class="o">=</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">a</span>
+		<span class="k">elif</span> <span class="n">a</span> <span class="o">==</span> <span class="n">prev</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="n">prev</span> <span class="o">=</span> <span class="n">a</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">True</span>
+	<span class="k">return</span> <span class="bp">False</span>
 
 </div>
-<div class="viewcode-block" id="OrderedSet"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.treetransforms.OrderedSet">[docs]</a><span class="k">class</span> <span class="nc">OrderedSet</span><span class="p">(</span><span class="n">Set</span><span class="p">):</span>
+<div class="viewcode-block" id="OrderedSet"><a class="viewcode-back" href="../../api/discodop.treetransforms.html#discodop.eval.OrderedSet">[docs]</a><span class="k">class</span> <span class="nc">OrderedSet</span><span class="p">(</span><span class="n">Set</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;A frozen, ordered set which maintains a regular list/tuple and set.</span>
 
 <span class="sd">	The set is indexable. Equality is defined _without_ regard for order.&quot;&quot;&quot;</span>
@@ -933,22 +1018,26 @@
 	<span class="kn">import</span> <span class="nn">io</span>
 	<span class="kn">from</span> <span class="nn">getopt</span> <span class="kn">import</span> <span class="n">gnu_getopt</span><span class="p">,</span> <span class="n">GetoptError</span>
 	<span class="kn">from</span> <span class="nn">discodop</span> <span class="kn">import</span> <span class="n">treebanktransforms</span>
-	<span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;none&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;introducepreterminals&#39;</span><span class="p">:</span> <span class="n">introducepreterminals</span><span class="p">,</span>
-			<span class="s">&#39;splitdisc&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;mergedisc&#39;</span><span class="p">:</span> <span class="n">mergediscnodes</span><span class="p">,</span> <span class="s">&#39;transform&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
-			<span class="s">&#39;unbinarize&#39;</span><span class="p">:</span> <span class="n">unbinarize</span><span class="p">,</span> <span class="s">&#39;binarize&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;optimalbinarize&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
-	<span class="n">flags</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;markorigin markheads leftunary rightunary tailmarker &#39;</span>
-			<span class="s">&#39;renumber reverse&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+	<span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="s">&#39;transform&#39;</span><span class="p">,</span> <span class="s">&#39;splitdisc&#39;</span><span class="p">,</span> <span class="s">&#39;binarize&#39;</span><span class="p">,</span> <span class="s">&#39;optimalbinarize&#39;</span><span class="p">,</span>
+			<span class="s">&#39;unbinarize&#39;</span><span class="p">,</span> <span class="s">&#39;mergedisc&#39;</span><span class="p">,</span> <span class="s">&#39;introducepreterminals&#39;</span><span class="p">}</span>
+	<span class="n">flags</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;help markorigin markhead leftunary rightunary tailmarker &#39;</span>
+			<span class="s">&#39;renumber reverse direction&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 	<span class="n">options</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;inputfmt= outputfmt= inputenc= outputenc= slice= ensureroot= &#39;</span>
-			<span class="s">&#39;punct= headrules= functions= morphology= lemmas= factor= &#39;</span>
-			<span class="s">&#39;markorigin= maxlen= fmt= enc= transforms=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+			<span class="s">&#39;punct= headrules= extreaheadrules= functions= morphology= &#39;</span>
+			<span class="s">&#39;lemmas= factor= fmt= markorigin= maxlen= enc= transforms= &#39;</span>
+			<span class="s">&#39;markovthreshold= &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 	<span class="k">try</span><span class="p">:</span>
-		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;h:v:&#39;</span><span class="p">,</span> <span class="n">flags</span> <span class="o">+</span> <span class="n">options</span><span class="p">)</span>
+		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;h:v:H:&#39;</span><span class="p">,</span> <span class="n">flags</span> <span class="o">+</span> <span class="n">options</span><span class="p">)</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
-			<span class="k">raise</span> <span class="n">GetoptError</span><span class="p">(</span><span class="s">&#39;error: expected 1, 2, or 3 positional arguments&#39;</span><span class="p">)</span>
+			<span class="k">raise</span> <span class="n">GetoptError</span><span class="p">(</span><span class="s">&#39;expected 1, 2, or 3 positional arguments&#39;</span><span class="p">)</span>
 	<span class="k">except</span> <span class="n">GetoptError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error: </span><span class="si">%r</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">USAGE</span><span class="p">),</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">),</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="k">if</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>  <span class="c"># -h is already used but will print help w/o argument</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">return</span>
 	<span class="k">if</span> <span class="n">action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="s">&#39;unrecognized action: </span><span class="si">%r</span><span class="se">\n</span><span class="s">available actions: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
 				<span class="n">action</span><span class="p">,</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">actions</span><span class="p">)),</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
@@ -957,18 +1046,22 @@
 		<span class="n">opts</span><span class="p">[</span><span class="s">&#39;--inputfmt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s">&#39;--fmt&#39;</span><span class="p">]</span>
 	<span class="k">if</span> <span class="s">&#39;--enc&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
 		<span class="n">opts</span><span class="p">[</span><span class="s">&#39;--inputenc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s">&#39;--outputenc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s">&#39;--enc&#39;</span><span class="p">]</span>
-	<span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">,</span> <span class="n">WRITERS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">WRITERS</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="s">&#39;unrecognized output format: </span><span class="si">%r</span><span class="se">\n</span><span class="s">available formats: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
-				<span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">),</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">WRITERS</span><span class="p">)),</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">,</span> <span class="n">treebank</span><span class="o">.</span><span class="n">WRITERS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">treebank</span><span class="o">.</span><span class="n">WRITERS</span><span class="p">:</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error: unrecognized output format: </span><span class="si">%r</span><span class="se">\n</span><span class="s">available formats: </span><span class="si">%s</span><span class="s">&#39;</span>
+				<span class="o">%</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">),</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">treebank</span><span class="o">.</span><span class="n">WRITERS</span><span class="p">)),</span>
+				<span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-	<span class="n">infilename</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="k">else</span> <span class="s">&#39;/dev/stdin&#39;</span>
-	<span class="n">outfilename</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="s">&#39;/dev/stdout&#39;</span>
+	<span class="n">infilename</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;-&#39;</span>
+			<span class="k">else</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+	<span class="n">outfilename</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;-&#39;</span>
+			<span class="k">else</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
 
 	<span class="c"># open corpus</span>
-	<span class="n">corpus</span> <span class="o">=</span> <span class="n">READERS</span><span class="p">[</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--inputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;export&#39;</span><span class="p">)](</span>
+	<span class="n">corpus</span> <span class="o">=</span> <span class="n">treebank</span><span class="o">.</span><span class="n">READERS</span><span class="p">[</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--inputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;export&#39;</span><span class="p">)](</span>
 			<span class="n">infilename</span><span class="p">,</span>
-			<span class="n">encoding</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--inputenc&#39;</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">),</span>
-			<span class="n">headrules</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--headrules&#39;</span><span class="p">),</span> <span class="n">markheads</span><span class="o">=</span><span class="s">&#39;--markheads&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+			<span class="n">encoding</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--inputenc&#39;</span><span class="p">,</span> <span class="s">&#39;utf8&#39;</span><span class="p">),</span>
+			<span class="n">headrules</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--headrules&#39;</span><span class="p">),</span>
+			<span class="n">extraheadrules</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--extraheadrules&#39;</span><span class="p">),</span>
 			<span class="n">ensureroot</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--ensureroot&#39;</span><span class="p">),</span> <span class="n">punct</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--punct&#39;</span><span class="p">),</span>
 			<span class="n">functions</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--functions&#39;</span><span class="p">),</span>
 			<span class="n">morphology</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--morphology&#39;</span><span class="p">),</span>
@@ -978,44 +1071,65 @@
 	<span class="n">trees</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">itertrees</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
 	<span class="k">if</span> <span class="s">&#39;--maxlen&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
 		<span class="n">maxlen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s">&#39;--maxlen&#39;</span><span class="p">])</span>
-		<span class="n">trees</span> <span class="o">=</span> <span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="ow">in</span> <span class="n">trees</span>
-				<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">maxlen</span><span class="p">)</span>
+		<span class="n">trees</span> <span class="o">=</span> <span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">trees</span>
+				<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">sent</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">maxlen</span><span class="p">)</span>
 	<span class="k">if</span> <span class="s">&#39;--renumber&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
-		<span class="n">trees</span> <span class="o">=</span> <span class="p">((</span><span class="s">&#39;</span><span class="si">%8d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">,</span> <span class="n">treesent</span><span class="p">)</span>
-				<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">treesent</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+		<span class="n">trees</span> <span class="o">=</span> <span class="p">((</span><span class="s">&#39;</span><span class="si">%8d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">_key</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
 	<span class="c"># select transformation</span>
-	<span class="n">transform</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="n">action</span><span class="p">]</span>
+	<span class="n">transform</span> <span class="o">=</span> <span class="bp">None</span>
 	<span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;binarize&#39;</span><span class="p">,</span> <span class="s">&#39;optimalbinarize&#39;</span><span class="p">):</span>
 		<span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-h&#39;</span><span class="p">,</span> <span class="mi">999</span><span class="p">))</span>
 		<span class="n">v</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-v&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+		<span class="n">revh</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-H&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 		<span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;binarize&#39;</span><span class="p">:</span>
 			<span class="n">factor</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--factor&#39;</span><span class="p">,</span> <span class="s">&#39;right&#39;</span><span class="p">)</span>
-			<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">binarize</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
-					<span class="n">leftmostunary</span><span class="o">=</span><span class="s">&#39;--leftunary&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
-					<span class="n">rightmostunary</span><span class="o">=</span><span class="s">&#39;--rightunary&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
-					<span class="n">tailmarker</span><span class="o">=</span><span class="s">&#39;$&#39;</span> <span class="k">if</span> <span class="s">&#39;--tailmarker&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+			<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">binarize</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+						<span class="n">revhorzmarkov</span><span class="o">=</span><span class="n">revh</span><span class="p">,</span>
+						<span class="n">leftmostunary</span><span class="o">=</span><span class="s">&#39;--leftunary&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+						<span class="n">rightmostunary</span><span class="o">=</span><span class="s">&#39;--rightunary&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+						<span class="n">tailmarker</span><span class="o">=</span><span class="s">&#39;$&#39;</span> <span class="k">if</span> <span class="s">&#39;--tailmarker&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+						<span class="n">direction</span><span class="o">=</span><span class="s">&#39;--direction&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+						<span class="n">headoutward</span><span class="o">=</span><span class="s">&#39;--headrules&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+						<span class="n">markhead</span><span class="o">=</span><span class="s">&#39;--markhead&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">)</span>
 		<span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;optimalbinarize&#39;</span><span class="p">:</span>
 			<span class="n">headdriven</span> <span class="o">=</span> <span class="s">&#39;--headrules&#39;</span> <span class="ow">in</span> <span class="n">opts</span>
-			<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">optimalbinarize</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">headdriven</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+			<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">optimalbinarize</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span>
+					<span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">headdriven</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 	<span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;splitdisc&#39;</span><span class="p">:</span>
-		<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">splitdiscnodes</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s">&#39;--markorigin&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">)</span>
-	<span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;unbinarize&#39;</span><span class="p">:</span>
-		<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">unbinarize</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+		<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">splitdiscnodes</span><span class="p">(</span>
+				<span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="s">&#39;--markorigin&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">)</span>
 	<span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;transform&#39;</span><span class="p">:</span>
-		<span class="n">tfs</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s">&#39;--transforms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
-		<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="p">(</span><span class="n">treebanktransforms</span><span class="o">.</span><span class="n">reversetransform</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tfs</span><span class="p">)</span>
+		<span class="n">tfs</span> <span class="o">=</span> <span class="n">treebanktransforms</span><span class="o">.</span><span class="n">expandpresets</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s">&#39;--transforms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">))</span>
+		<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="p">(</span>
+				<span class="n">treebanktransforms</span><span class="o">.</span><span class="n">reversetransform</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">tfs</span><span class="p">)</span>
 				<span class="k">if</span> <span class="s">&#39;--reverse&#39;</span> <span class="ow">in</span> <span class="n">opts</span>
-				<span class="k">else</span> <span class="n">treebanktransforms</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">tfs</span><span class="p">))</span>
-	<span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># NB: transform cannot affect (no. of) terminals</span>
-		<span class="n">trees</span> <span class="o">=</span> <span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">transform</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">),</span> <span class="n">sent</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">)</span>
+				<span class="k">else</span> <span class="n">treebanktransforms</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">sent</span><span class="p">,</span> <span class="n">tfs</span><span class="p">))</span>
+	<span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;unbinarize&#39;</span><span class="p">:</span>
+		<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">unbinarize</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;mergediscnodes&#39;</span><span class="p">:</span>
+		<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">mergediscnodes</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;introducepreterminals&#39;</span><span class="p">:</span>
+		<span class="n">transform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">introducepreterminals</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">sent</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+		<span class="k">def</span> <span class="nf">applytransform</span><span class="p">(</span><span class="n">trees</span><span class="p">):</span>
+			<span class="sd">&quot;&quot;&quot;Apply transform and yield modified items.&quot;&quot;&quot;</span>
+			<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
+				<span class="n">item</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+				<span class="k">yield</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span>
+
+		<span class="n">trees</span> <span class="o">=</span> <span class="n">applytransform</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;binarize&#39;</span> <span class="ow">and</span> <span class="s">&#39;--markovthreshold&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+			<span class="n">trees</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span>
+			<span class="n">markovthreshold</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">],</span>
+					<span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s">&#39;--markovthreshold&#39;</span><span class="p">]),</span>
+					<span class="n">revh</span> <span class="o">+</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+					<span class="n">v</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
 
 	<span class="c"># read, transform, &amp; write trees</span>
-	<span class="n">headrules</span> <span class="o">=</span> <span class="bp">None</span>
 	<span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;mst&#39;</span><span class="p">,</span> <span class="s">&#39;conll&#39;</span><span class="p">):</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--headrules&#39;</span><span class="p">):</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;need head rules for dependency conversion&#39;</span><span class="p">)</span>
-		<span class="n">headrules</span> <span class="o">=</span> <span class="n">treebanktransforms</span><span class="o">.</span><span class="n">readheadrules</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--headrules&#39;</span><span class="p">))</span>
 	<span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
 	<span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;dact&#39;</span><span class="p">:</span>
 		<span class="kn">import</span> <span class="nn">alpinocorpus</span>
@@ -1025,38 +1139,47 @@
 				<span class="s">&#39;--renumber&#39;</span><span class="p">}):</span>
 			<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span>
 					<span class="n">corpus</span><span class="o">.</span><span class="n">blocks</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-				<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%8d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n</span> <span class="k">if</span> <span class="s">&#39;--renumber&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="k">else</span> <span class="n">key</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span>
+				<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(((</span><span class="s">&#39;</span><span class="si">%8d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="s">&#39;--renumber&#39;</span> <span class="ow">in</span> <span class="n">opts</span>
+						<span class="k">else</span> <span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">),</span> <span class="n">block</span><span class="p">)</span>
 				<span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
 		<span class="k">else</span><span class="p">:</span>
-			<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
-				<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">writetree</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s">&#39;alpino&#39;</span><span class="p">))</span>
+			<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
+				<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">),</span> <span class="n">treebank</span><span class="o">.</span><span class="n">writetree</span><span class="p">(</span>
+						<span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">sent</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s">&#39;alpino&#39;</span><span class="p">,</span>
+						<span class="n">comment</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">))</span>
 				<span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
 	<span class="k">else</span><span class="p">:</span>
-		<span class="n">encoding</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;outputenc&#39;</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
-		<span class="n">outfile</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfilename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
-		<span class="c"># copy trees verbatim when only taking slice or converting encoding</span>
-		<span class="k">if</span> <span class="p">(</span><span class="n">action</span> <span class="o">==</span> <span class="s">&#39;none&#39;</span> <span class="ow">and</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--inputfmt&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-				<span class="s">&#39;--outputfmt&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="p">{</span><span class="s">&#39;--slice&#39;</span><span class="p">,</span> <span class="s">&#39;--inputenc&#39;</span><span class="p">,</span>
-				<span class="s">&#39;--outputenc&#39;</span><span class="p">,</span> <span class="s">&#39;--inputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;--outputfmt&#39;</span><span class="p">}):</span>
-			<span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">blocks</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-				<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
-				<span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
-				<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">writetree</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
-						<span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;export&#39;</span><span class="p">),</span> <span class="n">headrules</span><span class="p">))</span>
-				<span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="n">encoding</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;outputenc&#39;</span><span class="p">,</span> <span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+		<span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfilename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+			<span class="c"># copy trees verbatim when only taking slice or converting encoding</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">action</span> <span class="o">==</span> <span class="s">&#39;none&#39;</span> <span class="ow">and</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--inputfmt&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+					<span class="s">&#39;--outputfmt&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="p">{</span><span class="s">&#39;--slice&#39;</span><span class="p">,</span> <span class="s">&#39;--inputenc&#39;</span><span class="p">,</span>
+					<span class="s">&#39;--outputenc&#39;</span><span class="p">,</span> <span class="s">&#39;--inputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;--outputfmt&#39;</span><span class="p">}):</span>
+				<span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">blocks</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+					<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+					<span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;export&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;bracket&#39;</span><span class="p">:</span>
+					<span class="n">trees</span> <span class="o">=</span> <span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">canonicalize</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span> <span class="ow">and</span> <span class="n">item</span><span class="p">)</span>
+							<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;export&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;export&#39;</span><span class="p">:</span>
+					<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">treebank</span><span class="o">.</span><span class="n">EXPORTHEADER</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
+					<span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">treebank</span><span class="o">.</span><span class="n">writetree</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">sent</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+							<span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--outputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;export&#39;</span><span class="p">),</span>
+							<span class="n">comment</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">comment</span><span class="p">))</span>
+					<span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
 	<span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">ed </span><span class="si">%d</span><span class="s"> trees with action </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="s">&#39;convert&#39;</span> <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;none&#39;</span>
 			<span class="k">else</span> <span class="s">&#39;transform&#39;</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;OrderedSet&#39;</span><span class="p">,</span> <span class="s">&#39;abbr&#39;</span><span class="p">,</span> <span class="s">&#39;addbitsets&#39;</span><span class="p">,</span> <span class="s">&#39;addfanoutmarkers&#39;</span><span class="p">,</span> <span class="s">&#39;binarize&#39;</span><span class="p">,</span>
-		<span class="s">&#39;unbinarize&#39;</span><span class="p">,</span> <span class="s">&#39;canonicalize&#39;</span><span class="p">,</span> <span class="s">&#39;collapseunary&#39;</span><span class="p">,</span> <span class="s">&#39;complexity&#39;</span><span class="p">,</span>
-		<span class="s">&#39;complexityfanout&#39;</span><span class="p">,</span> <span class="s">&#39;contsets&#39;</span><span class="p">,</span> <span class="s">&#39;disc&#39;</span><span class="p">,</span> <span class="s">&#39;factorconstituent&#39;</span><span class="p">,</span>
-		<span class="s">&#39;fanout&#39;</span><span class="p">,</span> <span class="s">&#39;fanoutcomplexity&#39;</span><span class="p">,</span> <span class="s">&#39;getbits&#39;</span><span class="p">,</span> <span class="s">&#39;getyf&#39;</span><span class="p">,</span>
-		<span class="s">&#39;introducepreterminals&#39;</span><span class="p">,</span> <span class="s">&#39;mergediscnodes&#39;</span><span class="p">,</span> <span class="s">&#39;minimalbinarization&#39;</span><span class="p">,</span>
-		<span class="s">&#39;optimalbinarize&#39;</span><span class="p">,</span> <span class="s">&#39;postorder&#39;</span><span class="p">,</span> <span class="s">&#39;removefanoutmarkers&#39;</span><span class="p">,</span>
-		<span class="s">&#39;splitdiscnodes&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;binarize&#39;</span><span class="p">,</span> <span class="s">&#39;unbinarize&#39;</span><span class="p">,</span> <span class="s">&#39;collapseunary&#39;</span><span class="p">,</span> <span class="s">&#39;introducepreterminals&#39;</span><span class="p">,</span>
+		<span class="s">&#39;factorconstituent&#39;</span><span class="p">,</span> <span class="s">&#39;markovthreshold&#39;</span><span class="p">,</span> <span class="s">&#39;splitdiscnodes&#39;</span><span class="p">,</span>
+		<span class="s">&#39;mergediscnodes&#39;</span><span class="p">,</span> <span class="s">&#39;addfanoutmarkers&#39;</span><span class="p">,</span> <span class="s">&#39;removefanoutmarkers&#39;</span><span class="p">,</span>
+		<span class="s">&#39;canonicalize&#39;</span><span class="p">,</span> <span class="s">&#39;optimalbinarize&#39;</span><span class="p">,</span> <span class="s">&#39;minimalbinarization&#39;</span><span class="p">,</span>
+		<span class="s">&#39;fanout&#39;</span><span class="p">,</span> <span class="s">&#39;complexity&#39;</span><span class="p">,</span> <span class="s">&#39;complexityfanout&#39;</span><span class="p">,</span> <span class="s">&#39;fanoutcomplexity&#39;</span><span class="p">,</span>
+		<span class="s">&#39;contsets&#39;</span><span class="p">,</span> <span class="s">&#39;abbr&#39;</span><span class="p">,</span> <span class="s">&#39;getbits&#39;</span><span class="p">,</span> <span class="s">&#39;addbitsets&#39;</span><span class="p">,</span> <span class="s">&#39;getyf&#39;</span><span class="p">,</span> <span class="s">&#39;disc&#39;</span><span class="p">,</span>
+		<span class="s">&#39;treebankfanout&#39;</span><span class="p">,</span> <span class="s">&#39;OrderedSet&#39;</span><span class="p">]</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
 	<span class="n">main</span><span class="p">()</span>
@@ -1065,7 +1188,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../../index.html">Table Of Contents</a></h3>
 <ul>
@@ -1074,7 +1197,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -1091,16 +1214,16 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

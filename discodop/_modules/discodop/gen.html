@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.gen &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.gen &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,28 +23,28 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for discodop.gen</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;Generate random sentences with an LCFRS.</span>
 
 <span class="sd">Reads grammar from a text file.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
@@ -301,9 +301,13 @@
 	<span class="n">verbose</span> <span class="o">=</span> <span class="s">&quot;--verbose&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
 	<span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;--verbose&#39;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+	<span class="k">if</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="ow">or</span> <span class="s">&#39;-h&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
 		<span class="k">return</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&quot;incorrect number of arguments:&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">rules</span> <span class="o">=</span> <span class="p">(</span><span class="n">gzip</span><span class="o">.</span><span class="n">open</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;.gz&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">open</span><span class="p">)(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 	<span class="n">lexicon</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getreader</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)((</span><span class="n">gzip</span><span class="o">.</span><span class="n">open</span>
 			<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;.gz&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">open</span><span class="p">)(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
@@ -317,9 +321,9 @@
 		<span class="k">print</span><span class="p">(</span><span class="s">&quot;[</span><span class="si">%g</span><span class="s">] </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="o">.</span><span class="n">pop</span><span class="p">())))</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Grammar&#39;</span><span class="p">,</span> <span class="s">&#39;LexicalRule&#39;</span><span class="p">,</span> <span class="s">&#39;Rule&#39;</span><span class="p">,</span> <span class="s">&#39;arraytoyf&#39;</span><span class="p">,</span> <span class="s">&#39;chooserule&#39;</span><span class="p">,</span>
-		<span class="s">&#39;compose&#39;</span><span class="p">,</span> <span class="s">&#39;gen&#39;</span><span class="p">,</span> <span class="s">&#39;parsefrac&#39;</span><span class="p">,</span> <span class="s">&#39;read_bitpar_grammar&#39;</span><span class="p">,</span>
-		<span class="s">&#39;read_lcfrs_grammar&#39;</span><span class="p">,</span> <span class="s">&#39;splitgrammar&#39;</span><span class="p">,</span> <span class="s">&#39;yfarray&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Grammar&#39;</span><span class="p">,</span> <span class="s">&#39;LexicalRule&#39;</span><span class="p">,</span> <span class="s">&#39;Rule&#39;</span><span class="p">,</span> <span class="s">&#39;gen&#39;</span><span class="p">,</span> <span class="s">&#39;chooserule&#39;</span><span class="p">,</span> <span class="s">&#39;compose&#39;</span><span class="p">,</span>
+		<span class="s">&#39;parsefrac&#39;</span><span class="p">,</span> <span class="s">&#39;read_lcfrs_grammar&#39;</span><span class="p">,</span> <span class="s">&#39;read_bitpar_grammar&#39;</span><span class="p">,</span>
+		<span class="s">&#39;splitgrammar&#39;</span><span class="p">,</span> <span class="s">&#39;yfarray&#39;</span><span class="p">,</span> <span class="s">&#39;arraytoyf&#39;</span><span class="p">]</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
 	<span class="n">main</span><span class="p">()</span>
@@ -328,7 +332,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../../index.html">Table Of Contents</a></h3>
 <ul>
@@ -337,7 +341,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -354,16 +358,16 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -9,15 +9,15 @@ discodop.gen
 
    .. autosummary::
    
-      arraytoyf
+      gen
       chooserule
       compose
-      gen
       parsefrac
-      read_bitpar_grammar
       read_lcfrs_grammar
+      read_bitpar_grammar
       splitgrammar
       yfarray
+      arraytoyf
    
    
 

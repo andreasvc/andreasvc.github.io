@@ -1,0 +1,29 @@
+discodop.heads
+==============
+
+.. automodule:: discodop.heads
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ishead
+      getheadpos
+      readheadrules
+      headfinder
+      ptbheadfinder
+      sethead
+      saveheads
+      headstats
+   
+   
+
+   
+   
+   
+
+   
+   
+   

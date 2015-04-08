@@ -1,0 +1,24 @@
+discodop.functiontags
+=====================
+
+.. automodule:: discodop.functiontags
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      trainfunctionclassifier
+      applyfunctionclassifier
+      functionfeatures
+   
+   
+
+   
+   
+   
+
+   
+   
+   

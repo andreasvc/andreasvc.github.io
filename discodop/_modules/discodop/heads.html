@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.heads &mdash; Disco-DOP 0.5pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for discodop.heads</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Functions related to finding the linguistic head of a constituent.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span><span class="p">,</span> \
+		<span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">discodop.tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="kn">from</span> <span class="nn">discodop</span> <span class="kn">import</span> <span class="n">punctuation</span>
+
+<span class="n">FIELDS</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">WORD</span><span class="p">,</span> <span class="n">LEMMA</span><span class="p">,</span> <span class="n">TAG</span><span class="p">,</span> <span class="n">MORPH</span><span class="p">,</span> <span class="n">FUNC</span><span class="p">,</span> <span class="n">PARENT</span><span class="p">,</span> <span class="n">SECEDGETAG</span><span class="p">,</span> <span class="n">SECEDGEPARENT</span> <span class="o">=</span> <span class="n">FIELDS</span>
+<span class="n">HEADRULERE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;^(\S+)\s+(LEFT-TO-RIGHT|RIGHT-TO-LEFT)(?:\s+(.*))?$&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ishead"><a class="viewcode-back" href="../../api/discodop.heads.html#discodop.heads.ishead">[docs]</a><span class="k">def</span> <span class="nf">ishead</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Test whether this node is the head of the parent constituent.&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s">&#39;head&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="getheadpos"><a class="viewcode-back" href="../../api/discodop.heads.html#discodop.heads.getheadpos">[docs]</a><span class="k">def</span> <span class="nf">getheadpos</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Get head word dominated by this node.&quot;&quot;&quot;</span>
+	<span class="n">child</span> <span class="o">=</span> <span class="n">node</span>
+	<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">child</span><span class="p">:</span>
+			<span class="k">break</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Tree</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">child</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">child</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">child</span> <span class="k">if</span> <span class="n">ishead</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+		<span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+			<span class="k">break</span>
+	<span class="k">return</span> <span class="bp">None</span>
+
+</div>
+<div class="viewcode-block" id="readheadrules"><a class="viewcode-back" href="../../api/discodop.heads.html#discodop.heads.readheadrules">[docs]</a><span class="k">def</span> <span class="nf">readheadrules</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Read a file containing heuristic rules for head assignment.</span>
+
+<span class="sd">	Example line: ``s right-to-left vmfin vafin vaimp``, which means</span>
+<span class="sd">	traverse siblings of an S constituent from right to left, the first child</span>
+<span class="sd">	with a label of vmfin, vafin, or vaimp will be marked as head.&quot;&quot;&quot;</span>
+	<span class="n">headrules</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf8&#39;</span><span class="p">):</span>
+		<span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">line</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;%&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">label</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">heads</span> <span class="o">=</span> <span class="n">HEADRULERE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+			<span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+				<span class="k">print</span><span class="p">(</span><span class="s">&#39;no match:&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+				<span class="k">raise</span>
+			<span class="k">if</span> <span class="n">heads</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+				<span class="n">heads</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+			<span class="n">headrules</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">direction</span><span class="p">,</span> <span class="n">heads</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+	<span class="k">return</span> <span class="n">headrules</span>
+
+</div>
+<div class="viewcode-block" id="headfinder"><a class="viewcode-back" href="../../api/discodop.heads.html#discodop.heads.headfinder">[docs]</a><span class="k">def</span> <span class="nf">headfinder</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">headrules</span><span class="p">,</span> <span class="n">headlabels</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s">&#39;HD&#39;</span><span class="p">})):</span>
+	<span class="sd">&quot;&quot;&quot;Use head finding rules to select one child of tree node as head.&quot;&quot;&quot;</span>
+	<span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+			<span class="ow">and</span> <span class="n">headlabels</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">source</span><span class="p">[</span><span class="n">FUNC</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">))]</span>
+	<span class="k">if</span> <span class="n">candidates</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">children</span> <span class="o">=</span> <span class="n">tree</span>
+	<span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">heads</span> <span class="ow">in</span> <span class="n">headrules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="p">[]):</span>
+		<span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;LEFT-TO-RIGHT&#39;</span><span class="p">:</span>
+			<span class="n">children</span> <span class="o">=</span> <span class="n">tree</span>
+		<span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;RIGHT-TO-LEFT&#39;</span><span class="p">:</span>
+			<span class="n">children</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;expected RIGHT-TO-LEFT or LEFT-TO-RIGHT.&#39;</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">heads</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+				<span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span>
+						<span class="ow">and</span> <span class="n">child</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">head</span><span class="p">):</span>
+					<span class="k">return</span> <span class="n">child</span>
+	<span class="c"># default head is initial/last nonterminal (depending on direction)</span>
+	<span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span>
+				<span class="ow">and</span> <span class="ow">not</span> <span class="n">punctuation</span><span class="o">.</span><span class="n">ispunct</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">label</span><span class="p">)):</span>
+			<span class="k">return</span> <span class="n">child</span>
+
+</div>
+<div class="viewcode-block" id="ptbheadfinder"><a class="viewcode-back" href="../../api/discodop.heads.html#discodop.heads.ptbheadfinder">[docs]</a><span class="k">def</span> <span class="nf">ptbheadfinder</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">headrules</span><span class="p">,</span> <span class="n">headlabels</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s">&#39;HD&#39;</span><span class="p">}),</span> <span class="n">dptb</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;PTB-specific head rules for co-ordination, NPs and WH elements.&quot;&quot;&quot;</span>
+	<span class="n">head</span> <span class="o">=</span> <span class="bp">None</span>
+	<span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s">&#39;NP&#39;</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">tree</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s">&#39;POS&#39;</span><span class="p">:</span>
+			<span class="n">head</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">rhslabels</span> <span class="ow">in</span> <span class="p">(</span>
+					<span class="p">{</span><span class="s">&#39;NN&#39;</span><span class="p">,</span> <span class="s">&#39;NNP&#39;</span><span class="p">,</span> <span class="s">&#39;NNPS&#39;</span><span class="p">,</span> <span class="s">&#39;NNS&#39;</span><span class="p">,</span> <span class="s">&#39;NX&#39;</span><span class="p">,</span> <span class="s">&#39;POS&#39;</span><span class="p">,</span> <span class="s">&#39;JR&#39;</span><span class="p">},</span>
+					<span class="p">{</span><span class="s">&#39;NP&#39;</span><span class="p">},</span>
+					<span class="p">{</span><span class="s">&#39;$.&#39;</span><span class="p">,</span> <span class="s">&#39;ADJP&#39;</span><span class="p">,</span> <span class="s">&#39;PRN&#39;</span><span class="p">},</span>
+					<span class="p">{</span><span class="s">&#39;CD&#39;</span><span class="p">},</span>
+					<span class="p">{</span><span class="s">&#39;JJ&#39;</span><span class="p">,</span> <span class="s">&#39;JJS&#39;</span><span class="p">,</span> <span class="s">&#39;RB&#39;</span><span class="p">,</span> <span class="s">&#39;QP&#39;</span><span class="p">}):</span>
+				<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+					<span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">rhslabels</span> <span class="ow">or</span> <span class="p">(</span><span class="n">dptb</span>
+							<span class="ow">and</span> <span class="n">a</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;WH&#39;</span><span class="p">)</span>
+							<span class="ow">and</span> <span class="n">a</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="ow">in</span> <span class="n">rhslabels</span><span class="p">):</span>
+						<span class="n">head</span> <span class="o">=</span> <span class="n">a</span>
+						<span class="k">break</span>
+				<span class="k">if</span> <span class="n">head</span><span class="p">:</span>
+					<span class="k">break</span>
+			<span class="k">if</span> <span class="n">head</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+				<span class="n">head</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">head</span> <span class="o">=</span> <span class="n">headfinder</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">headrules</span><span class="p">,</span> <span class="n">headlabels</span><span class="p">)</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="p">{</span><span class="s">&#39;CC&#39;</span><span class="p">,</span> <span class="s">&#39;CONJP&#39;</span><span class="p">}:</span>
+			<span class="k">for</span> <span class="n">althead</span> <span class="ow">in</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="n">punctuation</span><span class="o">.</span><span class="n">ispunct</span><span class="p">(</span><span class="n">althead</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">althead</span><span class="o">.</span><span class="n">label</span><span class="p">):</span>
+					<span class="k">return</span> <span class="n">althead</span>
+	<span class="k">return</span> <span class="n">head</span>
+
+</div>
+<div class="viewcode-block" id="sethead"><a class="viewcode-back" href="../../api/discodop.heads.html#discodop.heads.sethead">[docs]</a><span class="k">def</span> <span class="nf">sethead</span><span class="p">(</span><span class="n">child</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Mark node as head in an auxiliary field.&quot;&quot;&quot;</span>
+	<span class="n">child</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="bp">True</span>
+
+</div>
+<div class="viewcode-block" id="saveheads"><a class="viewcode-back" href="../../api/discodop.heads.html#discodop.heads.saveheads">[docs]</a><span class="k">def</span> <span class="nf">saveheads</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">tailmarker</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Store head as grammatical function when inferrable from binarization.&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="n">tailmarker</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">tailmarker</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">label</span><span class="p">):</span>
+			<span class="n">sethead</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+	<span class="c"># assume head-outward binarization; the last binarized node has the head.</span>
+	<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="s">&#39;|&lt;&#39;</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">label</span>
+			<span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+				<span class="n">n</span><span class="o">.</span><span class="n">label</span><span class="p">[:</span><span class="n">n</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;|&lt;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
+				<span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">n</span><span class="p">)):</span>
+		<span class="n">sethead</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+</div>
+<div class="viewcode-block" id="headstats"><a class="viewcode-back" href="../../api/discodop.heads.html#discodop.heads.headstats">[docs]</a><span class="k">def</span> <span class="nf">headstats</span><span class="p">(</span><span class="n">trees</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Collect some information useful for writing headrules.</span>
+
+<span class="sd">	- ``heads[&#39;NP&#39;][&#39;NN&#39;] ==`` number of times NN occurs as head of NP.</span>
+<span class="sd">	- ``pos1[&#39;NP&#39;][1] ==`` number of times head of NP is at position 1.</span>
+<span class="sd">	- ``pos2`` is like pos1, but position is from the right.</span>
+<span class="sd">	- ``unknown[&#39;NP&#39;][&#39;NN&#39;] ==`` number of times NP that does not have a head</span>
+<span class="sd">		dominates an NN.&quot;&quot;&quot;</span>
+	<span class="n">heads</span><span class="p">,</span> <span class="n">unknown</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Counter</span><span class="p">),</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
+	<span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Counter</span><span class="p">),</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+				<span class="k">if</span> <span class="n">ishead</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+					<span class="n">heads</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">label</span><span class="p">][</span><span class="n">b</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+					<span class="n">pos1</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">label</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+					<span class="n">pos2</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">label</span><span class="p">][</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
+					<span class="k">break</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">unknown</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">a</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">heads</span><span class="p">,</span> <span class="n">unknown</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span>
+
+</div>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ishead&#39;</span><span class="p">,</span> <span class="s">&#39;getheadpos&#39;</span><span class="p">,</span> <span class="s">&#39;readheadrules&#39;</span><span class="p">,</span> <span class="s">&#39;headfinder&#39;</span><span class="p">,</span>
+		<span class="s">&#39;ptbheadfinder&#39;</span><span class="p">,</span> <span class="s">&#39;sethead&#39;</span><span class="p">,</span> <span class="s">&#39;saveheads&#39;</span><span class="p">,</span> <span class="s">&#39;headstats&#39;</span><span class="p">]</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

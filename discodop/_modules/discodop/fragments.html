@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.fragments &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.fragments &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,22 +23,22 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for discodop.fragments</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;Extract recurring tree fragments from constituency treebanks.</span>
@@ -50,27 +50,24 @@
 <span class="sd">&#39;kill %1&#39;). If the program seems stuck, re-run without multiprocessing</span>
 <span class="sd">(pass --numproc 1) to see if there might be a bug.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span><span class="p">,</span> \
+		<span class="n">unicode_literals</span>
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="s">&#39;2&#39;</span><span class="p">:</span>
-	<span class="n">imap</span> <span class="o">=</span> <span class="nb">map</span>
-<span class="k">else</span><span class="p">:</span>
-	<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">imap</span>
-<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span><span class="p">,</span> <span class="n">cpu_count</span><span class="p">,</span> <span class="n">log_to_stderr</span><span class="p">,</span> <span class="n">SUBDEBUG</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;2&#39;</span><span class="p">:</span>
+	<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">imap</span> <span class="k">as</span> <span class="nb">map</span>  <span class="c"># pylint: disable=E0611,W0622</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
 <span class="kn">from</span> <span class="nn">getopt</span> <span class="kn">import</span> <span class="n">gnu_getopt</span><span class="p">,</span> <span class="n">GetoptError</span>
 <span class="kn">from</span> <span class="nn">discodop.tree</span> <span class="kn">import</span> <span class="n">Tree</span>
 <span class="kn">from</span> <span class="nn">discodop.treebank</span> <span class="kn">import</span> <span class="n">READERS</span>
 <span class="kn">from</span> <span class="nn">discodop.treetransforms</span> <span class="kn">import</span> <span class="n">binarize</span><span class="p">,</span> <span class="n">introducepreterminals</span><span class="p">,</span> <span class="n">unbinarize</span>
-<span class="kn">from</span> <span class="nn">discodop._fragments</span> <span class="kn">import</span> <span class="n">readtreebank</span><span class="p">,</span> <span class="n">getctrees</span><span class="p">,</span> \
-		<span class="n">extractfragments</span><span class="p">,</span> <span class="n">exactcounts</span><span class="p">,</span> \
-		<span class="n">completebitsets</span><span class="p">,</span> <span class="n">coverbitsets</span>
+<span class="kn">from</span> <span class="nn">discodop</span> <span class="kn">import</span> <span class="n">_fragments</span>
 <span class="kn">from</span> <span class="nn">discodop.parser</span> <span class="kn">import</span> <span class="n">workerfunc</span>
 
 <span class="n">USAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span><span class="se">\</span>
@@ -83,21 +80,23 @@
 <span class="s">Frequencies refer to the first treebank by default.</span>
 <span class="s">Output is sent to stdout; to save the results, redirect to a file.</span>
 <span class="s">Options:</span>
-<span class="s">  --fmt=[</span><span class="si">%(fmts)s</span><span class="s">]</span>
+<span class="s">  --fmt=(</span><span class="si">%(fmts)s</span><span class="s">)</span>
 <span class="s">                when format is not &#39;bracket&#39;, work with discontinuous trees;</span>
 <span class="s">                output is in &#39;discbracket&#39; format:</span>
 <span class="s">                tree&lt;TAB&gt;sentence&lt;TAB&gt;frequency</span>
 <span class="s">                where &#39;tree&#39; has indices as leaves, referring to elements of</span>
 <span class="s">                &#39;sentence&#39;, a space separated list of words.</span>
 <span class="s">  -o file       Write output to &#39;file&#39; instead of stdout.</span>
-<span class="s">  --indices     report sets of indices instead of frequencies.</span>
-<span class="s">  --cover       include all depth-1 fragments of first treebank corresponding</span>
-<span class="s">                to single productions.</span>
+<span class="s">  --indices     report sets of 0-based indices instead of frequencies.</span>
+<span class="s">  --cover=n[,m] include all non-maximal/non-recurring fragments up to depth n</span>
+<span class="s">                of first treebank; optionally, limit number of substitution</span>
+<span class="s">				sites to m.</span>
 <span class="s">  --complete    find complete matches of fragments from treebank1 (needle) in</span>
 <span class="s">                treebank2 (haystack); frequencies are from haystack.</span>
 <span class="s">  --batch=dir   enable batch mode; any number of treebanks &gt; 1 can be given;</span>
-<span class="s">                first treebank will be compared to all others.</span>
+<span class="s">                first treebank (A) will be compared to all others (B).</span>
 <span class="s">                Results are written to filenames of the form dir/A_B.</span>
+<span class="s">                Counts/indices are from B.</span>
 <span class="s">  --numproc=n   use n independent processes, to enable multi-core usage</span>
 <span class="s">                (default: 1); use 0 to detect the number of CPUs.</span>
 <span class="s">  --numtrees=n  only read first n trees from first treebank</span>
@@ -114,61 +113,70 @@
 <span class="s">  --quiet       disable all messages.</span><span class="se">\</span>
 <span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmts</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">READERS</span><span class="p">))</span>
 
-<span class="n">FLAGS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;approx&#39;</span><span class="p">,</span> <span class="s">&#39;indices&#39;</span><span class="p">,</span> <span class="s">&#39;nofreq&#39;</span><span class="p">,</span> <span class="s">&#39;complete&#39;</span><span class="p">,</span> <span class="s">&#39;complement&#39;</span><span class="p">,</span> <span class="s">&#39;cover&#39;</span><span class="p">,</span>
-		<span class="s">&#39;alt&#39;</span><span class="p">,</span> <span class="s">&#39;relfreq&#39;</span><span class="p">,</span> <span class="s">&#39;twoterms&#39;</span><span class="p">,</span> <span class="s">&#39;adjacent&#39;</span><span class="p">,</span> <span class="s">&#39;debin&#39;</span><span class="p">,</span> <span class="s">&#39;debug&#39;</span><span class="p">,</span> <span class="s">&#39;quiet&#39;</span><span class="p">)</span>
-<span class="n">OPTIONS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;fmt=&#39;</span><span class="p">,</span> <span class="s">&#39;numproc=&#39;</span><span class="p">,</span> <span class="s">&#39;numtrees=&#39;</span><span class="p">,</span> <span class="s">&#39;encoding=&#39;</span><span class="p">,</span> <span class="s">&#39;batch=&#39;</span><span class="p">)</span>
+<span class="n">FLAGS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;approx&#39;</span><span class="p">,</span> <span class="s">&#39;indices&#39;</span><span class="p">,</span> <span class="s">&#39;nofreq&#39;</span><span class="p">,</span> <span class="s">&#39;complete&#39;</span><span class="p">,</span> <span class="s">&#39;complement&#39;</span><span class="p">,</span> <span class="s">&#39;alt&#39;</span><span class="p">,</span>
+<span class="s">&#39;relfreq&#39;</span><span class="p">,</span> <span class="s">&#39;twoterms&#39;</span><span class="p">,</span> <span class="s">&#39;adjacent&#39;</span><span class="p">,</span> <span class="s">&#39;debin&#39;</span><span class="p">,</span> <span class="s">&#39;debug&#39;</span><span class="p">,</span> <span class="s">&#39;quiet&#39;</span><span class="p">,</span> <span class="s">&#39;help&#39;</span><span class="p">)</span>
+<span class="n">OPTIONS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;fmt=&#39;</span><span class="p">,</span> <span class="s">&#39;numproc=&#39;</span><span class="p">,</span> <span class="s">&#39;numtrees=&#39;</span><span class="p">,</span> <span class="s">&#39;encoding=&#39;</span><span class="p">,</span> <span class="s">&#39;batch=&#39;</span><span class="p">,</span> <span class="s">&#39;cover=&#39;</span><span class="p">)</span>
 <span class="n">PARAMS</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">FRONTIERRE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;\(([^ ()]+) \)&quot;</span><span class="p">)</span>
 <span class="n">TERMRE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;\(([^ ()]+) ([^ ()]+)\)&quot;</span><span class="p">)</span>
 <span class="n">APPLY</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">_y</span><span class="p">:</span> <span class="n">x</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Command line interface to fragment extraction.&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="n">argv</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
 		<span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
 	<span class="k">try</span><span class="p">:</span>
-		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;o:&#39;</span><span class="p">,</span> <span class="n">FLAGS</span> <span class="o">+</span> <span class="n">OPTIONS</span><span class="p">)</span>
+		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;ho:&#39;</span><span class="p">,</span> <span class="n">FLAGS</span> <span class="o">+</span> <span class="n">OPTIONS</span><span class="p">)</span>
 	<span class="k">except</span> <span class="n">GetoptError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">USAGE</span><span class="p">))</span>
-		<span class="k">return</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+	<span class="k">if</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-h&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">return</span>
 
 	<span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">FLAGS</span><span class="p">:</span>
 		<span class="n">PARAMS</span><span class="p">[</span><span class="n">flag</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;--&#39;</span> <span class="o">+</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">opts</span>
 	<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--fmt&#39;</span><span class="p">,</span> <span class="s">&#39;bracket&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s">&#39;bracket&#39;</span>
 	<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--fmt&#39;</span><span class="p">,</span> <span class="s">&#39;bracket&#39;</span><span class="p">)</span>
-	<span class="n">numproc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;--numproc&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+	<span class="n">numproc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numproc&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 	<span class="k">if</span> <span class="n">numproc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 		<span class="n">numproc</span> <span class="o">=</span> <span class="n">cpu_count</span><span class="p">()</span>
 	<span class="k">if</span> <span class="ow">not</span> <span class="n">numproc</span><span class="p">:</span>
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;numproc should be an integer &gt; 0. got: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">numproc</span><span class="p">)</span>
 	<span class="n">limit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numtrees&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="ow">or</span> <span class="bp">None</span>
-	<span class="n">encoding</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;--encoding&quot;</span><span class="p">,</span> <span class="s">&quot;UTF-8&quot;</span><span class="p">)</span>
-	<span class="n">batchdir</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;--batch&quot;</span><span class="p">)</span>
+	<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;cover&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+	<span class="k">if</span> <span class="s">&#39;--cover&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">and</span> <span class="s">&#39;,&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">[</span><span class="s">&#39;--cover&#39;</span><span class="p">]:</span>
+		<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s">&#39;--cover&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+		<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;cover&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="s">&#39;--cover&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+		<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;cover&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--cover&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="mi">999</span>
+	<span class="n">encoding</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--encoding&#39;</span><span class="p">,</span> <span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+	<span class="n">batchdir</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--batch&#39;</span><span class="p">)</span>
 
 	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="s">&quot;missing treebank argument&quot;</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&#39;missing treebank argument&#39;</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">batchdir</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-		<span class="k">print</span><span class="p">(</span><span class="s">&quot;incorrect number of arguments:&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&#39;incorrect number of arguments:&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
-		<span class="k">return</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">batchdir</span><span class="p">:</span>
 		<span class="k">if</span> <span class="n">numproc</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Batch mode only supported in single-process &#39;</span>
 				<span class="s">&#39;mode. Use the xargs command for multi-processing.&#39;</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;-&#39;</span><span class="p">:</span>
-		<span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;/dev/stdin&#39;</span>
+		<span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
 	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;not found: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complete&#39;</span><span class="p">]:</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;need at least two treebanks with --complete.&#39;</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;twoterms&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;adjacent&#39;</span><span class="p">]:</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;--twoterms and --adjacent are incompatible &#39;</span>
 					<span class="s">&#39;with --complete.&#39;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complete&#39;</span><span class="p">]:</span>
-		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">batchdir</span><span class="p">:</span>
-			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;need at least two treebanks with --complete.&#39;</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;nofreq&#39;</span><span class="p">]:</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;--complete is incompatible with --nofreq &#39;</span>
 					<span class="s">&#39;and --approx&#39;</span><span class="p">)</span>
@@ -176,14 +184,14 @@
 	<span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span> <span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
 	<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;debug&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">numproc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-		<span class="n">logger</span> <span class="o">=</span> <span class="n">log_to_stderr</span><span class="p">()</span>
-		<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">SUBDEBUG</span><span class="p">)</span>
+		<span class="n">logger</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">log_to_stderr</span><span class="p">()</span>
+		<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">SUBDEBUG</span><span class="p">)</span>
 
-	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Disco-DOP Fragment Extractor&quot;</span><span class="p">)</span>
+	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Disco-DOP Fragment Extractor&#39;</span><span class="p">)</span>
 
-	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;parameters:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;    </span><span class="si">%s</span><span class="s">:</span><span class="se">\t</span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">kv</span>
+	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;parameters:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;    </span><span class="si">%s</span><span class="s">:</span><span class="se">\t</span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">kv</span>
 		<span class="k">for</span> <span class="n">kv</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">PARAMS</span><span class="o">.</span><span class="n">items</span><span class="p">())))</span>
-	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;treebank</span><span class="si">%d</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;treebank</span><span class="si">%d</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">)))</span>
 
 	<span class="k">if</span> <span class="n">numproc</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">batchdir</span><span class="p">:</span>
@@ -196,7 +204,7 @@
 			<span class="n">fragmentkeys</span> <span class="o">=</span> <span class="n">debinarize</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">)</span>
 		<span class="n">printfragments</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
-
+</div>
 <div class="viewcode-block" id="regular"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.regular">[docs]</a><span class="k">def</span> <span class="nf">regular</span><span class="p">(</span><span class="n">filenames</span><span class="p">,</span> <span class="n">numproc</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;non-batch processing. multiprocessing optional.&quot;&quot;&quot;</span>
 	<span class="n">mult</span> <span class="o">=</span> <span class="mi">1</span>
@@ -208,22 +216,21 @@
 	<span class="n">initworker</span><span class="p">(</span><span class="n">filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filenames</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
 			<span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">numproc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-		<span class="n">mymap</span> <span class="o">=</span> <span class="n">imap</span>
-		<span class="n">myapply</span> <span class="o">=</span> <span class="n">APPLY</span>
+		<span class="n">mymap</span> <span class="o">=</span> <span class="nb">map</span>
 	<span class="k">else</span><span class="p">:</span>  <span class="c"># multiprocessing, start worker processes</span>
-		<span class="n">pool</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">numproc</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">initworker</span><span class="p">,</span>
-			<span class="n">initargs</span><span class="o">=</span><span class="p">(</span><span class="n">filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-				<span class="n">filenames</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">))</span>
+		<span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span>
+				<span class="n">processes</span><span class="o">=</span><span class="n">numproc</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">initworker</span><span class="p">,</span>
+				<span class="n">initargs</span><span class="o">=</span><span class="p">(</span><span class="n">filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filenames</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+					<span class="k">else</span> <span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">))</span>
 		<span class="n">mymap</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap</span>
-		<span class="n">myapply</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">apply</span>
 	<span class="n">numtrees</span> <span class="o">=</span> <span class="p">(</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">len</span> <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="bp">None</span>
 			<span class="k">else</span> <span class="nb">min</span><span class="p">(</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">len</span><span class="p">,</span> <span class="n">limit</span><span class="p">))</span>
 
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complete&#39;</span><span class="p">]:</span>
 		<span class="n">trees1</span><span class="p">,</span> <span class="n">trees2</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees2&#39;</span><span class="p">]</span>
-		<span class="n">fragments</span> <span class="o">=</span> <span class="n">completebitsets</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span>
-				<span class="nb">max</span><span class="p">(</span><span class="n">trees1</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">,</span> <span class="p">(</span><span class="n">trees2</span> <span class="ow">or</span> <span class="n">trees1</span><span class="p">)</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">),</span>
-				<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">])</span>
+		<span class="n">fragments</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">completebitsets</span><span class="p">(</span>
+				<span class="n">trees1</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span>
+				<span class="nb">max</span><span class="p">(</span><span class="n">trees1</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">,</span> <span class="n">trees2</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">),</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">])</span>
 	<span class="k">else</span><span class="p">:</span>
 		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
 			<span class="n">work</span> <span class="o">=</span> <span class="n">workload</span><span class="p">(</span><span class="n">numtrees</span><span class="p">,</span> <span class="n">mult</span><span class="p">,</span> <span class="n">numproc</span><span class="p">)</span>
@@ -231,41 +238,45 @@
 			<span class="n">chunk</span> <span class="o">=</span> <span class="n">numtrees</span> <span class="o">//</span> <span class="p">(</span><span class="n">mult</span> <span class="o">*</span> <span class="n">numproc</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
 			<span class="n">work</span> <span class="o">=</span> <span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">chunk</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numtrees</span><span class="p">,</span> <span class="n">chunk</span><span class="p">)]</span>
 		<span class="k">if</span> <span class="n">numproc</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-			<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;work division:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;    </span><span class="si">%s</span><span class="s">:</span><span class="se">\t</span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">kv</span>
+			<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;work division:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;    </span><span class="si">%s</span><span class="s">:</span><span class="se">\t</span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">kv</span>
 				<span class="k">for</span> <span class="n">kv</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">numchunks</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">work</span><span class="p">),</span> <span class="n">mult</span><span class="o">=</span><span class="n">mult</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">())))</span>
 		<span class="n">dowork</span> <span class="o">=</span> <span class="n">mymap</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">work</span><span class="p">)</span>
-		<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">results</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dowork</span><span class="p">):</span>
+		<span class="k">for</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">dowork</span><span class="p">:</span>
 			<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">]:</span>
 				<span class="k">for</span> <span class="n">frag</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 					<span class="n">fragments</span><span class="p">[</span><span class="n">frag</span><span class="p">]</span> <span class="o">+=</span> <span class="n">x</span>
 			<span class="k">else</span><span class="p">:</span>
 				<span class="n">fragments</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
-	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;cover&#39;</span><span class="p">]:</span>
-		<span class="n">cover</span> <span class="o">=</span> <span class="n">myapply</span><span class="p">(</span><span class="n">coverfragworker</span><span class="p">,</span> <span class="p">())</span>
-		<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">]:</span>
-			<span class="n">fragments</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cover</span><span class="p">,</span>
-					<span class="n">exactcounts</span><span class="p">(</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span>
-					<span class="n">cover</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="n">fragments</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cover</span><span class="p">)</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;merged </span><span class="si">%d</span><span class="s"> cover fragments&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cover</span><span class="p">))</span>
 	<span class="n">fragmentkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;nofreq&#39;</span><span class="p">]:</span>
 		<span class="n">counts</span> <span class="o">=</span> <span class="bp">None</span>
 	<span class="k">elif</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">]:</span>
 		<span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="n">fragments</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">fragmentkeys</span><span class="p">]</span>
 	<span class="k">else</span><span class="p">:</span>
-		<span class="n">task</span> <span class="o">=</span> <span class="s">&quot;indices&quot;</span> <span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s">&quot;counts&quot;</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;dividing work for exact </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+		<span class="n">task</span> <span class="o">=</span> <span class="s">&#39;indices&#39;</span> <span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s">&#39;counts&#39;</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;dividing work for exact </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
 		<span class="n">bitsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">fragments</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">fragmentkeys</span><span class="p">]</span>
 		<span class="n">countchunk</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bitsets</span><span class="p">)</span> <span class="o">//</span> <span class="n">numproc</span> <span class="o">+</span> <span class="mi">1</span>
 		<span class="n">work</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bitsets</span><span class="p">),</span> <span class="n">countchunk</span><span class="p">))</span>
 		<span class="n">work</span> <span class="o">=</span> <span class="p">[(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">work</span><span class="p">),</span> <span class="n">bitsets</span><span class="p">[</span><span class="n">a</span><span class="p">:</span><span class="n">a</span> <span class="o">+</span> <span class="n">countchunk</span><span class="p">])</span>
 				<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">work</span><span class="p">)]</span>
 		<span class="n">counts</span> <span class="o">=</span> <span class="p">[]</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;getting exact </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;getting exact </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">mymap</span><span class="p">(</span><span class="n">exactcountworker</span><span class="p">,</span> <span class="n">work</span><span class="p">):</span>
 			<span class="n">counts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;cover&#39;</span><span class="p">]:</span>
+		<span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;cover&#39;</span><span class="p">]</span>
+		<span class="n">before</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">)</span>
+		<span class="n">cover</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">allfragments</span><span class="p">(</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">],</span>
+				<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span> <span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">],</span>
+				<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">])</span>
+		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">cover</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">a</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fragments</span><span class="p">:</span>
+				<span class="n">fragmentkeys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+				<span class="n">counts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cover</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;merged </span><span class="si">%d</span><span class="s"> cover fragments &#39;</span>
+				<span class="s">&#39;up to depth </span><span class="si">%d</span><span class="s"> with max </span><span class="si">%d</span><span class="s"> frontier non-terminals.&#39;</span><span class="p">,</span>
+				<span class="nb">len</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">)</span> <span class="o">-</span> <span class="n">before</span><span class="p">,</span> <span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">numproc</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
 		<span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 		<span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
@@ -275,13 +286,25 @@
 </div>
 <div class="viewcode-block" id="batch"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.batch">[docs]</a><span class="k">def</span> <span class="nf">batch</span><span class="p">(</span><span class="n">outputdir</span><span class="p">,</span> <span class="n">filenames</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="n">debin</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;batch processing: three or more treebanks specified.</span>
-<span class="sd">	The use case for this is when you have one big treebank which you want to</span>
-<span class="sd">	compare to lots of smaller sets of trees, and get the results for each</span>
-<span class="sd">	comparison in a separate file.&quot;&quot;&quot;</span>
+
+<span class="sd">	Compares the first treebank to all others, and writes the results</span>
+<span class="sd">	to ``outputdir/A_B`` where ``A`` and ``B`` are the respective filenames.</span>
+<span class="sd">	Counts/indices are from the other (B) treebanks.</span>
+<span class="sd">	There are at least 2 use cases for this:</span>
+
+<span class="sd">	1. Comparing one treebank to a series of others. The first treebank will</span>
+<span class="sd">		only be loaded once.</span>
+<span class="sd">	2. In combination with ``--complete``, the first treebank is a set of</span>
+<span class="sd">		fragments used as queries on the other treebanks specified.&quot;&quot;&quot;</span>
 	<span class="n">initworker</span><span class="p">(</span><span class="n">filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
 	<span class="n">trees1</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">]</span>
 	<span class="n">sents1</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">]</span>
-	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">]:</span>
+	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complete&#39;</span><span class="p">]:</span>
+		<span class="n">fragments</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">completebitsets</span><span class="p">(</span>
+				<span class="n">trees1</span><span class="p">,</span> <span class="n">sents1</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span>
+				<span class="n">trees1</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">])</span>
+		<span class="n">fragmentkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">]:</span>
 		<span class="n">fragments</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 	<span class="k">else</span><span class="p">:</span>
 		<span class="n">fragments</span> <span class="o">=</span> <span class="p">{}</span>
@@ -290,19 +313,15 @@
 			<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;prods&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;fmt&#39;</span><span class="p">],</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">))</span>
 		<span class="n">trees2</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees2&#39;</span><span class="p">]</span>
 		<span class="n">sents2</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents2&#39;</span><span class="p">]</span>
-		<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complete&#39;</span><span class="p">]:</span>
-			<span class="n">fragments</span> <span class="o">=</span> <span class="n">completebitsets</span><span class="p">(</span><span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span>
-					<span class="nb">max</span><span class="p">(</span><span class="n">trees1</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">,</span> <span class="p">(</span><span class="n">trees2</span> <span class="ow">or</span> <span class="n">trees1</span><span class="p">)</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">),</span>
-					<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">])</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="n">fragments</span> <span class="o">=</span> <span class="n">extractfragments</span><span class="p">(</span><span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
-					<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span> <span class="n">trees1</span><span class="p">,</span> <span class="n">sents1</span><span class="p">,</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complete&#39;</span><span class="p">]:</span>
+			<span class="n">fragments</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">extractfragments</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">sents1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+					<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span> <span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span><span class="p">,</span>
 					<span class="n">discontinuous</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">],</span> <span class="n">debug</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;debug&#39;</span><span class="p">],</span>
 					<span class="n">approx</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">],</span>
 					<span class="n">twoterms</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;twoterms&#39;</span><span class="p">],</span>
 					<span class="n">adjacent</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;adjacent&#39;</span><span class="p">])</span>
+			<span class="n">fragmentkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
 		<span class="n">counts</span> <span class="o">=</span> <span class="bp">None</span>
-		<span class="n">fragmentkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">fragments</span><span class="p">:</span>
 			<span class="n">counts</span> <span class="o">=</span> <span class="n">fragments</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 		<span class="k">elif</span> <span class="ow">not</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;nofreq&#39;</span><span class="p">]:</span>
@@ -310,7 +329,7 @@
 			<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;getting </span><span class="si">%s</span><span class="s"> for </span><span class="si">%d</span><span class="s"> fragments&#39;</span><span class="p">,</span>
 					<span class="s">&#39;indices of occurrence&#39;</span> <span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">]</span>
 					<span class="k">else</span> <span class="s">&#39;exact counts&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bitsets</span><span class="p">))</span>
-			<span class="n">counts</span> <span class="o">=</span> <span class="n">exactcounts</span><span class="p">(</span><span class="n">trees2</span><span class="p">,</span> <span class="n">trees1</span><span class="p">,</span> <span class="n">bitsets</span><span class="p">,</span>
+			<span class="n">counts</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">exactcounts</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">trees2</span><span class="p">,</span> <span class="n">bitsets</span><span class="p">,</span>
 					<span class="n">indices</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">])</span>
 		<span class="n">outputfilename</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">_</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">outputdir</span><span class="p">,</span>
 				<span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
@@ -318,7 +337,7 @@
 		<span class="k">if</span> <span class="n">debin</span><span class="p">:</span>
 			<span class="n">fragmentkeys</span> <span class="o">=</span> <span class="n">debinarize</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">)</span>
 		<span class="n">printfragments</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;wrote to </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">outputfilename</span><span class="p">)</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;wrote to </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">outputfilename</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="readtreebanks"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.readtreebanks">[docs]</a><span class="k">def</span> <span class="nf">readtreebanks</span><span class="p">(</span><span class="n">treebank1</span><span class="p">,</span> <span class="n">treebank2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s">&#39;bracket&#39;</span><span class="p">,</span>
@@ -326,9 +345,9 @@
 	<span class="sd">&quot;&quot;&quot;Read one or two treebanks.&quot;&quot;&quot;</span>
 	<span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
 	<span class="n">prods</span> <span class="o">=</span> <span class="p">{}</span>
-	<span class="n">trees1</span><span class="p">,</span> <span class="n">sents1</span> <span class="o">=</span> <span class="n">readtreebank</span><span class="p">(</span><span class="n">treebank1</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="p">,</span>
+	<span class="n">trees1</span><span class="p">,</span> <span class="n">sents1</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">readtreebank</span><span class="p">(</span><span class="n">treebank1</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="p">,</span>
 			<span class="n">fmt</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
-	<span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span> <span class="o">=</span> <span class="n">readtreebank</span><span class="p">(</span><span class="n">treebank2</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="p">,</span>
+	<span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">readtreebank</span><span class="p">(</span><span class="n">treebank2</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="p">,</span>
 			<span class="n">fmt</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
 	<span class="n">trees1</span><span class="o">.</span><span class="n">indextrees</span><span class="p">(</span><span class="n">prods</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">trees2</span><span class="p">:</span>
@@ -340,8 +359,9 @@
 <div class="viewcode-block" id="read2ndtreebank"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.read2ndtreebank">[docs]</a><span class="k">def</span> <span class="nf">read2ndtreebank</span><span class="p">(</span><span class="n">treebank2</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s">&#39;bracket&#39;</span><span class="p">,</span>
 		<span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Read a second treebank.&quot;&quot;&quot;</span>
-	<span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span> <span class="o">=</span> <span class="n">readtreebank</span><span class="p">(</span><span class="n">treebank2</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="p">,</span>
+	<span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">readtreebank</span><span class="p">(</span><span class="n">treebank2</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="p">,</span>
 			<span class="n">fmt</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
+	<span class="n">trees2</span><span class="o">.</span><span class="n">indextrees</span><span class="p">(</span><span class="n">prods</span><span class="p">)</span>
 	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%r</span><span class="s">: </span><span class="si">%d</span><span class="s"> trees; </span><span class="si">%d</span><span class="s"> nodes (max </span><span class="si">%d</span><span class="s">). &quot;</span>
 			<span class="s">&quot;labels: </span><span class="si">%d</span><span class="s">, prods: </span><span class="si">%d</span><span class="s">&quot;</span><span class="p">,</span>
 			<span class="n">treebank2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trees2</span><span class="p">),</span> <span class="n">trees2</span><span class="o">.</span><span class="n">numnodes</span><span class="p">,</span> <span class="n">trees2</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">,</span>
@@ -377,7 +397,7 @@
 </div>
 <div class="viewcode-block" id="initworkersimple"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.initworkersimple">[docs]</a><span class="k">def</span> <span class="nf">initworkersimple</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">disc</span><span class="p">,</span> <span class="n">trees2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sents2</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Initialization for a worker in which a treebank was already loaded.&quot;&quot;&quot;</span>
-	<span class="n">PARAMS</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">getctrees</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">disc</span><span class="p">,</span> <span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span><span class="p">))</span>
+	<span class="n">PARAMS</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_fragments</span><span class="o">.</span><span class="n">getctrees</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">disc</span><span class="p">,</span> <span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span><span class="p">))</span>
 	<span class="k">assert</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">]</span>
 
 </div>
@@ -391,7 +411,7 @@
 	<span class="n">sents2</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents2&#39;</span><span class="p">]</span>
 	<span class="k">assert</span> <span class="n">offset</span> <span class="o">&lt;</span> <span class="n">trees1</span><span class="o">.</span><span class="n">len</span>
 	<span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
-	<span class="n">result</span> <span class="o">=</span> <span class="n">extractfragments</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">sents1</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">extractfragments</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">sents1</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span>
 			<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span> <span class="n">trees2</span><span class="p">,</span> <span class="n">sents2</span><span class="p">,</span> <span class="n">approx</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;approx&#39;</span><span class="p">],</span>
 			<span class="n">discontinuous</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">],</span> <span class="n">complement</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complement&#39;</span><span class="p">],</span>
 			<span class="n">debug</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;debug&#39;</span><span class="p">],</span> <span class="n">twoterms</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;twoterms&#39;</span><span class="p">],</span>
@@ -406,30 +426,17 @@
 	<span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">bitsets</span> <span class="o">=</span> <span class="n">args</span>
 	<span class="n">trees1</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">]</span>
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complete&#39;</span><span class="p">]:</span>
-		<span class="n">results</span> <span class="o">=</span> <span class="n">exactcounts</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees2&#39;</span><span class="p">],</span> <span class="n">bitsets</span><span class="p">,</span>
+		<span class="n">results</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">exactcounts</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees2&#39;</span><span class="p">],</span> <span class="n">bitsets</span><span class="p">,</span>
 				<span class="n">indices</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">])</span>
 		<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;complete matches </span><span class="si">%d</span><span class="s"> of </span><span class="si">%d</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">results</span>
-	<span class="n">results</span> <span class="o">=</span> <span class="n">exactcounts</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">trees1</span><span class="p">,</span> <span class="n">bitsets</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">])</span>
+	<span class="n">results</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">exactcounts</span><span class="p">(</span>
+			<span class="n">trees1</span><span class="p">,</span> <span class="n">trees1</span><span class="p">,</span> <span class="n">bitsets</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">])</span>
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">]:</span>
 		<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;exact indices </span><span class="si">%d</span><span class="s"> of </span><span class="si">%d</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
 	<span class="k">else</span><span class="p">:</span>
 		<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;exact counts </span><span class="si">%d</span><span class="s"> of </span><span class="si">%d</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">results</span>
-
-</div>
-<span class="nd">@workerfunc</span>
-<div class="viewcode-block" id="coverfragworker"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.coverfragworker">[docs]</a><span class="k">def</span> <span class="nf">coverfragworker</span><span class="p">():</span>
-	<span class="sd">&quot;&quot;&quot;Worker function that gets depth-1 fragments.</span>
-
-<span class="sd">	Does not need multiprocessing but using it avoids reading the treebank</span>
-<span class="sd">	again.&quot;&quot;&quot;</span>
-	<span class="c"># TODO: expand this to extract all depth-n fragments for arbitrary n.</span>
-	<span class="n">trees1</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">]</span>
-	<span class="n">trees2</span> <span class="o">=</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees2&#39;</span><span class="p">]</span>
-	<span class="k">return</span> <span class="n">coverbitsets</span><span class="p">(</span><span class="n">trees1</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span>
-			<span class="nb">max</span><span class="p">(</span><span class="n">trees1</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">,</span> <span class="p">(</span><span class="n">trees2</span> <span class="ow">or</span> <span class="n">trees1</span><span class="p">)</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">),</span>
-			<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">])</span>
 
 </div>
 <div class="viewcode-block" id="workload"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.workload">[docs]</a><span class="k">def</span> <span class="nf">workload</span><span class="p">(</span><span class="n">numtrees</span><span class="p">,</span> <span class="n">mult</span><span class="p">,</span> <span class="n">numproc</span><span class="p">):</span>
@@ -462,8 +469,9 @@
 	<span class="k">return</span> <span class="n">result</span>
 
 </div>
-<div class="viewcode-block" id="getfragments"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.getfragments">[docs]</a><span class="k">def</span> <span class="nf">getfragments</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">numproc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">disc</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-		<span class="n">iterate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">complement</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cover</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="recurringfragments"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.recurringfragments">[docs]</a><span class="k">def</span> <span class="nf">recurringfragments</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">numproc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">disc</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="n">iterate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">complement</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxdepth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+		<span class="n">maxfrontier</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Get recurring fragments with exact counts in a single treebank.</span>
 
 <span class="sd">	:returns: a dictionary whose keys are fragments as strings, and</span>
@@ -471,10 +479,20 @@
 <span class="sd">		``(frag, sent)`` where ``frag`` is a unicode string, and ``sent``</span>
 <span class="sd">		is a list of words as unicode strings; when ``disc`` is ``False``, keys</span>
 <span class="sd">		are of the form ``frag`` where ``frag`` is a unicode string.</span>
-<span class="sd">	:param trees: a sequence of binarized Tree objects.</span>
+<span class="sd">	:param trees: a sequence of binarized Tree objects, with indices as leaves.</span>
+<span class="sd">	:param sents: the corresponding sentences (lists of strings).</span>
 <span class="sd">	:param numproc: number of processes to use; pass 0 to use detected # CPUs.</span>
-<span class="sd">	:param disc: when disc=True, assume trees with discontinuous constituents.</span>
-<span class="sd">	:param iterate, complement: see :func:`_fragments.extractfragments`&quot;&quot;&quot;</span>
+<span class="sd">	:param disc: when disc=True, assume trees with discontinuous constituents;</span>
+<span class="sd">		resulting fragments will be of the form (frag, sent);</span>
+<span class="sd">		otherwise fragments will be strings with words as leaves.</span>
+<span class="sd">	:param iterate, complement: see :func:`_fragments.extractfragments`</span>
+<span class="sd">	:param indices: when False, return integer counts instead of indices.</span>
+<span class="sd">	:param maxdepth: when &gt; 0, add &#39;cover&#39; fragments to result, corresponding</span>
+<span class="sd">		to all fragments up to given depth; pass 0 to disable.</span>
+<span class="sd">	:param maxfrontier: maximum number of frontier non-terminals (substitution</span>
+<span class="sd">		sites) in cover fragments; a limit of 0 only gives fragments that</span>
+<span class="sd">		bottom out in terminals; the default 999 is unlimited for practical</span>
+<span class="sd">		purposes.&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="n">numproc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 		<span class="n">numproc</span> <span class="o">=</span> <span class="n">cpu_count</span><span class="p">()</span>
 	<span class="n">numtrees</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span>
@@ -489,26 +507,19 @@
 	<span class="n">initworkersimple</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">sents</span><span class="p">),</span> <span class="n">disc</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">numproc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
 		<span class="n">mymap</span> <span class="o">=</span> <span class="nb">map</span>
-		<span class="n">myapply</span> <span class="o">=</span> <span class="n">APPLY</span>
 	<span class="k">else</span><span class="p">:</span>
 		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;work division:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;    </span><span class="si">%s</span><span class="s">: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">kv</span>
 				<span class="k">for</span> <span class="n">kv</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">numchunks</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">work</span><span class="p">),</span>
 					<span class="n">numproc</span><span class="o">=</span><span class="n">numproc</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">())))</span>
 		<span class="c"># start worker processes</span>
-		<span class="n">pool</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">numproc</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">initworkersimple</span><span class="p">,</span>
+		<span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span>
+				<span class="n">processes</span><span class="o">=</span><span class="n">numproc</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">initworkersimple</span><span class="p">,</span>
 				<span class="n">initargs</span><span class="o">=</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">sents</span><span class="p">),</span> <span class="n">disc</span><span class="p">))</span>
 		<span class="n">mymap</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span>
-		<span class="n">myapply</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">apply</span>
 	<span class="c"># collect recurring fragments</span>
 	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;extracting recurring fragments&quot;</span><span class="p">)</span>
 	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">mymap</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="n">work</span><span class="p">):</span>
 		<span class="n">fragments</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-	<span class="c"># add &#39;cover&#39; fragments corresponding to single productions</span>
-	<span class="k">if</span> <span class="n">cover</span><span class="p">:</span>
-		<span class="n">cover</span> <span class="o">=</span> <span class="n">myapply</span><span class="p">(</span><span class="n">coverfragworker</span><span class="p">,</span> <span class="p">())</span>
-		<span class="n">before</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
-		<span class="n">fragments</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cover</span><span class="p">)</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;merged </span><span class="si">%d</span><span class="s"> unseen cover fragments&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span> <span class="o">-</span> <span class="n">before</span><span class="p">)</span>
 	<span class="n">fragmentkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
 	<span class="n">bitsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">fragments</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">fragmentkeys</span><span class="p">]</span>
 	<span class="n">countchunk</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bitsets</span><span class="p">)</span> <span class="o">//</span> <span class="n">numproc</span> <span class="o">+</span> <span class="mi">1</span>
@@ -519,11 +530,25 @@
 	<span class="n">counts</span> <span class="o">=</span> <span class="p">[]</span>
 	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">mymap</span><span class="p">(</span><span class="n">exactcountworker</span><span class="p">,</span> <span class="n">work</span><span class="p">):</span>
 		<span class="n">counts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+	<span class="c"># add all fragments up to a given depth</span>
+	<span class="k">if</span> <span class="n">maxdepth</span><span class="p">:</span>
+		<span class="n">cover</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">allfragments</span><span class="p">(</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">],</span>
+				<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span> <span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="p">,</span> <span class="n">disc</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+		<span class="n">before</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">cover</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">a</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fragments</span><span class="p">:</span>
+				<span class="n">fragmentkeys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+				<span class="n">counts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cover</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;merged </span><span class="si">%d</span><span class="s"> cover fragments &#39;</span>
+				<span class="s">&#39;up to depth </span><span class="si">%d</span><span class="s"> with max </span><span class="si">%d</span><span class="s"> frontier non-terminals.&#39;</span><span class="p">,</span>
+				<span class="nb">len</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">)</span> <span class="o">-</span> <span class="n">before</span><span class="p">,</span> <span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">numproc</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
 		<span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 		<span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 		<span class="k">del</span> <span class="n">pool</span>
 	<span class="k">if</span> <span class="n">iterate</span><span class="p">:</span>  <span class="c"># optionally collect fragments of fragments</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">disc</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span>
 		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;extracting fragments of recurring fragments&quot;</span><span class="p">)</span>
 		<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complement&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c"># needs to be turned off if it was on</span>
 		<span class="n">newfrags</span> <span class="o">=</span> <span class="n">fragments</span>
@@ -531,8 +556,8 @@
 		<span class="n">ids</span> <span class="o">=</span> <span class="n">count</span><span class="p">()</span>
 		<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>  <span class="c"># up to 10 iterations</span>
 			<span class="n">newtrees</span> <span class="o">=</span> <span class="p">[</span><span class="n">binarize</span><span class="p">(</span>
-					<span class="n">introducepreterminals</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
-					<span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">),</span> <span class="n">childchar</span><span class="o">=</span><span class="s">&quot;}&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">tree</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">newfrags</span><span class="p">]</span>
+					<span class="n">introducepreterminals</span><span class="p">(</span><span class="n">Tree</span><span class="p">(</span><span class="n">tree</span><span class="p">),</span>
+					<span class="n">sent</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">),</span> <span class="n">childchar</span><span class="o">=</span><span class="s">&quot;}&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">tree</span><span class="p">,</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">newfrags</span><span class="p">]</span>
 			<span class="n">newsents</span> <span class="o">=</span> <span class="p">[[</span><span class="s">&quot;#</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">next</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">word</span>
 					<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">newfrags</span><span class="p">]</span>
 			<span class="n">newfrags</span><span class="p">,</span> <span class="n">newcounts</span> <span class="o">=</span> <span class="n">iteratefragments</span><span class="p">(</span>
@@ -548,10 +573,17 @@
 			<span class="n">counts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">newcounts</span><span class="p">)</span>
 			<span class="n">fragments</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">newfrags</span><span class="p">,</span> <span class="n">newcounts</span><span class="p">))</span>
 	<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;found </span><span class="si">%d</span><span class="s"> fragments&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">))</span>
-	<span class="k">if</span> <span class="ow">not</span> <span class="n">disc</span><span class="p">:</span>
-		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">):</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">,</span> <span class="n">counts</span><span class="p">)}</span>
-	<span class="k">return</span> <span class="p">{(</span><span class="n">a</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">b</span><span class="p">):</span> <span class="n">c</span>
-			<span class="k">for</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">,</span> <span class="n">counts</span><span class="p">)}</span>
+	<span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">fragmentkeys</span><span class="p">,</span> <span class="n">counts</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="allfragments"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.allfragments">[docs]</a><span class="k">def</span> <span class="nf">allfragments</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Return all fragments up to a certain depth, # frontiers.&quot;&quot;&quot;</span>
+	<span class="n">PARAMS</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">disc</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">approx</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">complete</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+			<span class="n">complement</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">adjacent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">twoterms</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+	<span class="n">initworkersimple</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">sents</span><span class="p">),</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">])</span>
+	<span class="k">return</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">allfragments</span><span class="p">(</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">],</span>
+			<span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span> <span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="p">,</span>
+			<span class="n">discontinuous</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">],</span> <span class="n">indices</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">])</span>
 
 </div>
 <div class="viewcode-block" id="iteratefragments"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.iteratefragments">[docs]</a><span class="k">def</span> <span class="nf">iteratefragments</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="n">newtrees</span><span class="p">,</span> <span class="n">newsents</span><span class="p">,</span> <span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">numproc</span><span class="p">):</span>
@@ -564,7 +596,8 @@
 		<span class="n">mymap</span> <span class="o">=</span> <span class="nb">map</span>
 	<span class="k">else</span><span class="p">:</span>
 		<span class="c"># since the input trees change, we need a new pool each time</span>
-		<span class="n">pool</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">numproc</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">initworkersimple</span><span class="p">,</span>
+		<span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span>
+				<span class="n">processes</span><span class="o">=</span><span class="n">numproc</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">initworkersimple</span><span class="p">,</span>
 				<span class="n">initargs</span><span class="o">=</span><span class="p">(</span><span class="n">newtrees</span><span class="p">,</span> <span class="n">newsents</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">],</span> <span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">))</span>
 		<span class="n">mymap</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap</span>
 	<span class="n">newfragments</span> <span class="o">=</span> <span class="p">{}</span>
@@ -601,8 +634,8 @@
 <span class="sd">	Quote terminals with double quotes terminal: -&gt; &quot;terminal&quot;</span>
 <span class="sd">	Remove parentheses around frontier nodes: (NN ) -&gt; NN</span>
 
-<span class="sd">	&gt;&gt;&gt; altrepr(&quot;(NP (DT a) (NN ))&quot;)</span>
-<span class="sd">	&#39;(NP (DT &quot;a&quot;) NN)&#39;</span>
+<span class="sd">	&gt;&gt;&gt; print(altrepr(&#39;(NP (DT a) (NN ))&#39;))</span>
+<span class="sd">	(NP (DT &quot;a&quot;) NN)</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="k">return</span> <span class="n">FRONTIERRE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;\1&#39;</span><span class="p">,</span> <span class="n">TERMRE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;(\1 &quot;\2&quot;)&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s">&quot;&#39;&#39;&quot;</span><span class="p">)))</span>
 
@@ -616,8 +649,8 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="n">frag</span> <span class="o">=</span> <span class="n">origfrag</span>
 		<span class="k">try</span><span class="p">:</span>
-			<span class="n">frag</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">unbinarize</span><span class="p">(</span><span class="n">Tree</span><span class="p">(</span><span class="n">frag</span><span class="p">)))</span>
-		<span class="k">except</span><span class="p">:</span>
+			<span class="n">frag</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">unbinarize</span><span class="p">(</span><span class="n">Tree</span><span class="p">(</span><span class="n">frag</span><span class="p">))</span>
+		<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c"># pylint: disable=broad-except</span>
 			<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">origfrag</span><span class="p">)</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">frag</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">frag</span><span class="p">)</span>
@@ -629,18 +662,20 @@
 	<span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
 		<span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
 		<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="n">out</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)(</span><span class="n">out</span><span class="p">)</span>
+			<span class="n">out</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)(</span><span class="n">out</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;alt&#39;</span><span class="p">]:</span>
 		<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fragments</span><span class="p">):</span>
 			<span class="n">fragments</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">altrepr</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;complete&#39;</span><span class="p">]:</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;total number of matches: </span><span class="si">%d</span><span class="s">&quot;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">counts</span><span class="p">))</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;total number of matches: </span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span>
+				<span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">(</span><span class="n">counts</span><span class="p">))</span>
 	<span class="k">else</span><span class="p">:</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;number of fragments: </span><span class="si">%d</span><span class="s">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">))</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;number of fragments: </span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">))</span>
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;nofreq&#39;</span><span class="p">]:</span>
 		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">fragments</span><span class="p">:</span>
-			<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">((</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">),</span>
-					<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">((</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+					<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
 					<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">a</span><span class="p">))</span>
 		<span class="k">return</span>
 	<span class="c"># a frequency of 0 is normal when counting occurrences of given fragments</span>
@@ -660,47 +695,55 @@
 	<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;indices&#39;</span><span class="p">]:</span>
 		<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">theindices</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="n">counts</span><span class="p">):</span>
 			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">theindices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
-				<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%r</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">((</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">),</span>
-					<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
-					<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">a</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">),</span>
+				<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%r</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">((</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+					<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+					<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">a</span><span class="p">,</span>
 					<span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">theindices</span><span class="o">.</span><span class="n">elements</span><span class="p">())</span>
 						<span class="k">if</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">theindices</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">theindices</span><span class="p">]</span>
 					<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;adjacent&#39;</span><span class="p">]</span> <span class="k">else</span>
 					<span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">theindices</span><span class="o">.</span><span class="n">elements</span><span class="p">()))))</span>
 			<span class="k">elif</span> <span class="n">zeroinvalid</span><span class="p">:</span>
-				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;invalid fragment--frequency=1: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">a</span><span class="p">)</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;invalid fragment--frequency=1: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span><span class="p">)</span>
 	<span class="k">elif</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;relfreq&#39;</span><span class="p">]:</span>
 		<span class="n">sums</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="n">counts</span><span class="p">):</span>
 			<span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
 				<span class="n">sums</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)]]</span> <span class="o">+=</span> <span class="n">freq</span>
 			<span class="k">elif</span> <span class="n">zeroinvalid</span><span class="p">:</span>
-				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;invalid fragment--frequency=</span><span class="si">%d</span><span class="s">: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;invalid fragment--frequency=</span><span class="si">%d</span><span class="s">: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
 					<span class="n">freq</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>
 		<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="n">counts</span><span class="p">):</span>
-			<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%d</span><span class="s">/</span><span class="si">%d</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">((</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">),</span>
-				<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
-				<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">a</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">),</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%d</span><span class="s">/</span><span class="si">%d</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">((</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+				<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+				<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">a</span><span class="p">,</span>
 				<span class="n">freq</span><span class="p">,</span> <span class="n">sums</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)]]))</span>
 	<span class="k">else</span><span class="p">:</span>
 		<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="n">counts</span><span class="p">):</span>
 			<span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
-				<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%d</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">((</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">),</span>
-					<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
-					<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">a</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">freq</span><span class="p">))</span>
+				<span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%d</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">((</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+					<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+					<span class="k">if</span> <span class="n">PARAMS</span><span class="p">[</span><span class="s">&#39;disc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">a</span><span class="p">,</span> <span class="n">freq</span><span class="p">))</span>
 			<span class="k">elif</span> <span class="n">zeroinvalid</span><span class="p">:</span>
-				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;invalid fragment--frequency=1: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">a</span><span class="p">)</span>
+				<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;invalid fragment--frequency=1: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="cpu_count"><a class="viewcode-back" href="../../api/discodop.fragments.html#discodop.fragments.cpu_count">[docs]</a><span class="k">def</span> <span class="nf">cpu_count</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;Return number of CPUs or 1.&quot;&quot;&quot;</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+	<span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+		<span class="k">return</span> <span class="mi">1</span>
 
 </div>
 <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
 	<span class="sd">&quot;&quot;&quot;Demonstration of fragment extractor.&quot;&quot;&quot;</span>
-	<span class="n">main</span><span class="p">(</span><span class="s">&quot;fragments.py --disc alpinosample.export&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+	<span class="n">main</span><span class="p">(</span><span class="s">&#39;fragments.py --fmt=export alpinosample.export&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;altrepr&#39;</span><span class="p">,</span> <span class="s">&#39;batch&#39;</span><span class="p">,</span> <span class="s">&#39;coverfragworker&#39;</span><span class="p">,</span> <span class="s">&#39;debinarize&#39;</span><span class="p">,</span>
-		<span class="s">&#39;exactcountworker&#39;</span><span class="p">,</span> <span class="s">&#39;getfragments&#39;</span><span class="p">,</span> <span class="s">&#39;initworker&#39;</span><span class="p">,</span> <span class="s">&#39;initworkersimple&#39;</span><span class="p">,</span>
-		<span class="s">&#39;iteratefragments&#39;</span><span class="p">,</span> <span class="s">&#39;printfragments&#39;</span><span class="p">,</span> <span class="s">&#39;read2ndtreebank&#39;</span><span class="p">,</span>
-		<span class="s">&#39;readtreebanks&#39;</span><span class="p">,</span> <span class="s">&#39;regular&#39;</span><span class="p">,</span> <span class="s">&#39;worker&#39;</span><span class="p">,</span> <span class="s">&#39;workload&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;main&#39;</span><span class="p">,</span> <span class="s">&#39;regular&#39;</span><span class="p">,</span> <span class="s">&#39;batch&#39;</span><span class="p">,</span> <span class="s">&#39;readtreebanks&#39;</span><span class="p">,</span> <span class="s">&#39;read2ndtreebank&#39;</span><span class="p">,</span>
+		<span class="s">&#39;initworker&#39;</span><span class="p">,</span> <span class="s">&#39;initworkersimple&#39;</span><span class="p">,</span> <span class="s">&#39;worker&#39;</span><span class="p">,</span> <span class="s">&#39;exactcountworker&#39;</span><span class="p">,</span>
+		<span class="s">&#39;workload&#39;</span><span class="p">,</span> <span class="s">&#39;recurringfragments&#39;</span><span class="p">,</span> <span class="s">&#39;iteratefragments&#39;</span><span class="p">,</span> <span class="s">&#39;allfragments&#39;</span><span class="p">,</span>
+		<span class="s">&#39;debinarize&#39;</span><span class="p">,</span> <span class="s">&#39;printfragments&#39;</span><span class="p">,</span> <span class="s">&#39;altrepr&#39;</span><span class="p">,</span> <span class="s">&#39;cpu_count&#39;</span><span class="p">]</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
 	<span class="n">main</span><span class="p">()</span>
@@ -709,7 +752,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../../index.html">Table Of Contents</a></h3>
 <ul>
@@ -718,7 +761,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -735,16 +778,16 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

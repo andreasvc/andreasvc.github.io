@@ -13,11 +13,12 @@ discodop.grammar
       treebankgrammar
       dopreduction
       doubledop
+      dop1
+      dopgrammar
       compiletsg
       sortgrammar
       flatten
       nodefreq
-      eqtree
       quotelabel
       rangeheads
       ranges
@@ -28,8 +29,9 @@ discodop.grammar
       write_lncky_grammar
       subsetgrammar
       grammarinfo
-      convertweight
       grammarstats
+      splitweight
+      convertweight
       stripweight
       sumrules
       sumlex

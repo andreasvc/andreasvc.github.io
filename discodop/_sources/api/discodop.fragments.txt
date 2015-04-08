@@ -9,21 +9,23 @@ discodop.fragments
 
    .. autosummary::
    
-      altrepr
+      main
+      regular
       batch
-      coverfragworker
-      debinarize
-      exactcountworker
-      getfragments
+      readtreebanks
+      read2ndtreebank
       initworker
       initworkersimple
-      iteratefragments
-      printfragments
-      read2ndtreebank
-      readtreebanks
-      regular
       worker
+      exactcountworker
       workload
+      recurringfragments
+      iteratefragments
+      allfragments
+      debinarize
+      printfragments
+      altrepr
+      cpu_count
    
    
 

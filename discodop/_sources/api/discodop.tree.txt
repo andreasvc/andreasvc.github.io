@@ -21,11 +21,8 @@ discodop.tree
    
       Tree
       ImmutableTree
-      AbstractParentedTree
       ParentedTree
       ImmutableParentedTree
-      MultiParentedTree
-      ImmutableMultiParentedTree
    
    
 

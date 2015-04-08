@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.estimates &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.estimates &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.kbest" href="discodop.kbest.html" />
     <link rel="prev" title="discodop.disambiguation" href="discodop.disambiguation.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,16 +38,16 @@
         <li class="right" >
           <a href="discodop.disambiguation.html" title="discodop.disambiguation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.estimates">
 <span id="discodop-estimates"></span><h1>discodop.estimates<a class="headerlink" href="#module-discodop.estimates" title="Permalink to this headline">¶</a></h1>
@@ -65,22 +65,22 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.estimates.getestimates" title="discodop.estimates.getestimates"><tt class="xref py py-obj docutils literal"><span class="pre">getestimates</span></tt></a>(Grammar&nbsp;grammar,&nbsp;UInt&nbsp;maxlen,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.estimates.getestimates" title="discodop.estimates.getestimates"><code class="xref py py-obj docutils literal"><span class="pre">getestimates</span></code></a>(Grammar&nbsp;grammar,&nbsp;...)</td>
 <td>Compute table of outside SX simple LR estimates for a PLCFRS.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.estimates.getpcfgestimates" title="discodop.estimates.getpcfgestimates"><tt class="xref py py-obj docutils literal"><span class="pre">getpcfgestimates</span></tt></a>(Grammar&nbsp;grammar,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.estimates.getpcfgestimates" title="discodop.estimates.getpcfgestimates"><code class="xref py py-obj docutils literal"><span class="pre">getpcfgestimates</span></code></a>(Grammar&nbsp;grammar,&nbsp;...)</td>
 <td>Compute table of outside SX estimates for a PCFG.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.estimates.getpcfgestimates" title="discodop.estimates.getpcfgestimates"><tt class="xref py py-obj docutils literal"><span class="pre">getpcfgestimates</span></tt></a>(Grammar&nbsp;grammar,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.estimates.getpcfgestimates" title="discodop.estimates.getpcfgestimates"><code class="xref py py-obj docutils literal"><span class="pre">getpcfgestimates</span></code></a>(Grammar&nbsp;grammar,&nbsp;...)</td>
 <td>Compute table of outside SX estimates for a PCFG.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.estimates.inside" title="discodop.estimates.inside"><tt class="xref py py-obj docutils literal"><span class="pre">inside</span></tt></a>(Grammar&nbsp;grammar,&nbsp;UInt&nbsp;maxlen,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.estimates.inside" title="discodop.estimates.inside"><code class="xref py py-obj docutils literal"><span class="pre">inside</span></code></a>(Grammar&nbsp;grammar,&nbsp;uint32_t&nbsp;maxlen,&nbsp;...)</td>
 <td>Compute inside estimate in bottom-up fashion, with full bit vectors.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.estimates.outsidelr" title="discodop.estimates.outsidelr"><tt class="xref py py-obj docutils literal"><span class="pre">outsidelr</span></tt></a>(Grammar&nbsp;grammar,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.estimates.outsidelr" title="discodop.estimates.outsidelr"><code class="xref py py-obj docutils literal"><span class="pre">outsidelr</span></code></a>(Grammar&nbsp;grammar,&nbsp;...)</td>
 <td>Compute the outside SX simple LR estimate in top down fashion.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.estimates.simpleinside" title="discodop.estimates.simpleinside"><tt class="xref py py-obj docutils literal"><span class="pre">simpleinside</span></tt></a>(Grammar&nbsp;grammar,&nbsp;UInt&nbsp;maxlen,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.estimates.simpleinside" title="discodop.estimates.simpleinside"><code class="xref py py-obj docutils literal"><span class="pre">simpleinside</span></code></a>(Grammar&nbsp;grammar,&nbsp;...)</td>
 <td>Compute simple inside estimate in bottom-up fashion.</td>
 </tr>
 </tbody>
@@ -92,51 +92,51 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.estimates.Item" title="discodop.estimates.Item"><tt class="xref py py-obj docutils literal"><span class="pre">Item</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.estimates.Item" title="discodop.estimates.Item"><code class="xref py py-obj docutils literal"><span class="pre">Item</span></code></a></td>
 <td>Item class used in agenda for computing the  outside LR estimate.</td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="discodop.estimates.Item">
-<em class="property">class </em><tt class="descclassname">discodop.estimates.</tt><tt class="descname">Item</tt><a class="headerlink" href="#discodop.estimates.Item" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.estimates.</code><code class="descname">Item</code><a class="headerlink" href="#discodop.estimates.Item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Item class used in agenda for computing the  outside LR estimate.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.estimates.getestimates">
-<tt class="descclassname">discodop.estimates.</tt><tt class="descname">getestimates</tt><big>(</big><em>Grammar grammar</em>, <em>UInt maxlen</em>, <em>UInt goal</em><big>)</big><a class="headerlink" href="#discodop.estimates.getestimates" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.estimates.</code><code class="descname">getestimates</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>uint32_t maxlen</em>, <em>uint32_t goal</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.estimates.getestimates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute table of outside SX simple LR estimates for a PLCFRS.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.estimates.getpcfgestimates">
-<tt class="descclassname">discodop.estimates.</tt><tt class="descname">getpcfgestimates</tt><big>(</big><em>Grammar grammar</em>, <em>UInt maxlen</em>, <em>UInt goal</em>, <em>bool debug=False</em><big>)</big><a class="headerlink" href="#discodop.estimates.getpcfgestimates" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.estimates.</code><code class="descname">getpcfgestimates</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>uint32_t maxlen</em>, <em>uint32_t goal</em>, <em>bool debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.estimates.getpcfgestimates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute table of outside SX estimates for a PCFG.</p>
 </dd></dl>
 
 <dl class="function">
 <dt>
-<tt class="descclassname">discodop.estimates.</tt><tt class="descname">getpcfgestimates</tt><big>(</big><em>Grammar grammar</em>, <em>UInt maxlen</em>, <em>UInt goal</em>, <em>bool debug=False</em><big>)</big></dt>
+<code class="descclassname">discodop.estimates.</code><code class="descname">getpcfgestimates</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>uint32_t maxlen</em>, <em>uint32_t goal</em>, <em>bool debug=False</em><span class="sig-paren">)</span></dt>
 <dd><p>Compute table of outside SX estimates for a PCFG.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.estimates.inside">
-<tt class="descclassname">discodop.estimates.</tt><tt class="descname">inside</tt><big>(</big><em>Grammar grammar</em>, <em>UInt maxlen</em>, <em>dict insidescores</em><big>)</big><a class="headerlink" href="#discodop.estimates.inside" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.estimates.</code><code class="descname">inside</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>uint32_t maxlen</em>, <em>dict insidescores</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.estimates.inside" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute inside estimate in bottom-up fashion, with full bit vectors.</p>
 <p>(not used).</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.estimates.outsidelr">
-<tt class="descclassname">discodop.estimates.</tt><tt class="descname">outsidelr</tt><big>(</big><em>Grammar grammar</em>, <em>__Pyx_memviewslice insidescores</em>, <em>UInt maxlen</em>, <em>UInt goal</em>, <em>__Pyx_memviewslice outside</em><big>)</big><a class="headerlink" href="#discodop.estimates.outsidelr" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.estimates.</code><code class="descname">outsidelr</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>__Pyx_memviewslice insidescores</em>, <em>uint32_t maxlen</em>, <em>uint32_t goal</em>, <em>__Pyx_memviewslice outside</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.estimates.outsidelr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the outside SX simple LR estimate in top down fashion.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.estimates.simpleinside">
-<tt class="descclassname">discodop.estimates.</tt><tt class="descname">simpleinside</tt><big>(</big><em>Grammar grammar</em>, <em>UInt maxlen</em>, <em>__Pyx_memviewslice insidescores</em><big>)</big><a class="headerlink" href="#discodop.estimates.simpleinside" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.estimates.</code><code class="descname">simpleinside</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>uint32_t maxlen</em>, <em>__Pyx_memviewslice insidescores</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.estimates.simpleinside" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute simple inside estimate in bottom-up fashion.
 Here vec is actually the length (number of terminals in the yield of
 the constituent)
@@ -150,7 +150,7 @@ values that have yet to be computed.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -166,7 +166,7 @@ values that have yet to be computed.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -183,7 +183,7 @@ values that have yet to be computed.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -192,14 +192,14 @@ values that have yet to be computed.</p>
         <li class="right" >
           <a href="discodop.disambiguation.html" title="discodop.disambiguation"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

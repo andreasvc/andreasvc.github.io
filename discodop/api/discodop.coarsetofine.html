@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.coarsetofine &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.coarsetofine &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.containers" href="discodop.containers.html" />
     <link rel="prev" title="discodop.bit" href="discodop.bit.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,16 +38,16 @@
         <li class="right" >
           <a href="discodop.bit.html" title="discodop.bit"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.coarsetofine">
 <span id="discodop-coarsetofine"></span><h1>discodop.coarsetofine<a class="headerlink" href="#module-discodop.coarsetofine" title="Permalink to this headline">¶</a></h1>
@@ -59,89 +59,37 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.bitparkbestitems" title="discodop.coarsetofine.bitparkbestitems"><tt class="xref py py-obj docutils literal"><span class="pre">bitparkbestitems</span></tt></a>(Chart&nbsp;chart,&nbsp;int&nbsp;k,&nbsp;...)</td>
-<td>Produce ChartItems occurring in a dictionary of derivations.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.doctf" title="discodop.coarsetofine.doctf"><tt class="xref py py-obj docutils literal"><span class="pre">doctf</span></tt></a>(coarse,&nbsp;fine,&nbsp;sent,&nbsp;tree,&nbsp;k,&nbsp;split[,&nbsp;...])</td>
-<td>Test coarse-to-fine methods on a sentence.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.getinside" title="discodop.coarsetofine.getinside"><tt class="xref py py-obj docutils literal"><span class="pre">getinside</span></tt></a>(Chart&nbsp;chart)</td>
-<td>Compute inside probabilities for a chart given its parse forest.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.getoutside" title="discodop.coarsetofine.getoutside"><tt class="xref py py-obj docutils literal"><span class="pre">getoutside</span></tt></a>(Chart&nbsp;chart)</td>
-<td>Compute outside probabilities for a chart given its parse forest.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.posteriorthreshold" title="discodop.coarsetofine.posteriorthreshold"><tt class="xref py py-obj docutils literal"><span class="pre">posteriorthreshold</span></tt></a>(Chart&nbsp;chart,&nbsp;double&nbsp;threshold)</td>
-<td>Get posterior prob.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.prunechart" title="discodop.coarsetofine.prunechart"><tt class="xref py py-obj docutils literal"><span class="pre">prunechart</span></tt></a>(Chart&nbsp;coarsechart,&nbsp;Grammar&nbsp;fine,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.prunechart" title="discodop.coarsetofine.prunechart"><code class="xref py py-obj docutils literal"><span class="pre">prunechart</span></code></a>(Chart&nbsp;coarsechart,&nbsp;Grammar&nbsp;fine,&nbsp;...)</td>
 <td>Produce a white list of selected chart items.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.whitelistfromposteriors" title="discodop.coarsetofine.whitelistfromposteriors"><tt class="xref py py-obj docutils literal"><span class="pre">whitelistfromposteriors</span></tt></a>(inside,&nbsp;outside,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.bitparkbestitems" title="discodop.coarsetofine.bitparkbestitems"><code class="xref py py-obj docutils literal"><span class="pre">bitparkbestitems</span></code></a>(Chart&nbsp;chart,&nbsp;int&nbsp;k,&nbsp;...)</td>
+<td>Produce ChartItems occurring in a dictionary of derivations.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.whitelistfromposteriors" title="discodop.coarsetofine.whitelistfromposteriors"><code class="xref py py-obj docutils literal"><span class="pre">whitelistfromposteriors</span></code></a>(inside,&nbsp;outside,&nbsp;...)</td>
 <td>Compute posterior probabilities &amp; prune away cells below a threshold.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.whitelistfromposteriors_matrix" title="discodop.coarsetofine.whitelistfromposteriors_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">whitelistfromposteriors_matrix</span></tt></a>(inside,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.whitelistfromposteriors_matrix" title="discodop.coarsetofine.whitelistfromposteriors_matrix"><code class="xref py py-obj docutils literal"><span class="pre">whitelistfromposteriors_matrix</span></code></a>(inside,&nbsp;...)</td>
 <td>Compute posterior probabilities &amp; prune away cells below a threshold.</td>
 </tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="discodop.coarsetofine.bitparkbestitems">
-<tt class="descclassname">discodop.coarsetofine.</tt><tt class="descname">bitparkbestitems</tt><big>(</big><em>Chart chart</em>, <em>int k</em>, <em>bool finecfg</em><big>)</big><a class="headerlink" href="#discodop.coarsetofine.bitparkbestitems" title="Permalink to this definition">¶</a></dt>
-<dd><p>Produce ChartItems occurring in a dictionary of derivations.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>chart</strong> &#8211; a chart where rankededges is a dictionary of CFG derivations.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.posteriorthreshold" title="discodop.coarsetofine.posteriorthreshold"><code class="xref py py-obj docutils literal"><span class="pre">posteriorthreshold</span></code></a>(Chart&nbsp;chart,&nbsp;double&nbsp;threshold)</td>
+<td>Prune labeled spans from chart below given posterior threshold.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary of ChartItems (mapping to None) occurring in the
-derivations.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.getinside" title="discodop.coarsetofine.getinside"><code class="xref py py-obj docutils literal"><span class="pre">getinside</span></code></a>(Chart&nbsp;chart)</td>
+<td>Compute inside probabilities for a chart given its parse forest.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.getoutside" title="discodop.coarsetofine.getoutside"><code class="xref py py-obj docutils literal"><span class="pre">getoutside</span></code></a>(Chart&nbsp;chart)</td>
+<td>Compute outside probabilities for a chart given its parse forest.</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.coarsetofine.doctf">
-<tt class="descclassname">discodop.coarsetofine.</tt><tt class="descname">doctf</tt><big>(</big><em>coarse</em>, <em>fine</em>, <em>sent</em>, <em>tree</em>, <em>k</em>, <em>split</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#discodop.coarsetofine.doctf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test coarse-to-fine methods on a sentence.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.coarsetofine.getinside">
-<tt class="descclassname">discodop.coarsetofine.</tt><tt class="descname">getinside</tt><big>(</big><em>Chart chart</em><big>)</big><a class="headerlink" href="#discodop.coarsetofine.getinside" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute inside probabilities for a chart given its parse forest.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.coarsetofine.getoutside">
-<tt class="descclassname">discodop.coarsetofine.</tt><tt class="descname">getoutside</tt><big>(</big><em>Chart chart</em><big>)</big><a class="headerlink" href="#discodop.coarsetofine.getoutside" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute outside probabilities for a chart given its parse forest.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.coarsetofine.posteriorthreshold">
-<tt class="descclassname">discodop.coarsetofine.</tt><tt class="descname">posteriorthreshold</tt><big>(</big><em>Chart chart</em>, <em>double threshold</em><big>)</big><a class="headerlink" href="#discodop.coarsetofine.posteriorthreshold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get posterior prob. for parse forest &amp; prune away cells below threshold.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary of remaining items</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="function">
 <dt id="discodop.coarsetofine.prunechart">
-<tt class="descclassname">discodop.coarsetofine.</tt><tt class="descname">prunechart</tt><big>(</big><em>Chart coarsechart</em>, <em>Grammar fine</em>, <em>k</em>, <em>bool splitprune</em>, <em>bool markorigin</em>, <em>bool finecfg</em>, <em>bool bitpar</em><big>)</big><a class="headerlink" href="#discodop.coarsetofine.prunechart" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.coarsetofine.</code><code class="descname">prunechart</code><span class="sig-paren">(</span><em>Chart coarsechart</em>, <em>Grammar fine</em>, <em>k</em>, <em>bool splitprune</em>, <em>bool markorigin</em>, <em>bool finecfg</em>, <em>bool bitpar</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.prunechart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Produce a white list of selected chart items.</p>
-<p>The criterion is that they occur in the <cite>k</cite>-best derivations of <tt class="docutils literal"><span class="pre">chart</span></tt>,
-or with posterior probability &gt; <cite>k</cite>. Labels <tt class="docutils literal"><span class="pre">X</span></tt> in <tt class="docutils literal"><span class="pre">coarse.toid</span></tt> are
-projected to the labels in the mapping of the fine grammar, e.g., to <tt class="docutils literal"><span class="pre">X</span></tt>
-and <tt class="docutils literal"><span class="pre">X&#64;n-m</span></tt> for a DOP reduction.</p>
+<p>The criterion is that they occur in the <cite>k</cite>-best derivations of <code class="docutils literal"><span class="pre">chart</span></code>,
+or with posterior probability &gt; <cite>k</cite>. Labels <code class="docutils literal"><span class="pre">X</span></code> in <code class="docutils literal"><span class="pre">coarse.toid</span></code> are
+projected to the labels in the mapping of the fine grammar, e.g., to <code class="docutils literal"><span class="pre">X</span></code>
+and <code class="docutils literal"><span class="pre">X&#64;n-m</span></code> for a DOP reduction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -149,13 +97,13 @@ and <tt class="docutils literal"><span class="pre">X&#64;n-m</span></tt> for a D
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>coarsechart</strong> &#8211; a Chart object produced by the PCFG or PLCFRS parser,
 or derivations from bitpar.</li>
-<li><strong>coarse</strong> &#8211; the grammar with which <tt class="docutils literal"><span class="pre">chart</span></tt> was produced.</li>
+<li><strong>coarse</strong> &#8211; the grammar with which <code class="docutils literal"><span class="pre">chart</span></code> was produced.</li>
 <li><strong>fine</strong> &#8211; the grammar to map labels to after pruning. must have a
-mapping to the coarse grammar established by <tt class="docutils literal"><span class="pre">fine.getmapping()</span></tt>.</li>
-<li><strong>k</strong> &#8211; when <tt class="docutils literal"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">1</span></tt>: number of <cite>k</cite>-best derivations to consider;
-when <tt class="docutils literal"><span class="pre">k==0</span></tt>, the chart is not pruned but filtered to contain only
+mapping to the coarse grammar established by <code class="docutils literal"><span class="pre">fine.getmapping()</span></code>.</li>
+<li><strong>k</strong> &#8211; when <code class="docutils literal"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">1</span></code>: number of <cite>k</cite>-best derivations to consider;
+when <code class="docutils literal"><span class="pre">k==0</span></code>, the chart is not pruned but filtered to contain only
 items that contribute to a complete derivation;
-when <tt class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">k</span> <span class="pre">&lt;</span> <span class="pre">1</span></tt>, inside-outside probabilities are computed and items
+when <code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">k</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>, inside-outside probabilities are computed and items
 with a posterior probabilities &lt; <cite>k</cite> are pruned.</li>
 <li><strong>splitprune</strong> &#8211; coarse stage used a split-PCFG where discontinuous node
 appear as multiple CFG nodes. Every discontinuous node will result
@@ -176,9 +124,9 @@ map to the discontinuous node NP_2.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">whitelisted:</th><td class="field-body"><tt class="docutils literal"><span class="pre">whitelist[label][item]</span> <span class="pre">==</span> <span class="pre">None</span></tt></td>
+<tr class="field-odd field"><th class="field-name">whitelisted:</th><td class="field-body"><code class="docutils literal"><span class="pre">whitelist[label][item]</span> <span class="pre">==</span> <span class="pre">None</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">blocked:</th><td class="field-body"><tt class="docutils literal"><span class="pre">item</span> <span class="pre">not</span> <span class="pre">in</span> <span class="pre">whitelist[label]</span></tt></td>
+<tr class="field-even field"><th class="field-name">blocked:</th><td class="field-body"><code class="docutils literal"><span class="pre">item</span> <span class="pre">not</span> <span class="pre">in</span> <span class="pre">whitelist[label]</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -188,9 +136,9 @@ map to the discontinuous node NP_2.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">whitelisted:</th><td class="field-body"><tt class="docutils literal"><span class="pre">whitelist[span][label]</span> <span class="pre">==</span> <span class="pre">None</span></tt></td>
+<tr class="field-odd field"><th class="field-name">whitelisted:</th><td class="field-body"><code class="docutils literal"><span class="pre">whitelist[span][label]</span> <span class="pre">==</span> <span class="pre">None</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">blocked:</th><td class="field-body"><tt class="docutils literal"><span class="pre">label</span> <span class="pre">not</span> <span class="pre">in</span> <span class="pre">whitelist[cell]</span></tt></td>
+<tr class="field-even field"><th class="field-name">blocked:</th><td class="field-body"><code class="docutils literal"><span class="pre">label</span> <span class="pre">not</span> <span class="pre">in</span> <span class="pre">whitelist[cell]</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -199,16 +147,59 @@ map to the discontinuous node NP_2.</li>
 </dd></dl>
 
 <dl class="function">
+<dt id="discodop.coarsetofine.bitparkbestitems">
+<code class="descclassname">discodop.coarsetofine.</code><code class="descname">bitparkbestitems</code><span class="sig-paren">(</span><em>Chart chart</em>, <em>int k</em>, <em>bool finecfg</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.bitparkbestitems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce ChartItems occurring in a dictionary of derivations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>chart</strong> &#8211; a chart where rankededges is a dictionary of CFG derivations.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary of ChartItems (mapping to None) occurring in the
+derivations.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="discodop.coarsetofine.whitelistfromposteriors">
-<tt class="descclassname">discodop.coarsetofine.</tt><tt class="descname">whitelistfromposteriors</tt><big>(</big><em>inside</em>, <em>outside</em>, <em>start</em>, <em>Grammar coarse</em>, <em>Grammar fine</em>, <em>double threshold</em>, <em>bool splitprune</em>, <em>bool markorigin</em>, <em>bool finecfg</em><big>)</big><a class="headerlink" href="#discodop.coarsetofine.whitelistfromposteriors" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.coarsetofine.</code><code class="descname">whitelistfromposteriors</code><span class="sig-paren">(</span><em>inside</em>, <em>outside</em>, <em>start</em>, <em>Grammar coarse</em>, <em>Grammar fine</em>, <em>double threshold</em>, <em>bool splitprune</em>, <em>bool markorigin</em>, <em>bool finecfg</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.whitelistfromposteriors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute posterior probabilities &amp; prune away cells below a threshold.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.coarsetofine.whitelistfromposteriors_matrix">
-<tt class="descclassname">discodop.coarsetofine.</tt><tt class="descname">whitelistfromposteriors_matrix</tt><big>(</big><em>inside</em>, <em>outside</em>, <em>ChartItem goal</em>, <em>Grammar coarse</em>, <em>Grammar fine</em>, <em>finechart</em>, <em>short maxlen</em>, <em>double threshold</em><big>)</big><a class="headerlink" href="#discodop.coarsetofine.whitelistfromposteriors_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.coarsetofine.</code><code class="descname">whitelistfromposteriors_matrix</code><span class="sig-paren">(</span><em>inside</em>, <em>outside</em>, <em>ChartItem goal</em>, <em>Grammar coarse</em>, <em>Grammar fine</em>, <em>finechart</em>, <em>short maxlen</em>, <em>double threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.whitelistfromposteriors_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute posterior probabilities &amp; prune away cells below a threshold.</p>
 <p>This version produces a matrix with pruned spans having NaN as value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.coarsetofine.posteriorthreshold">
+<code class="descclassname">discodop.coarsetofine.</code><code class="descname">posteriorthreshold</code><span class="sig-paren">(</span><em>Chart chart</em>, <em>double threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.posteriorthreshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prune labeled spans from chart below given posterior threshold.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary of remaining items.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.coarsetofine.getinside">
+<code class="descclassname">discodop.coarsetofine.</code><code class="descname">getinside</code><span class="sig-paren">(</span><em>Chart chart</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.getinside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute inside probabilities for a chart given its parse forest.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.coarsetofine.getoutside">
+<code class="descclassname">discodop.coarsetofine.</code><code class="descname">getoutside</code><span class="sig-paren">(</span><em>Chart chart</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.getoutside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute outside probabilities for a chart given its parse forest.</p>
 </dd></dl>
 
 </div>
@@ -217,7 +208,7 @@ map to the discontinuous node NP_2.</li>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -233,7 +224,7 @@ map to the discontinuous node NP_2.</li>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -250,7 +241,7 @@ map to the discontinuous node NP_2.</li>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -259,14 +250,14 @@ map to the discontinuous node NP_2.</li>
         <li class="right" >
           <a href="discodop.bit.html" title="discodop.bit"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

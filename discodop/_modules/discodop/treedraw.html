@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.treedraw &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.treedraw &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,22 +23,22 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for discodop.treedraw</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;Discontinuous tree drawing.</span>
@@ -49,7 +49,9 @@
 <span class="sd">http://jgaa.info/accepted/2006/EschbachGuentherBecker2006.10.2.pdf</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span><span class="p">,</span> \
+		<span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
@@ -94,6 +96,7 @@
 		<span class="s">&#39;cyan&#39;</span><span class="p">:</span> <span class="mi">36</span><span class="p">,</span>
 		<span class="s">&#39;white&#39;</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span>
 <span class="p">}</span>
+<span class="n">PTBPUNC</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;-LRB-&#39;</span><span class="p">,</span> <span class="s">&#39;-RRB-&#39;</span><span class="p">,</span> <span class="s">&#39;-LCB-&#39;</span><span class="p">,</span> <span class="s">&#39;-RCB-&#39;</span><span class="p">,</span> <span class="s">&#39;-LSB-&#39;</span><span class="p">,</span> <span class="s">&#39;-RSB-&#39;</span><span class="p">,</span> <span class="s">&#39;-NONE-&#39;</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="DrawTree"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree">[docs]</a><span class="k">class</span> <span class="nc">DrawTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -107,11 +110,12 @@
 <span class="sd">		contains non-integers as leaves, a continuous phrase-structure tree</span>
 <span class="sd">		is assumed. If sent is not given and the tree contains only indices</span>
 <span class="sd">		as leaves, the indices are displayed as placeholder terminals.</span>
+<span class="sd">	:param abbr: when True, abbreviate labels longer than 5 characters.</span>
 <span class="sd">	:param highlight: Optionally, a sequence of Tree objects in `tree` which</span>
 <span class="sd">		should be highlighted. Has the effect of only applying colors to nodes</span>
 <span class="sd">		in this sequence (nodes should be given as Tree objects, terminals as</span>
 <span class="sd">		indices).</span>
-<span class="sd">	:param abbr: when True, abbreviate labels longer than 5 characters.</span>
+<span class="sd">	:param highlightfunc: Similar to ``highlight``, but affects function tags.</span>
 
 <span class="sd">	&gt;&gt;&gt; print(DrawTree(&#39;(S (NP Mary) (VP walks))&#39;).text())</span>
 <span class="sd">	... # doctest: +NORMALIZE_WHITESPACE</span>
@@ -121,7 +125,8 @@
 <span class="sd">	 |         |</span>
 <span class="sd">	Mary     walks</span>
 <span class="sd">	&quot;&quot;&quot;</span>
-	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">highlight</span><span class="o">=</span><span class="p">(),</span> <span class="n">abbr</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">abbr</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">highlight</span><span class="o">=</span><span class="p">(),</span>
+			<span class="n">highlightfunc</span><span class="o">=</span><span class="p">()):</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">sent</span> <span class="o">=</span> <span class="n">sent</span>
 		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
@@ -131,7 +136,7 @@
 			<span class="n">leaves</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">()</span>
 			<span class="k">if</span> <span class="p">(</span><span class="n">leaves</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">())</span>
 					<span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">leaves</span><span class="p">)):</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">sent</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">leaves</span><span class="p">]</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">sent</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">leaves</span><span class="p">]</span>
 			<span class="k">else</span><span class="p">:</span>
 				<span class="c"># this deals with empty nodes (frontier non-terminals)</span>
 				<span class="c"># and multiple/mixed terminals under non-terminals.</span>
@@ -150,10 +155,10 @@
 			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="ow">is</span> <span class="n">tree</span><span class="p">:</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 			<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">label</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">):</span>
-				<span class="n">n</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">label</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s">u&#39;</span><span class="se">\u2026</span><span class="s">&#39;</span>  <span class="c"># unicode &#39;...&#39; ellipsis</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">highlight</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+				<span class="n">n</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">label</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\u2026</span><span class="s">&#39;</span>  <span class="c"># unicode &#39;...&#39; ellipsis</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">highlight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlightfunc</span> <span class="o">=</span> <span class="bp">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodecoords</span><span class="p">(</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sent</span><span class="p">,</span> <span class="n">highlight</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sent</span><span class="p">,</span> <span class="n">highlight</span><span class="p">,</span> <span class="n">highlightfunc</span><span class="p">)</span>
 
 	<span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="s">&#39;3&#39;</span><span class="p">:</span>
@@ -165,7 +170,11 @@
 						<span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
 					<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">))</span>
 
-<div class="viewcode-block" id="DrawTree.nodecoords"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.nodecoords">[docs]</a>	<span class="k">def</span> <span class="nf">nodecoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">highlight</span><span class="p">):</span>
+	<span class="k">def</span> <span class="nf">_repr_svg_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Return a rich representation for IPython notebook.&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">svg</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DrawTree.nodecoords"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.nodecoords">[docs]</a>	<span class="k">def</span> <span class="nf">nodecoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">highlight</span><span class="p">,</span> <span class="n">highlightfunc</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;Produce coordinates of nodes on a grid.</span>
 
 <span class="sd">		Objective:</span>
@@ -258,7 +267,8 @@
 		<span class="n">vertline</span><span class="p">,</span> <span class="n">corner</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span>  <span class="c"># constants</span>
 		<span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">():</span>
-			<span class="n">a</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">n</span><span class="p">)</span>
+			<span class="n">a</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span>
+					<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">n</span><span class="p">)</span>
 		<span class="n">scale</span> <span class="o">=</span> <span class="mi">2</span>
 		<span class="n">crossed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 		<span class="c"># internal nodes and lexical nodes (no frontiers)</span>
@@ -268,8 +278,11 @@
 		<span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)]</span>
 		<span class="n">nodes</span> <span class="o">=</span> <span class="p">{}</span>
 		<span class="n">ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">positions</span><span class="p">)}</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">n</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ids</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-				<span class="k">if</span> <span class="ow">not</span> <span class="n">highlight</span> <span class="ow">or</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">in</span> <span class="n">highlight</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">highlight</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ids</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="n">highlight</span> <span class="ow">or</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">in</span> <span class="n">highlight</span><span class="p">}</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">highlightfunc</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ids</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">in</span> <span class="n">highlightfunc</span>
+				<span class="k">if</span> <span class="n">highlightfunc</span> <span class="k">else</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">)}</span>
 		<span class="n">levels</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxdepth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)}</span>
 		<span class="n">terminals</span> <span class="o">=</span> <span class="p">[]</span>
 		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">:</span>
@@ -293,6 +306,7 @@
 			<span class="k">if</span> <span class="n">nodes</span><span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
 				<span class="n">nodes</span><span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">=</span> <span class="s">&#39;...&#39;</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">highlightfunc</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
 			<span class="n">positions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 			<span class="n">childcols</span><span class="p">[</span><span class="n">m</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
 
@@ -359,20 +373,20 @@
 
 		<span class="k">return</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">edges</span>
 </div>
-<div class="viewcode-block" id="DrawTree.svg"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.svg">[docs]</a>	<span class="k">def</span> <span class="nf">svg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">leafcolor</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">funccolor</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="DrawTree.svg"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.svg">[docs]</a>	<span class="k">def</span> <span class="nf">svg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hscale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">hmult</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nodecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">leafcolor</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span>
+			<span class="n">funccolor</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">funcsep</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;:returns: SVG representation of a discontinuous tree.&quot;&quot;&quot;</span>
 		<span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span>
-		<span class="n">hscale</span> <span class="o">=</span> <span class="mi">40</span>
 		<span class="n">vscale</span> <span class="o">=</span> <span class="mi">25</span>
 		<span class="n">hstart</span> <span class="o">=</span> <span class="n">vstart</span> <span class="o">=</span> <span class="mi">20</span>
 		<span class="n">width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">col</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 		<span class="n">height</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 		<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;svg version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; &#39;</span>
 				<span class="s">&#39;width=&quot;</span><span class="si">%d</span><span class="s">em&quot; height=&quot;</span><span class="si">%d</span><span class="s">em&quot; viewBox=&quot;</span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s">&quot;&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
-						<span class="n">width</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span>
+						<span class="n">width</span> <span class="o">*</span> <span class="n">hmult</span><span class="p">,</span>
 						<span class="n">height</span> <span class="o">*</span> <span class="mf">2.5</span><span class="p">,</span>
 						<span class="o">-</span><span class="n">hstart</span><span class="p">,</span> <span class="o">-</span><span class="n">vstart</span><span class="p">,</span>
-						<span class="n">width</span> <span class="o">*</span> <span class="n">hscale</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">hstart</span><span class="p">,</span>
+						<span class="n">width</span> <span class="o">*</span> <span class="n">hscale</span> <span class="o">+</span> <span class="n">hmult</span> <span class="o">*</span> <span class="n">hstart</span><span class="p">,</span>
 						<span class="n">height</span> <span class="o">*</span> <span class="n">vscale</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">vstart</span><span class="p">)]</span>
 
 		<span class="n">children</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
@@ -423,25 +437,34 @@
 			<span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
 			<span class="n">x</span> <span class="o">=</span> <span class="n">column</span> <span class="o">*</span> <span class="n">hscale</span> <span class="o">+</span> <span class="n">hstart</span>
 			<span class="n">y</span> <span class="o">=</span> <span class="n">row</span> <span class="o">*</span> <span class="n">vscale</span> <span class="o">+</span> <span class="n">vstart</span>
+			<span class="n">color</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
 			<span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">:</span>
 				<span class="n">color</span> <span class="o">=</span> <span class="n">nodecolor</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">leafcolor</span>
-				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">):</span>
-					<span class="n">color</span> <span class="o">=</span> <span class="n">funccolor</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">funcsep</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="ow">and</span> <span class="n">funcsep</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span>
+					<span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PTBPUNC</span><span class="p">):</span>
+				<span class="n">cat</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">funcsep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 			<span class="k">else</span><span class="p">:</span>
-				<span class="n">color</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
-			<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&lt;text style=&quot;text-anchor: middle; fill: </span><span class="si">%s</span><span class="s">; &#39;</span>
-					<span class="s">&#39;font-size: </span><span class="si">%d</span><span class="s">px;&quot; x=&quot;</span><span class="si">%g</span><span class="s">&quot; y=&quot;</span><span class="si">%g</span><span class="s">&quot;&gt;</span><span class="si">%s</span><span class="s">&lt;/text&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
-					<span class="n">color</span><span class="p">,</span> <span class="n">fontsize</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
-					<span class="n">escape</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">node</span><span class="p">)))</span>
-
+				<span class="n">cat</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">node</span>
+				<span class="n">func</span> <span class="o">=</span> <span class="bp">None</span>
+			<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&lt;text x=&quot;</span><span class="si">%g</span><span class="s">&quot; y=&quot;</span><span class="si">%g</span><span class="s">&quot; &#39;</span>
+					<span class="s">&#39;style=&quot;text-anchor: middle; font-size: </span><span class="si">%d</span><span class="s">px;&quot; &gt;&#39;</span>
+					<span class="s">&#39;&lt;tspan style=&quot;fill: </span><span class="si">%s</span><span class="s">; &quot;&gt;</span><span class="si">%s</span><span class="s">&lt;/tspan&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+					<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fontsize</span><span class="p">,</span>
+					<span class="n">color</span><span class="p">,</span> <span class="n">escape</span><span class="p">(</span><span class="n">cat</span><span class="p">)))</span>
+			<span class="k">if</span> <span class="n">func</span><span class="p">:</span>
+				<span class="n">result</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">&lt;tspan style=&quot;fill: </span><span class="si">%s</span><span class="s">; &quot;&gt;</span><span class="si">%s</span><span class="s">&lt;/tspan&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+							<span class="n">funcsep</span><span class="p">,</span> <span class="n">funccolor</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlightfunc</span>
+							<span class="k">else</span> <span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+			<span class="n">result</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&#39;&lt;/text&gt;&#39;</span>
 		<span class="n">result</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;&lt;/svg&gt;&#39;</span><span class="p">]</span>
 		<span class="k">return</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="DrawTree.text"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.text">[docs]</a>	<span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodedist</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">unicodelines</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">html</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ansi</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
 				<span class="n">nodecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">leafcolor</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">funccolor</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span>
-				<span class="n">maxwidth</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+				<span class="n">funcsep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">maxwidth</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;:returns: ASCII art for a discontinuous tree.</span>
 
+<span class="sd">		:param nodedist: minimum number of horiziontal spaces between nodes</span>
 <span class="sd">		:param unicodelines: whether to use Unicode line drawing characters</span>
 <span class="sd">			instead of plain (7-bit) ASCII.</span>
 <span class="sd">		:param html: whether to wrap output in html code (default plain text).</span>
@@ -449,16 +472,19 @@
 <span class="sd">			(only effective when html==False).</span>
 <span class="sd">		:param leafcolor, nodecolor: specify colors of leaves and phrasal</span>
 <span class="sd">			nodes; effective when either html or ansi is True.</span>
+<span class="sd">		:param funccolor, funcsep: if ``funcsep`` is a string, it is taken as a</span>
+<span class="sd">			separator for function tags, which will be drawn with</span>
+<span class="sd">			``funccolor``.</span>
 <span class="sd">		:param maxwidth: maximum number of characters before a label starts to</span>
-<span class="sd">			wrap; pass None to disable.&quot;&quot;&quot;</span>
+<span class="sd">			wrap across multiple lines; pass None to disable.&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="n">unicodelines</span><span class="p">:</span>
-			<span class="n">horzline</span> <span class="o">=</span> <span class="s">u&#39;</span><span class="se">\u2500</span><span class="s">&#39;</span>
-			<span class="n">leftcorner</span> <span class="o">=</span> <span class="s">u&#39;</span><span class="se">\u250c</span><span class="s">&#39;</span>
-			<span class="n">rightcorner</span> <span class="o">=</span> <span class="s">u&#39;</span><span class="se">\u2510</span><span class="s">&#39;</span>
-			<span class="n">vertline</span> <span class="o">=</span> <span class="s">u&#39; </span><span class="se">\u2502</span><span class="s"> &#39;</span>
-			<span class="n">tee</span> <span class="o">=</span> <span class="n">horzline</span> <span class="o">+</span> <span class="s">u&#39;</span><span class="se">\u252C</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">horzline</span>
-			<span class="n">bottom</span> <span class="o">=</span> <span class="n">horzline</span> <span class="o">+</span> <span class="s">u&#39;</span><span class="se">\u2534</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">horzline</span>
-			<span class="n">cross</span> <span class="o">=</span> <span class="n">horzline</span> <span class="o">+</span> <span class="s">u&#39;</span><span class="se">\u253c</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">horzline</span>
+			<span class="n">horzline</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\u2500</span><span class="s">&#39;</span>
+			<span class="n">leftcorner</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\u250c</span><span class="s">&#39;</span>
+			<span class="n">rightcorner</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\u2510</span><span class="s">&#39;</span>
+			<span class="n">vertline</span> <span class="o">=</span> <span class="s">&#39; </span><span class="se">\u2502</span><span class="s"> &#39;</span>
+			<span class="n">tee</span> <span class="o">=</span> <span class="n">horzline</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\u252C</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">horzline</span>
+			<span class="n">bottom</span> <span class="o">=</span> <span class="n">horzline</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\u2534</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">horzline</span>
+			<span class="n">cross</span> <span class="o">=</span> <span class="n">horzline</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\u253c</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">horzline</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="n">horzline</span> <span class="o">=</span> <span class="s">&#39;_&#39;</span>
 			<span class="n">leftcorner</span> <span class="o">=</span> <span class="n">rightcorner</span> <span class="o">=</span> <span class="s">&#39; &#39;</span>
@@ -536,16 +562,43 @@
 						<span class="n">branchrow</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">crosscell</span><span class="p">(</span><span class="n">branchrow</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
 				<span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">maxnodewith</span><span class="p">[</span><span class="n">col</span><span class="p">])</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">text</span><span class="p">]</span>
 				<span class="n">color</span> <span class="o">=</span> <span class="n">nodecolor</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">leafcolor</span>
-				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">):</span>
-					<span class="n">color</span> <span class="o">=</span> <span class="n">funccolor</span>
 				<span class="k">if</span> <span class="n">html</span><span class="p">:</span>
 					<span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="n">escape</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">text</span><span class="p">]</span>
-					<span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">:</span>
-						<span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;font color=</span><span class="si">%s</span><span class="s">&gt;</span><span class="si">%s</span><span class="s">&lt;/font&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
-								<span class="n">color</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">text</span><span class="p">]</span>
-				<span class="k">elif</span> <span class="n">ansi</span> <span class="ow">and</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">:</span>
-					<span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;</span><span class="se">\x1b</span><span class="s">[</span><span class="si">%d</span><span class="s">;1m</span><span class="si">%s</span><span class="se">\x1b</span><span class="s">[0m&#39;</span> <span class="o">%</span> <span class="p">(</span>
-							<span class="n">ANSICOLOR</span><span class="p">[</span><span class="n">color</span><span class="p">],</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">text</span><span class="p">]</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span> <span class="ow">or</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlightfunc</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+						<span class="n">html</span> <span class="ow">or</span> <span class="n">ansi</span><span class="p">):</span>
+					<span class="n">newtext</span> <span class="o">=</span> <span class="p">[]</span>
+					<span class="n">seensep</span> <span class="o">=</span> <span class="bp">False</span>
+					<span class="c"># everything before dash in nodecolor,</span>
+					<span class="c"># after dash use funccolor</span>
+					<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+						<span class="k">if</span> <span class="p">(</span><span class="n">funcsep</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">seensep</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span>
+								<span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PTBPUNC</span>
+								<span class="ow">and</span> <span class="n">funcsep</span> <span class="ow">in</span> <span class="n">line</span><span class="p">):</span>
+							<span class="n">cat</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">funcsep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+						<span class="k">elif</span> <span class="n">seensep</span><span class="p">:</span>
+							<span class="n">cat</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">line</span>
+						<span class="k">else</span><span class="p">:</span>
+							<span class="n">cat</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">line</span><span class="p">,</span> <span class="bp">None</span>
+						<span class="k">if</span> <span class="n">cat</span> <span class="ow">and</span> <span class="p">(</span><span class="n">html</span> <span class="ow">or</span> <span class="n">ansi</span><span class="p">)</span> <span class="ow">and</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">:</span>
+							<span class="k">if</span> <span class="n">html</span><span class="p">:</span>
+								<span class="n">newtext</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;&lt;font color=</span><span class="si">%s</span><span class="s">&gt;</span><span class="si">%s</span><span class="s">&lt;/font&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+										<span class="n">color</span><span class="p">,</span> <span class="n">cat</span><span class="p">))</span>
+							<span class="k">elif</span> <span class="n">ansi</span><span class="p">:</span>
+								<span class="n">newtext</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\x1b</span><span class="s">[</span><span class="si">%d</span><span class="s">;1m</span><span class="si">%s</span><span class="se">\x1b</span><span class="s">[0m&#39;</span> <span class="o">%</span> <span class="p">(</span>
+										<span class="n">ANSICOLOR</span><span class="p">[</span><span class="n">color</span><span class="p">],</span> <span class="n">cat</span><span class="p">))</span>
+						<span class="k">elif</span> <span class="n">cat</span><span class="p">:</span>
+							<span class="n">newtext</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
+						<span class="k">if</span> <span class="n">func</span><span class="p">:</span>
+							<span class="n">seensep</span> <span class="o">=</span> <span class="bp">True</span>
+							<span class="k">if</span> <span class="n">html</span> <span class="ow">and</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlightfunc</span><span class="p">:</span>
+								<span class="n">newtext</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">&lt;font color=</span><span class="si">%s</span><span class="s">&gt;</span><span class="si">%s</span><span class="s">&lt;/font&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+										<span class="n">funcsep</span><span class="p">,</span> <span class="n">funccolor</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+							<span class="k">elif</span> <span class="n">ansi</span> <span class="ow">and</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlightfunc</span><span class="p">:</span>
+								<span class="n">newtext</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\x1b</span><span class="s">[</span><span class="si">%d</span><span class="s">;1m</span><span class="si">%s</span><span class="se">\x1b</span><span class="s">[0m&#39;</span> <span class="o">%</span> <span class="p">(</span>
+										<span class="n">funcsep</span><span class="p">,</span> <span class="n">ANSICOLOR</span><span class="p">[</span><span class="n">funccolor</span><span class="p">],</span> <span class="n">func</span><span class="p">)</span>
+							<span class="k">else</span><span class="p">:</span>
+								<span class="n">newtext</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">funcsep</span> <span class="o">+</span> <span class="n">func</span>
+					<span class="n">text</span> <span class="o">=</span> <span class="n">newtext</span>
 				<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxnodeheight</span><span class="p">[</span><span class="n">row</span><span class="p">]):</span>
 					<span class="c"># draw vertical lines in partially filled multiline node</span>
 					<span class="c"># labels, but only if it&#39;s not a frontier node.</span>
@@ -570,19 +623,18 @@
 		<span class="k">return</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">result</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
 </div>
 <div class="viewcode-block" id="DrawTree.tikzmatrix"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.tikzmatrix">[docs]</a>	<span class="k">def</span> <span class="nf">tikzmatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">leafcolor</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span>
-			<span class="n">funccolor</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">):</span>
+			<span class="n">funccolor</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">funcsep</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;Produce TiKZ code for use with LaTeX.</span>
 
 <span class="sd">		PDF can be produced with pdflatex. Uses TiKZ matrices meaning that</span>
 <span class="sd">		nodes are put into a fixed grid. Where the cells of each column all</span>
 <span class="sd">		have the same width.&quot;&quot;&quot;</span>
 		<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;</span><span class="si">%%</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="si">%%</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">a</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sent</span><span class="p">)),</span>
-			<span class="sd">r&#39;&#39;&#39;\begin{tikzpicture}[scale=1, minimum height=1.25em,</span>
-<span class="sd">			text height=1.25ex, text depth=.25ex,</span>
-<span class="sd">			inner sep=0mm, node distance=1mm]&#39;&#39;&#39;</span><span class="p">,</span>
-		<span class="s">r&#39;\footnotesize\sffamily&#39;</span><span class="p">,</span>
-		<span class="s">r&#39;\matrix[row sep=0.5cm,column sep=0.1cm] {&#39;</span><span class="p">]</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">a</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sent</span><span class="p">)),</span>
+				<span class="sd">r&#39;&#39;&#39;\begin{tikzpicture}[scale=0.75, align=center,</span>
+<span class="sd">				inner sep=0mm, node distance=1mm]&#39;&#39;&#39;</span><span class="p">,</span>
+				<span class="s">r&#39;\footnotesize\sffamily&#39;</span><span class="p">,</span>
+				<span class="s">r&#39;\matrix[row sep=0.5cm,column sep=0.1cm] {&#39;</span><span class="p">]</span>
 
 		<span class="c"># write matrix with nodes</span>
 		<span class="n">matrix</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
@@ -598,19 +650,22 @@
 				<span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">matrix</span><span class="p">[</span><span class="n">row</span><span class="p">]:</span>
 					<span class="n">n</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
 					<span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+					<span class="n">cat</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="s">&#39;&#39;</span>
 					<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">):</span>
-						<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">):</span>
-							<span class="n">color</span> <span class="o">=</span> <span class="n">funccolor</span>
-						<span class="k">else</span><span class="p">:</span>
-							<span class="n">color</span> <span class="o">=</span> <span class="n">nodecolor</span>
-						<span class="n">label</span> <span class="o">=</span> <span class="n">latexlabel</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+						<span class="n">color</span> <span class="o">=</span> <span class="n">nodecolor</span>
+						<span class="k">if</span> <span class="p">(</span><span class="n">funcsep</span> <span class="ow">and</span> <span class="n">funcsep</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span>
+								<span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PTBPUNC</span><span class="p">):</span>
+							<span class="n">cat</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">funcsep</span><span class="p">)</span>
+							<span class="n">func</span> <span class="o">=</span> <span class="s">r&#39;</span><span class="si">%s</span><span class="s">\textcolor{</span><span class="si">%s</span><span class="s">}{</span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span> <span class="p">(</span>
+									<span class="n">funcsep</span><span class="p">,</span> <span class="n">funccolor</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+						<span class="n">label</span> <span class="o">=</span> <span class="n">latexlabel</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
 					<span class="k">else</span><span class="p">:</span>
 						<span class="n">color</span> <span class="o">=</span> <span class="n">leafcolor</span>
 						<span class="n">label</span> <span class="o">=</span> <span class="n">node</span>
 					<span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">:</span>
 						<span class="n">color</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
-					<span class="n">line</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">r&#39;\node [</span><span class="si">%s</span><span class="s">] (n</span><span class="si">%d</span><span class="s">) { </span><span class="si">%s</span><span class="s"> };&#39;</span> <span class="o">%</span> <span class="p">(</span>
-							<span class="n">color</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+					<span class="n">line</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">r&#39;\node (n</span><span class="si">%d</span><span class="s">) { \textcolor{</span><span class="si">%s</span><span class="s">}{</span><span class="si">%s</span><span class="s">}</span><span class="si">%s</span><span class="s"> };&#39;</span> <span class="o">%</span> <span class="p">(</span>
+							<span class="n">n</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">func</span><span class="p">))</span>
 				<span class="n">line</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;&amp;&#39;</span><span class="p">)</span>
 			<span class="c"># new row: skip last column char &#39;&amp;&#39;, add newline</span>
 			<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">r&#39; </span><span class="se">\\</span><span class="s">&#39;</span><span class="p">)</span>
@@ -618,36 +673,40 @@
 		<span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tikzedges</span><span class="p">())</span>
 		<span class="k">return</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DrawTree.tikznode"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.tikznode">[docs]</a>	<span class="k">def</span> <span class="nf">tikznode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">leafcolor</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">funccolor</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="DrawTree.tikznode"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.tikznode">[docs]</a>	<span class="k">def</span> <span class="nf">tikznode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">leafcolor</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span>
+			<span class="n">funccolor</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">funcsep</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;Produce TiKZ code to draw a tree.</span>
 
 <span class="sd">		Nodes are drawn with the \\node command so they can have arbitrary</span>
 <span class="sd">		coordinates.&quot;&quot;&quot;</span>
 		<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;</span><span class="si">%%</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="si">%%</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">a</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sent</span><span class="p">)),</span>
-			<span class="sd">r&#39;&#39;&#39;\begin{tikzpicture}[scale=0.75, minimum height=1.25em,</span>
-<span class="sd">			text height=1.25ex, text depth=.25ex,</span>
-<span class="sd">			inner sep=0mm, node distance=1mm]&#39;&#39;&#39;</span><span class="p">,</span>
-		<span class="s">r&#39;\footnotesize\sffamily&#39;</span><span class="p">,</span>
-		<span class="s">r&#39;\path&#39;</span><span class="p">]</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">a</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sent</span><span class="p">)),</span>
+				<span class="sd">r&#39;&#39;&#39;\begin{tikzpicture}[scale=0.75, align=center,</span>
+<span class="sd">				inner sep=0mm, node distance=1mm]&#39;&#39;&#39;</span><span class="p">,</span>
+				<span class="s">r&#39;\footnotesize\sffamily&#39;</span><span class="p">,</span>
+				<span class="s">r&#39;\path&#39;</span><span class="p">]</span>
 
 		<span class="n">bottom</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 		<span class="c"># write nodes with coordinates</span>
 		<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 			<span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+			<span class="n">func</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
 			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">):</span>
-				<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">):</span>
-					<span class="n">color</span> <span class="o">=</span> <span class="n">funccolor</span>
-				<span class="k">else</span><span class="p">:</span>
-					<span class="n">color</span> <span class="o">=</span> <span class="n">nodecolor</span>
-				<span class="n">label</span> <span class="o">=</span> <span class="n">latexlabel</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+				<span class="n">cat</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span>
+				<span class="n">color</span> <span class="o">=</span> <span class="n">nodecolor</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">funcsep</span> <span class="ow">and</span> <span class="n">funcsep</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span>
+						<span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PTBPUNC</span><span class="p">):</span>
+					<span class="n">cat</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">funcsep</span><span class="p">)</span>
+					<span class="n">func</span> <span class="o">=</span> <span class="s">r&#39;</span><span class="si">%s</span><span class="s">\textcolor{</span><span class="si">%s</span><span class="s">}{</span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span> <span class="p">(</span>
+							<span class="n">funcsep</span><span class="p">,</span> <span class="n">funccolor</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+				<span class="n">label</span> <span class="o">=</span> <span class="n">latexlabel</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
 			<span class="k">else</span><span class="p">:</span>
 				<span class="n">color</span> <span class="o">=</span> <span class="n">leafcolor</span>
 				<span class="n">label</span> <span class="o">=</span> <span class="n">node</span>
 			<span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">:</span>
 				<span class="n">color</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
-			<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">(</span><span class="si">%d</span><span class="s">, </span><span class="si">%d</span><span class="s">) node [</span><span class="si">%s</span><span class="s">] (n</span><span class="si">%d</span><span class="s">) {</span><span class="si">%s</span><span class="s">}&#39;</span>
-					<span class="o">%</span> <span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">row</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+			<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">r&#39;	(</span><span class="si">%d</span><span class="s">, </span><span class="si">%d</span><span class="s">) node (n</span><span class="si">%d</span><span class="s">) { \textcolor{</span><span class="si">%s</span><span class="s">}{</span><span class="si">%s</span><span class="s">}</span><span class="si">%s</span><span class="s"> }&#39;</span>
+					<span class="o">%</span> <span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">row</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">func</span><span class="p">))</span>
 		<span class="n">result</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;;&#39;</span><span class="p">]</span>
 		<span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tikzedges</span><span class="p">())</span>
 		<span class="k">return</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -809,7 +868,7 @@
 <span class="s">			0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16</span>
 <span class="s">			Mit einer Messe in der Sixtinischen Kapelle ist das Konklave </span><span class="se">\</span>
 <span class="s">				offiziell zu Ende gegangen .&#39;&#39;&#39;</span>
-	<span class="n">trees</span> <span class="o">=</span> <span class="p">[</span><span class="n">Tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">parse_leaf</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">trees</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()]</span>
+	<span class="n">trees</span> <span class="o">=</span> <span class="p">[</span><span class="n">Tree</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">trees</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()]</span>
 	<span class="n">sents</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">sents</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()]</span>
 	<span class="n">sents</span><span class="o">.</span><span class="n">extend</span><span class="p">([[</span><span class="s">&#39;Wake&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;up&#39;</span><span class="p">],</span>
 		<span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s">&#39;your&#39;</span><span class="p">,</span> <span class="s">&#39;friend&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">]])</span>
@@ -831,15 +890,16 @@
 	<span class="n">flags</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;help&#39;</span><span class="p">,</span> <span class="s">&#39;abbr&#39;</span><span class="p">,</span> <span class="s">&#39;plain&#39;</span><span class="p">)</span>
 	<span class="n">options</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;fmt=&#39;</span><span class="p">,</span> <span class="s">&#39;encoding=&#39;</span><span class="p">,</span> <span class="s">&#39;functions=&#39;</span><span class="p">,</span> <span class="s">&#39;morphology=&#39;</span><span class="p">,</span> <span class="s">&#39;numtrees=&#39;</span><span class="p">)</span>
 	<span class="k">try</span><span class="p">:</span>
-		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;n:&#39;</span><span class="p">,</span> <span class="n">flags</span> <span class="o">+</span> <span class="n">options</span><span class="p">)</span>
+		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;hn:&#39;</span><span class="p">,</span> <span class="n">flags</span> <span class="o">+</span> <span class="n">options</span><span class="p">)</span>
 	<span class="k">except</span> <span class="n">GetoptError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error: </span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">USAGE</span><span class="p">))</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
 	<span class="k">if</span> <span class="s">&#39;--test&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
 		<span class="n">test</span><span class="p">()</span>
 		<span class="k">return</span>
-	<span class="k">elif</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+	<span class="k">elif</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-h&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
 		<span class="k">return</span>
 	<span class="n">limit</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numtrees&#39;</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-n&#39;</span><span class="p">))</span>
@@ -862,11 +922,16 @@
 			<span class="k">for</span> <span class="n">trees</span><span class="p">,</span> <span class="n">sents</span> <span class="ow">in</span> <span class="n">corpora</span><span class="p">:</span>
 				<span class="n">tree</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">trees</span><span class="p">[</span><span class="n">sentid</span><span class="p">],</span> <span class="n">sents</span><span class="p">[</span><span class="n">sentid</span><span class="p">]</span>
 				<span class="k">print</span><span class="p">(</span><span class="n">DrawTree</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">abbr</span><span class="o">=</span><span class="s">&#39;--abbr&#39;</span> <span class="ow">in</span> <span class="n">opts</span>
-						<span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">unicodelines</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ansi</span><span class="o">=</span><span class="s">&#39;--plain&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">))</span>
+						<span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">unicodelines</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ansi</span><span class="o">=</span><span class="s">&#39;--plain&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+						<span class="n">funcsep</span><span class="o">=</span><span class="s">&#39;-&#39;</span> <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--functions&#39;</span><span class="p">)</span>
+							<span class="ow">in</span> <span class="p">(</span><span class="s">&#39;add&#39;</span><span class="p">,</span> <span class="s">&#39;between&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="bp">None</span><span class="p">))</span>
 	<span class="k">else</span><span class="p">:</span>  <span class="c"># read from stdin + detect format</span>
-		<span class="n">reader</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getreader</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--encoding&#39;</span><span class="p">,</span> <span class="s">&#39;utf8&#39;</span><span class="p">))</span>
-		<span class="n">stdin</span> <span class="o">=</span> <span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
-				<span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="n">reader</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">))</span>
+		<span class="n">encoding</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--encoding&#39;</span><span class="p">,</span> <span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+			<span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">()]</span>
+		<span class="n">stdin</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
+				<span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
 		<span class="n">trees</span> <span class="o">=</span> <span class="n">islice</span><span class="p">(</span><span class="n">incrementaltreereader</span><span class="p">(</span><span class="n">stdin</span><span class="p">,</span>
 				<span class="n">morphology</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--morphology&#39;</span><span class="p">),</span>
 				<span class="n">functions</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--functions&#39;</span><span class="p">)),</span>
@@ -875,7 +940,9 @@
 			<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">rest</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
 				<span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">. (len=</span><span class="si">%d</span><span class="s">): </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">),</span> <span class="n">rest</span><span class="p">))</span>
 				<span class="k">print</span><span class="p">(</span><span class="n">DrawTree</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">abbr</span><span class="o">=</span><span class="s">&#39;--abbr&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-						<span class="n">unicodelines</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ansi</span><span class="o">=</span><span class="s">&#39;--plain&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">))</span>
+						<span class="n">unicodelines</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ansi</span><span class="o">=</span><span class="s">&#39;--plain&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+						<span class="n">funcsep</span><span class="o">=</span><span class="s">&#39;-&#39;</span> <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--functions&#39;</span><span class="p">)</span>
+							<span class="ow">in</span> <span class="p">(</span><span class="s">&#39;add&#39;</span><span class="p">,</span> <span class="s">&#39;between&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="bp">None</span><span class="p">))</span>
 		<span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">):</span>
 			<span class="k">pass</span>
 
@@ -889,7 +956,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../../index.html">Table Of Contents</a></h3>
 <ul>
@@ -898,7 +965,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -915,16 +982,16 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="../../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

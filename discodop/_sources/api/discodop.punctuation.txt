@@ -1,0 +1,28 @@
+discodop.punctuation
+====================
+
+.. automodule:: discodop.punctuation
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ispunct
+      punctremove
+      punctprune
+      punctroot
+      punctlower
+      punctraise
+      balancedpunctraise
+   
+   
+
+   
+   
+   
+
+   
+   
+   

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.treedist &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.treedist &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.treedraw" href="discodop.treedraw.html" />
     <link rel="prev" title="discodop.treebanktransforms" href="discodop.treebanktransforms.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,16 +38,16 @@
         <li class="right" >
           <a href="discodop.treebanktransforms.html" title="discodop.treebanktransforms"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.treedist">
 <span id="discodop-treedist"></span><h1>discodop.treedist<a class="headerlink" href="#module-discodop.treedist" title="Permalink to this headline">¶</a></h1>
@@ -64,19 +64,19 @@ Licensed under a BSD style license.</li>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.prepare" title="discodop.treedist.prepare"><tt class="xref py py-obj docutils literal"><span class="pre">prepare</span></tt></a>(tree[,&nbsp;includeterms])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.prepare" title="discodop.treedist.prepare"><code class="xref py py-obj docutils literal"><span class="pre">prepare</span></code></a>(tree[,&nbsp;includeterms])</td>
 <td>Return a copy of tree prepared for tree edit distance calculation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treedist.strdist" title="discodop.treedist.strdist"><tt class="xref py py-obj docutils literal"><span class="pre">strdist</span></tt></a>(a,&nbsp;b)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treedist.strdist" title="discodop.treedist.strdist"><code class="xref py py-obj docutils literal"><span class="pre">strdist</span></code></a>(a,&nbsp;b)</td>
 <td>Default categorical distance function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.treedist" title="discodop.treedist.treedist"><tt class="xref py py-obj docutils literal"><span class="pre">treedist</span></tt></a>(tree1,&nbsp;tree2[,&nbsp;debug])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.treedist" title="discodop.treedist.treedist"><code class="xref py py-obj docutils literal"><span class="pre">treedist</span></code></a>(tree1,&nbsp;tree2[,&nbsp;debug])</td>
 <td>Zhang-Shasha tree edit distance.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treedist.newtreedist" title="discodop.treedist.newtreedist"><tt class="xref py py-obj docutils literal"><span class="pre">newtreedist</span></tt></a>(tree1,&nbsp;tree2[,&nbsp;debug])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treedist.newtreedist" title="discodop.treedist.newtreedist"><code class="xref py py-obj docutils literal"><span class="pre">newtreedist</span></code></a>(tree1,&nbsp;tree2[,&nbsp;debug])</td>
 <td>Tree edit distance implementation as in Billie (2005).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.geteditstats" title="discodop.treedist.geteditstats"><tt class="xref py py-obj docutils literal"><span class="pre">geteditstats</span></tt></a>(forest1,&nbsp;forest2)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.geteditstats" title="discodop.treedist.geteditstats"><code class="xref py py-obj docutils literal"><span class="pre">geteditstats</span></code></a>(forest1,&nbsp;forest2)</td>
 <td>Recursively get edit distance.</td>
 </tr>
 </tbody>
@@ -88,33 +88,33 @@ Licensed under a BSD style license.</li>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.Terminal" title="discodop.treedist.Terminal"><tt class="xref py py-obj docutils literal"><span class="pre">Terminal</span></tt></a>(node)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.Terminal" title="discodop.treedist.Terminal"><code class="xref py py-obj docutils literal"><span class="pre">Terminal</span></code></a>(node)</td>
 <td>Auxiliary class to add indices to terminal nodes of Tree objects.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treedist.AnnotatedTree" title="discodop.treedist.AnnotatedTree"><tt class="xref py py-obj docutils literal"><span class="pre">AnnotatedTree</span></tt></a>(root)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treedist.AnnotatedTree" title="discodop.treedist.AnnotatedTree"><code class="xref py py-obj docutils literal"><span class="pre">AnnotatedTree</span></code></a>(root)</td>
 <td>Wrap a tree to add some extra information.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.EditStats" title="discodop.treedist.EditStats"><tt class="xref py py-obj docutils literal"><span class="pre">EditStats</span></tt></a>([distance,&nbsp;matched,&nbsp;editscript])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treedist.EditStats" title="discodop.treedist.EditStats"><code class="xref py py-obj docutils literal"><span class="pre">EditStats</span></code></a>([distance,&nbsp;matched,&nbsp;editscript])</td>
 <td>Collect edit operations on a tree.</td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="discodop.treedist.Terminal">
-<em class="property">class </em><tt class="descclassname">discodop.treedist.</tt><tt class="descname">Terminal</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedist.html#Terminal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.Terminal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treedist.</code><code class="descname">Terminal</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treedist.html#Terminal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.Terminal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Auxiliary class to add indices to terminal nodes of Tree objects.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treedist.prepare">
-<tt class="descclassname">discodop.treedist.</tt><tt class="descname">prepare</tt><big>(</big><em>tree</em>, <em>includeterms=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedist.html#prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.prepare" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treedist.</code><code class="descname">prepare</code><span class="sig-paren">(</span><em>tree</em>, <em>includeterms=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treedist.html#prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.prepare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a copy of tree prepared for tree edit distance calculation.</p>
 <ul>
 <li><p class="first">sort children to have canonical order</p>
 </li>
 <li><dl class="first docutils">
 <dt>merge preterminals and terminals in single nodes</dt>
-<dd><p class="first last">(unless <tt class="docutils literal"><span class="pre">includeterms=True</span></tt>).</p>
+<dd><p class="first last">(unless <code class="docutils literal"><span class="pre">includeterms=True</span></code>).</p>
 </dd>
 </dl>
 </li>
@@ -123,40 +123,40 @@ Licensed under a BSD style license.</li>
 
 <dl class="class">
 <dt id="discodop.treedist.AnnotatedTree">
-<em class="property">class </em><tt class="descclassname">discodop.treedist.</tt><tt class="descname">AnnotatedTree</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedist.html#AnnotatedTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.AnnotatedTree" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treedist.</code><code class="descname">AnnotatedTree</code><span class="sig-paren">(</span><em>root</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treedist.html#AnnotatedTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.AnnotatedTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap a tree to add some extra information.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treedist.strdist">
-<tt class="descclassname">discodop.treedist.</tt><tt class="descname">strdist</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedist.html#strdist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.strdist" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treedist.</code><code class="descname">strdist</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treedist.html#strdist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.strdist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default categorical distance function.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treedist.treedist">
-<tt class="descclassname">discodop.treedist.</tt><tt class="descname">treedist</tt><big>(</big><em>tree1</em>, <em>tree2</em>, <em>debug=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedist.html#treedist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.treedist" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treedist.</code><code class="descname">treedist</code><span class="sig-paren">(</span><em>tree1</em>, <em>tree2</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treedist.html#treedist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.treedist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zhang-Shasha tree edit distance.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treedist.newtreedist">
-<tt class="descclassname">discodop.treedist.</tt><tt class="descname">newtreedist</tt><big>(</big><em>tree1</em>, <em>tree2</em>, <em>debug=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedist.html#newtreedist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.newtreedist" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treedist.</code><code class="descname">newtreedist</code><span class="sig-paren">(</span><em>tree1</em>, <em>tree2</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treedist.html#newtreedist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.newtreedist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tree edit distance implementation as in Billie (2005).</p>
-<p>Based on rparse code. Slower than <tt class="docutils literal"><span class="pre">treedist()</span></tt> but records edit script.
+<p>Based on rparse code. Slower than <code class="docutils literal"><span class="pre">treedist()</span></code> but records edit script.
 Should be rewritten to use a set of matrices as dynamic programming
 tables.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="discodop.treedist.EditStats">
-<em class="property">class </em><tt class="descclassname">discodop.treedist.</tt><tt class="descname">EditStats</tt><big>(</big><em>distance=0</em>, <em>matched=0</em>, <em>editscript=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedist.html#EditStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.EditStats" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treedist.</code><code class="descname">EditStats</code><span class="sig-paren">(</span><em>distance=0</em>, <em>matched=0</em>, <em>editscript=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treedist.html#EditStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.EditStats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collect edit operations on a tree.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treedist.geteditstats">
-<tt class="descclassname">discodop.treedist.</tt><tt class="descname">geteditstats</tt><big>(</big><em>forest1</em>, <em>forest2</em><big>)</big><a class="reference internal" href="../_modules/discodop/treedist.html#geteditstats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.geteditstats" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treedist.</code><code class="descname">geteditstats</code><span class="sig-paren">(</span><em>forest1</em>, <em>forest2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treedist.html#geteditstats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treedist.geteditstats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively get edit distance.</p>
 </dd></dl>
 
@@ -166,7 +166,7 @@ tables.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -182,7 +182,7 @@ tables.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -199,7 +199,7 @@ tables.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -208,14 +208,14 @@ tables.</p>
         <li class="right" >
           <a href="discodop.treebanktransforms.html" title="discodop.treebanktransforms"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

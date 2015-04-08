@@ -9,14 +9,13 @@ discodop.coarsetofine
 
    .. autosummary::
    
-      bitparkbestitems
-      doctf
-      getinside
-      getoutside
-      posteriorthreshold
       prunechart
+      bitparkbestitems
       whitelistfromposteriors
       whitelistfromposteriors_matrix
+      posteriorthreshold
+      getinside
+      getoutside
    
    
 

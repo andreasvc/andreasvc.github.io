@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.parser &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.parser &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,31 +23,31 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
-    <link rel="next" title="discodop.runexp" href="discodop.runexp.html" />
+    <link rel="next" title="discodop.punctuation" href="discodop.punctuation.html" />
     <link rel="prev" title="discodop.lexicon" href="discodop.lexicon.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="discodop.runexp.html" title="discodop.runexp"
+          <a href="discodop.punctuation.html" title="discodop.punctuation"
              accesskey="N">next</a></li>
         <li class="right" >
           <a href="discodop.lexicon.html" title="discodop.lexicon"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.parser">
 <span id="discodop-parser"></span><h1>discodop.parser<a class="headerlink" href="#module-discodop.parser" title="Permalink to this headline">¶</a></h1>
@@ -60,31 +60,31 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.doparsing" title="discodop.parser.doparsing"><tt class="xref py py-obj docutils literal"><span class="pre">doparsing</span></tt></a>(parser,&nbsp;infile,&nbsp;out,&nbsp;printprob,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.doparsing" title="discodop.parser.doparsing"><code class="xref py py-obj docutils literal"><span class="pre">doparsing</span></code></a>(parser,&nbsp;infile,&nbsp;out,&nbsp;printprob,&nbsp;...)</td>
 <td>Parse sentences from file and write results to file, log to stdout.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.exportbitpargrammar" title="discodop.parser.exportbitpargrammar"><tt class="xref py py-obj docutils literal"><span class="pre">exportbitpargrammar</span></tt></a>(stage)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.exportbitpargrammar" title="discodop.parser.exportbitpargrammar"><code class="xref py py-obj docutils literal"><span class="pre">exportbitpargrammar</span></code></a>(stage)</td>
 <td>(re-)export bitpar grammar with current weights.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.initworker" title="discodop.parser.initworker"><tt class="xref py py-obj docutils literal"><span class="pre">initworker</span></tt></a>(parser,&nbsp;printprob,&nbsp;usetags,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.initworker" title="discodop.parser.initworker"><code class="xref py py-obj docutils literal"><span class="pre">initworker</span></code></a>(parser,&nbsp;printprob,&nbsp;usetags,&nbsp;...)</td>
 <td>Load parser for a worker process.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.probstr" title="discodop.parser.probstr"><tt class="xref py py-obj docutils literal"><span class="pre">probstr</span></tt></a>(prob)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.probstr" title="discodop.parser.probstr"><code class="xref py py-obj docutils literal"><span class="pre">probstr</span></code></a>(prob)</td>
 <td>Render probability / number of subtrees as string.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.readgrammars" title="discodop.parser.readgrammars"><tt class="xref py py-obj docutils literal"><span class="pre">readgrammars</span></tt></a>(resultdir,&nbsp;stages[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.readgrammars" title="discodop.parser.readgrammars"><code class="xref py py-obj docutils literal"><span class="pre">readgrammars</span></code></a>(resultdir,&nbsp;stages[,&nbsp;...])</td>
 <td>Read the grammars from a previous experiment.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.readinputbitparstyle" title="discodop.parser.readinputbitparstyle"><tt class="xref py py-obj docutils literal"><span class="pre">readinputbitparstyle</span></tt></a>(infile)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.readinputbitparstyle" title="discodop.parser.readinputbitparstyle"><code class="xref py py-obj docutils literal"><span class="pre">readinputbitparstyle</span></code></a>(infile)</td>
 <td>Yields lists of tokens, where &#8216;nn&#8217; identifies a sentence break.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.which" title="discodop.parser.which"><tt class="xref py py-obj docutils literal"><span class="pre">which</span></tt></a>(program)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.which" title="discodop.parser.which"><code class="xref py py-obj docutils literal"><span class="pre">which</span></code></a>(program)</td>
 <td>Return first match for program in search path.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.worker" title="discodop.parser.worker"><tt class="xref py py-obj docutils literal"><span class="pre">worker</span></tt></a>(*args,&nbsp;**kwds)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.worker" title="discodop.parser.worker"><code class="xref py py-obj docutils literal"><span class="pre">worker</span></code></a>(*args,&nbsp;**kwds)</td>
 <td>Parse a single sentence.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.workerfunc" title="discodop.parser.workerfunc"><tt class="xref py py-obj docutils literal"><span class="pre">workerfunc</span></tt></a>(func)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.workerfunc" title="discodop.parser.workerfunc"><code class="xref py py-obj docutils literal"><span class="pre">workerfunc</span></code></a>(func)</td>
 <td>Wrap a multiprocessing worker function to produce a full traceback.</td>
 </tr>
 </tbody>
@@ -96,21 +96,21 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.DictObj" title="discodop.parser.DictObj"><tt class="xref py py-obj docutils literal"><span class="pre">DictObj</span></tt></a>(*a,&nbsp;**kw)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.DictObj" title="discodop.parser.DictObj"><code class="xref py py-obj docutils literal"><span class="pre">DictObj</span></code></a>(*a,&nbsp;**kw)</td>
 <td>Trivial class to wrap a dictionary for reasons of syntactic sugar.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.Parser" title="discodop.parser.Parser"><tt class="xref py py-obj docutils literal"><span class="pre">Parser</span></tt></a>(stages[,&nbsp;transformations,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.Parser" title="discodop.parser.Parser"><code class="xref py py-obj docutils literal"><span class="pre">Parser</span></code></a>(prm[,&nbsp;funcclassifier])</td>
 <td>A coarse-to-fine parser based on a given set of parameters.</td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="discodop.parser.DictObj">
-<em class="property">class </em><tt class="descclassname">discodop.parser.</tt><tt class="descname">DictObj</tt><big>(</big><em>*a</em>, <em>**kw</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#DictObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.DictObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.parser.</code><code class="descname">DictObj</code><span class="sig-paren">(</span><em>*a</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#DictObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.DictObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trivial class to wrap a dictionary for reasons of syntactic sugar.</p>
 <dl class="method">
 <dt id="discodop.parser.DictObj.update">
-<tt class="descname">update</tt><big>(</big><em>*a</em>, <em>**kw</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#DictObj.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.DictObj.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>*a</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#DictObj.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.DictObj.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update/add more attributes.</p>
 </dd></dl>
 
@@ -118,28 +118,17 @@
 
 <dl class="class">
 <dt id="discodop.parser.Parser">
-<em class="property">class </em><tt class="descclassname">discodop.parser.</tt><tt class="descname">Parser</tt><big>(</big><em>stages</em>, <em>transformations=None</em>, <em>postagging=None</em>, <em>binarization=DictObj(tailmarker=None)</em>, <em>relationalrealizational=None</em>, <em>verbosity=2</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.parser.</code><code class="descname">Parser</code><span class="sig-paren">(</span><em>prm</em>, <em>funcclassifier=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>A coarse-to-fine parser based on a given set of parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>stages</strong> &#8211; a list of coarse-to-fine stages containing grammars and
-parameters.</li>
-<li><strong>transformations</strong> &#8211; treebank transformations to reverse on parses.</li>
-<li><strong>binarization</strong> &#8211; settings used for binarization; used for the
-tailmarker attribute which identifies heads in parser output.</li>
-<li><strong>postagging</strong> &#8211; <p>if given, an unknown word model is used to assign POS
-tags during parsing. The model consists of a DictObj with (at least)
-the following attributes:</p>
-<ul>
-<li>unknownwordfun: function to produces signatures for unknown words.</li>
-<li>lexicon: the set of known words in the grammar.</li>
-<li>sigs: the set of word signatures occurring in the grammar.</li>
-</ul>
-</li>
-<li><strong>relationalrealizational</strong> &#8211; whether to reverse the RR-transform.</li>
+<li><strong>prm</strong> &#8211; A DictObj with parameters as returned by
+<code class="xref py py-func docutils literal"><span class="pre">runexp.readparam()</span></code>.</li>
+<li><strong>funcclassifier</strong> &#8211; optionally, a function tag classifier trained by
+<code class="xref py py-func docutils literal"><span class="pre">functiontags.trainfunctionclassifier()</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -147,13 +136,13 @@ the following attributes:</p>
 </table>
 <dl class="method">
 <dt id="discodop.parser.Parser.noparse">
-<tt class="descname">noparse</tt><big>(</big><em>stage</em>, <em>sent</em>, <em>tags</em>, <em>lastsuccessfulparse</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#Parser.noparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser.noparse" title="Permalink to this definition">¶</a></dt>
+<code class="descname">noparse</code><span class="sig-paren">(</span><em>stage</em>, <em>sent</em>, <em>tags</em>, <em>lastsuccessfulparse</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#Parser.noparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser.noparse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return parse from previous stage or a dummy parse.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.parser.Parser.parse">
-<tt class="descname">parse</tt><big>(</big><em>sent</em>, <em>tags=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parse</code><span class="sig-paren">(</span><em>sent</em>, <em>tags=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a sentence and perform postprocessing.</p>
 <p>Yields a dictionary from parse trees to probabilities for each stage.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -173,7 +162,7 @@ all possible tags.</li>
 
 <dl class="method">
 <dt id="discodop.parser.Parser.postprocess">
-<tt class="descname">postprocess</tt><big>(</big><em>treestr</em>, <em>stage=-1</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#Parser.postprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser.postprocess" title="Permalink to this definition">¶</a></dt>
+<code class="descname">postprocess</code><span class="sig-paren">(</span><em>treestr</em>, <em>sent</em>, <em>stage</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#Parser.postprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser.postprocess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take parse tree and apply postprocessing.</p>
 </dd></dl>
 
@@ -181,58 +170,58 @@ all possible tags.</li>
 
 <dl class="function">
 <dt id="discodop.parser.doparsing">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">doparsing</tt><big>(</big><em>parser</em>, <em>infile</em>, <em>out</em>, <em>printprob</em>, <em>oneline</em>, <em>usetags</em>, <em>numparses</em>, <em>numproc</em>, <em>fmt</em>, <em>morphology</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#doparsing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.doparsing" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">doparsing</code><span class="sig-paren">(</span><em>parser</em>, <em>infile</em>, <em>out</em>, <em>printprob</em>, <em>oneline</em>, <em>usetags</em>, <em>numparses</em>, <em>numproc</em>, <em>fmt</em>, <em>morphology</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#doparsing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.doparsing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse sentences from file and write results to file, log to stdout.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.parser.exportbitpargrammar">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">exportbitpargrammar</tt><big>(</big><em>stage</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#exportbitpargrammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.exportbitpargrammar" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">exportbitpargrammar</code><span class="sig-paren">(</span><em>stage</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#exportbitpargrammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.exportbitpargrammar" title="Permalink to this definition">¶</a></dt>
 <dd><p>(re-)export bitpar grammar with current weights.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.parser.initworker">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">initworker</tt><big>(</big><em>parser</em>, <em>printprob</em>, <em>usetags</em>, <em>numparses</em>, <em>fmt</em>, <em>morphology</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#initworker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.initworker" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">initworker</code><span class="sig-paren">(</span><em>parser</em>, <em>printprob</em>, <em>usetags</em>, <em>numparses</em>, <em>fmt</em>, <em>morphology</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#initworker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.initworker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load parser for a worker process.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.parser.probstr">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">probstr</tt><big>(</big><em>prob</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#probstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.probstr" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">probstr</code><span class="sig-paren">(</span><em>prob</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#probstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.probstr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render probability / number of subtrees as string.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.parser.readgrammars">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">readgrammars</tt><big>(</big><em>resultdir</em>, <em>stages</em>, <em>postagging=None</em>, <em>top='ROOT'</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#readgrammars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.readgrammars" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">readgrammars</code><span class="sig-paren">(</span><em>resultdir</em>, <em>stages</em>, <em>postagging=None</em>, <em>top=u'ROOT'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#readgrammars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.readgrammars" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read the grammars from a previous experiment.</p>
-<p>Expects a directory <tt class="docutils literal"><span class="pre">resultdir</span></tt> which contains the relevant grammars and
-the parameter file <tt class="docutils literal"><span class="pre">params.prm</span></tt>, as produced by <tt class="docutils literal"><span class="pre">runexp</span></tt>.</p>
+<p>Expects a directory <code class="docutils literal"><span class="pre">resultdir</span></code> which contains the relevant grammars and
+the parameter file <code class="docutils literal"><span class="pre">params.prm</span></code>, as produced by <code class="docutils literal"><span class="pre">runexp</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.parser.readinputbitparstyle">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">readinputbitparstyle</tt><big>(</big><em>infile</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#readinputbitparstyle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.readinputbitparstyle" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">readinputbitparstyle</code><span class="sig-paren">(</span><em>infile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#readinputbitparstyle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.readinputbitparstyle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields lists of tokens, where &#8216;nn&#8217; identifies a sentence break.</p>
-<p>Lazy version of <tt class="docutils literal"><span class="pre">infile.read().split('\n\n')</span></tt>.</p>
+<p>Lazy version of <code class="docutils literal"><span class="pre">infile.read().split('\n\n')</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.parser.which">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">which</tt><big>(</big><em>program</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#which"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.which" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">which</code><span class="sig-paren">(</span><em>program</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#which"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.which" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return first match for program in search path.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.parser.worker">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">worker</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.worker" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">worker</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.worker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a single sentence.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.parser.workerfunc">
-<tt class="descclassname">discodop.parser.</tt><tt class="descname">workerfunc</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="../_modules/discodop/parser.html#workerfunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.workerfunc" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.parser.</code><code class="descname">workerfunc</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#workerfunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.workerfunc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap a multiprocessing worker function to produce a full traceback.</p>
 </dd></dl>
 
@@ -242,7 +231,7 @@ the parameter file <tt class="docutils literal"><span class="pre">params.prm</sp
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -258,7 +247,7 @@ the parameter file <tt class="docutils literal"><span class="pre">params.prm</sp
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -275,23 +264,23 @@ the parameter file <tt class="docutils literal"><span class="pre">params.prm</sp
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="discodop.runexp.html" title="discodop.runexp"
+          <a href="discodop.punctuation.html" title="discodop.punctuation"
              >next</a></li>
         <li class="right" >
           <a href="discodop.lexicon.html" title="discodop.lexicon"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

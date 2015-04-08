@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.treesearch &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.treesearch &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.treetransforms" href="discodop.treetransforms.html" />
     <link rel="prev" title="discodop.treedraw" href="discodop.treedraw.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,16 +38,16 @@
         <li class="right" >
           <a href="discodop.treedraw.html" title="discodop.treedraw"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.treesearch">
 <span id="discodop-treesearch"></span><h1>discodop.treesearch<a class="headerlink" href="#module-discodop.treesearch" title="Permalink to this headline">¶</a></h1>
@@ -59,8 +59,11 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.filterlabels" title="discodop.treesearch.filterlabels"><tt class="xref py py-obj docutils literal"><span class="pre">filterlabels</span></tt></a>(line,&nbsp;nofunc,&nbsp;nomorph)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.filterlabels" title="discodop.treesearch.filterlabels"><code class="xref py py-obj docutils literal"><span class="pre">filterlabels</span></code></a>(line,&nbsp;nofunc,&nbsp;nomorph)</td>
 <td>Remove morphological and/or grammatical function labels from tree(s).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.cpu_count" title="discodop.treesearch.cpu_count"><code class="xref py py-obj docutils literal"><span class="pre">cpu_count</span></code></a>()</td>
+<td>Return number of CPUs or 1.</td>
 </tr>
 </tbody>
 </table>
@@ -71,27 +74,30 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.CorpusSearcher" title="discodop.treesearch.CorpusSearcher"><tt class="xref py py-obj docutils literal"><span class="pre">CorpusSearcher</span></tt></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
-<td>Abstract base class to wrap a set of corpus files that can be queried.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.CorpusSearcher" title="discodop.treesearch.CorpusSearcher"><code class="xref py py-obj docutils literal"><span class="pre">CorpusSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
+<td>Abstract base class to wrap corpus files that can be queried.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.TgrepSearcher" title="discodop.treesearch.TgrepSearcher"><tt class="xref py py-obj docutils literal"><span class="pre">TgrepSearcher</span></tt></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.TgrepSearcher" title="discodop.treesearch.TgrepSearcher"><code class="xref py py-obj docutils literal"><span class="pre">TgrepSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
 <td>Search a corpus with tgrep2.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.DactSearcher" title="discodop.treesearch.DactSearcher"><tt class="xref py py-obj docutils literal"><span class="pre">DactSearcher</span></tt></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.DactSearcher" title="discodop.treesearch.DactSearcher"><code class="xref py py-obj docutils literal"><span class="pre">DactSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
 <td>Search a dact corpus with xpath.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.RegexSearcher" title="discodop.treesearch.RegexSearcher"><tt class="xref py py-obj docutils literal"><span class="pre">RegexSearcher</span></tt></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.RegexSearcher" title="discodop.treesearch.RegexSearcher"><code class="xref py py-obj docutils literal"><span class="pre">RegexSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
 <td>Search a plain text file in UTF-8 with regular expressions.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.NoFuture" title="discodop.treesearch.NoFuture"><tt class="xref py py-obj docutils literal"><span class="pre">NoFuture</span></tt></a>(func,&nbsp;arg)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.NoFuture" title="discodop.treesearch.NoFuture"><code class="xref py py-obj docutils literal"><span class="pre">NoFuture</span></code></a>(func,&nbsp;arg)</td>
 <td>A non-asynchronous version of concurrent.futures.Future.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.FIFOOrederedDict" title="discodop.treesearch.FIFOOrederedDict"><code class="xref py py-obj docutils literal"><span class="pre">FIFOOrederedDict</span></code></a>(limit)</td>
+<td>FIFO cache with maximum number of elements based on OrderedDict.</td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="discodop.treesearch.CorpusSearcher">
-<em class="property">class </em><tt class="descclassname">discodop.treesearch.</tt><tt class="descname">CorpusSearcher</tt><big>(</big><em>files</em>, <em>macros=None</em>, <em>numthreads=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract base class to wrap a set of corpus files that can be queried.</p>
+<em class="property">class </em><code class="descclassname">discodop.treesearch.</code><code class="descname">CorpusSearcher</code><span class="sig-paren">(</span><em>files</em>, <em>macros=None</em>, <em>numthreads=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract base class to wrap corpus files that can be queried.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -107,8 +113,24 @@ None to disable threading.</li>
 </tbody>
 </table>
 <dl class="method">
+<dt id="discodop.treesearch.CorpusSearcher.batchcounts">
+<code class="descname">batchcounts</code><span class="sig-paren">(</span><em>queries</em>, <em>subset=None</em>, <em>limit=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.batchcounts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.batchcounts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like counts, but executes a sequence of queries.</p>
+<p>Useful in combination with <code class="docutils literal"><span class="pre">pandas.DataFrame</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a dict of the form
+<code class="docutils literal"><span class="pre">{corpus1:</span> <span class="pre">{query1:</span> <span class="pre">nummatches,</span> <span class="pre">query2:</span> <span class="pre">nummatches,</span> <span class="pre">...},</span> <span class="pre">...}</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="discodop.treesearch.CorpusSearcher.counts">
-<tt class="descname">counts</tt><big>(</big><em>query</em>, <em>subset=None</em>, <em>limit=None</em>, <em>indices=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.counts" title="Permalink to this definition">¶</a></dt>
+<code class="descname">counts</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>limit=None</em>, <em>indices=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.counts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run query and return a dict of the form {corpus1: nummatches, ...}.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -130,18 +152,25 @@ occurrences, instead of an integer count.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="discodop.treesearch.CorpusSearcher.trees">
-<tt class="descname">trees</tt><big>(</big><em>query</em>, <em>subset=None</em>, <em>maxresults=10</em>, <em>nofunc=False</em>, <em>nomorph=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.trees" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run query and return list of matching trees.</p>
+<dt id="discodop.treesearch.CorpusSearcher.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><em>filename</em>, <em>start</em>, <em>end</em>, <em>nofunc=False</em>, <em>nomorph=False</em>, <em>sents=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a range of trees / sentences.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>maxresults</strong> &#8211; the maximum number of matches to return.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> &#8211; one of the filenames in <code class="docutils literal"><span class="pre">self.files</span></code></li>
+<li><strong>start</strong> &#8211; start index (0-based, excluding empty lines)</li>
+<li><strong>end</strong> &#8211; end index (idem)</li>
+<li><strong>sents</strong> &#8211; if True, return sentences instead of trees.
+Sentences are strings with space-separated tokens.</li>
+<li><strong>nomorph</strong> (<em>nofunc,</em>) &#8211; same as for <code class="docutils literal"><span class="pre">trees()</span></code> method.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of tuples of the form
-<tt class="docutils literal"><span class="pre">(corpus,</span> <span class="pre">sentno,</span> <span class="pre">tree,</span> <span class="pre">sent,</span> <span class="pre">highlight)</span></tt>
-highlight is a set of nodes from tree.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list of Tree objects or sentences.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -149,23 +178,49 @@ highlight is a set of nodes from tree.</td>
 
 <dl class="method">
 <dt id="discodop.treesearch.CorpusSearcher.sents">
-<tt class="descname">sents</tt><big>(</big><em>query</em>, <em>subset=None</em>, <em>maxresults=100</em>, <em>brackets=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.sents" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run query and yield matching sentences.</p>
+<code class="descname">sents</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>maxresults=100</em>, <em>brackets=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.sents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run query and return matching sentences.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>maxresults</strong> &#8211; the maximum number of matches to return.</li>
-<li><strong>brackets</strong> &#8211; if True, return trees as they appear in the treebank;
-by default sentences are returned as a sequence of tokens.</li>
+<li><strong>brackets</strong> &#8211; if True, return trees as they appear in the treebank,
+match is the matching substring.
+If False (default), sentences are returned as a sequence of tokens.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of tuples of the form
-<tt class="docutils literal"><span class="pre">(corpus,</span> <span class="pre">sentno,</span> <span class="pre">sent,</span> <span class="pre">highlight)</span></tt>
+<code class="docutils literal"><span class="pre">(corpus,</span> <span class="pre">sentno,</span> <span class="pre">sent,</span> <span class="pre">highlight)</span></code>
 sent is a single string with space-separated tokens;
-highlight is a set of integer indices.</p>
+highlight is an iterable of integer indices of tokens matched
+by the query.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.treesearch.CorpusSearcher.trees">
+<code class="descname">trees</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>maxresults=10</em>, <em>nofunc=False</em>, <em>nomorph=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.trees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run query and return list of matching trees.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>maxresults</strong> &#8211; the maximum number of matches to return.</li>
+<li><strong>nomorph</strong> (<em>nofunc,</em>) &#8211; whether to remove / add function tags and
+morphological features from trees.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of tuples of the form
+<code class="docutils literal"><span class="pre">(corpus,</span> <span class="pre">sentno,</span> <span class="pre">tree,</span> <span class="pre">sent,</span> <span class="pre">highlight)</span></code>
+highlight is a list of matched Tree nodes from tree.</p>
 </td>
 </tr>
 </tbody>
@@ -176,27 +231,28 @@ highlight is a set of integer indices.</p>
 
 <dl class="class">
 <dt id="discodop.treesearch.TgrepSearcher">
-<em class="property">class </em><tt class="descclassname">discodop.treesearch.</tt><tt class="descname">TgrepSearcher</tt><big>(</big><em>files</em>, <em>macros=None</em>, <em>numthreads=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#TgrepSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.TgrepSearcher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treesearch.</code><code class="descname">TgrepSearcher</code><span class="sig-paren">(</span><em>files</em>, <em>macros=None</em>, <em>numthreads=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#TgrepSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.TgrepSearcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search a corpus with tgrep2.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="discodop.treesearch.DactSearcher">
-<em class="property">class </em><tt class="descclassname">discodop.treesearch.</tt><tt class="descname">DactSearcher</tt><big>(</big><em>files</em>, <em>macros=None</em>, <em>numthreads=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#DactSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.DactSearcher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treesearch.</code><code class="descname">DactSearcher</code><span class="sig-paren">(</span><em>files</em>, <em>macros=None</em>, <em>numthreads=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#DactSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.DactSearcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search a dact corpus with xpath.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="discodop.treesearch.RegexSearcher">
-<em class="property">class </em><tt class="descclassname">discodop.treesearch.</tt><tt class="descname">RegexSearcher</tt><big>(</big><em>files</em>, <em>macros=None</em>, <em>numthreads=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#RegexSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.RegexSearcher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treesearch.</code><code class="descname">RegexSearcher</code><span class="sig-paren">(</span><em>files</em>, <em>macros=None</em>, <em>numthreads=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#RegexSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.RegexSearcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search a plain text file in UTF-8 with regular expressions.</p>
 <p>Assumes that non-empty lines correspond to sentences.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>macros</strong> &#8211; a file containing lines of the form &#8216;name=regex&#8217;,
-and will be substituted when &#8216;{name}&#8217; appears in a query.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>macros</strong> &#8211; a file containing lines of the form <code class="docutils literal"><span class="pre">'name=regex'</span></code>;
+an occurrence of <code class="docutils literal"><span class="pre">'{name}'</span></code> will be suitably replaced when it
+appears in a query.</td>
 </tr>
 </tbody>
 </table>
@@ -204,20 +260,32 @@ and will be substituted when &#8216;{name}&#8217; appears in a query.</td>
 
 <dl class="class">
 <dt id="discodop.treesearch.NoFuture">
-<em class="property">class </em><tt class="descclassname">discodop.treesearch.</tt><tt class="descname">NoFuture</tt><big>(</big><em>func</em>, <em>arg</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#NoFuture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.NoFuture" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treesearch.</code><code class="descname">NoFuture</code><span class="sig-paren">(</span><em>func</em>, <em>arg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#NoFuture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.NoFuture" title="Permalink to this definition">¶</a></dt>
 <dd><p>A non-asynchronous version of concurrent.futures.Future.</p>
 <dl class="method">
 <dt id="discodop.treesearch.NoFuture.result">
-<tt class="descname">result</tt><big>(</big><em>timeout=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#NoFuture.result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.NoFuture.result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">result</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#NoFuture.result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.NoFuture.result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the precomputed result.</p>
 </dd></dl>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="discodop.treesearch.FIFOOrederedDict">
+<em class="property">class </em><code class="descclassname">discodop.treesearch.</code><code class="descname">FIFOOrederedDict</code><span class="sig-paren">(</span><em>limit</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#FIFOOrederedDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.FIFOOrederedDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>FIFO cache with maximum number of elements based on OrderedDict.</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="discodop.treesearch.filterlabels">
-<tt class="descclassname">discodop.treesearch.</tt><tt class="descname">filterlabels</tt><big>(</big><em>line</em>, <em>nofunc</em>, <em>nomorph</em><big>)</big><a class="reference internal" href="../_modules/discodop/treesearch.html#filterlabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.filterlabels" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treesearch.</code><code class="descname">filterlabels</code><span class="sig-paren">(</span><em>line</em>, <em>nofunc</em>, <em>nomorph</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#filterlabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.filterlabels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove morphological and/or grammatical function labels from tree(s).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treesearch.cpu_count">
+<code class="descclassname">discodop.treesearch.</code><code class="descname">cpu_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#cpu_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.cpu_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of CPUs or 1.</p>
 </dd></dl>
 
 </div>
@@ -226,7 +294,7 @@ and will be substituted when &#8216;{name}&#8217; appears in a query.</td>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -242,7 +310,7 @@ and will be substituted when &#8216;{name}&#8217; appears in a query.</td>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -259,7 +327,7 @@ and will be substituted when &#8216;{name}&#8217; appears in a query.</td>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -268,14 +336,14 @@ and will be substituted when &#8216;{name}&#8217; appears in a query.</td>
         <li class="right" >
           <a href="discodop.treedraw.html" title="discodop.treedraw"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

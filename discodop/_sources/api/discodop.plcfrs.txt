@@ -10,9 +10,8 @@ discodop.plcfrs
    .. autosummary::
    
       getparent
-      nwaymerge
+      merge
       parse
-      parse_symbolic
    
    
 
@@ -24,9 +23,9 @@ discodop.plcfrs
    
       Agenda
       DoubleAgenda
-      FatLCFRSChart
       LCFRSChart
       SmallLCFRSChart
+      FatLCFRSChart
    
    
 

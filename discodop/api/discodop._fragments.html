@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop._fragments &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop._fragments &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.bit" href="discodop.bit.html" />
     <link rel="prev" title="discodop.treetransforms" href="discodop.treetransforms.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,16 +38,16 @@
         <li class="right" >
           <a href="discodop.treetransforms.html" title="discodop.treetransforms"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop._fragments">
 <span id="discodop-fragments"></span><h1>discodop._fragments<a class="headerlink" href="#module-discodop._fragments" title="Permalink to this headline">¶</a></h1>
@@ -65,22 +65,28 @@ large treebanks.</li>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.addprods" title="discodop._fragments.addprods"><tt class="xref py py-obj docutils literal"><span class="pre">addprods</span></tt></a>(tree,&nbsp;sent[,&nbsp;disc])</td>
-<td>Set <tt class="docutils literal"><span class="pre">.prod</span></tt> attribute on nodes of tree to their LCFRS productions.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.completebitsets" title="discodop._fragments.completebitsets"><tt class="xref py py-obj docutils literal"><span class="pre">completebitsets</span></tt></a>((Ctrees&nbsp;trees,&nbsp;list&nbsp;sents,&nbsp;...)</td>
-<td>Generate bitsets corresponding to whole trees in the input.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.coverbitsets" title="discodop._fragments.coverbitsets"><tt class="xref py py-obj docutils literal"><span class="pre">coverbitsets</span></tt></a>((Ctrees&nbsp;trees,&nbsp;list&nbsp;sents,&nbsp;...)</td>
-<td>Utility function to generate one bitset for each type of production.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.exactcounts" title="discodop._fragments.exactcounts"><tt class="xref py py-obj docutils literal"><span class="pre">exactcounts</span></tt></a>(Ctrees&nbsp;trees1,&nbsp;Ctrees&nbsp;trees2,&nbsp;...)</td>
-<td>Get exact counts or indices of occurrence for fragments.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.extractfragments" title="discodop._fragments.extractfragments"><tt class="xref py py-obj docutils literal"><span class="pre">extractfragments</span></tt></a>(Ctrees&nbsp;trees1,&nbsp;list&nbsp;sents1,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.extractfragments" title="discodop._fragments.extractfragments"><code class="xref py py-obj docutils literal"><span class="pre">extractfragments</span></code></a>(Ctrees&nbsp;trees1,&nbsp;list&nbsp;sents1,&nbsp;...)</td>
 <td>Find the largest fragments in treebank(s) with the fast tree kernel.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.getctrees" title="discodop._fragments.getctrees"><tt class="xref py py-obj docutils literal"><span class="pre">getctrees</span></tt></a>(trees,&nbsp;sents[,&nbsp;disc,&nbsp;trees2,&nbsp;sents2])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.exactcounts" title="discodop._fragments.exactcounts"><code class="xref py py-obj docutils literal"><span class="pre">exactcounts</span></code></a>(Ctrees&nbsp;trees1,&nbsp;Ctrees&nbsp;trees2,&nbsp;...)</td>
+<td>Get exact counts or indices of occurrence for fragments.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.completebitsets" title="discodop._fragments.completebitsets"><code class="xref py py-obj docutils literal"><span class="pre">completebitsets</span></code></a>((Ctrees&nbsp;trees,&nbsp;list&nbsp;sents,&nbsp;...)</td>
+<td>Generate bitsets corresponding to whole trees in the input.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.allfragments" title="discodop._fragments.allfragments"><code class="xref py py-obj docutils literal"><span class="pre">allfragments</span></code></a>(Ctrees&nbsp;trees,&nbsp;list&nbsp;sents,&nbsp;...)</td>
+<td>Return all fragments of trees up to maxdepth.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.repl" title="discodop._fragments.repl"><code class="xref py py-obj docutils literal"><span class="pre">repl</span></code></a>(d)</td>
+<td>A function for use with re.sub that looks up numeric IDs in a dict.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.pygetsent" title="discodop._fragments.pygetsent"><code class="xref py py-obj docutils literal"><span class="pre">pygetsent</span></code></a>(unicode&nbsp;frag,&nbsp;list&nbsp;sent)</td>
+<td>Wrapper of <code class="docutils literal"><span class="pre">getsent()</span></code> to make doctests possible.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.nonfrontier" title="discodop._fragments.nonfrontier"><code class="xref py py-obj docutils literal"><span class="pre">nonfrontier</span></code></a>(sent)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.getctrees" title="discodop._fragments.getctrees"><code class="xref py py-obj docutils literal"><span class="pre">getctrees</span></code></a>(trees1,&nbsp;sents1[,&nbsp;disc,&nbsp;trees2,&nbsp;sents2])</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -91,66 +97,43 @@ large treebanks.</li>
 </table>
 </td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.getlabelsprods" title="discodop._fragments.getlabelsprods"><tt class="xref py py-obj docutils literal"><span class="pre">getlabelsprods</span></tt></a>(trees,&nbsp;labels,&nbsp;prods)</td>
-<td>Collect <tt class="docutils literal"><span class="pre">label</span></tt>, <tt class="docutils literal"><span class="pre">prod</span></tt> attributes from <tt class="docutils literal"><span class="pre">trees</span></tt> and index them.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.getprodid" title="discodop._fragments.getprodid"><tt class="xref py py-obj docutils literal"><span class="pre">getprodid</span></tt></a>(prods,&nbsp;node)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.nonfrontier" title="discodop._fragments.nonfrontier"><tt class="xref py py-obj docutils literal"><span class="pre">nonfrontier</span></tt></a>(sent)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.pygetsent" title="discodop._fragments.pygetsent"><tt class="xref py py-obj docutils literal"><span class="pre">pygetsent</span></tt></a>(bytes&nbsp;frag,&nbsp;list&nbsp;sent)</td>
-<td>Wrapper of <tt class="docutils literal"><span class="pre">getsent()</span></tt> to make doctests possible.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.readtreebank" title="discodop._fragments.readtreebank"><tt class="xref py py-obj docutils literal"><span class="pre">readtreebank</span></tt></a>(treebankfile,&nbsp;list&nbsp;labels,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.readtreebank" title="discodop._fragments.readtreebank"><code class="xref py py-obj docutils literal"><span class="pre">readtreebank</span></code></a>(treebankfile,&nbsp;list&nbsp;labels,&nbsp;...)</td>
 <td>Read a treebank from a given filename.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.repl" title="discodop._fragments.repl"><tt class="xref py py-obj docutils literal"><span class="pre">repl</span></tt></a>(d)</td>
-<td>A function for use with re.sub that looks up numeric IDs in a dict.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.tolist" title="discodop._fragments.tolist"><tt class="xref py py-obj docutils literal"><span class="pre">tolist</span></tt></a>(tree,&nbsp;sent)</td>
-<td>Convert Tree object to list of non-terminal nodes in preorder traversal.</td>
-</tr>
 </tbody>
 </table>
 <dl class="function">
-<dt id="discodop._fragments.addprods">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">addprods</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>disc=True</em><big>)</big><a class="headerlink" href="#discodop._fragments.addprods" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set <tt class="docutils literal"><span class="pre">.prod</span></tt> attribute on nodes of tree to their LCFRS productions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>disc</strong> &#8211; pass disc=False to get CFG productions instead.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop._fragments.completebitsets">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">completebitsets</tt><big>(</big><em>Ctrees trees</em>, <em>list sents</em>, <em>list labels</em>, <em>short maxnodes</em>, <em>bool discontinuous=False</em><big>)</big> &rarr; dict<a class="headerlink" href="#discodop._fragments.completebitsets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate bitsets corresponding to whole trees in the input.</p>
-<p>Important: if multiple treebanks are used, maxnodes should equal
-<tt class="docutils literal"><span class="pre">max(trees1.maxnodes,</span> <span class="pre">trees2.maxnodes)</span></tt></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop._fragments.coverbitsets">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">coverbitsets</tt><big>(</big><em>Ctrees trees</em>, <em>list sents</em>, <em>list labels</em>, <em>short maxnodes</em>, <em>bool discontinuous</em><big>)</big> &rarr; dict<a class="headerlink" href="#discodop._fragments.coverbitsets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Utility function to generate one bitset for each type of production.</p>
-<p>Important: if multiple treebanks are used, maxnodes should equal
-<tt class="docutils literal"><span class="pre">max(trees1.maxnodes,</span> <span class="pre">trees2.maxnodes)</span></tt></p>
+<dt id="discodop._fragments.extractfragments">
+<code class="descclassname">discodop._fragments.</code><code class="descname">extractfragments</code><span class="sig-paren">(</span><em>Ctrees trees1</em>, <em>list sents1</em>, <em>int offset</em>, <em>int end</em>, <em>list labels</em>, <em>Ctrees trees2=None</em>, <em>list sents2=None</em>, <em>bool approx=True</em>, <em>bool debug=False</em>, <em>bool discontinuous=False</em>, <em>bool complement=False</em>, <em>bool twoterms=False</em>, <em>bool adjacent=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.extractfragments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the largest fragments in treebank(s) with the fast tree kernel.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>scenario 1: recurring fragments in single treebank, use:</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">extractfragments(trees1,</span> <span class="pre">sents1,</span> <span class="pre">offset,</span> <span class="pre">end,</span> <span class="pre">labels)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>scenario 2: common fragments in two treebanks:</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">extractfragments(trees1,</span> <span class="pre">sents1,</span> <span class="pre">offset,</span> <span class="pre">end,</span> <span class="pre">labels,</span> <span class="pre">trees2,</span> <span class="pre">sents2)</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p><code class="docutils literal"><span class="pre">offset</span></code> and <code class="docutils literal"><span class="pre">end</span></code> can be used to divide the work over multiple
+processes; they are indices of <code class="docutils literal"><span class="pre">trees1</span></code> to work on (default is all);
+when <code class="docutils literal"><span class="pre">debug</span></code> is enabled a table of common productions is shown for each
+pair of trees; when <code class="docutils literal"><span class="pre">complement</span></code> is true, the complement of the recurring
+fragments in each pair of trees is extracted as well.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop._fragments.exactcounts">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">exactcounts</tt><big>(</big><em>Ctrees trees1</em>, <em>Ctrees trees2</em>, <em>list bitsets</em>, <em>bool indices=False</em><big>)</big><a class="headerlink" href="#discodop._fragments.exactcounts" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">exactcounts</code><span class="sig-paren">(</span><em>Ctrees trees1</em>, <em>Ctrees trees2</em>, <em>list bitsets</em>, <em>bool indices=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.exactcounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get exact counts or indices of occurrence for fragments.</p>
-<p>Given a set of fragments from <tt class="docutils literal"><span class="pre">trees1</span></tt> as bitsets, find all occurrences
-of those fragments in <tt class="docutils literal"><span class="pre">trees2</span></tt> (which may be equal to <tt class="docutils literal"><span class="pre">trees1</span></tt>).</p>
-<p>By default, exact counts are collected. When <tt class="docutils literal"><span class="pre">indices</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>, a
+<p>Given a set of fragments from <code class="docutils literal"><span class="pre">trees1</span></code> as bitsets, find all occurrences
+of those fragments in <code class="docutils literal"><span class="pre">trees2</span></code> (which may be equal to <code class="docutils literal"><span class="pre">trees1</span></code>).</p>
+<p>By default, exact counts are collected. When <code class="docutils literal"><span class="pre">indices</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, a
 multiset of indices is returned for each fragment; the indices point to the
 trees where the fragments (described by the bitsets) occur. This is useful
 to look up the contexts of fragments, or when the order of sentences has
@@ -161,33 +144,97 @@ not a maximal.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop._fragments.extractfragments">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">extractfragments</tt><big>(</big><em>Ctrees trees1</em>, <em>list sents1</em>, <em>int offset</em>, <em>int end</em>, <em>list labels</em>, <em>Ctrees trees2=None</em>, <em>list sents2=None</em>, <em>bool approx=True</em>, <em>bool debug=False</em>, <em>bool discontinuous=False</em>, <em>bool complement=False</em>, <em>bool twoterms=False</em>, <em>bool adjacent=False</em><big>)</big><a class="headerlink" href="#discodop._fragments.extractfragments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the largest fragments in treebank(s) with the fast tree kernel.</p>
-<ul>
-<li><dl class="first docutils">
-<dt>scenario 1: recurring fragments in single treebank, use:</dt>
-<dd><p class="first last"><tt class="docutils literal"><span class="pre">extractfragments(trees1,</span> <span class="pre">sents1,</span> <span class="pre">offset,</span> <span class="pre">end,</span> <span class="pre">labels)</span></tt></p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>scenario 2: common fragments in two treebanks:</dt>
-<dd><p class="first last"><tt class="docutils literal"><span class="pre">extractfragments(trees1,</span> <span class="pre">sents1,</span> <span class="pre">offset,</span> <span class="pre">end,</span> <span class="pre">labels,</span> <span class="pre">trees2,</span> <span class="pre">sents2)</span></tt></p>
-</dd>
-</dl>
-</li>
-</ul>
-<p><tt class="docutils literal"><span class="pre">offset</span></tt> and <tt class="docutils literal"><span class="pre">end</span></tt> can be used to divide the work over multiple
-processes; they are indices of <tt class="docutils literal"><span class="pre">trees1</span></tt> to work on (default is all);
-when <tt class="docutils literal"><span class="pre">debug</span></tt> is enabled a table of common productions is shown for each
-pair of trees; when <tt class="docutils literal"><span class="pre">complement</span></tt> is true, the complement of the recurring
-fragments in each pair of trees is extracted as well.</p>
+<dt id="discodop._fragments.completebitsets">
+<code class="descclassname">discodop._fragments.</code><code class="descname">completebitsets</code><span class="sig-paren">(</span><em>Ctrees trees</em>, <em>list sents</em>, <em>list labels</em>, <em>short maxnodes</em>, <em>bool discontinuous=False</em><span class="sig-paren">)</span> &rarr; dict<a class="headerlink" href="#discodop._fragments.completebitsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate bitsets corresponding to whole trees in the input.</p>
+<p>Important: if multiple treebanks are used, maxnodes should equal
+<code class="docutils literal"><span class="pre">max(trees1.maxnodes,</span> <span class="pre">trees2.maxnodes)</span></code></p>
 </dd></dl>
 
 <dl class="function">
+<dt id="discodop._fragments.allfragments">
+<code class="descclassname">discodop._fragments.</code><code class="descname">allfragments</code><span class="sig-paren">(</span><em>Ctrees trees</em>, <em>list sents</em>, <em>list labels</em>, <em>int maxdepth</em>, <em>int maxfrontier=999</em>, <em>bool discontinuous=True</em>, <em>bool indices=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.allfragments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all fragments of trees up to maxdepth.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>maxdepth</strong> &#8211; maximum depth of fragments; depth 1 gives fragments that
+are equivalent to a treebank grammar.</li>
+<li><strong>maxfrontier</strong> &#8211; maximum number of frontier non-terminals (substitution
+sites) in fragments; a limit of 0 only gives fragments that bottom out
+in terminals; 999 is unlimited for practical purposes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary fragments with tree strings as keys and integer counts
+as values.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop._fragments.repl">
+<code class="descclassname">discodop._fragments.</code><code class="descname">repl</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.repl" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function for use with re.sub that looks up numeric IDs in a dict.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop._fragments.pygetsent">
+<code class="descclassname">discodop._fragments.</code><code class="descname">pygetsent</code><span class="sig-paren">(</span><em>unicode frag</em>, <em>list sent</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.pygetsent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper of <code class="docutils literal"><span class="pre">getsent()</span></code> to make doctests possible.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frag</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">pygetsent</span><span class="p">(</span><span class="s">u&#39;(S (NP 2) (VP 4))&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">[</span><span class="s">u&#39;The&#39;</span><span class="p">,</span> <span class="s">u&#39;tall&#39;</span><span class="p">,</span> <span class="s">u&#39;man&#39;</span><span class="p">,</span> <span class="s">u&#39;there&#39;</span><span class="p">,</span> <span class="s">u&#39;walks&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">frag</span><span class="p">)</span>
+<span class="go">(S (NP 0) (VP 2))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;u&#39;&quot;</span><span class="p">,</span> <span class="s">&quot;&#39;&quot;</span><span class="p">))</span>
+<span class="go">(&#39;man&#39;, None, &#39;walks&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frag</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">pygetsent</span><span class="p">(</span><span class="s">u&#39;(VP (VB 0) (PRT 3))&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s">u&#39;Wake&#39;</span><span class="p">,</span> <span class="s">u&#39;your&#39;</span><span class="p">,</span> <span class="s">u&#39;friend&#39;</span><span class="p">,</span> <span class="s">u&#39;up&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">frag</span><span class="p">)</span>
+<span class="go">(VP (VB 0) (PRT 2))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;u&#39;&quot;</span><span class="p">,</span> <span class="s">&quot;&#39;&quot;</span><span class="p">))</span>
+<span class="go">(&#39;Wake&#39;, None, &#39;up&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frag</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">pygetsent</span><span class="p">(</span><span class="s">u&#39;(S (NP 2:2 4:4) (VP 1:1 3:3))&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">[</span><span class="s">u&#39;Walks&#39;</span><span class="p">,</span><span class="s">u&#39;the&#39;</span><span class="p">,</span><span class="s">u&#39;quickly&#39;</span><span class="p">,</span><span class="s">u&#39;man&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">frag</span><span class="p">)</span>
+<span class="go">(S (NP 1 3) (VP 0 2))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span>
+<span class="go">(None, None, None, None)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frag</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">pygetsent</span><span class="p">(</span><span class="s">u&#39;(ROOT (S 0:2) ($. 3))&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">[</span><span class="s">u&#39;Foo&#39;</span><span class="p">,</span> <span class="s">u&#39;bar&#39;</span><span class="p">,</span> <span class="s">u&#39;zed&#39;</span><span class="p">,</span> <span class="s">u&#39;.&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">frag</span><span class="p">)</span>
+<span class="go">(ROOT (S 0) ($. 1))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;u&#39;&quot;</span><span class="p">,</span> <span class="s">&quot;&#39;&quot;</span><span class="p">))</span>
+<span class="go">(None, &#39;.&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frag</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">pygetsent</span><span class="p">(</span><span class="s">u&#39;(ROOT (S 0) ($. 3))&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">[</span><span class="s">u&#39;Foo&#39;</span><span class="p">,</span> <span class="s">u&#39;bar&#39;</span><span class="p">,</span> <span class="s">u&#39;zed&#39;</span><span class="p">,</span><span class="s">u&#39;.&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">frag</span><span class="p">)</span>
+<span class="go">(ROOT (S 0) ($. 2))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;u&#39;&quot;</span><span class="p">,</span> <span class="s">&quot;&#39;&quot;</span><span class="p">))</span>
+<span class="go">(&#39;Foo&#39;, None, &#39;.&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frag</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">pygetsent</span><span class="p">(</span><span class="s">u&#39;(S|&lt;VP&gt;_2 (VP_3 0:1 3:3 16:16) (VAFIN 2))&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="sd">u&#39;&#39;&#39;In Japan wird offenbar die Fusion der Geldkonzerne Daiwa und</span>
+<span class="gp">... </span><span class="sd"> Sumitomo zur gr\xf6\xdften Bank der Welt vorbereitet .&#39;&#39;&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">frag</span><span class="p">)</span>
+<span class="go">(S|&lt;VP&gt;_2 (VP_3 0 2 4) (VAFIN 1))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;u&#39;&quot;</span><span class="p">,</span> <span class="s">&quot;&#39;&quot;</span><span class="p">))</span>
+<span class="go">(None, &#39;wird&#39;, None, None, None)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop._fragments.nonfrontier">
+<code class="descclassname">discodop._fragments.</code><code class="descname">nonfrontier</code><span class="sig-paren">(</span><em>sent</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.nonfrontier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="discodop._fragments.getctrees">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">getctrees</tt><big>(</big><em>trees</em>, <em>sents</em>, <em>disc=True</em>, <em>trees2=None</em>, <em>sents2=None</em><big>)</big><a class="headerlink" href="#discodop._fragments.getctrees" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">getctrees</code><span class="sig-paren">(</span><em>trees1</em>, <em>sents1</em>, <em>disc=True</em>, <em>trees2=None</em>, <em>sents2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.getctrees" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -199,64 +246,10 @@ fragments in each pair of trees is extracted as well.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop._fragments.getlabelsprods">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">getlabelsprods</tt><big>(</big><em>trees</em>, <em>labels</em>, <em>prods</em><big>)</big><a class="headerlink" href="#discodop._fragments.getlabelsprods" title="Permalink to this definition">¶</a></dt>
-<dd><p>Collect <tt class="docutils literal"><span class="pre">label</span></tt>, <tt class="docutils literal"><span class="pre">prod</span></tt> attributes from <tt class="docutils literal"><span class="pre">trees</span></tt> and index them.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop._fragments.getprodid">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">getprodid</tt><big>(</big><em>prods</em>, <em>node</em><big>)</big><a class="headerlink" href="#discodop._fragments.getprodid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="discodop._fragments.nonfrontier">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">nonfrontier</tt><big>(</big><em>sent</em><big>)</big><a class="headerlink" href="#discodop._fragments.nonfrontier" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="discodop._fragments.pygetsent">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">pygetsent</tt><big>(</big><em>bytes frag</em>, <em>list sent</em><big>)</big><a class="headerlink" href="#discodop._fragments.pygetsent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper of <tt class="docutils literal"><span class="pre">getsent()</span></tt> to make doctests possible.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pygetsent</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;(S (NP 2) (VP 4))&#39;</span><span class="p">,</span>
-<span class="gp">... </span><span class="p">[</span><span class="s">&#39;The&#39;</span><span class="p">,</span> <span class="s">&#39;tall&#39;</span><span class="p">,</span> <span class="s">&#39;man&#39;</span><span class="p">,</span> <span class="s">&#39;there&#39;</span><span class="p">,</span> <span class="s">&#39;walks&#39;</span><span class="p">])</span>
-<span class="go">(&#39;(S (NP 0) (VP 2))&#39;, (&#39;man&#39;, None, &#39;walks&#39;))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pygetsent</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;(VP (VB 0) (PRT 3))&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Wake&#39;</span><span class="p">,</span> <span class="s">&#39;your&#39;</span><span class="p">,</span> <span class="s">&#39;friend&#39;</span><span class="p">,</span> <span class="s">&#39;up&#39;</span><span class="p">])</span>
-<span class="go">(&#39;(VP (VB 0) (PRT 2))&#39;, (&#39;Wake&#39;, None, &#39;up&#39;))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pygetsent</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;(S (NP 2:2 4:4) (VP 1:1 3:3))&#39;</span><span class="p">,</span>
-<span class="gp">... </span><span class="p">[</span><span class="s">&#39;Walks&#39;</span><span class="p">,</span><span class="s">&#39;the&#39;</span><span class="p">,</span><span class="s">&#39;quickly&#39;</span><span class="p">,</span><span class="s">&#39;man&#39;</span><span class="p">])</span>
-<span class="go">(&#39;(S (NP 1 3) (VP 0 2))&#39;, (None, None, None, None))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pygetsent</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;(ROOT (S 0:2) ($. 3))&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span> <span class="s">&#39;zed&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">])</span>
-<span class="go">(&#39;(ROOT (S 0) ($. 1))&#39;, (None, &#39;.&#39;))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pygetsent</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;(ROOT (S 0) ($. 3))&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span> <span class="s">&#39;zed&#39;</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">])</span>
-<span class="go">(&#39;(ROOT (S 0) ($. 2))&#39;, (&#39;Foo&#39;, None, &#39;.&#39;))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pygetsent</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;(S|&lt;VP&gt;_2 (VP_3 0:1 3:3 16:16) (VAFIN 2))&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;In Japan</span>
-<span class="gp">... </span><span class="s"> wird offenbar die Fusion der Geldkonzerne Daiwa und Sumitomo zur</span>
-<span class="gp">... </span><span class="s"> gr</span><span class="se">\xf6\xdf</span><span class="s">ten Bank der Welt vorbereitet .&#39;&#39;&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-<span class="go">(&#39;(S|&lt;VP&gt;_2 (VP_3 0 2 4) (VAFIN 1))&#39;, (None, &#39;wird&#39;, None, None, None))</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
 <dt id="discodop._fragments.readtreebank">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">readtreebank</tt><big>(</big><em>treebankfile</em>, <em>list labels</em>, <em>dict prods</em>, <em>fmt='bracket'</em>, <em>limit=None</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#discodop._fragments.readtreebank" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">readtreebank</code><span class="sig-paren">(</span><em>treebankfile</em>, <em>list labels</em>, <em>dict prods</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.readtreebank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a treebank from a given filename.</p>
 <p>labels and prods should be re-used when reading multiple treebanks.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop._fragments.repl">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">repl</tt><big>(</big><em>d</em><big>)</big><a class="headerlink" href="#discodop._fragments.repl" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function for use with re.sub that looks up numeric IDs in a dict.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop._fragments.tolist">
-<tt class="descclassname">discodop._fragments.</tt><tt class="descname">tolist</tt><big>(</big><em>tree</em>, <em>sent</em><big>)</big><a class="headerlink" href="#discodop._fragments.tolist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert Tree object to list of non-terminal nodes in preorder traversal.</p>
-<p>Also adds indices to nodes reflecting their position in the list;
-i.e., <tt class="docutils literal"><span class="pre">tolist(tree,</span> <span class="pre">sent)[n].idx</span> <span class="pre">==</span> <span class="pre">n</span></tt></p>
 </dd></dl>
 
 </div>
@@ -265,7 +258,7 @@ i.e., <tt class="docutils literal"><span class="pre">tolist(tree,</span> <span c
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -281,7 +274,7 @@ i.e., <tt class="docutils literal"><span class="pre">tolist(tree,</span> <span c
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -298,7 +291,7 @@ i.e., <tt class="docutils literal"><span class="pre">tolist(tree,</span> <span c
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -307,14 +300,14 @@ i.e., <tt class="docutils literal"><span class="pre">tolist(tree,</span> <span c
         <li class="right" >
           <a href="discodop.treetransforms.html" title="discodop.treetransforms"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

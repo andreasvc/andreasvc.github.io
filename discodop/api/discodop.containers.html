@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.containers &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.containers &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.disambiguation" href="discodop.disambiguation.html" />
     <link rel="prev" title="discodop.coarsetofine" href="discodop.coarsetofine.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,16 +38,16 @@
         <li class="right" >
           <a href="discodop.coarsetofine.html" title="discodop.coarsetofine"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.containers">
 <span id="discodop-containers"></span><h1>discodop.containers<a class="headerlink" href="#module-discodop.containers" title="Permalink to this headline">¶</a></h1>
@@ -59,7 +59,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.numedges" title="discodop.containers.numedges"><tt class="xref py py-obj docutils literal"><span class="pre">numedges</span></tt></a>(list&nbsp;edgeslist)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.numedges" title="discodop.containers.numedges"><code class="xref py py-obj docutils literal"><span class="pre">numedges</span></code></a>(list&nbsp;edgeslist)</td>
 <td></td>
 </tr>
 </tbody>
@@ -71,35 +71,165 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Chart" title="discodop.containers.Chart"><tt class="xref py py-obj docutils literal"><span class="pre">Chart</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Grammar" title="discodop.containers.Grammar"><code class="xref py py-obj docutils literal"><span class="pre">Grammar</span></code></a>(rule_tuples_or_str[,&nbsp;lexicon,&nbsp;...])</td>
+<td>A grammar object which stores rules compactly, indexed in various ways.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.Chart" title="discodop.containers.Chart"><code class="xref py py-obj docutils literal"><span class="pre">Chart</span></code></a></td>
 <td>Base class for charts.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.Ctrees" title="discodop.containers.Ctrees"><tt class="xref py py-obj docutils literal"><span class="pre">Ctrees</span></tt></a></td>
-<td>Ctrees(list trees=None, dict prods=None) Auxiliary class to pass around collections of NodeArrays in Python.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Ctrees" title="discodop.containers.Ctrees"><code class="xref py py-obj docutils literal"><span class="pre">Ctrees</span></code></a>(list&nbsp;trees=None,&nbsp;dict&nbsp;prods=None)</td>
+<td>Auxiliary class to pass around collections of NodeArrays in Python.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Edges" title="discodop.containers.Edges"><tt class="xref py py-obj docutils literal"><span class="pre">Edges</span></tt></a></td>
-<td>A static array with a fixed number of Edge structs.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.LexicalRule" title="discodop.containers.LexicalRule"><code class="xref py py-obj docutils literal"><span class="pre">LexicalRule</span></code></a>(uint32_t&nbsp;lhs,&nbsp;unicode&nbsp;word,&nbsp;...)</td>
+<td>A weighted rule of the form &#8216;non-terminal &#8211;&gt; word&#8217;.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.FatChartItem" title="discodop.containers.FatChartItem"><tt class="xref py py-obj docutils literal"><span class="pre">FatChartItem</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.SmallChartItem" title="discodop.containers.SmallChartItem"><code class="xref py py-obj docutils literal"><span class="pre">SmallChartItem</span></code></a>(label,&nbsp;vec)</td>
+<td>Item with word sized bitvector.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.FatChartItem" title="discodop.containers.FatChartItem"><code class="xref py py-obj docutils literal"><span class="pre">FatChartItem</span></code></a></td>
 <td>Item where bitvector is a fixed-width static array.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Grammar" title="discodop.containers.Grammar"><tt class="xref py py-obj docutils literal"><span class="pre">Grammar</span></tt></a></td>
-<td>Grammar(rule_tuples_or_bytes, lexicon=None, start=b&#8217;ROOT&#8217;, bitpar=False, binarized=True) A grammar object which stores rules compactly, indexed in various ways.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Edges" title="discodop.containers.Edges"><code class="xref py py-obj docutils literal"><span class="pre">Edges</span></code></a></td>
+<td>A static array with a fixed number of Edge structs.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.LexicalRule" title="discodop.containers.LexicalRule"><tt class="xref py py-obj docutils literal"><span class="pre">LexicalRule</span></tt></a></td>
-<td>LexicalRule(UInt lhs, unicode word, double prob) A weighted rule of the form &#8216;non-terminal &#8211;&gt; word&#8217;.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.RankedEdge" title="discodop.containers.RankedEdge"><tt class="xref py py-obj docutils literal"><span class="pre">RankedEdge</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.RankedEdge" title="discodop.containers.RankedEdge"><code class="xref py py-obj docutils literal"><span class="pre">RankedEdge</span></code></a></td>
 <td>A derivation with backpointers.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.SmallChartItem" title="discodop.containers.SmallChartItem"><tt class="xref py py-obj docutils literal"><span class="pre">SmallChartItem</span></tt></a></td>
-<td>SmallChartItem(label, vec) Item with word sized bitvector.</td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
+<dt id="discodop.containers.Grammar">
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">Grammar</code><span class="sig-paren">(</span><em>rule_tuples_or_str</em>, <em>lexicon=None</em>, <em>start=u'ROOT'</em>, <em>binarized=True</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A grammar object which stores rules compactly, indexed in various ways.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rule_tuples_or_str</strong> &#8211; either a sequence of tuples containing both
+phrasal &amp; lexical rules, or a string containing the phrasal
+rules in text format; in the latter case <code class="docutils literal"><span class="pre">lexicon</span></code> should be given.
+The text format allows for more efficient loading and is used
+internally.</li>
+<li><strong>start</strong> &#8211; a string identifying the unique start symbol of this grammar,
+which will be used by default when parsing with this grammar</li>
+<li><strong>binarized</strong> &#8211; whether to require a binarized grammar;
+a non-binarized grammar can only be used by bitpar.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>By default the grammar is in logprob mode;
+invoke <code class="docutils literal"><span class="pre">grammar.switch('default',</span> <span class="pre">logprob=False)</span></code> to switch.
+If the grammar only contains integral weights (frequencies), they will
+be normalized into relative frequencies; if the grammar contains any
+non-integral weights, weights will be left unchanged.</p>
+<dl class="method">
+<dt id="discodop.containers.Grammar.buildchainvec">
+<code class="descname">buildchainvec</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar.buildchainvec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a boolean matrix representing the unary (chain) rules.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Grammar.getmapping">
+<code class="descname">getmapping</code><span class="sig-paren">(</span><em>self</em>, <em>Grammar coarse</em>, <em>striplabelre=None</em>, <em>neverblockre=None</em>, <em>bool splitprune=False</em>, <em>bool markorigin=False</em>, <em>dict mapping=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar.getmapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct mapping of this grammar&#8217;s non-terminal labels to another.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>coarse</strong> &#8211; the grammar to which this grammar&#8217;s labels will be
+mapped. May be <code class="docutils literal"><span class="pre">None</span></code>; useful when <code class="docutils literal"><span class="pre">neverblockre</span></code> needs to be
+applied.</li>
+<li><strong>striplabelre</strong> &#8211; if not None, a compiled regex used to form
+the coarse label for a given fine label. This regex is applied
+with a substitution to the empty string.</li>
+<li><strong>neverblockre</strong> &#8211; <p>labels that match this regex will never be pruned.
+Also used to identify auxiliary labels of Double-DOP grammars.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>use <code class="docutils literal"><span class="pre">|&lt;</span></code> to ignore nodes introduced by binarization;</dt>
+<dd>useful if coarse and fine stages employ different kinds of
+markovization; e.g., <code class="docutils literal"><span class="pre">NP</span></code> and <code class="docutils literal"><span class="pre">VP</span></code> may be blocked,
+but not <code class="docutils literal"><span class="pre">NP|&lt;DT-NN&gt;</span></code>.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">_[0-9]+</span></code> to ignore discontinuous nodes <code class="docutils literal"><span class="pre">X_n</span></code> where <code class="docutils literal"><span class="pre">X</span></code> is</dt>
+<dd>a label and <em>n</em> is a fanout.</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li><strong>mapping</strong> &#8211; a dictionary with strings of fine labels mapped to
+coarse labels. striplabelre, if given, is applied first.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The regexes should be compiled objects, i.e., <code class="docutils literal"><span class="pre">re.compile(regex)</span></code>,
+or <code class="docutils literal"><span class="pre">None</span></code> to leave labels unchanged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Grammar.getrulemapping">
+<code class="descname">getrulemapping</code><span class="sig-paren">(</span><em>self</em>, <em>Grammar coarse</em>, <em>striplabelre</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar.getrulemapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a mapping of coarse rules to sets of fine rules.</p>
+<p>A coarse rule for a given fine rule is found by applying the regex
+<code class="docutils literal"><span class="pre">striplabelre</span></code> to labels. NB: this regex is applied to strings with
+multiple non-terminal labels at once, it should not match on the end of
+string <code class="docutils literal"><span class="pre">$</span></code>. The mapping uses the rule numbers (<code class="docutils literal"><span class="pre">rule.no</span></code>) derived
+from the original order of the rules when the Grammar object was
+created; e.g., <code class="docutils literal"><span class="pre">self.rulemapping[12]</span> <span class="pre">==</span> <span class="pre">[34,</span> <span class="pre">56,</span> <span class="pre">78,</span> <span class="pre">...]</span></code>
+where 12 refers to a rule in the given coarse grammar, and the other
+IDs to rules in this grammar.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Grammar.register">
+<code class="descname">register</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a probabilistic model given a name and a sequence of
+floats <code class="docutils literal"><span class="pre">weights</span></code>, with weights in the same order as
+<code class="docutils literal"><span class="pre">self.origrules</span></code> and <code class="docutils literal"><span class="pre">self.origlexicon</span></code> (which is an arbitrary
+order except that tags for each word are clustered together).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Grammar.rulestr">
+<code class="descname">rulestr</code><span class="sig-paren">(</span><em>self</em>, <em>int n</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar.rulestr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string representation of a specific rule in this grammar.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Grammar.setmask">
+<code class="descname">setmask</code><span class="sig-paren">(</span><em>self</em>, <em>seq</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar.setmask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a sequence of rule numbers, store a mask so that any phrasal
+rules not in the sequence are deactivated. If sequence is None, the
+mask is cleared.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Grammar.switch">
+<code class="descname">switch</code><span class="sig-paren">(</span><em>self</em>, <em>unicode name</em>, <em>bool logprob=True</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar.switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch to a different probabilistic model;
+use u&#8217;default&#8217; to swith back to model given during initialization.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Grammar.testgrammar">
+<code class="descname">testgrammar</code><span class="sig-paren">(</span><em>self</em>, <em>epsilon=&lt;???&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Grammar.testgrammar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether all left-hand sides sum to 1 +/-epsilon for the
+currently selected weights.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="discodop.containers.Chart">
-<em class="property">class </em><tt class="descclassname">discodop.containers.</tt><tt class="descname">Chart</tt><a class="headerlink" href="#discodop.containers.Chart" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">Chart</code><a class="headerlink" href="#discodop.containers.Chart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for charts. Provides methods available on all charts.</p>
 <p>The subclass hierarchy for charts has three levels:</p>
 <blockquote>
@@ -116,28 +246,28 @@
 </li>
 </ol>
 </div></blockquote>
-<p>Level 1/2 defines a type for labeled spans referred to as <tt class="docutils literal"><span class="pre">item</span></tt>.</p>
+<p>Level 1/2 defines a type for labeled spans referred to as <code class="docutils literal"><span class="pre">item</span></code>.</p>
 <dl class="method">
 <dt id="discodop.containers.Chart.filter">
-<tt class="descname">filter</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.containers.Chart.filter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">filter</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Chart.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Drop entries not part of a derivation headed by root of chart.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.containers.Chart.indices">
-<tt class="descname">indices</tt><big>(</big><em>self</em>, <em>item</em><big>)</big><a class="headerlink" href="#discodop.containers.Chart.indices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of indices dominated by <tt class="docutils literal"><span class="pre">item</span></tt>.</p>
+<code class="descname">indices</code><span class="sig-paren">(</span><em>self</em>, <em>item</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Chart.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of indices dominated by <code class="docutils literal"><span class="pre">item</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.containers.Chart.root">
-<tt class="descname">root</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.containers.Chart.root" title="Permalink to this definition">¶</a></dt>
+<code class="descname">root</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Chart.root" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return item with root label spanning the whole sentence.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.containers.Chart.stats">
-<tt class="descname">stats</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.containers.Chart.stats" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stats</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Chart.stats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a short string with counts of items, edges.</p>
 </dd></dl>
 
@@ -145,29 +275,27 @@
 
 <dl class="class">
 <dt id="discodop.containers.Ctrees">
-<em class="property">class </em><tt class="descclassname">discodop.containers.</tt><tt class="descname">Ctrees</tt><a class="headerlink" href="#discodop.containers.Ctrees" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ctrees(list trees=None, dict prods=None)
-Auxiliary class to pass around collections of NodeArrays in Python.</p>
-<blockquote>
-<div>When trees is given, prods should be given as well.
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">Ctrees</code><span class="sig-paren">(</span><em>list trees=None</em>, <em>dict prods=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary class to pass around collections of NodeArrays in Python.</p>
+<p>When trees is given, prods should be given as well.
 When trees is not given, the alloc() method should be called and
-trees added one by one using the add() or addnodes() methods.</div></blockquote>
+trees added one by one using the add() or addnodes() methods.</p>
 <dl class="method">
 <dt id="discodop.containers.Ctrees.add">
-<tt class="descname">add</tt><big>(</big><em>self</em>, <em>list tree</em>, <em>dict prods</em><big>)</big><a class="headerlink" href="#discodop.containers.Ctrees.add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add</code><span class="sig-paren">(</span><em>self</em>, <em>list tree</em>, <em>dict prods</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Incrementally add tree to the node array.</p>
 <p>Useful when dealing with large numbers of Tree objects (say 100,000).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.containers.Ctrees.alloc">
-<tt class="descname">alloc</tt><big>(</big><em>self</em>, <em>int numtrees</em>, <em>long numnodes</em><big>)</big><a class="headerlink" href="#discodop.containers.Ctrees.alloc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">alloc</code><span class="sig-paren">(</span><em>self</em>, <em>int numtrees</em>, <em>long numnodes</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.alloc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize an array of trees of nodes structs.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.containers.Ctrees.indextrees">
-<tt class="descname">indextrees</tt><big>(</big><em>self</em>, <em>dict prods</em><big>)</big><a class="headerlink" href="#discodop.containers.Ctrees.indextrees" title="Permalink to this definition">¶</a></dt>
+<code class="descname">indextrees</code><span class="sig-paren">(</span><em>self</em>, <em>dict prods</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.indextrees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create index from productions to trees containing that production.</p>
 <p>Productions are represented as integer IDs, trees are given as sets of
 integer indices.</p>
@@ -176,184 +304,60 @@ integer indices.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="discodop.containers.Edges">
-<em class="property">class </em><tt class="descclassname">discodop.containers.</tt><tt class="descname">Edges</tt><a class="headerlink" href="#discodop.containers.Edges" title="Permalink to this definition">¶</a></dt>
-<dd><p>A static array with a fixed number of Edge structs.</p>
+<dt id="discodop.containers.LexicalRule">
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">LexicalRule</code><span class="sig-paren">(</span><em>uint32_t lhs</em>, <em>unicode word</em>, <em>double prob</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.LexicalRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>A weighted rule of the form &#8216;non-terminal &#8211;&gt; word&#8217;.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.containers.SmallChartItem">
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">SmallChartItem</code><span class="sig-paren">(</span><em>label</em>, <em>vec</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.SmallChartItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Item with word sized bitvector.</p>
+<dl class="method">
+<dt id="discodop.containers.SmallChartItem.binrepr">
+<code class="descname">binrepr</code><span class="sig-paren">(</span><em>self</em>, <em>int lensent=0</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.SmallChartItem.binrepr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.SmallChartItem.lexidx">
+<code class="descname">lexidx</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.SmallChartItem.lexidx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="discodop.containers.FatChartItem">
-<em class="property">class </em><tt class="descclassname">discodop.containers.</tt><tt class="descname">FatChartItem</tt><a class="headerlink" href="#discodop.containers.FatChartItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">FatChartItem</code><a class="headerlink" href="#discodop.containers.FatChartItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Item where bitvector is a fixed-width static array.</p>
 <dl class="method">
 <dt id="discodop.containers.FatChartItem.binrepr">
-<tt class="descname">binrepr</tt><big>(</big><em>self</em>, <em>lensent=0</em><big>)</big><a class="headerlink" href="#discodop.containers.FatChartItem.binrepr" title="Permalink to this definition">¶</a></dt>
+<code class="descname">binrepr</code><span class="sig-paren">(</span><em>self</em>, <em>lensent=0</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.FatChartItem.binrepr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="discodop.containers.FatChartItem.lexidx">
-<tt class="descname">lexidx</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.containers.FatChartItem.lexidx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lexidx</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.FatChartItem.lexidx" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="discodop.containers.Grammar">
-<em class="property">class </em><tt class="descclassname">discodop.containers.</tt><tt class="descname">Grammar</tt><a class="headerlink" href="#discodop.containers.Grammar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Grammar(rule_tuples_or_bytes, lexicon=None, start=b&#8217;ROOT&#8217;, bitpar=False, binarized=True)
-A grammar object which stores rules compactly, indexed in various ways.</p>
-<blockquote>
-<div><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param rule_tuples_or_bytes:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">either a sequence of tuples containing both
-phrasal &amp; lexical rules, or a bytes string containing the phrasal
-rules in text format; in the latter case <tt class="docutils literal"><span class="pre">lexicon</span></tt> should be given.
-The text format allows for more efficient loading and is used
-internally.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">param start:</th><td class="field-body">a string identifying the unique start symbol of this grammar,
-which will be used by default when parsing with this grammar</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">param bitpar:</th><td class="field-body">whether to expect and use the bitpar grammar format</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param binarized:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">whether to require a binarized grammar;
-a non-binarized grammar can only be used by bitpar.</td>
-</tr>
-</tbody>
-</table>
-<p>By default the grammar is in logprob mode;
-invoke <tt class="docutils literal"><span class="pre">grammar.switch(u'default',</span> <span class="pre">logprob=False)</span></tt> to switch.
-If the grammar only contains integral weights (frequencies), they will
-be normalized into relative frequencies; if the grammar contains any
-non-integral weights, weights will be left unchanged.</p>
-</div></blockquote>
-<dl class="method">
-<dt id="discodop.containers.Grammar.buildchainvec">
-<tt class="descname">buildchainvec</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.containers.Grammar.buildchainvec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build a boolean matrix representing the unary (chain) rules.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="discodop.containers.Grammar.getmapping">
-<tt class="descname">getmapping</tt><big>(</big><em>self</em>, <em>Grammar coarse</em>, <em>striplabelre=None</em>, <em>neverblockre=None</em>, <em>bool splitprune=False</em>, <em>bool markorigin=False</em><big>)</big><a class="headerlink" href="#discodop.containers.Grammar.getmapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a mapping of fine non-terminal IDs to coarse non-terminal
-IDs, by applying the regex <tt class="docutils literal"><span class="pre">striplabelre</span></tt> to the fine labels, used
-for coarse-to-fine pruning. A secondary regex neverblockre is for items
-that should never be pruned.
-The regexes should be compiled objects, i.e., <tt class="docutils literal"><span class="pre">re.compile(regex)</span></tt>,
-or <tt class="docutils literal"><span class="pre">None</span></tt> to leave labels unchanged. <tt class="docutils literal"><span class="pre">coarse</span></tt> may be <tt class="docutils literal"><span class="pre">None</span></tt>, in
-which case only <tt class="docutils literal"><span class="pre">neverblockre</span></tt> is effective, which is also used for
-non-pruning purposes.</p>
-<ul>
-<li><dl class="first docutils">
-<dt>use <tt class="docutils literal"><span class="pre">|&lt;</span></tt> to ignore nodes introduced by binarization;</dt>
-<dd><p class="first last">useful if coarse and fine stages employ different kinds of
-markovization; e.g., <tt class="docutils literal"><span class="pre">NP</span></tt> and <tt class="docutils literal"><span class="pre">VP</span></tt> may be blocked,
-but not <tt class="docutils literal"><span class="pre">NP|&lt;DT-NN&gt;</span></tt>.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">_[0-9]+</span></tt> to ignore discontinuous nodes <tt class="docutils literal"><span class="pre">X_n</span></tt> where <tt class="docutils literal"><span class="pre">X</span></tt> is a</dt>
-<dd><p class="first last">label and <em>n</em> is a fanout.</p>
-</dd>
-</dl>
-</li>
-</ul>
-</dd></dl>
-
-<dl class="method">
-<dt id="discodop.containers.Grammar.getrulemapping">
-<tt class="descname">getrulemapping</tt><big>(</big><em>self</em>, <em>Grammar coarse</em>, <em>striplabelre</em><big>)</big><a class="headerlink" href="#discodop.containers.Grammar.getrulemapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Produce a mapping of coarse rules to sets of fine rules.</p>
-<p>A coarse rule for a given fine rule is found by applying the regex
-<tt class="docutils literal"><span class="pre">striplabelre</span></tt> to labels. NB: this regex is applied to strings with
-multiple non-terminal labels at once, it should not match on the end of
-string <tt class="docutils literal"><span class="pre">$</span></tt>. The mapping uses the rule numbers (<tt class="docutils literal"><span class="pre">rule.no</span></tt>) derived
-from the original order of the rules when the Grammar object was
-created; e.g., <tt class="docutils literal"><span class="pre">self.rulemapping[12]</span> <span class="pre">==</span> <span class="pre">[34,</span> <span class="pre">56,</span> <span class="pre">78,</span> <span class="pre">...]</span></tt>
-where 12 refers to a rule in the given coarse grammar, and the other
-IDs to rules in this grammar.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="discodop.containers.Grammar.register">
-<tt class="descname">register</tt><big>(</big><em>self</em>, <em>unicode name</em>, <em>weights</em><big>)</big><a class="headerlink" href="#discodop.containers.Grammar.register" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register a probabilistic model given a name and a sequence of
-floats <tt class="docutils literal"><span class="pre">weights</span></tt>, with weights in the same order as
-<tt class="docutils literal"><span class="pre">self.origrules</span></tt> and <tt class="docutils literal"><span class="pre">self.origlexicon</span></tt> (which is an arbitrary
-order except that tags for each word are clustered together).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="discodop.containers.Grammar.rulestr">
-<tt class="descname">rulestr</tt><big>(</big><em>self</em>, <em>int n</em><big>)</big><a class="headerlink" href="#discodop.containers.Grammar.rulestr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a string representation of a specific rule in this grammar.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="discodop.containers.Grammar.setmask">
-<tt class="descname">setmask</tt><big>(</big><em>self</em>, <em>seq</em><big>)</big><a class="headerlink" href="#discodop.containers.Grammar.setmask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a sequence of rule numbers, store a mask so that any phrasal
-rules not in the sequence are deactivated. If sequence is None, the
-mask is cleared.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="discodop.containers.Grammar.switch">
-<tt class="descname">switch</tt><big>(</big><em>self</em>, <em>unicode name</em>, <em>bool logprob=True</em><big>)</big><a class="headerlink" href="#discodop.containers.Grammar.switch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Switch to a different probabilistic model;
-use u&#8217;default&#8217; to swith back to model given during initialization.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="discodop.containers.Grammar.testgrammar">
-<tt class="descname">testgrammar</tt><big>(</big><em>self</em>, <em>epsilon=&lt;???&gt;</em><big>)</big><a class="headerlink" href="#discodop.containers.Grammar.testgrammar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test whether all left-hand sides sum to 1 +/-epsilon for the
-currently selected weights.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="discodop.containers.LexicalRule">
-<em class="property">class </em><tt class="descclassname">discodop.containers.</tt><tt class="descname">LexicalRule</tt><a class="headerlink" href="#discodop.containers.LexicalRule" title="Permalink to this definition">¶</a></dt>
-<dd><p>LexicalRule(UInt lhs, unicode word, double prob)
-A weighted rule of the form &#8216;non-terminal &#8211;&gt; word&#8217;.</p>
+<dt id="discodop.containers.Edges">
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">Edges</code><a class="headerlink" href="#discodop.containers.Edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>A static array with a fixed number of Edge structs.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="discodop.containers.RankedEdge">
-<em class="property">class </em><tt class="descclassname">discodop.containers.</tt><tt class="descname">RankedEdge</tt><a class="headerlink" href="#discodop.containers.RankedEdge" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">RankedEdge</code><a class="headerlink" href="#discodop.containers.RankedEdge" title="Permalink to this definition">¶</a></dt>
 <dd><p>A derivation with backpointers.</p>
 <p>Denotes a <em>k</em>-best derivation defined by an edge, including the chart
 item (head) to which it points, along with ranks for its children.</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="discodop.containers.SmallChartItem">
-<em class="property">class </em><tt class="descclassname">discodop.containers.</tt><tt class="descname">SmallChartItem</tt><a class="headerlink" href="#discodop.containers.SmallChartItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>SmallChartItem(label, vec)
-Item with word sized bitvector.</p>
-<dl class="method">
-<dt id="discodop.containers.SmallChartItem.binrepr">
-<tt class="descname">binrepr</tt><big>(</big><em>self</em>, <em>int lensent=0</em><big>)</big><a class="headerlink" href="#discodop.containers.SmallChartItem.binrepr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="discodop.containers.SmallChartItem.lexidx">
-<tt class="descname">lexidx</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.containers.SmallChartItem.lexidx" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="function">
 <dt id="discodop.containers.numedges">
-<tt class="descclassname">discodop.containers.</tt><tt class="descname">numedges</tt><big>(</big><em>list edgeslist</em><big>)</big><a class="headerlink" href="#discodop.containers.numedges" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.containers.</code><code class="descname">numedges</code><span class="sig-paren">(</span><em>list edgeslist</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.numedges" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -362,7 +366,7 @@ Item with word sized bitvector.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -378,7 +382,7 @@ Item with word sized bitvector.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -395,7 +399,7 @@ Item with word sized bitvector.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -404,14 +408,14 @@ Item with word sized bitvector.</p>
         <li class="right" >
           <a href="discodop.coarsetofine.html" title="discodop.coarsetofine"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

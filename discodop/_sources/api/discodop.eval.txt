@@ -9,27 +9,29 @@ discodop.eval
 
    .. autosummary::
    
-      accuracy
+      main
+      readparam
+      transitiveclosure
+      alignsent
+      transform
+      parentedbracketings
       bracketings
       bracketing
-      disc
-      editdistance
-      f_measure
-      harmean
-      intervals
-      leafancestor
-      leafancestorpaths
-      mean
-      nozerodiv
-      parentedbracketings
-      pathscore
-      precision
-      readparam
-      recall
       strbracketings
-      transform
-      transitiveclosure
+      leafancestorpaths
+      pathscore
+      leafancestor
       treedisteval
+      recall
+      precision
+      f_measure
+      accuracy
+      harmean
+      mean
+      intervals
+      disc
+      nozerodiv
+      editdistance
    
    
 
@@ -39,9 +41,9 @@ discodop.eval
 
    .. autosummary::
    
-      EvalAccumulator
       Evaluator
       TreePairResult
+      EvalAccumulator
    
    
 

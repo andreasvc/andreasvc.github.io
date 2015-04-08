@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.treebank &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.treebank &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.treebanktransforms" href="discodop.treebanktransforms.html" />
     <link rel="prev" title="discodop.tree" href="discodop.tree.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,16 +38,16 @@
         <li class="right" >
           <a href="discodop.tree.html" title="discodop.tree"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.treebank">
 <span id="discodop-treebank"></span><h1>discodop.treebank<a class="headerlink" href="#module-discodop.treebank" title="Permalink to this headline">¶</a></h1>
@@ -59,62 +59,68 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.brackettree" title="discodop.treebank.brackettree"><tt class="xref py py-obj docutils literal"><span class="pre">brackettree</span></tt></a>(treestr,&nbsp;sent,&nbsp;brackets,&nbsp;strtermre)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.brackettree" title="discodop.treebank.brackettree"><code class="xref py py-obj docutils literal"><span class="pre">brackettree</span></code></a>(treestr,&nbsp;sent,&nbsp;brackets,&nbsp;strtermre)</td>
 <td>Parse a single tree presented in (disc)bracket format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.exporttree" title="discodop.treebank.exporttree"><tt class="xref py py-obj docutils literal"><span class="pre">exporttree</span></tt></a>(block[,&nbsp;functions,&nbsp;morphology,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.exporttree" title="discodop.treebank.exporttree"><code class="xref py py-obj docutils literal"><span class="pre">exporttree</span></code></a>(block[,&nbsp;functions,&nbsp;morphology,&nbsp;...])</td>
 <td>Get tree, sentence from tree in export format given as list of lines.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.exportsplit" title="discodop.treebank.exportsplit"><tt class="xref py py-obj docutils literal"><span class="pre">exportsplit</span></tt></a>(line)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.exportsplit" title="discodop.treebank.exportsplit"><code class="xref py py-obj docutils literal"><span class="pre">exportsplit</span></code></a>(line)</td>
 <td>Take a line in export format and split into fields.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.alpinotree" title="discodop.treebank.alpinotree"><tt class="xref py py-obj docutils literal"><span class="pre">alpinotree</span></tt></a>(block[,&nbsp;functions,&nbsp;morphology,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.alpinotree" title="discodop.treebank.alpinotree"><code class="xref py py-obj docutils literal"><span class="pre">alpinotree</span></code></a>(block[,&nbsp;functions,&nbsp;morphology,&nbsp;...])</td>
 <td>Get tree, sent from tree in Alpino format given as etree XML object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writetree" title="discodop.treebank.writetree"><tt class="xref py py-obj docutils literal"><span class="pre">writetree</span></tt></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;fmt[,&nbsp;comment,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writetree" title="discodop.treebank.writetree"><code class="xref py py-obj docutils literal"><span class="pre">writetree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;fmt[,&nbsp;comment,&nbsp;...])</td>
 <td>Convert a tree to a string representation in the given treebank format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.writeexporttree" title="discodop.treebank.writeexporttree"><tt class="xref py py-obj docutils literal"><span class="pre">writeexporttree</span></tt></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;comment,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.writebrackettree" title="discodop.treebank.writebrackettree"><code class="xref py py-obj docutils literal"><span class="pre">writebrackettree</span></code></a>(tree,&nbsp;sent)</td>
+<td>Return a tree in bracket notation with words as terminals.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writeexporttree" title="discodop.treebank.writeexporttree"><code class="xref py py-obj docutils literal"><span class="pre">writeexporttree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;comment,&nbsp;...)</td>
 <td>Return string with given tree in Negra&#8217;s export format.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writealpinotree" title="discodop.treebank.writealpinotree"><tt class="xref py py-obj docutils literal"><span class="pre">writealpinotree</span></tt></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;commentstr)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.writealpinotree" title="discodop.treebank.writealpinotree"><code class="xref py py-obj docutils literal"><span class="pre">writealpinotree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;commentstr)</td>
 <td>Return XML string with tree in AlpinoXML format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.writedependencies" title="discodop.treebank.writedependencies"><tt class="xref py py-obj docutils literal"><span class="pre">writedependencies</span></tt></a>(tree,&nbsp;sent,&nbsp;fmt,&nbsp;headrules)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writedependencies" title="discodop.treebank.writedependencies"><code class="xref py py-obj docutils literal"><span class="pre">writedependencies</span></code></a>(tree,&nbsp;sent,&nbsp;fmt)</td>
 <td>Convert tree to unlabeled dependencies in <cite>mst</cite> or <cite>conll</cite> format.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.dependencies" title="discodop.treebank.dependencies"><tt class="xref py py-obj docutils literal"><span class="pre">dependencies</span></tt></a>(root,&nbsp;headrules)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.dependencies" title="discodop.treebank.dependencies"><code class="xref py py-obj docutils literal"><span class="pre">dependencies</span></code></a>(root)</td>
 <td>Lin (1995): A Dependency-based Method for Evaluating [...] Parsers.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.makedep" title="discodop.treebank.makedep"><tt class="xref py py-obj docutils literal"><span class="pre">makedep</span></tt></a>(root,&nbsp;deps,&nbsp;headrules)</td>
-<td>Traverse a tree marking heads and extracting dependencies.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.handlefunctions" title="discodop.treebank.handlefunctions"><tt class="xref py py-obj docutils literal"><span class="pre">handlefunctions</span></tt></a>(action,&nbsp;tree[,&nbsp;pos,&nbsp;top,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.handlefunctions" title="discodop.treebank.handlefunctions"><code class="xref py py-obj docutils literal"><span class="pre">handlefunctions</span></code></a>(action,&nbsp;tree[,&nbsp;pos,&nbsp;top,&nbsp;...])</td>
 <td>Add function tags to phrasal labels e.g., &#8216;VP&#8217; =&gt; &#8216;VP-HD&#8217;.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.handlemorphology" title="discodop.treebank.handlemorphology"><tt class="xref py py-obj docutils literal"><span class="pre">handlemorphology</span></tt></a>(action,&nbsp;lemmaaction,&nbsp;...[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.handlemorphology" title="discodop.treebank.handlemorphology"><code class="xref py py-obj docutils literal"><span class="pre">handlemorphology</span></code></a>(action,&nbsp;lemmaaction,&nbsp;...[,&nbsp;...])</td>
 <td>Augment/replace preterminal label with morphological information.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.incrementaltreereader" title="discodop.treebank.incrementaltreereader"><tt class="xref py py-obj docutils literal"><span class="pre">incrementaltreereader</span></tt></a>(treeinput[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.incrementaltreereader" title="discodop.treebank.incrementaltreereader"><code class="xref py py-obj docutils literal"><span class="pre">incrementaltreereader</span></code></a>(treeinput[,&nbsp;...])</td>
 <td>Incremental corpus reader.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.segmentbrackets" title="discodop.treebank.segmentbrackets"><tt class="xref py py-obj docutils literal"><span class="pre">segmentbrackets</span></tt></a>(brackets[,&nbsp;strict])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.segmentbrackets" title="discodop.treebank.segmentbrackets"><code class="xref py py-obj docutils literal"><span class="pre">segmentbrackets</span></code></a>(brackets[,&nbsp;strict])</td>
 <td>Co-routine that accepts one line at a time.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.segmentexport" title="discodop.treebank.segmentexport"><tt class="xref py py-obj docutils literal"><span class="pre">segmentexport</span></tt></a>(morphology,&nbsp;functions[,&nbsp;strict])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.segmentexport" title="discodop.treebank.segmentexport"><code class="xref py py-obj docutils literal"><span class="pre">segmentexport</span></code></a>(morphology,&nbsp;functions[,&nbsp;strict])</td>
 <td>Co-routine that accepts one line at a time.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.quote" title="discodop.treebank.quote"><tt class="xref py py-obj docutils literal"><span class="pre">quote</span></tt></a>(word)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.quote" title="discodop.treebank.quote"><code class="xref py py-obj docutils literal"><span class="pre">quote</span></code></a>(word)</td>
 <td>Quote parentheses and replace None with &#8216;&#8217;.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.unquote" title="discodop.treebank.unquote"><tt class="xref py py-obj docutils literal"><span class="pre">unquote</span></tt></a>(word)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.unquote" title="discodop.treebank.unquote"><code class="xref py py-obj docutils literal"><span class="pre">unquote</span></code></a>(word)</td>
 <td>Reverse quoting of parentheses, frontier spans.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.treebankfanout" title="discodop.treebank.treebankfanout"><tt class="xref py py-obj docutils literal"><span class="pre">treebankfanout</span></tt></a>(trees)</td>
-<td>Get maximal fan-out of a list of trees.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.termindices" title="discodop.treebank.termindices"><code class="xref py py-obj docutils literal"><span class="pre">termindices</span></code></a>(treestr)</td>
+<td>Replace terminals in a tree string with consecutive indices.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.numbase" title="discodop.treebank.numbase"><tt class="xref py py-obj docutils literal"><span class="pre">numbase</span></tt></a>(key)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.numbase" title="discodop.treebank.numbase"><code class="xref py py-obj docutils literal"><span class="pre">numbase</span></code></a>(key)</td>
 <td>Turn a file name into a numeric sorting key if possible.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.removeterminals" title="discodop.treebank.removeterminals"><code class="xref py py-obj docutils literal"><span class="pre">removeterminals</span></code></a>(tree,&nbsp;sent,&nbsp;func)</td>
+<td>Remove any terminals for which func is True, and any empty ancestors.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.removeemptynodes" title="discodop.treebank.removeemptynodes"><code class="xref py py-obj docutils literal"><span class="pre">removeemptynodes</span></code></a>(tree,&nbsp;sent)</td>
+<td>Remove any empty nodes, and any empty ancestors.</td>
 </tr>
 </tbody>
 </table>
@@ -125,55 +131,73 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.CorpusReader" title="discodop.treebank.CorpusReader"><tt class="xref py py-obj docutils literal"><span class="pre">CorpusReader</span></tt></a>(path[,&nbsp;encoding,&nbsp;ensureroot,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.Item" title="discodop.treebank.Item"><code class="xref py py-obj docutils literal"><span class="pre">Item</span></code></a>(tree,&nbsp;sent,&nbsp;comment,&nbsp;block)</td>
+<td>A treebank item.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.CorpusReader" title="discodop.treebank.CorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">CorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;ensureroot,&nbsp;...])</td>
 <td>Abstract corpus reader.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.BracketCorpusReader" title="discodop.treebank.BracketCorpusReader"><tt class="xref py py-obj docutils literal"><span class="pre">BracketCorpusReader</span></tt></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.BracketCorpusReader" title="discodop.treebank.BracketCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">BracketCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Corpus reader for phrase-structures in bracket notation.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.DiscBracketCorpusReader" title="discodop.treebank.DiscBracketCorpusReader"><tt class="xref py py-obj docutils literal"><span class="pre">DiscBracketCorpusReader</span></tt></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.DiscBracketCorpusReader" title="discodop.treebank.DiscBracketCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">DiscBracketCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>A corpus reader for discontinuous trees in bracket notation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.NegraCorpusReader" title="discodop.treebank.NegraCorpusReader"><tt class="xref py py-obj docutils literal"><span class="pre">NegraCorpusReader</span></tt></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.NegraCorpusReader" title="discodop.treebank.NegraCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">NegraCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Read a corpus in the Negra export format.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.AlpinoCorpusReader" title="discodop.treebank.AlpinoCorpusReader"><tt class="xref py py-obj docutils literal"><span class="pre">AlpinoCorpusReader</span></tt></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.AlpinoCorpusReader" title="discodop.treebank.AlpinoCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">AlpinoCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Corpus reader for the Dutch Alpino treebank in XML format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.TigerXMLCorpusReader" title="discodop.treebank.TigerXMLCorpusReader"><tt class="xref py py-obj docutils literal"><span class="pre">TigerXMLCorpusReader</span></tt></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.TigerXMLCorpusReader" title="discodop.treebank.TigerXMLCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">TigerXMLCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Corpus reader for the Tiger XML format.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.DactCorpusReader" title="discodop.treebank.DactCorpusReader"><tt class="xref py py-obj docutils literal"><span class="pre">DactCorpusReader</span></tt></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.DactCorpusReader" title="discodop.treebank.DactCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">DactCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Corpus reader for Alpino trees in Dact format (DB XML).</td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
+<dt id="discodop.treebank.Item">
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">Item</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em>, <em>comment</em>, <em>block</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#Item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.Item" title="Permalink to this definition">¶</a></dt>
+<dd><p>A treebank item.</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="discodop.treebank.CorpusReader">
-<em class="property">class </em><tt class="descclassname">discodop.treebank.</tt><tt class="descname">CorpusReader</tt><big>(</big><em>path</em>, <em>encoding=u'utf-8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>headfinal=True</em>, <em>headreverse=False</em>, <em>markheads=False</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">CorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract corpus reader.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <tt class="docutils literal"><span class="pre">wsj*.mrg</span></tt>.</li>
+<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <code class="docutils literal"><span class="pre">wsj*.mrg</span></code>.</li>
 <li><strong>ensureroot</strong> &#8211; add root node with given label if necessary.</li>
 <li><strong>removeempty</strong> &#8211; remove empty nodes and any empty ancestors; a
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>headfinal</strong> &#8211; put head in final position (default: frontal).</li>
-<li><strong>headreverse</strong> &#8211; the head is made final/frontal by reversing
-everything before or after the head. When True, the side on which
-the head is will be the reversed side.</li>
-<li><strong>markheads</strong> &#8211; add &#8216;-HD&#8217; to phrasal label of heads.</li>
+<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is.</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">move punctuation to appropriate constituents
 using heuristics.</td>
@@ -181,9 +205,11 @@ using heuristics.</td>
 <tr class="field-odd field"><th class="field-name">&#8216;moveall&#8217;:</th><td class="field-body">same as &#8216;move&#8217;, but moves all preterminals under root,
 instead of only recognized punctuation.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+<tr class="field-even field"><th class="field-name">&#8216;prune&#8217;:</th><td class="field-body">prune away leading &amp; ending quotes &amp; periods, then move.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
 (as in original Negra/Tiger treebanks).</td>
 </tr>
 </tbody>
@@ -194,16 +220,16 @@ instead of only recognized punctuation.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is.</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate grammatical function to syntactic label,
-separated by a hypen: e.g., NP =&gt; NP-SBJ</td>
+separated by a hypen: e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">NP-SBJ</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated grammatical function,
-e.g., NP-SBJ =&gt; NP</td>
+e.g., <code class="docutils literal"><span class="pre">NP-SBJ</span> <span class="pre">=&gt;</span> <span class="pre">NP</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic label with grammatical function,
-e.g., NP =&gt; SBJ</td>
+e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">SBJ</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -213,15 +239,15 @@ e.g., NP =&gt; SBJ</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
-e.g., DET/sg.def</td>
+e.g., <code class="docutils literal"><span class="pre">DET/sg.def</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">add node with morphological information between
-POS tag and word, e.g., (DET (sg.def the))</td>
+POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</span> <span class="pre">(sg.def</span> <span class="pre">the))</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -231,11 +257,11 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas [default].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man</td>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals</td>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert lemma as node between POS tag and word.</td>
 </tr>
@@ -249,13 +275,13 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 </table>
 <dl class="method">
 <dt id="discodop.treebank.CorpusReader.itertrees">
-<tt class="descname">itertrees</tt><big>(</big><em>start=None</em>, <em>end=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.itertrees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.itertrees" title="Permalink to this definition">¶</a></dt>
+<code class="descname">itertrees</code><span class="sig-paren">(</span><em>start=None</em>, <em>end=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.itertrees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.itertrees" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an iterator returning tuples (key, (tree, sent)) of
-sentences in corpus. Useful when the dictionary of all trees in
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an iterator returning tuples <code class="docutils literal"><span class="pre">(key,</span> <span class="pre">(tree,</span> <span class="pre">sent,</span> <span class="pre">comment))</span></code>
+of sentences in corpus. Useful when the dictionary of all trees in
 corpus would not fit in memory.</td>
 </tr>
 </tbody>
@@ -264,13 +290,13 @@ corpus would not fit in memory.</td>
 
 <dl class="method">
 <dt id="discodop.treebank.CorpusReader.trees">
-<tt class="descname">trees</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.trees" title="Permalink to this definition">¶</a></dt>
+<code class="descname">trees</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.trees" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an ordered dictionary of parse trees
-(<tt class="docutils literal"><span class="pre">Tree</span></tt> objects with integer indices as leaves).</td>
+(<code class="docutils literal"><span class="pre">Tree</span></code> objects with integer indices as leaves).</td>
 </tr>
 </tbody>
 </table>
@@ -278,7 +304,7 @@ corpus would not fit in memory.</td>
 
 <dl class="method">
 <dt id="discodop.treebank.CorpusReader.sents">
-<tt class="descname">sents</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.sents" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sents</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.sents" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -292,7 +318,7 @@ each sentence being a list of words.</td>
 
 <dl class="method">
 <dt id="discodop.treebank.CorpusReader.tagged_sents">
-<tt class="descname">tagged_sents</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.tagged_sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.tagged_sents" title="Permalink to this definition">¶</a></dt>
+<code class="descname">tagged_sents</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.tagged_sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.tagged_sents" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -306,7 +332,7 @@ each tagged sentence being a list of (word, tag) pairs.</td>
 
 <dl class="method">
 <dt id="discodop.treebank.CorpusReader.blocks">
-<tt class="descname">blocks</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.blocks" title="Permalink to this definition">¶</a></dt>
+<code class="descname">blocks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader.blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader.blocks" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -322,7 +348,7 @@ trees in the original treebank.</td>
 
 <dl class="class">
 <dt id="discodop.treebank.BracketCorpusReader">
-<em class="property">class </em><tt class="descclassname">discodop.treebank.</tt><tt class="descname">BracketCorpusReader</tt><big>(</big><em>path</em>, <em>encoding=u'utf-8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>headfinal=True</em>, <em>headreverse=False</em>, <em>markheads=False</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#BracketCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.BracketCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">BracketCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#BracketCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.BracketCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corpus reader for phrase-structures in bracket notation.</p>
 <p>For example:</p>
 <div class="highlight-python"><div class="highlight"><pre>(S (NP John) (VP (VB is) (JJ rich)) (. .))
@@ -333,23 +359,32 @@ trees in the original treebank.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <tt class="docutils literal"><span class="pre">wsj*.mrg</span></tt>.</li>
+<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <code class="docutils literal"><span class="pre">wsj*.mrg</span></code>.</li>
 <li><strong>ensureroot</strong> &#8211; add root node with given label if necessary.</li>
 <li><strong>removeempty</strong> &#8211; remove empty nodes and any empty ancestors; a
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>headfinal</strong> &#8211; put head in final position (default: frontal).</li>
-<li><strong>headreverse</strong> &#8211; the head is made final/frontal by reversing
-everything before or after the head. When True, the side on which
-the head is will be the reversed side.</li>
-<li><strong>markheads</strong> &#8211; add &#8216;-HD&#8217; to phrasal label of heads.</li>
+<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is.</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">move punctuation to appropriate constituents
 using heuristics.</td>
@@ -357,9 +392,11 @@ using heuristics.</td>
 <tr class="field-odd field"><th class="field-name">&#8216;moveall&#8217;:</th><td class="field-body">same as &#8216;move&#8217;, but moves all preterminals under root,
 instead of only recognized punctuation.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+<tr class="field-even field"><th class="field-name">&#8216;prune&#8217;:</th><td class="field-body">prune away leading &amp; ending quotes &amp; periods, then move.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
 (as in original Negra/Tiger treebanks).</td>
 </tr>
 </tbody>
@@ -370,16 +407,16 @@ instead of only recognized punctuation.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is.</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate grammatical function to syntactic label,
-separated by a hypen: e.g., NP =&gt; NP-SBJ</td>
+separated by a hypen: e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">NP-SBJ</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated grammatical function,
-e.g., NP-SBJ =&gt; NP</td>
+e.g., <code class="docutils literal"><span class="pre">NP-SBJ</span> <span class="pre">=&gt;</span> <span class="pre">NP</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic label with grammatical function,
-e.g., NP =&gt; SBJ</td>
+e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">SBJ</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -389,15 +426,15 @@ e.g., NP =&gt; SBJ</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
-e.g., DET/sg.def</td>
+e.g., <code class="docutils literal"><span class="pre">DET/sg.def</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">add node with morphological information between
-POS tag and word, e.g., (DET (sg.def the))</td>
+POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</span> <span class="pre">(sg.def</span> <span class="pre">the))</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -407,11 +444,11 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas [default].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man</td>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals</td>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert lemma as node between POS tag and word.</td>
 </tr>
@@ -427,7 +464,7 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 
 <dl class="class">
 <dt id="discodop.treebank.DiscBracketCorpusReader">
-<em class="property">class </em><tt class="descclassname">discodop.treebank.</tt><tt class="descname">DiscBracketCorpusReader</tt><big>(</big><em>path</em>, <em>encoding=u'utf-8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>headfinal=True</em>, <em>headreverse=False</em>, <em>markheads=False</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#DiscBracketCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.DiscBracketCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">DiscBracketCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#DiscBracketCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.DiscBracketCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>A corpus reader for discontinuous trees in bracket notation.</p>
 <p>Leaves are indices pointing to words in a separately specified sentence.
 For example:</p>
@@ -444,23 +481,32 @@ internal representation employed here, so it can be read efficiently.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <tt class="docutils literal"><span class="pre">wsj*.mrg</span></tt>.</li>
+<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <code class="docutils literal"><span class="pre">wsj*.mrg</span></code>.</li>
 <li><strong>ensureroot</strong> &#8211; add root node with given label if necessary.</li>
 <li><strong>removeempty</strong> &#8211; remove empty nodes and any empty ancestors; a
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>headfinal</strong> &#8211; put head in final position (default: frontal).</li>
-<li><strong>headreverse</strong> &#8211; the head is made final/frontal by reversing
-everything before or after the head. When True, the side on which
-the head is will be the reversed side.</li>
-<li><strong>markheads</strong> &#8211; add &#8216;-HD&#8217; to phrasal label of heads.</li>
+<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is.</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">move punctuation to appropriate constituents
 using heuristics.</td>
@@ -468,9 +514,11 @@ using heuristics.</td>
 <tr class="field-odd field"><th class="field-name">&#8216;moveall&#8217;:</th><td class="field-body">same as &#8216;move&#8217;, but moves all preterminals under root,
 instead of only recognized punctuation.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+<tr class="field-even field"><th class="field-name">&#8216;prune&#8217;:</th><td class="field-body">prune away leading &amp; ending quotes &amp; periods, then move.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
 (as in original Negra/Tiger treebanks).</td>
 </tr>
 </tbody>
@@ -481,16 +529,16 @@ instead of only recognized punctuation.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is.</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate grammatical function to syntactic label,
-separated by a hypen: e.g., NP =&gt; NP-SBJ</td>
+separated by a hypen: e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">NP-SBJ</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated grammatical function,
-e.g., NP-SBJ =&gt; NP</td>
+e.g., <code class="docutils literal"><span class="pre">NP-SBJ</span> <span class="pre">=&gt;</span> <span class="pre">NP</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic label with grammatical function,
-e.g., NP =&gt; SBJ</td>
+e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">SBJ</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -500,15 +548,15 @@ e.g., NP =&gt; SBJ</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
-e.g., DET/sg.def</td>
+e.g., <code class="docutils literal"><span class="pre">DET/sg.def</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">add node with morphological information between
-POS tag and word, e.g., (DET (sg.def the))</td>
+POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</span> <span class="pre">(sg.def</span> <span class="pre">the))</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -518,11 +566,11 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas [default].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man</td>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals</td>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert lemma as node between POS tag and word.</td>
 </tr>
@@ -538,30 +586,39 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 
 <dl class="class">
 <dt id="discodop.treebank.NegraCorpusReader">
-<em class="property">class </em><tt class="descclassname">discodop.treebank.</tt><tt class="descname">NegraCorpusReader</tt><big>(</big><em>path</em>, <em>encoding=u'utf-8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>headfinal=True</em>, <em>headreverse=False</em>, <em>markheads=False</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#NegraCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.NegraCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">NegraCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#NegraCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.NegraCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a corpus in the Negra export format.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <tt class="docutils literal"><span class="pre">wsj*.mrg</span></tt>.</li>
+<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <code class="docutils literal"><span class="pre">wsj*.mrg</span></code>.</li>
 <li><strong>ensureroot</strong> &#8211; add root node with given label if necessary.</li>
 <li><strong>removeempty</strong> &#8211; remove empty nodes and any empty ancestors; a
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>headfinal</strong> &#8211; put head in final position (default: frontal).</li>
-<li><strong>headreverse</strong> &#8211; the head is made final/frontal by reversing
-everything before or after the head. When True, the side on which
-the head is will be the reversed side.</li>
-<li><strong>markheads</strong> &#8211; add &#8216;-HD&#8217; to phrasal label of heads.</li>
+<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is.</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">move punctuation to appropriate constituents
 using heuristics.</td>
@@ -569,9 +626,11 @@ using heuristics.</td>
 <tr class="field-odd field"><th class="field-name">&#8216;moveall&#8217;:</th><td class="field-body">same as &#8216;move&#8217;, but moves all preterminals under root,
 instead of only recognized punctuation.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+<tr class="field-even field"><th class="field-name">&#8216;prune&#8217;:</th><td class="field-body">prune away leading &amp; ending quotes &amp; periods, then move.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
 (as in original Negra/Tiger treebanks).</td>
 </tr>
 </tbody>
@@ -582,16 +641,16 @@ instead of only recognized punctuation.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is.</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate grammatical function to syntactic label,
-separated by a hypen: e.g., NP =&gt; NP-SBJ</td>
+separated by a hypen: e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">NP-SBJ</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated grammatical function,
-e.g., NP-SBJ =&gt; NP</td>
+e.g., <code class="docutils literal"><span class="pre">NP-SBJ</span> <span class="pre">=&gt;</span> <span class="pre">NP</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic label with grammatical function,
-e.g., NP =&gt; SBJ</td>
+e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">SBJ</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -601,15 +660,15 @@ e.g., NP =&gt; SBJ</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
-e.g., DET/sg.def</td>
+e.g., <code class="docutils literal"><span class="pre">DET/sg.def</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">add node with morphological information between
-POS tag and word, e.g., (DET (sg.def the))</td>
+POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</span> <span class="pre">(sg.def</span> <span class="pre">the))</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -619,11 +678,11 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas [default].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man</td>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals</td>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert lemma as node between POS tag and word.</td>
 </tr>
@@ -639,30 +698,39 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 
 <dl class="class">
 <dt id="discodop.treebank.TigerXMLCorpusReader">
-<em class="property">class </em><tt class="descclassname">discodop.treebank.</tt><tt class="descname">TigerXMLCorpusReader</tt><big>(</big><em>path</em>, <em>encoding=u'utf-8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>headfinal=True</em>, <em>headreverse=False</em>, <em>markheads=False</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#TigerXMLCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.TigerXMLCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">TigerXMLCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#TigerXMLCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.TigerXMLCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corpus reader for the Tiger XML format.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <tt class="docutils literal"><span class="pre">wsj*.mrg</span></tt>.</li>
+<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <code class="docutils literal"><span class="pre">wsj*.mrg</span></code>.</li>
 <li><strong>ensureroot</strong> &#8211; add root node with given label if necessary.</li>
 <li><strong>removeempty</strong> &#8211; remove empty nodes and any empty ancestors; a
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>headfinal</strong> &#8211; put head in final position (default: frontal).</li>
-<li><strong>headreverse</strong> &#8211; the head is made final/frontal by reversing
-everything before or after the head. When True, the side on which
-the head is will be the reversed side.</li>
-<li><strong>markheads</strong> &#8211; add &#8216;-HD&#8217; to phrasal label of heads.</li>
+<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is.</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">move punctuation to appropriate constituents
 using heuristics.</td>
@@ -670,9 +738,11 @@ using heuristics.</td>
 <tr class="field-odd field"><th class="field-name">&#8216;moveall&#8217;:</th><td class="field-body">same as &#8216;move&#8217;, but moves all preterminals under root,
 instead of only recognized punctuation.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+<tr class="field-even field"><th class="field-name">&#8216;prune&#8217;:</th><td class="field-body">prune away leading &amp; ending quotes &amp; periods, then move.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
 (as in original Negra/Tiger treebanks).</td>
 </tr>
 </tbody>
@@ -683,16 +753,16 @@ instead of only recognized punctuation.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is.</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate grammatical function to syntactic label,
-separated by a hypen: e.g., NP =&gt; NP-SBJ</td>
+separated by a hypen: e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">NP-SBJ</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated grammatical function,
-e.g., NP-SBJ =&gt; NP</td>
+e.g., <code class="docutils literal"><span class="pre">NP-SBJ</span> <span class="pre">=&gt;</span> <span class="pre">NP</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic label with grammatical function,
-e.g., NP =&gt; SBJ</td>
+e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">SBJ</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -702,15 +772,15 @@ e.g., NP =&gt; SBJ</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
-e.g., DET/sg.def</td>
+e.g., <code class="docutils literal"><span class="pre">DET/sg.def</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">add node with morphological information between
-POS tag and word, e.g., (DET (sg.def the))</td>
+POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</span> <span class="pre">(sg.def</span> <span class="pre">the))</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -720,11 +790,11 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas [default].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man</td>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals</td>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert lemma as node between POS tag and word.</td>
 </tr>
@@ -738,7 +808,7 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 </table>
 <dl class="method">
 <dt id="discodop.treebank.TigerXMLCorpusReader.blocks">
-<tt class="descname">blocks</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#TigerXMLCorpusReader.blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.TigerXMLCorpusReader.blocks" title="Permalink to this definition">¶</a></dt>
+<code class="descname">blocks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#TigerXMLCorpusReader.blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.TigerXMLCorpusReader.blocks" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -754,32 +824,41 @@ trees in the treebank.</td>
 
 <dl class="class">
 <dt id="discodop.treebank.AlpinoCorpusReader">
-<em class="property">class </em><tt class="descclassname">discodop.treebank.</tt><tt class="descname">AlpinoCorpusReader</tt><big>(</big><em>path</em>, <em>encoding=u'utf-8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>headfinal=True</em>, <em>headreverse=False</em>, <em>markheads=False</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#AlpinoCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.AlpinoCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">AlpinoCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#AlpinoCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.AlpinoCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corpus reader for the Dutch Alpino treebank in XML format.</p>
 <p>Expects a corpus in directory format, where every sentence is in a single
-<tt class="docutils literal"><span class="pre">.xml</span></tt> file.</p>
+<code class="docutils literal"><span class="pre">.xml</span></code> file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <tt class="docutils literal"><span class="pre">wsj*.mrg</span></tt>.</li>
+<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <code class="docutils literal"><span class="pre">wsj*.mrg</span></code>.</li>
 <li><strong>ensureroot</strong> &#8211; add root node with given label if necessary.</li>
 <li><strong>removeempty</strong> &#8211; remove empty nodes and any empty ancestors; a
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>headfinal</strong> &#8211; put head in final position (default: frontal).</li>
-<li><strong>headreverse</strong> &#8211; the head is made final/frontal by reversing
-everything before or after the head. When True, the side on which
-the head is will be the reversed side.</li>
-<li><strong>markheads</strong> &#8211; add &#8216;-HD&#8217; to phrasal label of heads.</li>
+<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is.</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">move punctuation to appropriate constituents
 using heuristics.</td>
@@ -787,9 +866,11 @@ using heuristics.</td>
 <tr class="field-odd field"><th class="field-name">&#8216;moveall&#8217;:</th><td class="field-body">same as &#8216;move&#8217;, but moves all preterminals under root,
 instead of only recognized punctuation.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+<tr class="field-even field"><th class="field-name">&#8216;prune&#8217;:</th><td class="field-body">prune away leading &amp; ending quotes &amp; periods, then move.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
 (as in original Negra/Tiger treebanks).</td>
 </tr>
 </tbody>
@@ -800,16 +881,16 @@ instead of only recognized punctuation.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is.</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate grammatical function to syntactic label,
-separated by a hypen: e.g., NP =&gt; NP-SBJ</td>
+separated by a hypen: e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">NP-SBJ</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated grammatical function,
-e.g., NP-SBJ =&gt; NP</td>
+e.g., <code class="docutils literal"><span class="pre">NP-SBJ</span> <span class="pre">=&gt;</span> <span class="pre">NP</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic label with grammatical function,
-e.g., NP =&gt; SBJ</td>
+e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">SBJ</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -819,15 +900,15 @@ e.g., NP =&gt; SBJ</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
-e.g., DET/sg.def</td>
+e.g., <code class="docutils literal"><span class="pre">DET/sg.def</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">add node with morphological information between
-POS tag and word, e.g., (DET (sg.def the))</td>
+POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</span> <span class="pre">(sg.def</span> <span class="pre">the))</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -837,11 +918,11 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas [default].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man</td>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals</td>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert lemma as node between POS tag and word.</td>
 </tr>
@@ -855,7 +936,7 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 </table>
 <dl class="method">
 <dt id="discodop.treebank.AlpinoCorpusReader.blocks">
-<tt class="descname">blocks</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#AlpinoCorpusReader.blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.AlpinoCorpusReader.blocks" title="Permalink to this definition">¶</a></dt>
+<code class="descname">blocks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#AlpinoCorpusReader.blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.AlpinoCorpusReader.blocks" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -871,30 +952,39 @@ trees in the treebank.</td>
 
 <dl class="class">
 <dt id="discodop.treebank.DactCorpusReader">
-<em class="property">class </em><tt class="descclassname">discodop.treebank.</tt><tt class="descname">DactCorpusReader</tt><big>(</big><em>path</em>, <em>encoding=u'utf-8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>headfinal=True</em>, <em>headreverse=False</em>, <em>markheads=False</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#DactCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.DactCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">DactCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#DactCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.DactCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corpus reader for Alpino trees in Dact format (DB XML).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <tt class="docutils literal"><span class="pre">wsj*.mrg</span></tt>.</li>
+<li><strong>path</strong> &#8211; filename or pattern of corpus files; e.g., <code class="docutils literal"><span class="pre">wsj*.mrg</span></code>.</li>
 <li><strong>ensureroot</strong> &#8211; add root node with given label if necessary.</li>
 <li><strong>removeempty</strong> &#8211; remove empty nodes and any empty ancestors; a
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>headfinal</strong> &#8211; put head in final position (default: frontal).</li>
-<li><strong>headreverse</strong> &#8211; the head is made final/frontal by reversing
-everything before or after the head. When True, the side on which
-the head is will be the reversed side.</li>
-<li><strong>markheads</strong> &#8211; add &#8216;-HD&#8217; to phrasal label of heads.</li>
+<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is.</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">leave punctuation as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">move punctuation to appropriate constituents
 using heuristics.</td>
@@ -902,9 +992,11 @@ using heuristics.</td>
 <tr class="field-odd field"><th class="field-name">&#8216;moveall&#8217;:</th><td class="field-body">same as &#8216;move&#8217;, but moves all preterminals under root,
 instead of only recognized punctuation.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+<tr class="field-even field"><th class="field-name">&#8216;prune&#8217;:</th><td class="field-body">prune away leading &amp; ending quotes &amp; periods, then move.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">eliminate punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;root&#8217;:</th><td class="field-body">attach punctuation directly to root
 (as in original Negra/Tiger treebanks).</td>
 </tr>
 </tbody>
@@ -915,16 +1007,16 @@ instead of only recognized punctuation.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is.</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;leave&#8217;:</th><td class="field-body">leave syntactic labels as is [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate grammatical function to syntactic label,
-separated by a hypen: e.g., NP =&gt; NP-SBJ</td>
+separated by a hypen: e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">NP-SBJ</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated grammatical function,
-e.g., NP-SBJ =&gt; NP</td>
+e.g., <code class="docutils literal"><span class="pre">NP-SBJ</span> <span class="pre">=&gt;</span> <span class="pre">NP</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic label with grammatical function,
-e.g., NP =&gt; SBJ</td>
+e.g., <code class="docutils literal"><span class="pre">NP</span> <span class="pre">=&gt;</span> <span class="pre">SBJ</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -934,15 +1026,15 @@ e.g., NP =&gt; SBJ</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals</td>
+<tr class="field-odd field"><th class="field-name">None, &#8216;no&#8217;:</th><td class="field-body">use POS tags as preterminals [default].</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
-e.g., DET/sg.def</td>
+e.g., <code class="docutils literal"><span class="pre">DET/sg.def</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">add node with morphological information between
-POS tag and word, e.g., (DET (sg.def the))</td>
+POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</span> <span class="pre">(sg.def</span> <span class="pre">the))</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -952,11 +1044,11 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas</td>
+<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">ignore lemmas [default].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man</td>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemma to terminals, e.g., men/man.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals</td>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemmas as terminals.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert lemma as node between POS tag and word.</td>
 </tr>
@@ -972,33 +1064,33 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 
 <dl class="function">
 <dt id="discodop.treebank.brackettree">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">brackettree</tt><big>(</big><em>treestr</em>, <em>sent</em>, <em>brackets</em>, <em>strtermre</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#brackettree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.brackettree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">brackettree</code><span class="sig-paren">(</span><em>treestr</em>, <em>sent</em>, <em>brackets</em>, <em>strtermre</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#brackettree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.brackettree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a single tree presented in (disc)bracket format.</p>
-<p>in the &#8216;bracket&#8217; case <tt class="docutils literal"><span class="pre">sent</span></tt> is ignored.</p>
+<p>in the &#8216;bracket&#8217; case <code class="docutils literal"><span class="pre">sent</span></code> is ignored.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.exporttree">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">exporttree</tt><big>(</big><em>block</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#exporttree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.exporttree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">exporttree</code><span class="sig-paren">(</span><em>block</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#exporttree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.exporttree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get tree, sentence from tree in export format given as list of lines.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.exportsplit">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">exportsplit</tt><big>(</big><em>line</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#exportsplit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.exportsplit" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">exportsplit</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#exportsplit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.exportsplit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a line in export format and split into fields.</p>
 <p>Add dummy fields lemma, sec. edge if those fields are absent.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.alpinotree">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">alpinotree</tt><big>(</big><em>block</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#alpinotree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.alpinotree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">alpinotree</code><span class="sig-paren">(</span><em>block</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#alpinotree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.alpinotree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get tree, sent from tree in Alpino format given as etree XML object.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.writetree">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">writetree</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>n</em>, <em>fmt</em>, <em>comment=None</em>, <em>headrules=None</em>, <em>morphology=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#writetree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writetree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">writetree</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em>, <em>n</em>, <em>fmt</em>, <em>comment=None</em>, <em>morphology=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#writetree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writetree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a tree to a string representation in the given treebank format.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1006,17 +1098,18 @@ POS tag and word, e.g., (DET (sg.def the))</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>tree</strong> &#8211; should have indices as terminals</li>
-<li><strong>sent</strong> &#8211; contains the words corresponding to the indices in <tt class="docutils literal"><span class="pre">tree</span></tt></li>
+<li><strong>sent</strong> &#8211; contains the words corresponding to the indices in <code class="docutils literal"><span class="pre">tree</span></code></li>
 <li><strong>n</strong> &#8211; an identifier for this tree; part of the output with some formats</li>
-<li><strong>fmt</strong> &#8211; Formats are <tt class="docutils literal"><span class="pre">bracket</span></tt>, <tt class="docutils literal"><span class="pre">discbracket</span></tt>, Negra&#8217;s <tt class="docutils literal"><span class="pre">export</span></tt>
-format, and <tt class="docutils literal"><span class="pre">alpino</span></tt> XML format, as well unlabeled dependency
-conversion into <tt class="docutils literal"><span class="pre">mst</span></tt> or <tt class="docutils literal"><span class="pre">conll</span></tt> format (requires head rules).
-The formats <tt class="docutils literal"><span class="pre">tokens</span></tt> and <tt class="docutils literal"><span class="pre">wordpos</span></tt> are to strip away tree structure
-and leave only lines with tokens or <tt class="docutils literal"><span class="pre">token/POS</span></tt>.</li>
+<li><strong>fmt</strong> &#8211; Formats are <code class="docutils literal"><span class="pre">bracket</span></code>, <code class="docutils literal"><span class="pre">discbracket</span></code>, Negra&#8217;s <code class="docutils literal"><span class="pre">export</span></code>
+format, and <code class="docutils literal"><span class="pre">alpino</span></code> XML format, as well unlabeled dependency
+conversion into <code class="docutils literal"><span class="pre">mst</span></code> or <code class="docutils literal"><span class="pre">conll</span></code> format (requires head rules).
+The formats <code class="docutils literal"><span class="pre">tokens</span></code> and <code class="docutils literal"><span class="pre">wordpos</span></code> are to strip away tree structure
+and leave only lines with tokens or <code class="docutils literal"><span class="pre">token/POS</span></code>.
+When using <code class="docutils literal"><span class="pre">bracket</span></code>, make sure tree is canonicalized.</li>
 <li><strong>comment</strong> &#8211; optionally, a string that will go in the format&#8217;s comment
-field (supported by <tt class="docutils literal"><span class="pre">export</span></tt> and <tt class="docutils literal"><span class="pre">alpino</span></tt>), at the end of the line
-preceded by a tab (<tt class="docutils literal"><span class="pre">bracket</span></tt> and <tt class="docutils literal"><span class="pre">discbracket</span></tt>), or that will be
-prepended on a line starting with &#8216;%% &#8216; (other formats).</li>
+field (supported by <code class="docutils literal"><span class="pre">export</span></code> and <code class="docutils literal"><span class="pre">alpino</span></code>), at the end of the line
+preceded by a tab (<code class="docutils literal"><span class="pre">discbracket</span></code>); ignored by other formats. Should
+be a single line.</li>
 </ul>
 </td>
 </tr>
@@ -1027,38 +1120,38 @@ contain a &#8216;source&#8217; attribute with such information.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="discodop.treebank.writebrackettree">
+<code class="descclassname">discodop.treebank.</code><code class="descname">writebrackettree</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#writebrackettree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writebrackettree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tree in bracket notation with words as terminals.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="discodop.treebank.writeexporttree">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">writeexporttree</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>n</em>, <em>comment</em>, <em>morphology</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#writeexporttree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writeexporttree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">writeexporttree</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em>, <em>n</em>, <em>comment</em>, <em>morphology</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#writeexporttree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writeexporttree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return string with given tree in Negra&#8217;s export format.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.writealpinotree">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">writealpinotree</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>n</em>, <em>commentstr</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#writealpinotree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writealpinotree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">writealpinotree</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em>, <em>n</em>, <em>commentstr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#writealpinotree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writealpinotree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return XML string with tree in AlpinoXML format.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.writedependencies">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">writedependencies</tt><big>(</big><em>tree</em>, <em>sent</em>, <em>fmt</em>, <em>headrules</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#writedependencies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writedependencies" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">writedependencies</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em>, <em>fmt</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#writedependencies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.writedependencies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert tree to unlabeled dependencies in <cite>mst</cite> or <cite>conll</cite> format.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.dependencies">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">dependencies</tt><big>(</big><em>root</em>, <em>headrules</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#dependencies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.dependencies" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">dependencies</code><span class="sig-paren">(</span><em>root</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#dependencies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.dependencies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lin (1995): A Dependency-based Method for Evaluating [...] Parsers.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop.treebank.makedep">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">makedep</tt><big>(</big><em>root</em>, <em>deps</em>, <em>headrules</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#makedep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.makedep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Traverse a tree marking heads and extracting dependencies.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="discodop.treebank.handlefunctions">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">handlefunctions</tt><big>(</big><em>action</em>, <em>tree</em>, <em>pos=True</em>, <em>top=False</em>, <em>morphology=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#handlefunctions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.handlefunctions" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">handlefunctions</code><span class="sig-paren">(</span><em>action</em>, <em>tree</em>, <em>pos=True</em>, <em>top=False</em>, <em>morphology=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#handlefunctions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.handlefunctions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add function tags to phrasal labels e.g., &#8216;VP&#8217; =&gt; &#8216;VP-HD&#8217;.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1068,6 +1161,7 @@ contain a &#8216;source&#8217; attribute with such information.</p>
 <li><strong>action</strong> &#8211; one of {None, &#8216;add&#8217;, &#8216;replace&#8217;, &#8216;remove&#8217;}</li>
 <li><strong>pos</strong> &#8211; whether to add function tags to POS tags.</li>
 <li><strong>top</strong> &#8211; whether to add function tags to the top node.</li>
+<li><strong>morphology</strong> &#8211; if morphology=&#8217;between&#8217;, skip those nodes.</li>
 </ul>
 </td>
 </tr>
@@ -1077,13 +1171,13 @@ contain a &#8216;source&#8217; attribute with such information.</p>
 
 <dl class="function">
 <dt id="discodop.treebank.handlemorphology">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">handlemorphology</tt><big>(</big><em>action</em>, <em>lemmaaction</em>, <em>preterminal</em>, <em>source</em>, <em>sent=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#handlemorphology"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.handlemorphology" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">handlemorphology</code><span class="sig-paren">(</span><em>action</em>, <em>lemmaaction</em>, <em>preterminal</em>, <em>source</em>, <em>sent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#handlemorphology"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.handlemorphology" title="Permalink to this definition">¶</a></dt>
 <dd><p>Augment/replace preterminal label with morphological information.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.incrementaltreereader">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">incrementaltreereader</tt><big>(</big><em>treeinput</em>, <em>morphology=None</em>, <em>functions=None</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#incrementaltreereader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.incrementaltreereader" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">incrementaltreereader</code><span class="sig-paren">(</span><em>treeinput</em>, <em>morphology=None</em>, <em>functions=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#incrementaltreereader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.incrementaltreereader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Incremental corpus reader.</p>
 <p>Supports brackets, discbrackets, and export format. The format is
 autodetected. Expects an iterator giving one line at a time. Yields tuples
@@ -1093,7 +1187,7 @@ other data following the tree.</p>
 
 <dl class="function">
 <dt id="discodop.treebank.segmentbrackets">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">segmentbrackets</tt><big>(</big><em>brackets</em>, <em>strict=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#segmentbrackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.segmentbrackets" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">segmentbrackets</code><span class="sig-paren">(</span><em>brackets</em>, <em>strict=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#segmentbrackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.segmentbrackets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Co-routine that accepts one line at a time.</p>
 <p>Yields tuples (result, status) where ...</p>
 <ul>
@@ -1111,13 +1205,13 @@ between this S-expression and the next.</p>
 
 <dl class="function">
 <dt id="discodop.treebank.segmentexport">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">segmentexport</tt><big>(</big><em>morphology</em>, <em>functions</em>, <em>strict=False</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#segmentexport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.segmentexport" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">segmentexport</code><span class="sig-paren">(</span><em>morphology</em>, <em>functions</em>, <em>strict=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#segmentexport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.segmentexport" title="Permalink to this definition">¶</a></dt>
 <dd><p>Co-routine that accepts one line at a time.
-Yields tuples <tt class="docutils literal"><span class="pre">(result,</span> <span class="pre">status)</span></tt> where ...</p>
+Yields tuples <code class="docutils literal"><span class="pre">(result,</span> <span class="pre">status)</span></code> where ...</p>
 <ul>
 <li><dl class="first docutils">
-<dt>result is <tt class="docutils literal"><span class="pre">None</span></tt> or a segment delimited by</dt>
-<dd><p class="first last"><tt class="docutils literal"><span class="pre">#BOS</span></tt> and <tt class="docutils literal"><span class="pre">#EOS</span></tt> as a list of lines;</p>
+<dt>result is <code class="docutils literal"><span class="pre">None</span></code> or a segment delimited by</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">#BOS</span></code> and <code class="docutils literal"><span class="pre">#EOS</span></code> as a list of lines;</p>
 </dd>
 </dl>
 </li>
@@ -1128,26 +1222,46 @@ Yields tuples <tt class="docutils literal"><span class="pre">(result,</span> <sp
 
 <dl class="function">
 <dt id="discodop.treebank.quote">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">quote</tt><big>(</big><em>word</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#quote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.quote" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">quote</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#quote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.quote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quote parentheses and replace None with &#8216;&#8217;.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.unquote">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">unquote</tt><big>(</big><em>word</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#unquote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.unquote" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">unquote</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#unquote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.unquote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reverse quoting of parentheses, frontier spans.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop.treebank.treebankfanout">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">treebankfanout</tt><big>(</big><em>trees</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#treebankfanout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.treebankfanout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get maximal fan-out of a list of trees.</p>
+<dt id="discodop.treebank.termindices">
+<code class="descclassname">discodop.treebank.</code><code class="descname">termindices</code><span class="sig-paren">(</span><em>treestr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#termindices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.termindices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace terminals in a tree string with consecutive indices.</p>
+<p>Only applicable to trees without discontinuity.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">termindices</span><span class="p">(</span><span class="s">&#39;(S (NP Mary) (VP walks))&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="go">(S (NP 0) (VP 1))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">))</span>
+<span class="go">Mary walks</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.treebank.numbase">
-<tt class="descclassname">discodop.treebank.</tt><tt class="descname">numbase</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/discodop/treebank.html#numbase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.numbase" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.treebank.</code><code class="descname">numbase</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#numbase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.numbase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn a file name into a numeric sorting key if possible.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treebank.removeterminals">
+<code class="descclassname">discodop.treebank.</code><code class="descname">removeterminals</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em>, <em>func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#removeterminals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.removeterminals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove any terminals for which func is True, and any empty ancestors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="discodop.treebank.removeemptynodes">
+<code class="descclassname">discodop.treebank.</code><code class="descname">removeemptynodes</code><span class="sig-paren">(</span><em>tree</em>, <em>sent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#removeemptynodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.removeemptynodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove any empty nodes, and any empty ancestors.</p>
 </dd></dl>
 
 </div>
@@ -1156,7 +1270,7 @@ Yields tuples <tt class="docutils literal"><span class="pre">(result,</span> <sp
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -1172,7 +1286,7 @@ Yields tuples <tt class="docutils literal"><span class="pre">(result,</span> <sp
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -1189,7 +1303,7 @@ Yields tuples <tt class="docutils literal"><span class="pre">(result,</span> <sp
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -1198,14 +1312,14 @@ Yields tuples <tt class="docutils literal"><span class="pre">(result,</span> <sp
         <li class="right" >
           <a href="discodop.tree.html" title="discodop.tree"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

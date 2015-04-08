@@ -10,6 +10,7 @@ discodop.treesearch
    .. autosummary::
    
       filterlabels
+      cpu_count
    
    
 
@@ -24,6 +25,7 @@ discodop.treesearch
       DactSearcher
       RegexSearcher
       NoFuture
+      FIFOOrederedDict
    
    
 

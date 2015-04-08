@@ -14,11 +14,11 @@ discodop.treebank
       exportsplit
       alpinotree
       writetree
+      writebrackettree
       writeexporttree
       writealpinotree
       writedependencies
       dependencies
-      makedep
       handlefunctions
       handlemorphology
       incrementaltreereader
@@ -26,8 +26,10 @@ discodop.treebank
       segmentexport
       quote
       unquote
-      treebankfanout
+      termindices
       numbase
+      removeterminals
+      removeemptynodes
    
    
 
@@ -37,6 +39,7 @@ discodop.treebank
 
    .. autosummary::
    
+      Item
       CorpusReader
       BracketCorpusReader
       DiscBracketCorpusReader

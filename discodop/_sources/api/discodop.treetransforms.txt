@@ -9,29 +9,30 @@ discodop.treetransforms
 
    .. autosummary::
    
-      abbr
-      addbitsets
-      addfanoutmarkers
       binarize
       unbinarize
-      canonicalize
       collapseunary
+      introducepreterminals
+      factorconstituent
+      markovthreshold
+      splitdiscnodes
+      mergediscnodes
+      addfanoutmarkers
+      removefanoutmarkers
+      canonicalize
+      optimalbinarize
+      minimalbinarization
+      fanout
       complexity
       complexityfanout
-      contsets
-      disc
-      factorconstituent
-      fanout
       fanoutcomplexity
+      contsets
+      abbr
       getbits
+      addbitsets
       getyf
-      introducepreterminals
-      mergediscnodes
-      minimalbinarization
-      optimalbinarize
-      postorder
-      removefanoutmarkers
-      splitdiscnodes
+      disc
+      treebankfanout
    
    
 

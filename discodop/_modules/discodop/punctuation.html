@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>discodop.punctuation &mdash; Disco-DOP 0.5pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for discodop.punctuation</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Punctuation related functions.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span><span class="p">,</span> \
+		<span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">discodop.tree</span> <span class="kn">import</span> <span class="n">Tree</span><span class="p">,</span> <span class="n">ParentedTree</span>
+
+
+<span class="c"># fixme: treebank specific parameters for detecting punctuation.</span>
+<span class="n">PUNCTTAGS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;&#39;&#39;&quot;</span><span class="p">,</span> <span class="s">&#39;``&#39;</span><span class="p">,</span> <span class="s">&#39;-LRB-&#39;</span><span class="p">,</span> <span class="s">&#39;-RRB-&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="s">&#39;,&#39;</span><span class="p">,</span>  <span class="c"># PTB</span>
+		<span class="s">&#39;$,&#39;</span><span class="p">,</span> <span class="s">&#39;$.&#39;</span><span class="p">,</span> <span class="s">&#39;$[&#39;</span><span class="p">,</span> <span class="s">&#39;$(&#39;</span><span class="p">,</span>  <span class="c"># Negra/Tiger</span>
+		<span class="s">&#39;let&#39;</span><span class="p">,</span> <span class="s">&#39;LET[]&#39;</span><span class="p">,</span> <span class="s">&#39;SPEC[symb]&#39;</span><span class="p">,</span> <span class="s">&#39;TW[hoofd,vrij]&#39;</span><span class="p">,</span>  <span class="c"># Alpino/Lassy</span>
+		<span class="s">&#39;COMMA&#39;</span><span class="p">,</span> <span class="s">&#39;PUNCT&#39;</span><span class="p">,</span> <span class="s">&#39;PAREN&#39;</span><span class="p">}</span>  <span class="c"># Grammatical Framework</span>
+
+<span class="c"># NB: &#39; is not in this list of tokens, because if it occurs as a possesive</span>
+<span class="c"># marker it should be left alone; occurrences of &#39; as quotation marker may</span>
+<span class="c"># still be identified using tags.</span>
+<span class="n">PUNCTUATION</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="s">&#39;.,():-&quot;;?/!*&amp;`[]&lt;&gt;{}|=</span><span class="se">\xc2\xab\xc2\xbb\xb7\xad\\</span><span class="s">&#39;</span>
+		<span class="p">)</span> <span class="o">|</span> <span class="p">{</span><span class="s">&#39;&amp;bullet;&#39;</span><span class="p">,</span> <span class="s">&#39;..&#39;</span><span class="p">,</span> <span class="s">&#39;...&#39;</span><span class="p">,</span> <span class="s">&#39;....&#39;</span><span class="p">,</span> <span class="s">&#39;.....&#39;</span><span class="p">,</span> <span class="s">&#39;......&#39;</span><span class="p">,</span>
+		<span class="s">&#39;!!&#39;</span><span class="p">,</span> <span class="s">&#39;!!!&#39;</span><span class="p">,</span> <span class="s">&#39;??&#39;</span><span class="p">,</span> <span class="s">&#39;???&#39;</span><span class="p">,</span> <span class="s">&quot;&#39;&#39;&quot;</span><span class="p">,</span> <span class="s">&#39;``&#39;</span><span class="p">,</span> <span class="s">&#39;,,&#39;</span><span class="p">,</span>
+		<span class="s">&#39;--&#39;</span><span class="p">,</span> <span class="s">&#39;---&#39;</span><span class="p">,</span> <span class="s">&#39;----&#39;</span><span class="p">,</span> <span class="s">&#39;-LRB-&#39;</span><span class="p">,</span> <span class="s">&#39;-RRB-&#39;</span><span class="p">,</span> <span class="s">&#39;-LCB-&#39;</span><span class="p">,</span> <span class="s">&#39;-RCB-&#39;</span><span class="p">}</span>
+
+<span class="c"># Punctuation that is pruned if it is leading or ending (as in Collins 1999)</span>
+<span class="n">PRUNEPUNCT</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;``&#39;</span><span class="p">,</span> <span class="s">&quot;&#39;&#39;&quot;</span><span class="p">,</span> <span class="s">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">}</span>
+
+<span class="c"># Punctuation that come in pairs (left: right).</span>
+<span class="n">BALANCEDPUNCTMATCH</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;&quot;&#39;</span><span class="p">:</span> <span class="s">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s">&quot;&#39;&quot;</span><span class="p">:</span> <span class="s">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s">&#39;``&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;&#39;&quot;</span><span class="p">,</span>
+		<span class="s">&#39;[&#39;</span><span class="p">:</span> <span class="s">&#39;]&#39;</span><span class="p">,</span> <span class="s">&#39;(&#39;</span><span class="p">:</span> <span class="s">&#39;)&#39;</span><span class="p">,</span> <span class="s">&#39;-LRB-&#39;</span><span class="p">:</span> <span class="s">&#39;-RRB-&#39;</span><span class="p">,</span> <span class="s">&#39;-LSB-&#39;</span><span class="p">:</span> <span class="s">&#39;-RSB-&#39;</span><span class="p">,</span>
+		<span class="s">&#39;-&#39;</span><span class="p">:</span> <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\xc2\xab</span><span class="s">&#39;</span><span class="p">:</span> <span class="s">&#39;</span><span class="se">\xc2\xbb</span><span class="s">&#39;</span><span class="p">}</span>  <span class="c"># unicode &lt;&lt; and &gt;&gt;</span>
+
+
+<div class="viewcode-block" id="ispunct"><a class="viewcode-back" href="../../api/discodop.punctuation.html#discodop.punctuation.ispunct">[docs]</a><span class="k">def</span> <span class="nf">ispunct</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Test whether a word and/or tag is punctuation.&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">PUNCTTAGS</span> <span class="ow">or</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">PUNCTUATION</span>
+
+</div>
+<div class="viewcode-block" id="punctremove"><a class="viewcode-back" href="../../api/discodop.punctuation.html#discodop.punctuation.punctremove">[docs]</a><span class="k">def</span> <span class="nf">punctremove</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Remove any punctuation nodes, and any empty ancestors.&quot;&quot;&quot;</span>
+	<span class="kn">from</span> <span class="nn">discodop.treebank</span> <span class="kn">import</span> <span class="n">removeterminals</span>
+	<span class="n">removeterminals</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">ispunct</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="punctprune"><a class="viewcode-back" href="../../api/discodop.punctuation.html#discodop.punctuation.punctprune">[docs]</a><span class="k">def</span> <span class="nf">punctprune</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Remove quotes and period at sentence beginning and end.&quot;&quot;&quot;</span>
+	<span class="kn">from</span> <span class="nn">discodop.treebank</span> <span class="kn">import</span> <span class="n">removeterminals</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">PRUNEPUNCT</span><span class="p">:</span>
+		<span class="n">sent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+	<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">PRUNEPUNCT</span><span class="p">:</span>
+		<span class="n">sent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
+	<span class="k">if</span> <span class="n">tree</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+		<span class="n">sent</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">sent</span> <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">removeterminals</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">_b</span><span class="p">:</span> <span class="n">a</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="punctroot"><a class="viewcode-back" href="../../api/discodop.punctuation.html#discodop.punctuation.punctroot">[docs]</a><span class="k">def</span> <span class="nf">punctroot</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Move punctuation directly under ROOT, as in the Negra annotation.&quot;&quot;&quot;</span>
+	<span class="n">punct</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">treepositions</span><span class="p">(</span><span class="s">&#39;leaves&#39;</span><span class="p">)):</span>
+		<span class="k">if</span> <span class="n">ispunct</span><span class="p">(</span><span class="n">sent</span><span class="p">[</span><span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">]],</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">label</span><span class="p">):</span>
+			<span class="c"># store punctuation node</span>
+			<span class="n">punct</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+			<span class="c"># remove this punctuation node and any empty ancestors</span>
+			<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+				<span class="k">del</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="n">n</span><span class="p">]]</span>
+				<span class="k">if</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]]:</span>
+					<span class="k">break</span>
+	<span class="n">tree</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">punct</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="punctlower"><a class="viewcode-back" href="../../api/discodop.punctuation.html#discodop.punctuation.punctlower">[docs]</a><span class="k">def</span> <span class="nf">punctlower</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Find suitable constituent for punctuation marks and add it there.</span>
+
+<span class="sd">	Initial candidate is the root node. Note that ``punctraise()`` performs</span>
+<span class="sd">	better. Based on rparse code.&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">lower</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">candidate</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Lower a specific instance of punctuation in tree.</span>
+
+<span class="sd">		Recurses top-down on suitable candidates.&quot;&quot;&quot;</span>
+		<span class="n">num</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">leaves</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">leaves</span><span class="p">())):</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">child</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
+				<span class="k">continue</span>
+			<span class="n">termdom</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">leaves</span><span class="p">()</span>
+			<span class="k">if</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">termdom</span><span class="p">):</span>
+				<span class="n">candidate</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+				<span class="k">break</span>
+			<span class="k">elif</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">termdom</span><span class="p">):</span>
+				<span class="n">lower</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span>
+				<span class="k">break</span>
+
+	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">treepositions</span><span class="p">(</span><span class="s">&#39;leaves&#39;</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">ispunct</span><span class="p">(</span><span class="n">sent</span><span class="p">[</span><span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">]],</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">label</span><span class="p">):</span>
+			<span class="n">b</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+			<span class="k">del</span> <span class="n">tree</span><span class="p">[</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+			<span class="n">lower</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="punctraise"><a class="viewcode-back" href="../../api/discodop.punctuation.html#discodop.punctuation.punctraise">[docs]</a><span class="k">def</span> <span class="nf">punctraise</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">rootpreterms</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Attach punctuation nodes to an appropriate constituent.</span>
+
+<span class="sd">	Trees in the Negra corpus have punctuation attached to the root;</span>
+<span class="sd">	i.e., it is not part of the phrase-structure. This function moves the</span>
+<span class="sd">	punctuation to an appropriate level in the tree. A punctuation node is a</span>
+<span class="sd">	POS tag with a punctuation terminal. Modifies trees in-place.</span>
+
+<span class="sd">	:param rootpreterms: if True, move all preterminals under root,</span>
+<span class="sd">		instead of only recognized punctuation.&quot;&quot;&quot;</span>
+	<span class="c"># punct = [node for node in tree.subtrees() if isinstance(node[0], int)</span>
+	<span class="n">punct</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span> <span class="k">if</span> <span class="n">node</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span>
+			<span class="ow">and</span> <span class="p">(</span><span class="n">rootpreterms</span> <span class="ow">or</span> <span class="n">ispunct</span><span class="p">(</span><span class="n">sent</span><span class="p">[</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="p">))]</span>
+	<span class="k">while</span> <span class="n">punct</span><span class="p">:</span>
+		<span class="n">node</span> <span class="o">=</span> <span class="n">punct</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+		<span class="k">while</span> <span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">tree</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+		<span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="n">tree</span><span class="p">:</span>
+			<span class="k">continue</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent_index</span><span class="p">)</span>
+		<span class="n">phrasalnode</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Tree</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="n">phrasalnode</span><span class="p">):</span>
+			<span class="c"># add punctuation mark to highest left/right neighbor</span>
+			<span class="c"># if any(node[0] - 1 == max(a.leaves()) for a in candidate):</span>
+			<span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">candidate</span><span class="p">):</span>
+				<span class="n">candidate</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+				<span class="k">break</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">tree</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="balancedpunctraise"><a class="viewcode-back" href="../../api/discodop.punctuation.html#discodop.punctuation.balancedpunctraise">[docs]</a><span class="k">def</span> <span class="nf">balancedpunctraise</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Move balanced punctuation ``&quot; &#39; - ( ) [ ]`` to a common constituent.</span>
+
+<span class="sd">	Based on rparse code.&quot;&quot;&quot;</span>
+	<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ParentedTree</span><span class="p">)</span>
+	<span class="c"># right punct str as key, mapped to left index as value</span>
+	<span class="n">punctmap</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="c"># punctuation indices mapped to preterminal nodes</span>
+	<span class="n">termparent</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">()</span>
+			<span class="k">if</span> <span class="n">a</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ispunct</span><span class="p">(</span><span class="n">sent</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">a</span><span class="o">.</span><span class="n">label</span><span class="p">)}</span>
+	<span class="k">for</span> <span class="n">terminal</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">termparent</span><span class="p">):</span>
+		<span class="n">preterminal</span> <span class="o">=</span> <span class="n">termparent</span><span class="p">[</span><span class="n">terminal</span><span class="p">]</span>
+		<span class="c"># do we know the matching punctuation mark for this one?</span>
+		<span class="k">if</span> <span class="n">preterminal</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">PUNCTTAGS</span> <span class="ow">and</span> <span class="n">sent</span><span class="p">[</span><span class="n">terminal</span><span class="p">]</span> <span class="ow">in</span> <span class="n">punctmap</span><span class="p">:</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">terminal</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">punctmap</span><span class="p">[</span><span class="n">sent</span><span class="p">[</span><span class="n">right</span><span class="p">]]</span>
+			<span class="n">rightparent</span> <span class="o">=</span> <span class="n">preterminal</span><span class="o">.</span><span class="n">parent</span>
+			<span class="n">leftparent</span> <span class="o">=</span> <span class="n">termparent</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="o">.</span><span class="n">parent</span>
+			<span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">leftparent</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span> <span class="o">==</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+				<span class="n">node</span> <span class="o">=</span> <span class="n">termparent</span><span class="p">[</span><span class="n">right</span><span class="p">]</span>
+				<span class="n">leftparent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent_index</span><span class="p">))</span>
+			<span class="k">elif</span> <span class="nb">min</span><span class="p">(</span><span class="n">rightparent</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span> <span class="o">==</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+				<span class="n">node</span> <span class="o">=</span> <span class="n">termparent</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>
+				<span class="n">rightparent</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent_index</span><span class="p">))</span>
+			<span class="k">if</span> <span class="n">sent</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="ow">in</span> <span class="n">punctmap</span><span class="p">:</span>
+				<span class="k">del</span> <span class="n">punctmap</span><span class="p">[</span><span class="n">sent</span><span class="p">[</span><span class="n">right</span><span class="p">]]</span>
+		<span class="k">elif</span> <span class="p">(</span><span class="n">sent</span><span class="p">[</span><span class="n">terminal</span><span class="p">]</span> <span class="ow">in</span> <span class="n">BALANCEDPUNCTMATCH</span>
+				<span class="ow">and</span> <span class="n">preterminal</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">PUNCTTAGS</span><span class="p">):</span>
+			<span class="n">punctmap</span><span class="p">[</span><span class="n">BALANCEDPUNCTMATCH</span><span class="p">[</span><span class="n">sent</span><span class="p">[</span><span class="n">terminal</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">terminal</span>
+
+</div>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ispunct&#39;</span><span class="p">,</span> <span class="s">&#39;punctremove&#39;</span><span class="p">,</span> <span class="s">&#39;punctprune&#39;</span><span class="p">,</span> <span class="s">&#39;punctroot&#39;</span><span class="p">,</span> <span class="s">&#39;punctlower&#39;</span><span class="p">,</span>
+		<span class="s">&#39;punctraise&#39;</span><span class="p">,</span> <span class="s">&#39;balancedpunctraise&#39;</span><span class="p">]</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

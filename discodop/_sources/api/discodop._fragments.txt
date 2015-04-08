@@ -9,19 +9,15 @@ discodop._fragments
 
    .. autosummary::
    
-      addprods
-      completebitsets
-      coverbitsets
-      exactcounts
       extractfragments
-      getctrees
-      getlabelsprods
-      getprodid
-      nonfrontier
-      pygetsent
-      readtreebank
+      exactcounts
+      completebitsets
+      allfragments
       repl
-      tolist
+      pygetsent
+      nonfrontier
+      getctrees
+      readtreebank
    
    
 

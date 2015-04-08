@@ -9,18 +9,18 @@ discodop.disambiguation
 
    .. autosummary::
    
-      dopparseprob
-      doprerank
-      fragmentsinderiv
-      frontiernt
       getderivations
-      getsamples
-      gettree
       marginalize
+      gettree
       recoverfragments
-      splitfrag
+      fragmentsinderiv
       treeparsing
       viterbiderivation
+      getsamples
+      doprerank
+      dopparseprob
+      frontiernt
+      splitfrag
    
    
 

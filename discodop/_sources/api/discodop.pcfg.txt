@@ -9,18 +9,17 @@ discodop.pcfg
 
    .. autosummary::
    
-      bitpar_nbest
-      bitpar_yap_forest
-      chartmatrix
+      parse
       doinsideoutside
       insidescores
-      minmaxmatrices
       outsidescores
-      parse
+      minmaxmatrices
+      chartmatrix
       parse_bitpar
-      parse_symbolic
-      pprint_matrix
+      bitpar_yap_forest
+      bitpar_nbest
       renumber
+      pprint_matrix
    
    
 

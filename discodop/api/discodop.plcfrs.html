@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.plcfrs &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.plcfrs &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,27 +23,27 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="prev" title="discodop.pcfg" href="discodop.pcfg.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="discodop.pcfg.html" title="discodop.pcfg"
              accesskey="P">previous</a></li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.plcfrs">
 <span id="discodop-plcfrs"></span><h1>discodop.plcfrs<a class="headerlink" href="#module-discodop.plcfrs" title="Permalink to this headline">¶</a></h1>
@@ -56,17 +56,14 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.getparent" title="discodop.plcfrs.getparent"><tt class="xref py py-obj docutils literal"><span class="pre">getparent</span></tt></a>(i)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.getparent" title="discodop.plcfrs.getparent"><code class="xref py py-obj docutils literal"><span class="pre">getparent</span></code></a>(i)</td>
 <td>Python version of Cython-only _parent() function.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">nwaymerge</span></tt></td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.merge" title="discodop.plcfrs.merge"><code class="xref py py-obj docutils literal"><span class="pre">merge</span></code></a>(*iterables[,&nbsp;key])</td>
+<td>Generator that performs an n-way merge of sorted iterables.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.parse" title="discodop.plcfrs.parse"><tt class="xref py py-obj docutils literal"><span class="pre">parse</span></tt></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;tags,&nbsp;start,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.parse" title="discodop.plcfrs.parse"><code class="xref py py-obj docutils literal"><span class="pre">parse</span></code></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;tags,&nbsp;start,&nbsp;...])</td>
 <td>Parse sentence and produce a chart.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.parse_symbolic" title="discodop.plcfrs.parse_symbolic"><tt class="xref py py-obj docutils literal"><span class="pre">parse_symbolic</span></tt></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;...])</td>
-<td>Like parse(), but only compute parse forest, disregard probabilities.</td>
 </tr>
 </tbody>
 </table>
@@ -77,43 +74,40 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.Agenda" title="discodop.plcfrs.Agenda"><tt class="xref py py-obj docutils literal"><span class="pre">Agenda</span></tt></a></td>
-<td>Agenda(iterable=None) Priority Queue implemented with array-based n-ary heap.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.Agenda" title="discodop.plcfrs.Agenda"><code class="xref py py-obj docutils literal"><span class="pre">Agenda</span></code></a>([iterable])</td>
+<td>Priority Queue implemented with array-based n-ary heap.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.DoubleAgenda" title="discodop.plcfrs.DoubleAgenda"><tt class="xref py py-obj docutils literal"><span class="pre">DoubleAgenda</span></tt></a></td>
-<td>DoubleAgenda(iterable=None) Priority Queue where priorities are C doubles.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.DoubleAgenda" title="discodop.plcfrs.DoubleAgenda"><code class="xref py py-obj docutils literal"><span class="pre">DoubleAgenda</span></code></a>([iterable])</td>
+<td>Priority Queue where priorities are C doubles.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.FatLCFRSChart" title="discodop.plcfrs.FatLCFRSChart"><tt class="xref py py-obj docutils literal"><span class="pre">FatLCFRSChart</span></tt></a></td>
-<td>FatLCFRSChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True) LCFRS chart that supports longer sentences.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.LCFRSChart" title="discodop.plcfrs.LCFRSChart"><code class="xref py py-obj docutils literal"><span class="pre">LCFRSChart</span></code></a>(Grammar&nbsp;grammar,&nbsp;list&nbsp;sent[,&nbsp;...])</td>
+<td>A chart for LCFRS grammars.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.LCFRSChart" title="discodop.plcfrs.LCFRSChart"><tt class="xref py py-obj docutils literal"><span class="pre">LCFRSChart</span></tt></a></td>
-<td>LCFRSChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True) A chart for LCFRS grammars.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.SmallLCFRSChart" title="discodop.plcfrs.SmallLCFRSChart"><code class="xref py py-obj docutils literal"><span class="pre">SmallLCFRSChart</span></code></a>(Grammar&nbsp;grammar,&nbsp;list&nbsp;sent)</td>
+<td>For sentences that fit into a single machine word.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.SmallLCFRSChart" title="discodop.plcfrs.SmallLCFRSChart"><tt class="xref py py-obj docutils literal"><span class="pre">SmallLCFRSChart</span></tt></a></td>
-<td>SmallLCFRSChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True) For sentences that fit into a single machine word.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.FatLCFRSChart" title="discodop.plcfrs.FatLCFRSChart"><code class="xref py py-obj docutils literal"><span class="pre">FatLCFRSChart</span></code></a>(Grammar&nbsp;grammar,&nbsp;list&nbsp;sent[,&nbsp;...])</td>
+<td>LCFRS chart that supports longer sentences.</td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="discodop.plcfrs.Agenda">
-<em class="property">class </em><tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">Agenda</tt><a class="headerlink" href="#discodop.plcfrs.Agenda" title="Permalink to this definition">¶</a></dt>
-<dd><p>Agenda(iterable=None)
-Priority Queue implemented with array-based n-ary heap.</p>
-<blockquote>
-<div><p>Implements decrease-key and remove operations by marking entries as
+<em class="property">class </em><code class="descclassname">discodop.plcfrs.</code><code class="descname">Agenda</code><span class="sig-paren">(</span><em>iterable=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Priority Queue implemented with array-based n-ary heap.</p>
+<p>Implements decrease-key and remove operations by marking entries as
 invalid. Provides dictionary-like interface.</p>
-<p>Can be initialized with an iterable; order of equivalent values remains and
-the best priorities are retained on duplicate keys.</p>
-</div></blockquote>
+<p>Can be initialized with an iterable; equivalent values are preserved in
+insertion order and the best priorities are retained on duplicate keys.</p>
 <dl class="method">
 <dt id="discodop.plcfrs.Agenda.clear">
-<tt class="descname">clear</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.Agenda.clear" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove all items from agenda.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.plcfrs.Agenda.items">
-<tt class="descname">items</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.Agenda.items" title="Permalink to this definition">¶</a></dt>
+<code class="descname">items</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda.items" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -126,7 +120,7 @@ the best priorities are retained on duplicate keys.</p>
 
 <dl class="method">
 <dt id="discodop.plcfrs.Agenda.keys">
-<tt class="descname">keys</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.Agenda.keys" title="Permalink to this definition">¶</a></dt>
+<code class="descname">keys</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda.keys" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -139,14 +133,14 @@ the best priorities are retained on duplicate keys.</p>
 
 <dl class="method">
 <dt id="discodop.plcfrs.Agenda.peekitem">
-<tt class="descname">peekitem</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.Agenda.peekitem" title="Permalink to this definition">¶</a></dt>
+<code class="descname">peekitem</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda.peekitem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the current best (key, value) pair, while keeping it on the
 agenda.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.plcfrs.Agenda.pop">
-<tt class="descname">pop</tt><big>(</big><em>self</em>, <em>key</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.Agenda.pop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pop</code><span class="sig-paren">(</span><em>self</em>, <em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda.pop" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -159,7 +153,7 @@ agenda.</p>
 
 <dl class="method">
 <dt id="discodop.plcfrs.Agenda.popitem">
-<tt class="descname">popitem</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.Agenda.popitem" title="Permalink to this definition">¶</a></dt>
+<code class="descname">popitem</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda.popitem" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -172,13 +166,13 @@ agenda.</p>
 
 <dl class="method">
 <dt id="discodop.plcfrs.Agenda.update">
-<tt class="descname">update</tt><big>(</big><em>self</em>, <em>*a</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.Agenda.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>self</em>, <em>*a</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change score of items given a sequence of (key, value) pairs.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.plcfrs.Agenda.values">
-<tt class="descname">values</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.Agenda.values" title="Permalink to this definition">¶</a></dt>
+<code class="descname">values</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.Agenda.values" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -193,28 +187,25 @@ agenda.</p>
 
 <dl class="class">
 <dt id="discodop.plcfrs.DoubleAgenda">
-<em class="property">class </em><tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">DoubleAgenda</tt><a class="headerlink" href="#discodop.plcfrs.DoubleAgenda" title="Permalink to this definition">¶</a></dt>
-<dd><p>DoubleAgenda(iterable=None)
-Priority Queue where priorities are C doubles.</p>
-<blockquote>
-<div><p>Implements decrease-key and remove operations by marking entries as
+<em class="property">class </em><code class="descclassname">discodop.plcfrs.</code><code class="descname">DoubleAgenda</code><span class="sig-paren">(</span><em>iterable=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.DoubleAgenda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Priority Queue where priorities are C doubles.</p>
+<p>Implements decrease-key and remove operations by marking entries as
 invalid. Provides dictionary-like interface.</p>
 <p>Can be initialized with an iterable of DoubleEntry objects; order of
 equivalent values remains and the best priorities are retained on duplicate
 keys.</p>
 <p>This version is specialized to be used as agenda with C doubles as
 priorities (values); keys are hashable Python objects.</p>
-</div></blockquote>
 <dl class="method">
 <dt id="discodop.plcfrs.DoubleAgenda.peekitem">
-<tt class="descname">peekitem</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.DoubleAgenda.peekitem" title="Permalink to this definition">¶</a></dt>
+<code class="descname">peekitem</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.DoubleAgenda.peekitem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the current best (key, value) pair, while keeping it on the
 agenda.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="discodop.plcfrs.DoubleAgenda.pop">
-<tt class="descname">pop</tt><big>(</big><em>self</em>, <em>key</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.DoubleAgenda.pop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pop</code><span class="sig-paren">(</span><em>self</em>, <em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.DoubleAgenda.pop" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -227,71 +218,63 @@ agenda.</p>
 
 <dl class="method">
 <dt id="discodop.plcfrs.DoubleAgenda.popitem">
-<tt class="descname">popitem</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.DoubleAgenda.popitem" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="discodop.plcfrs.FatLCFRSChart">
-<em class="property">class </em><tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">FatLCFRSChart</tt><a class="headerlink" href="#discodop.plcfrs.FatLCFRSChart" title="Permalink to this definition">¶</a></dt>
-<dd><p>FatLCFRSChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True)
-LCFRS chart that supports longer sentences.</p>
-<dl class="method">
-<dt id="discodop.plcfrs.FatLCFRSChart.indices">
-<tt class="descname">indices</tt><big>(</big><em>self</em>, <em>FatChartItem item</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.FatLCFRSChart.indices" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="discodop.plcfrs.FatLCFRSChart.root">
-<tt class="descname">root</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.FatLCFRSChart.root" title="Permalink to this definition">¶</a></dt>
+<code class="descname">popitem</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.DoubleAgenda.popitem" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="discodop.plcfrs.LCFRSChart">
-<em class="property">class </em><tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">LCFRSChart</tt><a class="headerlink" href="#discodop.plcfrs.LCFRSChart" title="Permalink to this definition">¶</a></dt>
-<dd><p>LCFRSChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True)
-A chart for LCFRS grammars. An item is a ChartItem object.</p>
+<em class="property">class </em><code class="descclassname">discodop.plcfrs.</code><code class="descname">LCFRSChart</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>list sent</em>, <em>start=None</em>, <em>logprob=True</em>, <em>viterbi=True</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.LCFRSChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>A chart for LCFRS grammars. An item is a ChartItem object.</p>
 <dl class="method">
 <dt id="discodop.plcfrs.LCFRSChart.itemstr">
-<tt class="descname">itemstr</tt><big>(</big><em>self</em>, <em>item</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.LCFRSChart.itemstr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="discodop.plcfrs.LCFRSChart.label">
-<tt class="descname">label</tt><big>(</big><em>self</em>, <em>item</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.LCFRSChart.label" title="Permalink to this definition">¶</a></dt>
+<code class="descname">itemstr</code><span class="sig-paren">(</span><em>self</em>, <em>item</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.LCFRSChart.itemstr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="discodop.plcfrs.SmallLCFRSChart">
-<em class="property">class </em><tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">SmallLCFRSChart</tt><a class="headerlink" href="#discodop.plcfrs.SmallLCFRSChart" title="Permalink to this definition">¶</a></dt>
-<dd><p>SmallLCFRSChart(Grammar grammar, list sent, start=None, logprob=True, viterbi=True)
-For sentences that fit into a single machine word.</p>
+<em class="property">class </em><code class="descclassname">discodop.plcfrs.</code><code class="descname">SmallLCFRSChart</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>list sent</em>, <em>start=None</em>, <em>logprob=True</em>, <em>viterbi=True</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.SmallLCFRSChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>For sentences that fit into a single machine word.</p>
 <dl class="method">
 <dt id="discodop.plcfrs.SmallLCFRSChart.indices">
-<tt class="descname">indices</tt><big>(</big><em>self</em>, <em>SmallChartItem item</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.SmallLCFRSChart.indices" title="Permalink to this definition">¶</a></dt>
+<code class="descname">indices</code><span class="sig-paren">(</span><em>self</em>, <em>SmallChartItem item</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.SmallLCFRSChart.indices" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="discodop.plcfrs.SmallLCFRSChart.root">
-<tt class="descname">root</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.SmallLCFRSChart.root" title="Permalink to this definition">¶</a></dt>
+<code class="descname">root</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.SmallLCFRSChart.root" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="discodop.plcfrs.FatLCFRSChart">
+<em class="property">class </em><code class="descclassname">discodop.plcfrs.</code><code class="descname">FatLCFRSChart</code><span class="sig-paren">(</span><em>Grammar grammar</em>, <em>list sent</em>, <em>start=None</em>, <em>logprob=True</em>, <em>viterbi=True</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.FatLCFRSChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>LCFRS chart that supports longer sentences.</p>
+<dl class="method">
+<dt id="discodop.plcfrs.FatLCFRSChart.indices">
+<code class="descname">indices</code><span class="sig-paren">(</span><em>self</em>, <em>FatChartItem item</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.FatLCFRSChart.indices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="discodop.plcfrs.FatLCFRSChart.root">
+<code class="descname">root</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.FatLCFRSChart.root" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.plcfrs.getparent">
-<tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">getparent</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.getparent" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.plcfrs.</code><code class="descname">getparent</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.getparent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Python version of Cython-only _parent() function.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.plcfrs.merge">
-<tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">merge</tt><big>(</big><em>*iterables</em>, <em>key=None</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.merge" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.plcfrs.</code><code class="descname">merge</code><span class="sig-paren">(</span><em>*iterables</em>, <em>key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generator that performs an n-way merge of sorted iterables.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">merge</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
 <span class="go">[0, 0, 1, 1, 2, 2, 3]</span>
@@ -303,20 +286,21 @@ already be sorted with this key.</p>
 
 <dl class="function">
 <dt id="discodop.plcfrs.parse">
-<tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">parse</tt><big>(</big><em>sent</em>, <em>Grammar grammar</em>, <em>tags=None</em>, <em>bool exhaustive=True</em>, <em>start=None</em>, <em>list whitelist=None</em>, <em>bool splitprune=False</em>, <em>bool markorigin=False</em>, <em>estimates=None</em>, <em>int beamwidth=0</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.parse" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.plcfrs.</code><code class="descname">parse</code><span class="sig-paren">(</span><em>sent</em>, <em>Grammar grammar</em>, <em>tags=None</em>, <em>bool exhaustive=True</em>, <em>start=None</em>, <em>list whitelist=None</em>, <em>bool splitprune=False</em>, <em>bool markorigin=False</em>, <em>estimates=None</em>, <em>bool symbolic=False</em>, <em>double beam_beta=0.0</em>, <em>int beam_delta=50</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.plcfrs.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse sentence and produce a chart.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sent</strong> &#8211; a sequence of tokens</li>
-<li><strong>grammar</strong> &#8211; a <tt class="docutils literal"><span class="pre">Grammar</span></tt> object.</li>
-<li><strong>tags</strong> &#8211; optionally, a sequence of gold tags, which will be used
-instead of trying all possible tags.</li>
+<li><strong>sent</strong> &#8211; A sequence of tokens that will be parsed.</li>
+<li><strong>grammar</strong> &#8211; A <code class="docutils literal"><span class="pre">Grammar</span></code> object.</li>
+<li><strong>tags</strong> &#8211; Optionally, a sequence of POS tags to use instead of
+attempting to apply all possible POS tags.</li>
 <li><strong>exhaustive</strong> &#8211; don&#8217;t stop at viterbi parse, return a full chart</li>
-<li><strong>start</strong> &#8211; integer corresponding to the start symbol that analyses
-should have, e.g., grammar.toid[b&#8217;ROOT&#8217;]</li>
+<li><strong>start</strong> &#8211; integer corresponding to the start symbol that complete
+derivations should be headed by; e.g., <code class="docutils literal"><span class="pre">grammar.toid['ROOT']</span></code>.
+If not given, the default specified by <code class="docutils literal"><span class="pre">grammar</span></code> is used.</li>
 <li><strong>whitelist</strong> &#8211; a whitelist of allowed ChartItems. Anything else is not
 added to the agenda.</li>
 <li><strong>splitprune</strong> &#8211; coarse stage used a split-PCFG where discontinuous node
@@ -332,24 +316,21 @@ estimates (&#8216;SX&#8217; or &#8216;SXlrgaps&#8217;), and the estimates themse
 4-dimensional numpy matrix. If estimates are not consistent, it is
 no longer guaranteed that the optimal parse will be found.
 experimental.</li>
-<li><strong>beamwidth</strong> &#8211; specify the maximum number of items that will be explored
-for each particular span, on a first-come-first-served basis.
-setting to 0 disables this feature. experimental.</li>
+<li><strong>symbolic</strong> &#8211; If True, only compute parse forest, disregard
+probabilities. The agenda is an O(1) queue instead of a O(log n)
+priority queue.</li>
+<li><strong>beam_beta</strong> &#8211; keep track of the best score in each cell and only allow
+items which are within a multiple of <code class="docutils literal"><span class="pre">beam_beta</span></code> of the best score.
+Should be a negative log probability. Pass <code class="docutils literal"><span class="pre">0.0</span></code> to disable.</li>
+<li><strong>beam_delta</strong> &#8211; the maximum span length to which beam search is applied.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <tt class="docutils literal"><span class="pre">Chart</span></tt> object.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a <code class="docutils literal"><span class="pre">Chart</span></code> object.</p>
 </td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.plcfrs.parse_symbolic">
-<tt class="descclassname">discodop.plcfrs.</tt><tt class="descname">parse_symbolic</tt><big>(</big><em>sent</em>, <em>Grammar grammar</em>, <em>tags=None</em>, <em>start=None</em><big>)</big><a class="headerlink" href="#discodop.plcfrs.parse_symbolic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Like parse(), but only compute parse forest, disregard probabilities.</p>
-<p>The agenda is a O(1) queue instead of a O(log n) priority queue.</p>
 </dd></dl>
 
 </div>
@@ -358,7 +339,7 @@ setting to 0 disables this feature. experimental.</li>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -374,7 +355,7 @@ setting to 0 disables this feature. experimental.</li>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -391,20 +372,20 @@ setting to 0 disables this feature. experimental.</li>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="discodop.pcfg.html" title="discodop.pcfg"
              >previous</a></li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

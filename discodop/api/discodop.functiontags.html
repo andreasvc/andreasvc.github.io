@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.demos &mdash; Disco-DOP 0.5pre1 documentation</title>
+    <title>discodop.functiontags &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -25,18 +25,18 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
-    <link rel="next" title="discodop.eval" href="discodop.eval.html" />
-    <link rel="prev" title="discodop.plcfrs" href="discodop.plcfrs.html" /> 
+    <link rel="next" title="discodop.gen" href="discodop.gen.html" />
+    <link rel="prev" title="discodop.fragments" href="discodop.fragments.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="discodop.eval.html" title="discodop.eval"
+          <a href="discodop.gen.html" title="discodop.gen"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="discodop.plcfrs.html" title="discodop.plcfrs"
+          <a href="discodop.fragments.html" title="discodop.fragments"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
@@ -49,9 +49,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-discodop.demos">
-<span id="discodop-demos"></span><h1>discodop.demos<a class="headerlink" href="#module-discodop.demos" title="Permalink to this headline">¶</a></h1>
-<p>Examples of various formalisms encoded in LCFRS grammars.</p>
+  <div class="section" id="module-discodop.functiontags">
+<span id="discodop-functiontags"></span><h1>discodop.functiontags<a class="headerlink" href="#module-discodop.functiontags" title="Permalink to this headline">¶</a></h1>
+<p>Function tags classifier.</p>
 <p class="rubric">Functions</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -59,46 +59,36 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.demos.tree_adjoining_grammar" title="discodop.demos.tree_adjoining_grammar"><code class="xref py py-obj docutils literal"><span class="pre">tree_adjoining_grammar</span></code></a>()</td>
-<td>Example of a tree-adjoining grammar (TAG) encoded as an LCFRS.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.functiontags.trainfunctionclassifier" title="discodop.functiontags.trainfunctionclassifier"><code class="xref py py-obj docutils literal"><span class="pre">trainfunctionclassifier</span></code></a>(trees,&nbsp;sents,&nbsp;numproc)</td>
+<td>Train a classifier to predict functions tags in trees.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.demos.dependencygrammar" title="discodop.demos.dependencygrammar"><code class="xref py py-obj docutils literal"><span class="pre">dependencygrammar</span></code></a>()</td>
-<td>An example dependency structure encoded in an LCFRS grammar.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.functiontags.applyfunctionclassifier" title="discodop.functiontags.applyfunctionclassifier"><code class="xref py py-obj docutils literal"><span class="pre">applyfunctionclassifier</span></code></a>(funcclassifier,&nbsp;...)</td>
+<td>Add predicted function tags to tree using classifier.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.demos.bitext" title="discodop.demos.bitext"><code class="xref py py-obj docutils literal"><span class="pre">bitext</span></code></a>()</td>
-<td>Bitext parsing with a synchronous CFG.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.functiontags.functionfeatures" title="discodop.functiontags.functionfeatures"><code class="xref py py-obj docutils literal"><span class="pre">functionfeatures</span></code></a>(node,&nbsp;sent)</td>
+<td>Return a list of features for node to predict its function tag.</td>
 </tr>
 </tbody>
 </table>
 <dl class="function">
-<dt id="discodop.demos.tree_adjoining_grammar">
-<code class="descclassname">discodop.demos.</code><code class="descname">tree_adjoining_grammar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/demos.html#tree_adjoining_grammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.demos.tree_adjoining_grammar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Example of a tree-adjoining grammar (TAG) encoded as an LCFRS.
-Taken from: Chen &amp; Vijay-Shanker (2000), Automated extraction of TAGs
-from the Penn treebank.
-Limitations:
-- no epsilon productions
-Non-terminals have identifiers to encode elementary trees of depth &gt; 2.</p>
+<dt id="discodop.functiontags.trainfunctionclassifier">
+<code class="descclassname">discodop.functiontags.</code><code class="descname">trainfunctionclassifier</code><span class="sig-paren">(</span><em>trees</em>, <em>sents</em>, <em>numproc</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/functiontags.html#trainfunctionclassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.functiontags.trainfunctionclassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train a classifier to predict functions tags in trees.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop.demos.dependencygrammar">
-<code class="descclassname">discodop.demos.</code><code class="descname">dependencygrammar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/demos.html#dependencygrammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.demos.dependencygrammar" title="Permalink to this definition">¶</a></dt>
-<dd><p>An example dependency structure encoded in an LCFRS grammar.</p>
-<p>Taken from: Gildea (2010, fig. 4), Optimal Parsing Strategies for Linear
-Context-Free Rewriting Systems.
-Limitations:
-- rules have to be binarized
-- lexical rules have to be unary
-These have been dealt with by introducing nodes w/underscores.</p>
+<dt id="discodop.functiontags.applyfunctionclassifier">
+<code class="descclassname">discodop.functiontags.</code><code class="descname">applyfunctionclassifier</code><span class="sig-paren">(</span><em>funcclassifier</em>, <em>tree</em>, <em>sent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/functiontags.html#applyfunctionclassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.functiontags.applyfunctionclassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add predicted function tags to tree using classifier.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop.demos.bitext">
-<code class="descclassname">discodop.demos.</code><code class="descname">bitext</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/demos.html#bitext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.demos.bitext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bitext parsing with a synchronous CFG.</p>
-<p>Translation would require a special decoder (instead of normal kbest
-derivations where the whole sentence is given).</p>
+<dt id="discodop.functiontags.functionfeatures">
+<code class="descclassname">discodop.functiontags.</code><code class="descname">functionfeatures</code><span class="sig-paren">(</span><em>node</em>, <em>sent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/functiontags.html#functionfeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.functiontags.functionfeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of features for node to predict its function tag.</p>
+<p>The node must be a ParentedTree, with head information.</p>
+<p>The features are based on Blaheta &amp; Charniak (2000),
+Assigning Function Tags to Parsed Text.</p>
 </dd></dl>
 
 </div>
@@ -144,10 +134,10 @@ derivations where the whole sentence is given).</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="discodop.eval.html" title="discodop.eval"
+          <a href="discodop.gen.html" title="discodop.gen"
              >next</a></li>
         <li class="right" >
-          <a href="discodop.plcfrs.html" title="discodop.plcfrs"
+          <a href="discodop.fragments.html" title="discodop.fragments"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>

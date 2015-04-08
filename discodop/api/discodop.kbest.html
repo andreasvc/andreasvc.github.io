@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>discodop.kbest &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>discodop.kbest &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="../index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
     <link rel="up" title="API documentation" href="../api.html" />
     <link rel="next" title="discodop.pcfg" href="discodop.pcfg.html" />
     <link rel="prev" title="discodop.estimates" href="discodop.estimates.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,16 +38,16 @@
         <li class="right" >
           <a href="discodop.estimates.html" title="discodop.estimates"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" accesskey="U">API documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-discodop.kbest">
 <span id="discodop-kbest"></span><h1>discodop.kbest<a class="headerlink" href="#module-discodop.kbest" title="Permalink to this headline">¶</a></h1>
@@ -60,31 +60,28 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.kbest.getderiv" title="discodop.kbest.getderiv"><tt class="xref py py-obj docutils literal"><span class="pre">getderiv</span></tt></a>(v,&nbsp;RankedEdge&nbsp;ej,&nbsp;Chart&nbsp;chart,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.kbest.getderiv" title="discodop.kbest.getderiv"><code class="xref py py-obj docutils literal"><span class="pre">getderiv</span></code></a>(v,&nbsp;RankedEdge&nbsp;ej,&nbsp;Chart&nbsp;chart,&nbsp;...)</td>
 <td>Convert a RankedEdge to a string with a tree in bracket notation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.kbest.lazykbest" title="discodop.kbest.lazykbest"><tt class="xref py py-obj docutils literal"><span class="pre">lazykbest</span></tt></a>(Chart&nbsp;chart,&nbsp;int&nbsp;k,&nbsp;...)</td>
-<td>Wrapper function to run <tt class="docutils literal"><span class="pre">lazykthbest</span></tt>.</td>
-</tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">lazykthbest</span></tt></td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.kbest.lazykbest" title="discodop.kbest.lazykbest"><code class="xref py py-obj docutils literal"><span class="pre">lazykbest</span></code></a>(Chart&nbsp;chart,&nbsp;int&nbsp;k,&nbsp;...)</td>
+<td>Wrapper function to run <code class="docutils literal"><span class="pre">lazykthbest</span></code>.</td>
 </tr>
 </tbody>
 </table>
 <dl class="function">
 <dt id="discodop.kbest.getderiv">
-<tt class="descclassname">discodop.kbest.</tt><tt class="descname">getderiv</tt><big>(</big><em>v</em>, <em>RankedEdge ej</em>, <em>Chart chart</em>, <em>bytes debin</em><big>)</big><a class="headerlink" href="#discodop.kbest.getderiv" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.kbest.</code><code class="descname">getderiv</code><span class="sig-paren">(</span><em>v</em>, <em>RankedEdge ej</em>, <em>Chart chart</em>, <em>unicode debin</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.kbest.getderiv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a RankedEdge to a string with a tree in bracket notation.</p>
-<p>A RankedEdge consists of an edge and a rank tuple: <tt class="docutils literal"><span class="pre">(e,</span> <span class="pre">j)</span></tt> notation
+<p>A RankedEdge consists of an edge and a rank tuple: <code class="docutils literal"><span class="pre">(e,</span> <span class="pre">j)</span></code> notation
 (&#8216;derivation with backpointers&#8217;). For example, given an edge based on the
-rule <tt class="docutils literal"><span class="pre">S</span> <span class="pre">=&gt;</span> <span class="pre">NP</span> <span class="pre">VP</span></tt> and the tuple <tt class="docutils literal"><span class="pre">(2,</span> <span class="pre">1)</span></tt>, this identifies a derivation
+rule <code class="docutils literal"><span class="pre">S</span> <span class="pre">=&gt;</span> <span class="pre">NP</span> <span class="pre">VP</span></code> and the tuple <code class="docutils literal"><span class="pre">(2,</span> <span class="pre">1)</span></code>, this identifies a derivation
 headed by S and having the 2nd best NP and the 1st best VP as children.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>debin</strong> &#8211; perform on-the-fly debinarization, identify intermediate
-nodes using the substring <tt class="docutils literal"><span class="pre">debin</span></tt>.</td>
+nodes using the substring <code class="docutils literal"><span class="pre">debin</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -92,10 +89,10 @@ nodes using the substring <tt class="docutils literal"><span class="pre">debin</
 
 <dl class="function">
 <dt id="discodop.kbest.lazykbest">
-<tt class="descclassname">discodop.kbest.</tt><tt class="descname">lazykbest</tt><big>(</big><em>Chart chart</em>, <em>int k</em>, <em>bytes debin=None</em>, <em>bool derivs=True</em><big>)</big><a class="headerlink" href="#discodop.kbest.lazykbest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper function to run <tt class="docutils literal"><span class="pre">lazykthbest</span></tt>.</p>
+<code class="descclassname">discodop.kbest.</code><code class="descname">lazykbest</code><span class="sig-paren">(</span><em>Chart chart</em>, <em>int k</em>, <em>unicode debin=None</em>, <em>bool derivs=True</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.kbest.lazykbest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper function to run <code class="docutils literal"><span class="pre">lazykthbest</span></code>.</p>
 <p>Produces the ranked chart, as well as derivations as strings (when
-<tt class="docutils literal"><span class="pre">derivs</span></tt> is True). chart is a monotone hypergraph; should be acyclic
+<code class="docutils literal"><span class="pre">derivs</span></code> is True). chart is a monotone hypergraph; should be acyclic
 unless probabilities resolve the cycles (maybe nonzero weights for unary
 productions are sufficient?).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -118,7 +115,7 @@ productions are sufficient?).</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="../index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -134,7 +131,7 @@ productions are sufficient?).</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -151,7 +148,7 @@ productions are sufficient?).</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -160,14 +157,14 @@ productions are sufficient?).</p>
         <li class="right" >
           <a href="discodop.estimates.html" title="discodop.estimates"
              >previous</a> |</li>
-        <li><a href="../index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="../ref.html" >Reference</a> &raquo;</li>
-          <li><a href="../api.html" >API documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../api.html" >API documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

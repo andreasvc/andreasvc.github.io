@@ -19,14 +19,14 @@ discodop.containers
 
    .. autosummary::
    
+      Grammar
       Chart
       Ctrees
-      Edges
-      FatChartItem
-      Grammar
       LexicalRule
-      RankedEdge
       SmallChartItem
+      FatChartItem
+      Edges
+      RankedEdge
    
    
 

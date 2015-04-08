@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>File formats &mdash; Disco-DOP 0.4.1pre1 documentation</title>
+    <title>File formats &mdash; Disco-DOP 0.5pre1 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.4.1pre1',
+        VERSION:     '0.5pre1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.4.1pre1 documentation" href="index.html" />
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="index.html" />
     <link rel="up" title="Reference" href="ref.html" />
     <link rel="next" title="API documentation" href="api.html" />
     <link rel="prev" title="Parser parameters" href="params.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,15 +38,15 @@
         <li class="right" >
           <a href="params.html" title="Parser parameters"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="ref.html" accesskey="U">Reference</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="ref.html" accesskey="U">Reference</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="file-formats">
 <span id="fileformats"></span><h1>File formats<a class="headerlink" href="#file-formats" title="Permalink to this headline">¶</a></h1>
@@ -69,7 +69,7 @@ rich    JJ  --  --  500
 The preamble listing the tag sets is ignored and not reproduced
 when trees are written in this format.</p>
 <p>This format is supported when input is read incrementally from
-standard input with the <tt class="docutils literal"><span class="pre">treedraw</span></tt> and <tt class="docutils literal"><span class="pre">treetransforms</span></tt> commands.</p>
+standard input with the <code class="docutils literal"><span class="pre">treedraw</span></code> and <code class="docutils literal"><span class="pre">treetransforms</span></code> commands.</p>
 <p>Cf. <a class="reference external" href="http://www.coli.uni-saarland.de/projects/sfb378/negra-corpus/exformat3.ps">http://www.coli.uni-saarland.de/projects/sfb378/negra-corpus/exformat3.ps</a></p>
 </div>
 <div class="section" id="bracket">
@@ -80,7 +80,7 @@ standard input with the <tt class="docutils literal"><span class="pre">treedraw<
 </pre></div>
 </div>
 <p>This format is supported when input is read incrementally from
-standard input with the <tt class="docutils literal"><span class="pre">treedraw</span></tt> and <tt class="docutils literal"><span class="pre">treetransforms</span></tt> commands.</p>
+standard input with the <code class="docutils literal"><span class="pre">treedraw</span></code> and <code class="docutils literal"><span class="pre">treetransforms</span></code> commands.</p>
 </div>
 <div class="section" id="discbracket">
 <h3>discbracket<a class="headerlink" href="#discbracket" title="Permalink to this headline">¶</a></h3>
@@ -96,7 +96,7 @@ per line. Compared to Negra&#8217;s export format, this format lacks morphology,
 lemmas and functional edges. On the other hand, it is very close to the
 internal representation employed here, so it can be read efficiently.</p>
 <p>This format is supported when input is read incrementally from
-standard input with the <tt class="docutils literal"><span class="pre">treedraw</span></tt> and <tt class="docutils literal"><span class="pre">treetransforms</span></tt> commands.</p>
+standard input with the <code class="docutils literal"><span class="pre">treedraw</span></code> and <code class="docutils literal"><span class="pre">treetransforms</span></code> commands.</p>
 </div>
 <div class="section" id="alpino">
 <h3>alpino<a class="headerlink" href="#alpino" title="Permalink to this headline">¶</a></h3>
@@ -117,7 +117,7 @@ Cf. <a class="reference external" href="http://rug-compling.github.io/dact/">htt
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name"><tt class="docutils literal"><span class="pre">tiger</span></tt>:</th><td class="field-body">Tiger XML format.
+<tr class="field-odd field"><th class="field-name"><code class="docutils literal"><span class="pre">tiger</span></code>:</th><td class="field-body">Tiger XML format.
 Cf. <a class="reference external" href="http://www.ims.uni-stuttgart.de/forschung/ressourcen/werkzeuge/TIGERSearch/doc/html/TigerXML.html">http://www.ims.uni-stuttgart.de/forschung/ressourcen/werkzeuge/TIGERSearch/doc/html/TigerXML.html</a></td>
 </tr>
 </tbody>
@@ -129,11 +129,11 @@ Cf. <a class="reference external" href="http://www.ims.uni-stuttgart.de/forschun
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name"><tt class="docutils literal"><span class="pre">connl</span></tt>, <tt class="docutils literal"><span class="pre">mst</span></tt>:</th><td class="field-body">unlabeled dependencies; relies on head identfication.</td>
+<tr class="field-odd field"><th class="field-name"><code class="docutils literal"><span class="pre">connl</span></code>, <code class="docutils literal"><span class="pre">mst</span></code>:</th><td class="field-body">unlabeled dependencies; relies on head identfication.</td>
 </tr>
-<tr class="field-even field"><th class="field-name"><tt class="docutils literal"><span class="pre">tokens</span></tt>:</th><td class="field-body">one sentence per line, tokens separated by spaces.</td>
+<tr class="field-even field"><th class="field-name"><code class="docutils literal"><span class="pre">tokens</span></code>:</th><td class="field-body">one sentence per line, tokens separated by spaces.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name"><tt class="docutils literal"><span class="pre">wordpos</span></tt>:</th><td class="field-body">similar to <tt class="docutils literal"><span class="pre">tokens</span></tt> but of the form <tt class="docutils literal"><span class="pre">token/POS</span></tt>.</td>
+<tr class="field-odd field"><th class="field-name"><code class="docutils literal"><span class="pre">wordpos</span></code>:</th><td class="field-body">similar to <code class="docutils literal"><span class="pre">tokens</span></code> but of the form <code class="docutils literal"><span class="pre">token/POS</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -194,9 +194,9 @@ restored in derivations using a backtransform table with the original fragments
 for each grammar rule.</p>
 <p>The backtransform file contains one fragment per line, with the lines
 corresponding to the lines of the grammar rule file. Frontier non-terminals
-are indicated as <tt class="docutils literal"><span class="pre">{0}</span></tt>, <tt class="docutils literal"><span class="pre">{1}</span></tt>, etc.
+are indicated as <code class="docutils literal"><span class="pre">{0}</span></code>, <code class="docutils literal"><span class="pre">{1}</span></code>, etc.
 The fragments which this backtransform is based on is also saved, with a
-filename of the form <tt class="docutils literal"><span class="pre">.fragments.gz</span></tt>.
+filename of the form <code class="docutils literal"><span class="pre">.fragments.gz</span></code>.
 To view the grammar rules together with the corresponding fragments, issue the
 following command:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ paste &lt;(zcat dop.rules.gz) &lt;(zcat dop.fragments.gz)
@@ -235,7 +235,7 @@ every fragment is assigned a uniform weight of 0.5.</p>
 <p>This file specifies a set of heuristic rules to pick for every constituent
 one of its children as being the head of the constituent, based on
 syntactic categories.</p>
-<p>The file is case insensitive. Lines starting with <tt class="docutils literal"><span class="pre">%</span></tt> are treated as comments
+<p>The file is case insensitive. Lines starting with <code class="docutils literal"><span class="pre">%</span></code> are treated as comments
 and ignored. Each line specifies a rule of the form:</p>
 <div class="highlight-python"><div class="highlight"><pre>CAT left-to-right child1 child2...
 </pre></div>
@@ -244,7 +244,7 @@ and ignored. Each line specifies a rule of the form:</p>
 <div class="highlight-python"><div class="highlight"><pre>CAT right-to-left child1 child2...
 </pre></div>
 </div>
-<p>This rule specifies how a head is assigned for a constituent labeled as <tt class="docutils literal"><span class="pre">CAT</span></tt>.
+<p>This rule specifies how a head is assigned for a constituent labeled as <code class="docutils literal"><span class="pre">CAT</span></code>.
 The second argument specifies whether the children of the constituent should
 be considered starting from the left or from the right (corresponding to whether
 a category is head-first head-final).
@@ -313,7 +313,7 @@ EVALB parameter files.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
@@ -329,7 +329,7 @@ EVALB parameter files.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -346,7 +346,7 @@ EVALB parameter files.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -355,13 +355,13 @@ EVALB parameter files.</p>
         <li class="right" >
           <a href="params.html" title="Parser parameters"
              >previous</a> |</li>
-        <li><a href="index.html">Disco-DOP 0.4.1pre1 documentation</a> &raquo;</li>
-          <li><a href="ref.html" >Reference</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="ref.html" >Reference</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Andreas van Cranenburgh.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
