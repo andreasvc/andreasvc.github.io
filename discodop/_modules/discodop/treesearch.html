@@ -65,38 +65,13 @@
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
 	<span class="n">ALPINOCORPUSLIB</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="kn">from</span> <span class="nn">roaringbitmap</span> <span class="kn">import</span> <span class="n">RoaringBitmap</span>
-<span class="kn">from</span> <span class="nn">discodop</span> <span class="kn">import</span> <span class="n">treebank</span><span class="p">,</span> <span class="n">treetransforms</span>
+<span class="kn">from</span> <span class="nn">discodop</span> <span class="kn">import</span> <span class="n">treebank</span><span class="p">,</span> <span class="n">treetransforms</span><span class="p">,</span> <span class="n">_fragments</span>
 <span class="kn">from</span> <span class="nn">discodop.tree</span> <span class="kn">import</span> <span class="n">Tree</span>
 <span class="kn">from</span> <span class="nn">discodop.parser</span> <span class="kn">import</span> <span class="n">workerfunc</span><span class="p">,</span> <span class="n">which</span>
 <span class="kn">from</span> <span class="nn">discodop.treedraw</span> <span class="kn">import</span> <span class="n">ANSICOLOR</span><span class="p">,</span> <span class="n">DrawTree</span>
 
-<span class="n">USAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;Search through treebanks with queries.</span>
-<span class="s">Usage: </span><span class="si">%s</span><span class="s"> [--engine=(tgrep2|xpath|regex)] [-t|-s|-c] &lt;query&gt; &lt;treebank&gt;...</span>
-
-<span class="s">Options:</span>
-<span class="s">  -e, --engine=&lt;x&gt;</span>
-<span class="s">                  Select query engine; possible options:</span>
-<span class="s">                  tgrep2: tgrep2 queries (default); files are bracket corpora</span>
-<span class="s">                          (optionally precompiled into tgrep2 format).</span>
-<span class="s">                  xpath: arbitrary xpath queries; files are dact XML corpora.</span>
-<span class="s">                  regex: search through tokenized sentences with Python regexps</span>
-<span class="s">  -c, --counts    report counts</span>
-<span class="s">  -s, --sents     output sentences (default)</span>
-<span class="s">  -t, --trees     output visualizations of trees</span>
-<span class="s">  -b, --brackets  output raw trees in the original corpus format</span>
-<span class="s">  -o, --only-matching</span>
-<span class="s">                  only output the matching portion</span>
-<span class="s">                  with --sents, --trees, and --brackets</span>
-<span class="s">  -m, --max-count=&lt;n&gt;</span>
-<span class="s">                  with --counts: only consider first n sentences;</span>
-<span class="s">                  otherwise: stop after n matches.</span>
-<span class="s">  -n, --line-number</span>
-<span class="s">                  Prefix each line of output with the sentence number within</span>
-<span class="s">                  its input file.</span>
-<span class="s">  -M, --macros=&lt;x&gt;</span>
-<span class="s">                  file with macros</span>
-<span class="s">  --numthreads=&lt;x&gt;</span>
-<span class="s">                  Number of concurrent threads to use.</span>
+<span class="n">SHORTUSAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;Search through treebanks with queries.</span>
+<span class="s">Usage: </span><span class="si">%s</span><span class="s"> [--engine=(tgrep2|xpath|regex)] [-t|-s|-c] &lt;query&gt; &lt;treebank&gt;...</span><span class="se">\</span>
 <span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">CACHESIZE</span> <span class="o">=</span> <span class="mi">1024</span>
 <span class="n">GETLEAVES</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39; ([^ ()]+)(?=[ )])&#39;</span><span class="p">)</span>
@@ -129,7 +104,7 @@
 <span class="sd">		:param files: a sequence of filenames of corpora</span>
 <span class="sd">		:param macros: a filename with macros that can be used in queries.</span>
 <span class="sd">		:param numthreads: the number of concurrent threads to use;</span>
-<span class="sd">			None to disable threading.&quot;&quot;&quot;</span>
+<span class="sd">			pass 1 to disable threading.&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="nb">dict</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span>
 				<span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)):</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;&quot;files&quot; argument must be a sequence of filenames.&#39;</span><span class="p">)</span>
@@ -169,12 +144,12 @@
 
 <span class="sd">		:param maxresults: the maximum number of matches to return.</span>
 <span class="sd">		:param brackets: if True, return trees as they appear in the treebank,</span>
-<span class="sd">			match is the matching substring.</span>
+<span class="sd">			match is a string with the matching subtree.</span>
 <span class="sd">			If False (default), sentences are returned as a sequence of tokens.</span>
 <span class="sd">		:returns: list of tuples of the form</span>
-<span class="sd">			``(corpus, sentno, sent, highlight)``</span>
+<span class="sd">			``(corpus, sentno, sent, match)``</span>
 <span class="sd">			sent is a single string with space-separated tokens;</span>
-<span class="sd">			highlight is an iterable of integer indices of tokens matched</span>
+<span class="sd">			match is an iterable of integer indices of tokens matched</span>
 <span class="sd">			by the query.&quot;&quot;&quot;</span>
 </div>
 <div class="viewcode-block" id="CorpusSearcher.batchcounts"><a class="viewcode-back" href="../../api/discodop.treesearch.html#discodop.treesearch.CorpusSearcher.batchcounts">[docs]</a>	<span class="k">def</span> <span class="nf">batchcounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -263,9 +238,9 @@
 			<span class="n">nofunc</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">nomorph</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 		<span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
 		<span class="c"># %s the sentence number</span>
-		<span class="c"># %w complete tree in bracket notation</span>
-		<span class="c"># %h the matched subtree in bracket notation</span>
-		<span class="n">fmt</span> <span class="o">=</span> <span class="s">r&#39;</span><span class="si">%s</span><span class="s">:::%w:::%h\n&#39;</span>
+		<span class="c"># %w com:plete tree in bracket notation</span>
+		<span class="c"># %m all marked nodes, or the head node if none are marked</span>
+		<span class="n">fmt</span> <span class="o">=</span> <span class="s">r&#39;</span><span class="si">%s</span><span class="s">:::%w:::%m\n&#39;</span>
 		<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 		<span class="n">jobs</span> <span class="o">=</span> <span class="p">{}</span>
 		<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
@@ -294,6 +269,8 @@
 					<span class="n">treestr</span> <span class="o">=</span> <span class="n">treestr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">match</span><span class="p">,</span> <span class="s">&#39;_HIGH</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">match</span><span class="p">)</span>
 				<span class="n">tree</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">treebank</span><span class="o">.</span><span class="n">termindices</span><span class="p">(</span><span class="n">treestr</span><span class="p">)</span>
 				<span class="n">tree</span> <span class="o">=</span> <span class="n">treetransforms</span><span class="o">.</span><span class="n">mergediscnodes</span><span class="p">(</span><span class="n">Tree</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span>
+				<span class="n">sent</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-LRB-&#39;</span><span class="p">,</span> <span class="s">&#39;(&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-RRB-&#39;</span><span class="p">,</span> <span class="s">&#39;)&#39;</span><span class="p">)</span>
+						<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">]</span>
 				<span class="n">high</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;_HIGH&quot;</span><span class="p">)))</span>
 				<span class="k">if</span> <span class="n">high</span><span class="p">:</span>
 					<span class="n">high</span> <span class="o">=</span> <span class="n">high</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
@@ -309,8 +286,8 @@
 		<span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
 		<span class="c"># %s the sentence number</span>
 		<span class="c"># %w complete tree in bracket notation</span>
-		<span class="c"># %h the matched subtree in bracket notation</span>
-		<span class="n">fmt</span> <span class="o">=</span> <span class="s">r&#39;</span><span class="si">%s</span><span class="s">:::%w:::%h\n&#39;</span>
+		<span class="c"># %m all marked nodes, or the head node if none are marked</span>
+		<span class="n">fmt</span> <span class="o">=</span> <span class="s">r&#39;</span><span class="si">%s</span><span class="s">:::%w:::%m\n&#39;</span>
 		<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 		<span class="n">jobs</span> <span class="o">=</span> <span class="p">{}</span>
 		<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
@@ -332,7 +309,9 @@
 					<span class="n">idx</span> <span class="o">=</span> <span class="n">sent</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">match</span> <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">)</span>
 							<span class="k">else</span> <span class="s">&#39; </span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">match</span><span class="p">)</span>
 					<span class="n">prelen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">GETLEAVES</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">sent</span><span class="p">[:</span><span class="n">idx</span><span class="p">]))</span>
-					<span class="n">sent</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">GETLEAVES</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">sent</span><span class="p">))</span>
+					<span class="n">sent</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+							<span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-LRB-&#39;</span><span class="p">,</span> <span class="s">&#39;(&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-RRB-&#39;</span><span class="p">,</span> <span class="s">&#39;)&#39;</span><span class="p">)</span>
+							<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">GETLEAVES</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">sent</span><span class="p">))</span>
 					<span class="n">match</span> <span class="o">=</span> <span class="n">GETLEAVES</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
 							<span class="n">match</span><span class="p">)</span> <span class="k">if</span> <span class="s">&#39;(&#39;</span> <span class="ow">in</span> <span class="n">match</span> <span class="k">else</span> <span class="p">[</span><span class="n">match</span><span class="p">]</span>
 					<span class="n">match</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">prelen</span><span class="p">,</span> <span class="n">prelen</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="p">))</span>
@@ -365,7 +344,9 @@
 		<span class="n">result</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
 		<span class="k">if</span> <span class="n">sents</span><span class="p">:</span>
 			<span class="k">return</span> <span class="n">result</span>
-		<span class="k">return</span> <span class="p">[(</span><span class="n">treetransforms</span><span class="o">.</span><span class="n">mergediscnodes</span><span class="p">(</span><span class="n">Tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)),</span> <span class="n">sent</span><span class="p">)</span>
+		<span class="k">return</span> <span class="p">[(</span><span class="n">treetransforms</span><span class="o">.</span><span class="n">mergediscnodes</span><span class="p">(</span><span class="n">Tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)),</span>
+				<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-LRB-&#39;</span><span class="p">,</span> <span class="s">&#39;(&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-RRB-&#39;</span><span class="p">,</span> <span class="s">&#39;)&#39;</span><span class="p">)</span>
+					<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">])</span>
 				<span class="k">for</span> <span class="n">tree</span><span class="p">,</span> <span class="n">sent</span>
 				<span class="ow">in</span> <span class="p">(</span><span class="n">treebank</span><span class="o">.</span><span class="n">termindices</span><span class="p">(</span><span class="n">filterlabels</span><span class="p">(</span>
 					<span class="n">treestr</span><span class="p">,</span> <span class="n">nofunc</span><span class="p">,</span> <span class="n">nomorph</span><span class="p">))</span> <span class="k">for</span> <span class="n">treestr</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)]</span>
@@ -379,16 +360,14 @@
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">macros</span><span class="p">:</span>
 			<span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">macros</span><span class="p">)</span>
 		<span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-		<span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
-				<span class="n">bufsize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-				<span class="n">shell</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-				<span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
-				<span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+		<span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+				<span class="n">args</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bufsize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+				<span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
 		<span class="n">linere</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;([0-9]+):::([^\n]*)&#39;</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">limit</span> <span class="ow">or</span> <span class="n">maxresults</span><span class="p">:</span>
 			<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 			<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">proc</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">readline</span><span class="p">,</span> <span class="n">b</span><span class="s">&#39;&#39;</span><span class="p">)):</span>
-				<span class="n">match</span> <span class="o">=</span> <span class="n">linere</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
+				<span class="n">match</span> <span class="o">=</span> <span class="n">linere</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">))</span>
 				<span class="n">m</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 				<span class="k">if</span> <span class="p">(</span><span class="n">limit</span> <span class="ow">and</span> <span class="n">m</span> <span class="o">&gt;=</span> <span class="n">limit</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">maxresults</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="n">maxresults</span><span class="p">):</span>
 					<span class="n">proc</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -398,7 +377,7 @@
 				<span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>
 			<span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
 				<span class="n">proc</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-				<span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+				<span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span>
 				<span class="n">proc</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
@@ -545,10 +524,210 @@
 		<span class="k">return</span> <span class="n">islice</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">maxresults</span><span class="p">)</span>
 
 </div>
+<span class="k">class</span> <span class="nc">FragmentSearcher</span><span class="p">(</span><span class="n">CorpusSearcher</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Search for fragments in a bracket treebank.</span>
+
+<span class="sd">	Format of treebanks and queries can be bracket, discbracket, or</span>
+<span class="sd">	export (autodetected).</span>
+<span class="sd">	Each query consists of one or more tree fragments, and the results</span>
+<span class="sd">	will be merged together, except with batchcounts(), which returns</span>
+<span class="sd">	the results for each fragment separately.&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">macros</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">numthreads</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">FragmentSearcher</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">macros</span><span class="p">,</span> <span class="n">numthreads</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">prods</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+			<span class="c"># problem: won&#39;t convert bracket to disc. trees</span>
+			<span class="c"># self.files[filename] = _fragments.readtreebank(</span>
+			<span class="c"># 		filename, self.labels, self.prods, fmt=fmt)</span>
+			<span class="c"># get format from extension</span>
+			<span class="n">ext</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;export&#39;</span><span class="p">:</span> <span class="s">&#39;export&#39;</span><span class="p">,</span> <span class="s">&#39;mrg&#39;</span><span class="p">:</span> <span class="s">&#39;bracket&#39;</span><span class="p">,</span> <span class="s">&#39;dbr&#39;</span><span class="p">:</span> <span class="s">&#39;discbracket&#39;</span><span class="p">}</span>
+			<span class="n">trees</span><span class="p">,</span> <span class="n">sents</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">treebank</span><span class="o">.</span><span class="n">READERS</span><span class="p">[</span><span class="n">ext</span><span class="p">[</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]](</span>
+					<span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">itertrees</span><span class="p">():</span>
+				<span class="n">trees</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">treetransforms</span><span class="o">.</span><span class="n">binarize</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">dot</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+				<span class="n">sents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">sent</span><span class="p">)</span>
+			<span class="c"># result = list(treebank.incrementaltreereader(</span>
+			<span class="c"># 			io.open(filename, encoding=&#39;utf8&#39;)))</span>
+			<span class="c"># trees = [treetransforms.binarize(a, dot=True)</span>
+			<span class="c"># 		for a, _, _ in result]</span>
+			<span class="c"># sents = [b for _, b, _ in result]</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">getctrees</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span>
+					<span class="n">labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prods</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">])</span>
+			<span class="c"># keep track of maxnodes?</span>
+		<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">filename</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">indextrees</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prods</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">macros</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">if</span> <span class="n">macros</span><span class="p">:</span>
+			<span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">macros</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">macros</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">counts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+		<span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+		<span class="n">jobs</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">result</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span>
+						<span class="s">&#39;counts&#39;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">indices</span><span class="p">]</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">indices</span><span class="p">:</span>
+					<span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_submit</span><span class="p">(</span>
+							<span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">),</span>
+							<span class="n">filename</span><span class="p">)]</span> <span class="o">=</span> <span class="n">filename</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_submit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">),</span>
+						<span class="n">filename</span><span class="p">)]</span> <span class="o">=</span> <span class="n">filename</span>
+		<span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_completed</span><span class="p">(</span><span class="n">jobs</span><span class="p">):</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">jobs</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">indices</span><span class="p">:</span>
+				<span class="n">result</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+				<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">():</span>
+					<span class="n">result</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">result</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="s">&#39;counts&#39;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">indices</span>
+					<span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">result</span>
+
+	<span class="k">def</span> <span class="nf">batchcounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+		<span class="n">jobs</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="n">query</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+		<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
+			<span class="c"># try:</span>
+			<span class="c"># 	result[filename] = self.cache[</span>
+			<span class="c"># 			&#39;counts&#39;, query, filename, limit, indices]</span>
+			<span class="c"># except KeyError:</span>
+			<span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_submit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+				<span class="n">filename</span><span class="p">)]</span> <span class="o">=</span> <span class="n">filename</span>
+		<span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_completed</span><span class="p">(</span><span class="n">jobs</span><span class="p">):</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">jobs</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
+			<span class="c"># self.cache[&#39;counts&#39;, query, filename, limit, False] =</span>
+			<span class="n">result</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+		<span class="k">return</span> <span class="n">result</span>
+
+	<span class="k">def</span> <span class="nf">trees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">maxresults</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+			<span class="n">nofunc</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">nomorph</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">nofunc</span> <span class="ow">or</span> <span class="n">nomorph</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span>
+		<span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">jobs</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">x</span><span class="p">,</span> <span class="n">maxresults2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="s">&#39;trees&#39;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span>
+						<span class="n">nofunc</span><span class="p">,</span> <span class="n">nomorph</span><span class="p">]</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="n">maxresults2</span> <span class="o">=</span> <span class="mi">0</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">maxresults</span> <span class="ow">or</span> <span class="n">maxresults</span> <span class="o">&gt;</span> <span class="n">maxresults2</span><span class="p">:</span>
+				<span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_submit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query</span><span class="p">(</span>
+						<span class="n">query</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">maxresults</span><span class="p">)),</span> <span class="n">filename</span><span class="p">)]</span> <span class="o">=</span> <span class="n">filename</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="n">maxresults</span><span class="p">])</span>
+		<span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_completed</span><span class="p">(</span><span class="n">jobs</span><span class="p">):</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">jobs</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
+			<span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="k">for</span> <span class="n">frag</span><span class="p">,</span> <span class="n">multiset</span> <span class="ow">in</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">():</span>
+				<span class="k">for</span> <span class="n">sentno</span> <span class="ow">in</span> <span class="n">multiset</span><span class="p">:</span>
+					<span class="n">tree</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
+							<span class="n">filename</span><span class="p">,</span> <span class="n">sentno</span><span class="p">,</span> <span class="n">sentno</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+					<span class="n">high</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># FIXME matching subtree not returned</span>
+					<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">filename</span><span class="p">,</span> <span class="n">sentno</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">high</span><span class="p">))</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="s">&#39;trees&#39;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span>
+					<span class="n">nofunc</span><span class="p">,</span> <span class="n">nomorph</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">maxresults</span>
+			<span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">result</span>
+
+	<span class="k">def</span> <span class="nf">sents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">maxresults</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">brackets</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+		<span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">jobs</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">x</span><span class="p">,</span> <span class="n">maxresults2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="s">&#39;sents&#39;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">brackets</span><span class="p">]</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="n">maxresults2</span> <span class="o">=</span> <span class="mi">0</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">maxresults</span> <span class="ow">or</span> <span class="n">maxresults</span> <span class="o">&gt;</span> <span class="n">maxresults2</span><span class="p">:</span>
+				<span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_submit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_query</span><span class="p">(</span>
+						<span class="n">query</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">maxresults</span><span class="p">)),</span> <span class="n">filename</span><span class="p">)]</span> <span class="o">=</span> <span class="n">filename</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="n">maxresults</span><span class="p">])</span>
+		<span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_completed</span><span class="p">(</span><span class="n">jobs</span><span class="p">):</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">jobs</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
+			<span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="k">for</span> <span class="n">frag</span><span class="p">,</span> <span class="n">multiset</span> <span class="ow">in</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">():</span>
+				<span class="k">for</span> <span class="n">sentno</span> <span class="ow">in</span> <span class="n">multiset</span><span class="p">:</span>
+					<span class="n">tree</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
+							<span class="n">filename</span><span class="p">,</span> <span class="n">sentno</span><span class="p">,</span> <span class="n">sentno</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+					<span class="n">sent</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span>
+					<span class="k">if</span> <span class="n">brackets</span><span class="p">:</span>
+						<span class="n">sent</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">sent</span>
+						<span class="n">match</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+							<span class="nb">str</span><span class="p">(</span><span class="n">frag</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+							<span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">a</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">frag</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+					<span class="k">else</span><span class="p">:</span>
+						<span class="n">xsent</span> <span class="o">=</span> <span class="n">sent</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+						<span class="n">match</span> <span class="o">=</span> <span class="p">{</span><span class="n">xsent</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">frag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+								<span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">}</span>
+					<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">filename</span><span class="p">,</span> <span class="n">sentno</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">match</span><span class="p">))</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="s">&#39;sents&#39;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">brackets</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">maxresults</span>
+			<span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">result</span>
+
+	<span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span>
+			<span class="n">nofunc</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">nomorph</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sents</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">nofunc</span> <span class="ow">or</span> <span class="n">nomorph</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span>
+		<span class="n">trees</span><span class="p">,</span> <span class="n">xsents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span>
+		<span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_fragments</span><span class="o">.</span><span class="n">completebitsets</span><span class="p">(</span>
+			<span class="n">trees</span><span class="p">,</span> <span class="n">xsents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">filename</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">,</span> <span class="n">discontinuous</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+		<span class="k">if</span> <span class="n">sents</span><span class="p">:</span>
+			<span class="k">return</span> <span class="p">[</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="p">[(</span><span class="n">treetransforms</span><span class="o">.</span><span class="n">mergediscnodes</span><span class="p">(</span><span class="n">Tree</span><span class="p">(</span><span class="n">treestr</span><span class="p">)),</span> <span class="n">sent</span><span class="p">)</span>
+					<span class="k">for</span> <span class="n">treestr</span><span class="p">,</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+
+	<span class="k">def</span> <span class="nf">_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">maxresults</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+			<span class="n">indices</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Run a query on a single file.&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">macros</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">macros</span><span class="p">)</span>
+		<span class="n">trees</span><span class="p">,</span> <span class="n">sents</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[(</span><span class="n">treetransforms</span><span class="o">.</span><span class="n">binarize</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dot</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">b</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">treebank</span><span class="o">.</span><span class="n">incrementaltreereader</span><span class="p">(</span>
+					<span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">query</span><span class="p">))])</span>
+		<span class="n">queries</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">getctrees</span><span class="p">(</span>
+				<span class="nb">list</span><span class="p">(</span><span class="n">trees</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">sents</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">prods</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prods</span><span class="p">)</span>
+		<span class="n">maxnodes</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">queries</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">maxnodes</span><span class="p">,</span>
+					<span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">filename</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">maxnodes</span> <span class="k">for</span> <span class="n">filename</span>
+						<span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">))</span>
+		<span class="n">fragments</span> <span class="o">=</span> <span class="n">_fragments</span><span class="o">.</span><span class="n">completebitsets</span><span class="p">(</span>
+				<span class="n">queries</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span> <span class="n">queries</span><span class="p">[</span><span class="s">&#39;sents1&#39;</span><span class="p">],</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">maxnodes</span><span class="p">,</span> <span class="n">discontinuous</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+		<span class="n">results</span> <span class="o">=</span> <span class="p">((</span><span class="n">frag</span><span class="p">,</span> <span class="n">multiset</span><span class="p">)</span> <span class="k">for</span> <span class="n">frag</span><span class="p">,</span> <span class="n">multiset</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+					<span class="n">fragments</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
+					<span class="n">_fragments</span><span class="o">.</span><span class="n">exactcounts</span><span class="p">(</span>
+						<span class="n">queries</span><span class="p">[</span><span class="s">&#39;trees1&#39;</span><span class="p">],</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">filename</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+						<span class="nb">list</span><span class="p">(</span><span class="n">fragments</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+						<span class="n">indices</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="n">indices</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+						<span class="n">maxnodes</span><span class="o">=</span><span class="n">maxnodes</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)))</span>
+		<span class="k">if</span> <span class="n">maxresults</span><span class="p">:</span>
+			<span class="n">results</span> <span class="o">=</span> <span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">islice</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">maxresults</span><span class="p">))</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">results</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">results</span>
+
+
 <div class="viewcode-block" id="RegexSearcher"><a class="viewcode-back" href="../../api/discodop.treesearch.html#discodop.treesearch.RegexSearcher">[docs]</a><span class="k">class</span> <span class="nc">RegexSearcher</span><span class="p">(</span><span class="n">CorpusSearcher</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Search a plain text file in UTF-8 with regular expressions.</span>
 
-<span class="sd">	Assumes that non-empty lines correspond to sentences.</span>
+<span class="sd">	Assumes that non-empty lines correspond to sentences; empty lines</span>
+<span class="sd">	do not count towards line numbers (e.g., when used as paragraph breaks).</span>
 
 <span class="sd">	:param macros: a file containing lines of the form ``&#39;name=regex&#39;``;</span>
 <span class="sd">		an occurrence of ``&#39;{name}&#39;`` will be suitably replaced when it</span>
@@ -557,7 +736,7 @@
 		<span class="nb">super</span><span class="p">(</span><span class="n">RegexSearcher</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">macros</span><span class="p">,</span> <span class="n">numthreads</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">macros</span> <span class="o">=</span> <span class="p">{}</span>
 		<span class="k">if</span> <span class="n">macros</span><span class="p">:</span>
-			<span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">macros</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+			<span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">macros</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">macros</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">lineindex</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
 
@@ -704,34 +883,36 @@
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 	<span class="sd">&quot;&quot;&quot;CLI.&quot;&quot;&quot;</span>
 	<span class="kn">from</span> <span class="nn">getopt</span> <span class="kn">import</span> <span class="n">gnu_getopt</span><span class="p">,</span> <span class="n">GetoptError</span>
-	<span class="n">shortoptions</span> <span class="o">=</span> <span class="s">&#39;e:m:M:stcbnoh&#39;</span>
+	<span class="n">shortoptions</span> <span class="o">=</span> <span class="s">&#39;e:m:M:stcbnofh&#39;</span>
 	<span class="n">options</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;engine= macros= numthreads= max-count= &#39;</span>
-			<span class="s">&#39;trees sents brackets counts only-matching line-number help&#39;</span><span class="p">)</span>
+			<span class="s">&#39;trees sents brackets counts only-matching line-number file help&#39;</span><span class="p">)</span>
 	<span class="k">try</span><span class="p">:</span>
 		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">shortoptions</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
 		<span class="n">query</span><span class="p">,</span> <span class="n">corpora</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+			<span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="n">corpora</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;enter one or more corpus files&#39;</span><span class="p">)</span>
 	<span class="k">except</span> <span class="p">(</span><span class="n">GetoptError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">err</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">SHORTUSAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
-	<span class="k">if</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-h&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
-		<span class="k">return</span>
+	<span class="k">if</span> <span class="s">&#39;--file&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-f&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+		<span class="n">query</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 	<span class="n">macros</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--macros&#39;</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-M&#39;</span><span class="p">))</span>
 	<span class="n">engine</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--engine&#39;</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-e&#39;</span><span class="p">,</span> <span class="s">&#39;tgrep2&#39;</span><span class="p">))</span>
 	<span class="n">maxresults</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--max-count&#39;</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>
+	<span class="n">numthreads</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numthreads&#39;</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">engine</span> <span class="o">==</span> <span class="s">&#39;tgrep2&#39;</span><span class="p">:</span>
-		<span class="n">searcher</span> <span class="o">=</span> <span class="n">TgrepSearcher</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">macros</span><span class="o">=</span><span class="n">macros</span><span class="p">,</span>
-				<span class="n">numthreads</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numthreads&#39;</span><span class="p">))</span>
+		<span class="n">searcher</span> <span class="o">=</span> <span class="n">TgrepSearcher</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">macros</span><span class="o">=</span><span class="n">macros</span><span class="p">,</span> <span class="n">numthreads</span><span class="o">=</span><span class="n">numthreads</span><span class="p">)</span>
 	<span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s">&#39;xpath&#39;</span><span class="p">:</span>
-		<span class="n">searcher</span> <span class="o">=</span> <span class="n">DactSearcher</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">macros</span><span class="o">=</span><span class="n">macros</span><span class="p">,</span>
-				<span class="n">numthreads</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numthreads&#39;</span><span class="p">))</span>
+		<span class="n">searcher</span> <span class="o">=</span> <span class="n">DactSearcher</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">macros</span><span class="o">=</span><span class="n">macros</span><span class="p">,</span> <span class="n">numthreads</span><span class="o">=</span><span class="n">numthreads</span><span class="p">)</span>
 	<span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s">&#39;regex&#39;</span><span class="p">:</span>
-		<span class="n">searcher</span> <span class="o">=</span> <span class="n">RegexSearcher</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">macros</span><span class="o">=</span><span class="n">macros</span><span class="p">,</span>
-				<span class="n">numthreads</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numthreads&#39;</span><span class="p">))</span>
+		<span class="n">searcher</span> <span class="o">=</span> <span class="n">RegexSearcher</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">macros</span><span class="o">=</span><span class="n">macros</span><span class="p">,</span> <span class="n">numthreads</span><span class="o">=</span><span class="n">numthreads</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s">&#39;frag&#39;</span><span class="p">:</span>
+		<span class="n">searcher</span> <span class="o">=</span> <span class="n">FragmentSearcher</span><span class="p">(</span>
+				<span class="n">corpora</span><span class="p">,</span> <span class="n">macros</span><span class="o">=</span><span class="n">macros</span><span class="p">,</span> <span class="n">numthreads</span><span class="o">=</span><span class="n">numthreads</span><span class="p">)</span>
 	<span class="k">else</span><span class="p">:</span>
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;incorrect --engine value: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">engine</span><span class="p">)</span>
 	<span class="k">if</span> <span class="s">&#39;--counts&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-c&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
@@ -756,7 +937,7 @@
 				<span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\x1b</span><span class="s">[0m:</span><span class="se">\x1b</span><span class="s">[</span><span class="si">%d</span><span class="s">m</span><span class="si">%s</span><span class="se">\x1b</span><span class="s">[0m:&#39;</span>
 						<span class="o">%</span> <span class="p">(</span><span class="n">ANSICOLOR</span><span class="p">[</span><span class="s">&#39;green&#39;</span><span class="p">],</span> <span class="n">sentno</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
 			<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-	<span class="k">else</span><span class="p">:</span>
+	<span class="k">else</span><span class="p">:</span>  <span class="c"># sentences or brackets</span>
 		<span class="n">brackets</span> <span class="o">=</span> <span class="s">&#39;--brackets&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-b&#39;</span> <span class="ow">in</span> <span class="n">opts</span>
 		<span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">sentno</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">high</span> <span class="ow">in</span> <span class="n">searcher</span><span class="o">.</span><span class="n">sents</span><span class="p">(</span>
 				<span class="n">query</span><span class="p">,</span> <span class="n">brackets</span><span class="o">=</span><span class="n">brackets</span><span class="p">,</span> <span class="n">maxresults</span><span class="o">=</span><span class="n">maxresults</span><span class="p">):</span>
@@ -802,6 +983,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -828,7 +1020,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

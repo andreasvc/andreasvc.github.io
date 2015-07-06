@@ -114,7 +114,7 @@
 <td>Replace terminals in a tree string with consecutive indices.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.numbase" title="discodop.treebank.numbase"><code class="xref py py-obj docutils literal"><span class="pre">numbase</span></code></a>(key)</td>
-<td>Turn a file name into a numeric sorting key if possible.</td>
+<td>Split file name in numeric and string components to use as sort key.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.removeterminals" title="discodop.treebank.removeterminals"><code class="xref py py-obj docutils literal"><span class="pre">removeterminals</span></code></a>(tree,&nbsp;sent,&nbsp;func)</td>
 <td>Remove any terminals for which func is True, and any empty ancestors.</td>
@@ -165,7 +165,7 @@
 
 <dl class="class">
 <dt id="discodop.treebank.CorpusReader">
-<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">CorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">CorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#CorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.CorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract corpus reader.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -178,20 +178,6 @@
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
-</tr>
-<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -348,7 +334,7 @@ trees in the original treebank.</td>
 
 <dl class="class">
 <dt id="discodop.treebank.BracketCorpusReader">
-<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">BracketCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#BracketCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.BracketCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">BracketCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#BracketCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.BracketCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corpus reader for phrase-structures in bracket notation.</p>
 <p>For example:</p>
 <div class="highlight-python"><div class="highlight"><pre>(S (NP John) (VP (VB is) (JJ rich)) (. .))
@@ -365,20 +351,6 @@ trees in the original treebank.</td>
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
-</tr>
-<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -464,7 +436,7 @@ POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</s
 
 <dl class="class">
 <dt id="discodop.treebank.DiscBracketCorpusReader">
-<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">DiscBracketCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#DiscBracketCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.DiscBracketCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">DiscBracketCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#DiscBracketCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.DiscBracketCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>A corpus reader for discontinuous trees in bracket notation.</p>
 <p>Leaves are indices pointing to words in a separately specified sentence.
 For example:</p>
@@ -487,20 +459,6 @@ internal representation employed here, so it can be read efficiently.</p>
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
-</tr>
-<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -586,7 +544,7 @@ POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</s
 
 <dl class="class">
 <dt id="discodop.treebank.NegraCorpusReader">
-<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">NegraCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#NegraCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.NegraCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">NegraCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#NegraCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.NegraCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a corpus in the Negra export format.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -599,20 +557,6 @@ POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</s
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
-</tr>
-<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -698,7 +642,7 @@ POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</s
 
 <dl class="class">
 <dt id="discodop.treebank.TigerXMLCorpusReader">
-<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">TigerXMLCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#TigerXMLCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.TigerXMLCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">TigerXMLCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#TigerXMLCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.TigerXMLCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corpus reader for the Tiger XML format.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -711,20 +655,6 @@ POS tag and word, e.g., <code class="docutils literal"><span class="pre">(DET</s
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
-</tr>
-<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -824,7 +754,7 @@ trees in the treebank.</td>
 
 <dl class="class">
 <dt id="discodop.treebank.AlpinoCorpusReader">
-<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">AlpinoCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#AlpinoCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.AlpinoCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">AlpinoCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#AlpinoCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.AlpinoCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corpus reader for the Dutch Alpino treebank in XML format.</p>
 <p>Expects a corpus in directory format, where every sentence is in a single
 <code class="docutils literal"><span class="pre">.xml</span></code> file.</p>
@@ -839,20 +769,6 @@ trees in the treebank.</td>
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
-</tr>
-<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -952,7 +868,7 @@ trees in the treebank.</td>
 
 <dl class="class">
 <dt id="discodop.treebank.DactCorpusReader">
-<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">DactCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>extraheadrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#DactCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.DactCorpusReader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treebank.</code><code class="descname">DactCorpusReader</code><span class="sig-paren">(</span><em>path</em>, <em>encoding=u'utf8'</em>, <em>ensureroot=None</em>, <em>punct=None</em>, <em>headrules=None</em>, <em>removeempty=False</em>, <em>functions=None</em>, <em>morphology=None</em>, <em>lemmas=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#DactCorpusReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.DactCorpusReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corpus reader for Alpino trees in Dact format (DB XML).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -965,20 +881,6 @@ trees in the treebank.</td>
 terminal is empty if it is equal to None, &#8216;&#8217;, or &#8216;-NONE-&#8216;.</li>
 <li><strong>headrules</strong> &#8211; if given, read rules for assigning heads and apply
 them by ordering constituents according to their heads.</li>
-<li><strong>extraheadrules</strong> &#8211; <p>one of ...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
-</tr>
-<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li><strong>punct</strong> &#8211; <p>one of ...</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1179,10 +1081,20 @@ contain a &#8216;source&#8217; attribute with such information.</p>
 <dt id="discodop.treebank.incrementaltreereader">
 <code class="descclassname">discodop.treebank.</code><code class="descname">incrementaltreereader</code><span class="sig-paren">(</span><em>treeinput</em>, <em>morphology=None</em>, <em>functions=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#incrementaltreereader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.incrementaltreereader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Incremental corpus reader.</p>
-<p>Supports brackets, discbrackets, and export format. The format is
-autodetected. Expects an iterator giving one line at a time. Yields tuples
-with a Tree object, a separate lists of terminals, and a string with any
-other data following the tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>treeinput</strong> &#8211; an iterator giving one line at a time.
+Supports brackets, discbrackets, and export format. The format is
+autodetected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Yields:</th><td class="field-body">tuples <code class="docutils literal"><span class="pre">(tree,</span> <span class="pre">sent,</span> <span class="pre">comment)</span></code> with a Tree object, a separate
+lists of terminals, and a string with any other data following the
+tree.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1236,7 +1148,16 @@ Yields tuples <code class="docutils literal"><span class="pre">(result,</span> <
 <dt id="discodop.treebank.termindices">
 <code class="descclassname">discodop.treebank.</code><code class="descname">termindices</code><span class="sig-paren">(</span><em>treestr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#termindices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.termindices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replace terminals in a tree string with consecutive indices.</p>
-<p>Only applicable to trees without discontinuity.</p>
+<p>Only applicable to phrase-structure trees without discontinuity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tuple <code class="docutils literal"><span class="pre">(tree,</span> <span class="pre">sent)</span></code> with Tree object and sentence as list of
+strings.</td>
+</tr>
+</tbody>
+</table>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">termindices</span><span class="p">(</span><span class="s">&#39;(S (NP Mary) (VP walks))&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 <span class="go">(S (NP 0) (VP 1))</span>
@@ -1249,7 +1170,7 @@ Yields tuples <code class="docutils literal"><span class="pre">(result,</span> <
 <dl class="function">
 <dt id="discodop.treebank.numbase">
 <code class="descclassname">discodop.treebank.</code><code class="descname">numbase</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treebank.html#numbase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treebank.numbase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Turn a file name into a numeric sorting key if possible.</p>
+<dd><p>Split file name in numeric and string components to use as sort key.</p>
 </dd></dl>
 
 <dl class="function">
@@ -1285,6 +1206,17 @@ Yields tuples <code class="docutils literal"><span class="pre">(result,</span> <
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -1318,7 +1250,7 @@ Yields tuples <code class="docutils literal"><span class="pre">(result,</span> <
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

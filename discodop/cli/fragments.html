@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fragments &mdash; Disco-DOP 0.5pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.5pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
+    <link rel="next" title="gen" href="gen.html" />
+    <link rel="prev" title="eval" href="eval.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="gen.html" title="gen"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="eval.html" title="eval"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fragments">
+<h1>fragments<a class="headerlink" href="#fragments" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">Usage: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">fragments</span> <span class="pre">&lt;treebank1&gt;</span> <span class="pre">[treebank2]</span> <span class="pre">[options]</span></code></div>
+<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">fragments</span> <span class="pre">--batch=&lt;dir&gt;</span> <span class="pre">&lt;treebank1&gt;</span> <span class="pre">&lt;treebank2&gt;...</span> <span class="pre">[options]</span></code></div>
+</div>
+<p>If only one treebank is given, fragments occurring at least twice are sought.
+If two treebanks are given, finds common fragments between first &amp; second.
+Input is in Penn treebank format (S-expressions), one tree per line.
+Output contains lines of the form &#8220;tree&lt;TAB&gt;frequency&#8221;.
+Frequencies refer to the first treebank by default.
+Output is sent to stdout; to save the results, redirect to a file.</p>
+<p>Options:</p>
+<dl class="docutils">
+<dt>&#8211;fmt=(export|bracket|discbracket|tiger|alpino|dact)</dt>
+<dd>when format is not <code class="docutils literal"><span class="pre">bracket</span></code>, work with discontinuous trees;
+output is in <code class="docutils literal"><span class="pre">discbracket</span></code> format:
+tree&lt;TAB&gt;sentence&lt;TAB&gt;frequency
+where <code class="docutils literal"><span class="pre">tree</span></code> has indices as leaves, referring to elements of
+<code class="docutils literal"><span class="pre">sentence</span></code>, a space separated list of words.</dd>
+</dl>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-o <var>file</var></span></kbd></td>
+<td>Write output to <code class="docutils literal"><span class="pre">file</span></code> instead of stdout.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--indices</span></kbd></td>
+<td>report sets of 0-based indices instead of frequencies.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>&#8211;cover=n[,m]</dt>
+<dd>include all non-maximal/non-recurring fragments up to depth <code class="docutils literal"><span class="pre">n</span></code>
+of first treebank; optionally, limit number of substitution
+sites to <code class="docutils literal"><span class="pre">m</span></code>.</dd>
+</dl>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--complete</span></kbd></td>
+<td>find complete matches of fragments from treebank1 (needle) in
+treebank2 (haystack); frequencies are from haystack.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--batch=<var>dir</var></span></kbd></td>
+<td>enable batch mode; any number of treebanks &gt; 1 can be given;
+first treebank (A) will be compared to all others (B).
+Results are written to filenames of the form dir/A_B.
+Counts/indices are from B.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--numproc=<var>n</var></span></kbd></td>
+<td>use n independent processes, to enable multi-core usage
+(default: 1); use 0 to detect the number of CPUs.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--numtrees=<var>n</var></span></kbd></td>
+<td>only read first n trees from first treebank</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--encoding=<var>x</var></span></kbd></td>
+<td>use x as treebank encoding, e.g. utf-8, iso-8859-1, etc.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--nofreq</span></kbd></td>
+<td>do not report frequencies.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--approx</span></kbd></td>
+<td>report counts of occurrence as maximal fragment (lower bound)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--relfreq</span></kbd></td>
+<td>report relative frequencies wrt. root node of fragments.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--debin</span></kbd></td>
+<td>debinarize fragments.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--twoterms</span></kbd></td>
+<td>only consider fragments with at least two lexical terminals.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--adjacent</span></kbd></td>
+<td>only consider pairs of adjacent fragments (n, n + 1).</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--alt</span></kbd></td>
+<td>alternative output format: (NP (DT &#8220;a&#8221;) NN)
+default: (NP (DT a) (NN ))</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--debug</span></kbd></td>
+<td>extra debug information, ignored when numproc &gt; 1.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--quiet</span></kbd></td>
+<td>disable all messages.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">Reference</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="eval.html">eval</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treetransforms.html">treetransforms</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="gen.html" title="gen"
+             >next</a></li>
+        <li class="right" >
+          <a href="eval.html" title="eval"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -84,74 +84,11 @@
 			<span class="n">prev</span> <span class="o">=</span> <span class="n">arg</span>
 		<span class="k">return</span> <span class="n">result</span>
 
-<span class="n">USAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;Treebank binarization and conversion.</span>
-<span class="s">Usage: </span><span class="si">%s</span><span class="s"> [options] &lt;action&gt; [input [output]]</span>
+<span class="n">SHORTUSAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;Treebank binarization and conversion.</span>
+<span class="s">Usage: </span><span class="si">%s</span><span class="s"> &lt;action&gt; [input [output]] [options]</span>
 <span class="s">where input and output are treebanks; standard in/output is used if not given.</span>
-<span class="s">action is one of:</span>
-<span class="s">    none</span>
-<span class="s">    binarize [-h x] [-v x] [--factor=left|right]</span>
-<span class="s">    optimalbinarize [-h x] [-v x]</span>
-<span class="s">    unbinarize</span>
-<span class="s">    introducepreterminals</span>
-<span class="s">    splitdisc [--markorigin]</span>
-<span class="s">    mergedisc</span>
-<span class="s">    transform [--reverse] [--transforms=(NAME1,NAME2...)]</span>
-
-<span class="s">options may consist of:</span>
-<span class="s">  --inputfmt=(</span><span class="si">%s</span><span class="s">)</span>
-<span class="s">  --outputfmt=(</span><span class="si">%s</span><span class="s">)</span>
-<span class="s">                 Treebank format [default: export].</span>
-<span class="s">                 Selecting the formats &#39;conll&#39; or &#39;mst&#39; results in an unlabeled</span>
-<span class="s">                 dependency conversion and requires the use of heuristic head</span>
-<span class="s">                 rules (--headrules).</span>
-<span class="s">  --fmt=x        Shortcut to specify both input and output formats.</span>
-<span class="s">  --inputenc|--outputenc|--enc=(utf-8|iso-8859-1|...)</span>
-<span class="s">                 Treebank encoding [default: utf-8].</span>
-<span class="s">  --slice=n:m    select a range of sentences from input starting with n,</span>
-<span class="s">                 up to but not including m; as in Python, n or m can be left</span>
-<span class="s">                 out or negative, and the first index is 0.</span>
-<span class="s">  --renumber     Replace sentence IDs with numbers starting from 1,</span>
-<span class="s">                 padded with 8 spaces.</span>
-<span class="s">  --maxlen=n     only select sentences with up to n tokens.</span>
-<span class="s">  --punct=x      &#39;leave&#39;: (default): leave punctuation as is</span>
-<span class="s">                 &#39;remove&#39;: remove any punctuation</span>
-<span class="s">                 &#39;move&#39;: re-attach punctuation to nearest constituent</span>
-<span class="s">                       to minimize discontinuity</span>
-<span class="s">                 &#39;restore&#39;: attach punctuation under root node</span>
-<span class="s">  --functions=x  &#39;leave&#39;: (default): leave syntactic labels as is</span>
-<span class="s">                 &#39;remove&#39;: strip away hyphen-separated function labels</span>
-<span class="s">                 &#39;add&#39;: concatenate syntactic categories with functions</span>
-<span class="s">                 &#39;replace&#39;: replace syntactic labels w/grammatical functions</span>
-<span class="s">  --morphology=x &#39;no&#39; (default): use POS tags as preterminals</span>
-<span class="s">                 &#39;add&#39;: concatenate morphological information to POS tags,</span>
-<span class="s">                     e.g., DET/sg.def</span>
-<span class="s">                 &#39;replace&#39;: use morphological information as preterminal label</span>
-<span class="s">                 &#39;between&#39;: insert node with morphological information between</span>
-<span class="s">                     POS tag and word, e.g., (DET (sg.def the))</span>
-<span class="s">  --lemmas=x     &#39;no&#39; (default): do not use lemmas</span>
-<span class="s">                 &#39;add&#39;: concatenate lemmas to terminals, e.g., word/lemma</span>
-<span class="s">                 &#39;replace&#39;: use lemma instead of terminals</span>
-<span class="s">                 &#39;between&#39;: insert node with lemma between POS tag and word,</span>
-<span class="s">                     e.g., (NN (man men))</span>
-<span class="s">  --ensureroot=x add root node labeled &#39;x&#39; to trees if not already present.</span>
-<span class="s">  --headrules=x  turn on head finding; affects binarization.</span>
-<span class="s">                 reads rules from file &quot;x&quot; (e.g., &quot;negra.headrules&quot;).</span>
-<span class="s">  --extraheadrules=(ptb|dptb)</span>
-<span class="s">                 turn on additional, built-in head rules; requires previous</span>
-<span class="s">                 option; [default: disabled].</span>
-<span class="s">  --factor=(left|right)</span>
-<span class="s">                 specify left- or right-factored binarization [default: right].</span>
-<span class="s">  -h n           horizontal markovization. default: infinite (all siblings)</span>
-<span class="s">  -v n           vertical markovization. default: 1 (immediate parent only)</span>
-<span class="s">  --markhead     prepend head to markovized labels.</span>
-<span class="s">  --leftunary    make initial / final productions of binarized constituents</span>
-<span class="s">  --rightunary   ... unary productions.</span>
-<span class="s">  --tailmarker   mark rightmost child (the head if headrules are applied), to</span>
-<span class="s">                 avoid cyclic rules when --leftunary and --rightunary are used.</span>
-<span class="s">  --transforms=x specify names of tree transformations to apply; for possible</span>
-<span class="s">                 names, cf. treebanktransforms module.</span>
-<span class="s">  --reverse      reverse the transformations given by --transforms&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span>
-			<span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">treebank</span><span class="o">.</span><span class="n">READERS</span><span class="p">),</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">treebank</span><span class="o">.</span><span class="n">WRITERS</span><span class="p">))</span>
+<span class="s">action is one of: none binarize optimalbinarize unbinarize</span>
+<span class="s">	introducepreterminals splitdisc mergedisc transform&#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c"># e.g., &#39;VP_2*0&#39; group 1: &#39;VP_2&#39;; group 2: &#39;0&#39;; group 3: &#39;&#39;</span>
 <span class="n">SPLITLABELRE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;(.*)\*(?:([0-9]+)([^!]+![^!]+)?)?$&#39;</span><span class="p">)</span>
@@ -1021,23 +958,19 @@
 	<span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="s">&#39;transform&#39;</span><span class="p">,</span> <span class="s">&#39;splitdisc&#39;</span><span class="p">,</span> <span class="s">&#39;binarize&#39;</span><span class="p">,</span> <span class="s">&#39;optimalbinarize&#39;</span><span class="p">,</span>
 			<span class="s">&#39;unbinarize&#39;</span><span class="p">,</span> <span class="s">&#39;mergedisc&#39;</span><span class="p">,</span> <span class="s">&#39;introducepreterminals&#39;</span><span class="p">}</span>
 	<span class="n">flags</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;help markorigin markhead leftunary rightunary tailmarker &#39;</span>
-			<span class="s">&#39;renumber reverse direction&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+			<span class="s">&#39;renumber reverse removeempty direction&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 	<span class="n">options</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;inputfmt= outputfmt= inputenc= outputenc= slice= ensureroot= &#39;</span>
-			<span class="s">&#39;punct= headrules= extreaheadrules= functions= morphology= &#39;</span>
-			<span class="s">&#39;lemmas= factor= fmt= markorigin= maxlen= enc= transforms= &#39;</span>
-			<span class="s">&#39;markovthreshold= &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+			<span class="s">&#39;punct= headrules= functions= morphology= lemmas= factor= fmt= &#39;</span>
+			<span class="s">&#39;markorigin= maxlen= enc= transforms= markovthreshold= &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 	<span class="k">try</span><span class="p">:</span>
 		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;h:v:H:&#39;</span><span class="p">,</span> <span class="n">flags</span> <span class="o">+</span> <span class="n">options</span><span class="p">)</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="n">GetoptError</span><span class="p">(</span><span class="s">&#39;expected 1, 2, or 3 positional arguments&#39;</span><span class="p">)</span>
 	<span class="k">except</span> <span class="n">GetoptError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">SHORTUSAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">),</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="k">if</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>  <span class="c"># -h is already used but will print help w/o argument</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
-		<span class="k">return</span>
 	<span class="k">if</span> <span class="n">action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="s">&#39;unrecognized action: </span><span class="si">%r</span><span class="se">\n</span><span class="s">available actions: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
 				<span class="n">action</span><span class="p">,</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">actions</span><span class="p">)),</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
@@ -1052,17 +985,18 @@
 				<span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">infilename</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;-&#39;</span>
-			<span class="k">else</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+			<span class="k">else</span> <span class="s">&#39;-&#39;</span><span class="p">)</span>
 	<span class="n">outfilename</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;-&#39;</span>
-			<span class="k">else</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+			<span class="k">else</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
 
 	<span class="c"># open corpus</span>
 	<span class="n">corpus</span> <span class="o">=</span> <span class="n">treebank</span><span class="o">.</span><span class="n">READERS</span><span class="p">[</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--inputfmt&#39;</span><span class="p">,</span> <span class="s">&#39;export&#39;</span><span class="p">)](</span>
 			<span class="n">infilename</span><span class="p">,</span>
 			<span class="n">encoding</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--inputenc&#39;</span><span class="p">,</span> <span class="s">&#39;utf8&#39;</span><span class="p">),</span>
 			<span class="n">headrules</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--headrules&#39;</span><span class="p">),</span>
-			<span class="n">extraheadrules</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--extraheadrules&#39;</span><span class="p">),</span>
-			<span class="n">ensureroot</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--ensureroot&#39;</span><span class="p">),</span> <span class="n">punct</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--punct&#39;</span><span class="p">),</span>
+			<span class="n">ensureroot</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--ensureroot&#39;</span><span class="p">),</span>
+			<span class="n">removeempty</span><span class="o">=</span><span class="s">&#39;--removeempty&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">,</span>
+			<span class="n">punct</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--punct&#39;</span><span class="p">),</span>
 			<span class="n">functions</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--functions&#39;</span><span class="p">),</span>
 			<span class="n">morphology</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--morphology&#39;</span><span class="p">),</span>
 			<span class="n">lemmas</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--lemmas&#39;</span><span class="p">))</span>
@@ -1196,6 +1130,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -1222,7 +1167,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

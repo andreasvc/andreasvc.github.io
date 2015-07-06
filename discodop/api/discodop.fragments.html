@@ -74,13 +74,13 @@ you want to abort, kill the program manually (e.g., press Ctrl-Z and issue
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.batch" title="discodop.fragments.batch"><code class="xref py py-obj docutils literal"><span class="pre">batch</span></code></a>(outputdir,&nbsp;filenames,&nbsp;limit,&nbsp;encoding,&nbsp;...)</td>
 <td>batch processing: three or more treebanks specified.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.readtreebanks" title="discodop.fragments.readtreebanks"><code class="xref py py-obj docutils literal"><span class="pre">readtreebanks</span></code></a>(treebank1[,&nbsp;treebank2,&nbsp;fmt,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.readtreebanks" title="discodop.fragments.readtreebanks"><code class="xref py py-obj docutils literal"><span class="pre">readtreebanks</span></code></a>(filename1[,&nbsp;filename2,&nbsp;fmt,&nbsp;...])</td>
 <td>Read one or two treebanks.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.read2ndtreebank" title="discodop.fragments.read2ndtreebank"><code class="xref py py-obj docutils literal"><span class="pre">read2ndtreebank</span></code></a>(treebank2,&nbsp;labels,&nbsp;prods[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.read2ndtreebank" title="discodop.fragments.read2ndtreebank"><code class="xref py py-obj docutils literal"><span class="pre">read2ndtreebank</span></code></a>(filename2,&nbsp;labels,&nbsp;prods[,&nbsp;...])</td>
 <td>Read a second treebank.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.initworker" title="discodop.fragments.initworker"><code class="xref py py-obj docutils literal"><span class="pre">initworker</span></code></a>(treebank1,&nbsp;treebank2,&nbsp;limit,&nbsp;encoding)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.initworker" title="discodop.fragments.initworker"><code class="xref py py-obj docutils literal"><span class="pre">initworker</span></code></a>(filename1,&nbsp;filename2,&nbsp;limit,&nbsp;encoding)</td>
 <td>Read treebanks for this worker.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.initworkersimple" title="discodop.fragments.initworkersimple"><code class="xref py py-obj docutils literal"><span class="pre">initworkersimple</span></code></a>(trees,&nbsp;sents,&nbsp;disc[,&nbsp;...])</td>
@@ -156,19 +156,19 @@ There are at least 2 use cases for this:</p>
 
 <dl class="function">
 <dt id="discodop.fragments.readtreebanks">
-<code class="descclassname">discodop.fragments.</code><code class="descname">readtreebanks</code><span class="sig-paren">(</span><em>treebank1</em>, <em>treebank2=None</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#readtreebanks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.readtreebanks" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.fragments.</code><code class="descname">readtreebanks</code><span class="sig-paren">(</span><em>filename1</em>, <em>filename2=None</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#readtreebanks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.readtreebanks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read one or two treebanks.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.fragments.read2ndtreebank">
-<code class="descclassname">discodop.fragments.</code><code class="descname">read2ndtreebank</code><span class="sig-paren">(</span><em>treebank2</em>, <em>labels</em>, <em>prods</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#read2ndtreebank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.read2ndtreebank" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.fragments.</code><code class="descname">read2ndtreebank</code><span class="sig-paren">(</span><em>filename2</em>, <em>labels</em>, <em>prods</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#read2ndtreebank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.read2ndtreebank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a second treebank.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.fragments.initworker">
-<code class="descclassname">discodop.fragments.</code><code class="descname">initworker</code><span class="sig-paren">(</span><em>treebank1</em>, <em>treebank2</em>, <em>limit</em>, <em>encoding</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#initworker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.initworker" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.fragments.</code><code class="descname">initworker</code><span class="sig-paren">(</span><em>filename1</em>, <em>filename2</em>, <em>limit</em>, <em>encoding</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#initworker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.initworker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read treebanks for this worker.</p>
 <p>We do this separately for each process under the assumption that this is
 advantageous with a NUMA architecture.</p>
@@ -197,7 +197,7 @@ advantageous with a NUMA architecture.</p>
 <code class="descclassname">discodop.fragments.</code><code class="descname">workload</code><span class="sig-paren">(</span><em>numtrees</em>, <em>mult</em>, <em>numproc</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#workload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.workload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate an even workload.</p>
 <p>When <em>n</em> trees are compared against themselves, <code class="docutils literal"><span class="pre">n</span> <span class="pre">*</span> <span class="pre">(n</span> <span class="pre">-</span> <span class="pre">1)</span></code> total
-comparisons are made. Each tree <em>m</em> has to be compared to all trees <em>x</em>
+comparisons are made. Each tree <code class="docutils literal"><span class="pre">m</span></code> has to be compared to all trees <code class="docutils literal"><span class="pre">x</span></code>
 such that <code class="docutils literal"><span class="pre">m</span> <span class="pre">&lt;</span> <span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">n</span></code>
 (meaning there are more comparisons for lower <em>n</em>).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -312,6 +312,17 @@ Remove parentheses around frontier nodes: (NN ) -&gt; NN</p>
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -345,7 +356,7 @@ Remove parentheses around frontier nodes: (NN ) -&gt; NN</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

@@ -54,7 +54,6 @@
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">from</span> <span class="nn">cgi</span> <span class="kn">import</span> <span class="n">escape</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
@@ -66,26 +65,10 @@
 	<span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>  <span class="c"># pylint: disable=W0622,C0103</span>
 
 
-<span class="n">USAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span><span class="se">\</span>
+<span class="n">SHORTUSAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span><span class="se">\</span>
 <span class="s">Usage: </span><span class="si">%s</span><span class="s"> [&lt;treebank&gt;...] [options]</span>
-<span class="s">Options:</span>
-<span class="s">  --fmt=[</span><span class="si">%s</span><span class="s">]        Specify corpus format [default: export].</span>
-<span class="s">  --encoding=enc    Specify a different encoding than the default UTF-8.</span>
-<span class="s">  --functions=x     &#39;leave&#39;=default: leave syntactic labels as is,</span>
-<span class="s">                    &#39;remove&#39;: strip functions off labels,</span>
-<span class="s">                    &#39;add&#39;: show both syntactic categories and functions,</span>
-<span class="s">                    &#39;replace&#39;: only show grammatical functions.</span>
-<span class="s">  --morphology=x    &#39;no&#39;=default: only show POS tags,</span>
-<span class="s">                    &#39;add&#39;: concatenate morphology tags to POS tags,</span>
-<span class="s">                    &#39;replace&#39;: replace POS tags with morphology tags,</span>
-<span class="s">                    &#39;between&#39;: add morphological node between POS tag and word.</span>
-<span class="s">  --abbr            abbreviate labels longer than 5 characters.</span>
-<span class="s">  --plain           disable ANSI colors.</span>
-<span class="s">  -n, --numtrees=x  only display the first x trees from the input.</span>
 <span class="s">If no treebank is given, input is read from standard input; format is detected.</span>
-<span class="s">If more than one treebank is specified, trees will be displayed in parallel.</span>
-<span class="s">Pipe the output through &#39;less -R&#39; to preserve the colors.</span><span class="se">\</span>
-<span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">READERS</span><span class="p">))</span>
+<span class="s">Pipe the output through &#39;less -R&#39; to preserve the colors.&#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">ANSICOLOR</span> <span class="o">=</span> <span class="p">{</span>
 		<span class="s">&#39;black&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
 		<span class="s">&#39;red&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span>
@@ -265,7 +248,7 @@
 					<span class="s">&#39;with n=len(sent)</span><span class="se">\n</span><span class="s">tokens: </span><span class="si">%d</span><span class="s"> indices: &#39;</span>
 					<span class="s">&#39;</span><span class="si">%r</span><span class="se">\n</span><span class="s">sent: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">),</span> <span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">(),</span> <span class="n">sent</span><span class="p">))</span>
 		<span class="n">vertline</span><span class="p">,</span> <span class="n">corner</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span>  <span class="c"># constants</span>
-		<span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+		<span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">():</span>
 			<span class="n">a</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">leaves</span><span class="p">())</span>
 					<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">Tree</span><span class="p">)</span> <span class="k">else</span> <span class="n">n</span><span class="p">)</span>
@@ -650,8 +633,9 @@
 				<span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">matrix</span><span class="p">[</span><span class="n">row</span><span class="p">]:</span>
 					<span class="n">n</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
 					<span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
-					<span class="n">cat</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="s">&#39;&#39;</span>
+					<span class="n">func</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
 					<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Tree</span><span class="p">):</span>
+						<span class="n">cat</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span>
 						<span class="n">color</span> <span class="o">=</span> <span class="n">nodecolor</span>
 						<span class="k">if</span> <span class="p">(</span><span class="n">funcsep</span> <span class="ow">and</span> <span class="n">funcsep</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span>
 								<span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PTBPUNC</span><span class="p">):</span>
@@ -728,7 +712,26 @@
 		<span class="n">result</span> <span class="o">+=</span> <span class="p">[</span><span class="s">r&#39;\end{tikzpicture}&#39;</span><span class="p">]</span>
 		<span class="k">return</span> <span class="n">result</span>
 
-</div>
+<div class="viewcode-block" id="DrawTree.tikzqtree"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.DrawTree.tikzqtree">[docs]</a>	<span class="k">def</span> <span class="nf">tikzqtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">leafcolor</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">):</span>
+		<span class="sd">r&quot;&quot;&quot;Produce TiKZ-qtree code to draw a continuous tree.</span>
+
+<span class="sd">		To get trees with straight edges, add this in the preamble::</span>
+
+<span class="sd">			\tikzset{edge from parent/.style={draw, edge from parent path={</span>
+<span class="sd">				(\tikzparentnode.south) -- +(0,-3pt) -| (\tikzchildnode)}}}</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">reserved_chars</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;([#$%&amp;~_{}])&#39;</span><span class="p">)</span>
+
+		<span class="n">pprint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">brackets</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;[.&#39;</span><span class="p">,</span> <span class="s">&#39; ]&#39;</span><span class="p">))</span>
+		<span class="n">escaped</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">reserved_chars</span><span class="p">,</span> <span class="s">r&#39;</span><span class="se">\\</span><span class="s">\1&#39;</span><span class="p">,</span> <span class="n">pprint</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+			<span class="s">&#39;</span><span class="se">\\</span><span class="s">begin{tikzpicture}&#39;</span><span class="p">,</span>
+			<span class="s">&#39;  </span><span class="se">\\</span><span class="s">tikzset{every node/.style={color=</span><span class="si">%s</span><span class="s">}, font=</span><span class="se">\\</span><span class="s">sf}&#39;</span> <span class="o">%</span> <span class="n">nodecolor</span><span class="p">,</span>
+			<span class="s">&#39;  </span><span class="se">\\</span><span class="s">tikzset{every leaf node/.style={color=</span><span class="si">%s</span><span class="s">}}&#39;</span> <span class="o">%</span> <span class="n">leafcolor</span><span class="p">,</span>
+			<span class="s">&#39;  </span><span class="se">\\</span><span class="s">Tree </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">escaped</span><span class="p">,</span>
+			<span class="s">&#39;</span><span class="se">\\</span><span class="s">end{tikzpicture}&#39;</span><span class="p">])</span>
+
+</div></div>
 <div class="viewcode-block" id="latexlabel"><a class="viewcode-back" href="../../api/discodop.treedraw.html#discodop.treedraw.latexlabel">[docs]</a><span class="k">def</span> <span class="nf">latexlabel</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Quote/format label for latex.&quot;&quot;&quot;</span>
 	<span class="n">newlabel</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;$&#39;</span><span class="p">,</span> <span class="s">r&#39;\$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">r&#39;\_&#39;</span><span class="p">)</span>
@@ -893,14 +896,11 @@
 		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;hn:&#39;</span><span class="p">,</span> <span class="n">flags</span> <span class="o">+</span> <span class="n">options</span><span class="p">)</span>
 	<span class="k">except</span> <span class="n">GetoptError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">SHORTUSAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
 	<span class="k">if</span> <span class="s">&#39;--test&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
 		<span class="n">test</span><span class="p">()</span>
-		<span class="k">return</span>
-	<span class="k">elif</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-h&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
 		<span class="k">return</span>
 	<span class="n">limit</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numtrees&#39;</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-n&#39;</span><span class="p">))</span>
 	<span class="n">limit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span> <span class="k">if</span> <span class="n">limit</span> <span class="k">else</span> <span class="bp">None</span>
@@ -964,6 +964,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -990,7 +1001,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

@@ -62,57 +62,12 @@
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="s">&#39;3&#39;</span><span class="p">:</span>
 	<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>  <span class="c"># pylint: disable=redefined-builtin</span>
 
-<span class="n">USAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;Read off grammars from treebanks.</span>
+<span class="n">SHORTUSAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;Read off grammars from treebanks.</span>
 <span class="s">Usage: </span><span class="si">%(cmd)s</span><span class="s"> &lt;type&gt; &lt;input&gt; &lt;output&gt; [options]</span>
 <span class="s">or: </span><span class="si">%(cmd)s</span><span class="s"> param &lt;parameter-file&gt; &lt;output-directory&gt;</span>
 <span class="s">or: </span><span class="si">%(cmd)s</span><span class="s"> info &lt;rules-file&gt;</span>
-<span class="s">or: </span><span class="si">%(cmd)s</span><span class="s"> merge (rules|lexicon|fragments) &lt;input1&gt; &lt;input2&gt;... &lt;output&gt;</span>
-
-<span class="s">type is one of:</span>
-<span class="s">   pcfg            Probabilistic Context-Free Grammar (treebank grammar).</span>
-<span class="s">   plcfrs          Probabilistic Linear Context-Free Rewriting System</span>
-<span class="s">                   (discontinuous treebank grammar).</span>
-<span class="s">   ptsg            Probabilistic Tree-Substitution Grammar.</span>
-<span class="s">   dopreduction    All-fragments PTSG using Goodman&#39;s reduction.</span>
-<span class="s">   doubledop       PTSG from recurring fragmensts.</span>
-<span class="s">   param           Extract a series of grammars according to parameters.</span>
-<span class="s">   info            Print statistics for PLCFRS/bitpar rules.</span>
-<span class="s">   merge           Interpolate given sorted grammars into a single grammar.</span>
-<span class="s">                   Input can be a rules, lexicon or fragment file.</span>
-<span class="s">                   To ensure properly sorted input with GNU sort,</span>
-<span class="s">                   disable locale specific settings:</span>
-<span class="s">                   $ discodop grammar merge rules</span>
-<span class="s">                     &lt;(zcat plcfrs.rules.gz | LC_ALL=C sort)</span>
-<span class="s">                     &lt;(zcat dop.rules.gz | LC_ALL=C sort)</span>
-
-<span class="s">input is a binarized treebank, or in the &#39;ptsg&#39; case, weighted fragments in the</span>
-<span class="s">same format as the output of the discodop fragments command;</span>
-<span class="s">input may contain discontinuous constituents, except for the &#39;pcfg&#39; case.</span>
-<span class="s">output is the base name for the filenames to write the grammar to;</span>
-<span class="s">the filenames will be &#39;&lt;output&gt;.rules&#39; and &#39;&lt;output&gt;.lex&#39;.</span>
-<span class="s">NB: both the info and merge commands expect grammars to be sorted by LHS,</span>
-<span class="s">such as the ones created by this tool.</span>
-
-<span class="s">Options:</span>
-<span class="s">  --inputfmt=(</span><span class="si">%(fmts)s</span><span class="s">)</span>
-<span class="s">             Input treebank format [default: export].</span>
-<span class="s">  --inputenc=(utf-8|iso-8859-1|...)</span>
-<span class="s">             Treebank encoding [default: utf-8].</span>
-<span class="s">  --dopestimator=(rfe|ewe|shortest|...)</span>
-<span class="s">             When extracting a DOP grammar, the estimator to use for</span>
-<span class="s">             assigning weights.</span>
-<span class="s">  --numproc=(1|2|...)</span>
-<span class="s">             Number of processes to start [default: 1].</span>
-<span class="s">             Only relevant for double dop fragment extraction.</span>
-<span class="s">  --gzip     Compress output with gzip, view with zless &amp;c.</span>
-<span class="s">  --packed   Use packed graph encoding for DOP reduction</span>
-<span class="s">  --bitpar   Produce an unbinarized grammar for use with bitpar</span>
-<span class="s">  -s X       Start symbol to use for PTSG.</span>
-
-<span class="s">When a PCFG is requested, or the input format is &#39;bracket&#39; (Penn format), the</span>
-<span class="s">output will be in bitpar format. Otherwise the grammar is written as a PLCFRS.</span>
-<span class="s">Output encoding will be ASCII for the rules, and utf-8 for the lexicon.</span><span class="se">\</span>
-<span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmts</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">READERS</span><span class="p">))</span>
+<span class="s">or: </span><span class="si">%(cmd)s</span><span class="s"> merge (rules|lexicon|fragments) &lt;input1&gt; &lt;input2&gt;... &lt;output&gt;</span><span class="se">\</span>
+<span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
 <span class="n">RULERE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
 		<span class="s">r&#39;(?P&lt;RULE1&gt;(?P&lt;LHS1&gt;[^ \t]+).*)\t&#39;</span>
@@ -245,11 +200,13 @@
 		<span class="n">nodefreq</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">dectree</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">ntfd</span><span class="p">)</span>
 		<span class="k">for</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">avar</span><span class="p">),</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">bvar</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">prods</span><span class="p">,</span> <span class="n">uprods</span><span class="p">):</span>
 			<span class="k">assert</span> <span class="n">avar</span> <span class="o">==</span> <span class="n">bvar</span>
-			<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cartpi</span><span class="p">([(</span><span class="n">x</span><span class="p">,</span> <span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">y</span> <span class="k">else</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)]):</span>
+			<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cartpi</span><span class="p">([(</span><span class="n">x</span><span class="p">,</span> <span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">y</span> <span class="k">else</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+					<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)]):</span>
 				<span class="n">rules</span><span class="p">[</span><span class="n">c</span><span class="p">,</span> <span class="n">avar</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 	<span class="k">if</span> <span class="n">extrarules</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
 		<span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">extrarules</span><span class="p">:</span>
 			<span class="n">rules</span><span class="p">[</span><span class="n">rule</span><span class="p">]</span> <span class="o">+=</span> <span class="n">extrarules</span><span class="p">[</span><span class="n">rule</span><span class="p">]</span>
+			<span class="n">fd</span><span class="p">[</span><span class="n">rule</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">extrarules</span><span class="p">[</span><span class="n">rule</span><span class="p">]</span>
 
 	<span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="n">rule</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;:returns: rule with RFE and EWE probability.&quot;&quot;&quot;</span>
@@ -1028,12 +985,9 @@
 			<span class="n">treebankfile</span><span class="p">,</span> <span class="n">grammarfile</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 	<span class="k">except</span> <span class="p">(</span><span class="n">GetoptError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">err</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">SHORTUSAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
-	<span class="k">if</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-h&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
-		<span class="k">return</span>
 	<span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;pcfg&#39;</span><span class="p">,</span> <span class="s">&#39;plcfrs&#39;</span><span class="p">,</span> <span class="s">&#39;dopreduction&#39;</span><span class="p">,</span> <span class="s">&#39;doubledop&#39;</span><span class="p">,</span> <span class="s">&#39;ptsg&#39;</span><span class="p">,</span>
 			<span class="s">&#39;param&#39;</span><span class="p">,</span> <span class="s">&#39;info&#39;</span><span class="p">,</span> <span class="s">&#39;merge&#39;</span><span class="p">):</span>
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unrecognized model: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
@@ -1178,6 +1132,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -1204,7 +1169,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

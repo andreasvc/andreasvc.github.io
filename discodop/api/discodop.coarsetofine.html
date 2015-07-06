@@ -65,11 +65,11 @@
 <tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.bitparkbestitems" title="discodop.coarsetofine.bitparkbestitems"><code class="xref py py-obj docutils literal"><span class="pre">bitparkbestitems</span></code></a>(Chart&nbsp;chart,&nbsp;int&nbsp;k,&nbsp;...)</td>
 <td>Produce ChartItems occurring in a dictionary of derivations.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.whitelistfromposteriors" title="discodop.coarsetofine.whitelistfromposteriors"><code class="xref py py-obj docutils literal"><span class="pre">whitelistfromposteriors</span></code></a>(inside,&nbsp;outside,&nbsp;...)</td>
-<td>Compute posterior probabilities &amp; prune away cells below a threshold.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">whitelistfromposteriors</span></code></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.coarsetofine.whitelistfromposteriors_matrix" title="discodop.coarsetofine.whitelistfromposteriors_matrix"><code class="xref py py-obj docutils literal"><span class="pre">whitelistfromposteriors_matrix</span></code></a>(inside,&nbsp;...)</td>
-<td>Compute posterior probabilities &amp; prune away cells below a threshold.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">whitelistfromposteriors_matrix</span></code></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.coarsetofine.posteriorthreshold" title="discodop.coarsetofine.posteriorthreshold"><code class="xref py py-obj docutils literal"><span class="pre">posteriorthreshold</span></code></a>(Chart&nbsp;chart,&nbsp;double&nbsp;threshold)</td>
 <td>Prune labeled spans from chart below given posterior threshold.</td>
@@ -94,10 +94,9 @@ and <code class="docutils literal"><span class="pre">X&#64;n-m</span></code> for
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>coarsechart</strong> &#8211; a Chart object produced by the PCFG or PLCFRS parser,
 or derivations from bitpar.</li>
-<li><strong>coarse</strong> &#8211; the grammar with which <code class="docutils literal"><span class="pre">chart</span></code> was produced.</li>
 <li><strong>fine</strong> &#8211; the grammar to map labels to after pruning. must have a
 mapping to the coarse grammar established by <code class="docutils literal"><span class="pre">fine.getmapping()</span></code>.</li>
 <li><strong>k</strong> &#8211; when <code class="docutils literal"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">1</span></code>: number of <cite>k</cite>-best derivations to consider;
@@ -114,6 +113,9 @@ integer to distinguish components; e.g., CFG nodes NP*0 and NP*1
 map to the discontinuous node NP_2.</li>
 <li><strong>bitpar</strong> &#8211; prune from bitpar derivations instead of actual chart</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">(whitelist,</span> <span class="pre">items,</span> <span class="pre">msg)</span></code></p>
 </td>
 </tr>
 </tbody>
@@ -164,19 +166,6 @@ derivations.</td>
 </dd></dl>
 
 <dl class="function">
-<dt id="discodop.coarsetofine.whitelistfromposteriors">
-<code class="descclassname">discodop.coarsetofine.</code><code class="descname">whitelistfromposteriors</code><span class="sig-paren">(</span><em>inside</em>, <em>outside</em>, <em>start</em>, <em>Grammar coarse</em>, <em>Grammar fine</em>, <em>double threshold</em>, <em>bool splitprune</em>, <em>bool markorigin</em>, <em>bool finecfg</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.whitelistfromposteriors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute posterior probabilities &amp; prune away cells below a threshold.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.coarsetofine.whitelistfromposteriors_matrix">
-<code class="descclassname">discodop.coarsetofine.</code><code class="descname">whitelistfromposteriors_matrix</code><span class="sig-paren">(</span><em>inside</em>, <em>outside</em>, <em>ChartItem goal</em>, <em>Grammar coarse</em>, <em>Grammar fine</em>, <em>finechart</em>, <em>short maxlen</em>, <em>double threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.whitelistfromposteriors_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute posterior probabilities &amp; prune away cells below a threshold.</p>
-<p>This version produces a matrix with pruned spans having NaN as value.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="discodop.coarsetofine.posteriorthreshold">
 <code class="descclassname">discodop.coarsetofine.</code><code class="descname">posteriorthreshold</code><span class="sig-paren">(</span><em>Chart chart</em>, <em>double threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.coarsetofine.posteriorthreshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prune labeled spans from chart below given posterior threshold.</p>
@@ -223,6 +212,17 @@ derivations.</td>
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -256,7 +256,7 @@ derivations.</td>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

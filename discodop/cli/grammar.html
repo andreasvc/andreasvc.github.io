@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>grammar &mdash; Disco-DOP 0.5pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.5pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
+    <link rel="next" title="parser" href="parser.html" />
+    <link rel="prev" title="gen" href="gen.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="parser.html" title="parser"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="gen.html" title="gen"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="grammar">
+<h1>grammar<a class="headerlink" href="#grammar" title="Permalink to this headline">¶</a></h1>
+<p>Read off grammars from treebanks.</p>
+<div class="line-block">
+<div class="line">Usage: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">grammar</span> <span class="pre">&lt;type&gt;</span> <span class="pre">&lt;input&gt;</span> <span class="pre">&lt;output&gt;</span> <span class="pre">[options]</span></code></div>
+<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">param</span> <span class="pre">&lt;parameter-file&gt;</span> <span class="pre">&lt;output-directory&gt;</span></code></div>
+<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">info</span> <span class="pre">&lt;rules-file&gt;</span></code></div>
+<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">merge</span> <span class="pre">(rules|lexicon|fragments)</span> <span class="pre">&lt;input1&gt;</span> <span class="pre">&lt;input2&gt;...</span> <span class="pre">&lt;output&gt;</span></code></div>
+</div>
+<p><code class="docutils literal"><span class="pre">type</span></code> is one of:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">pcfg:</th><td class="field-body">Probabilistic Context-Free Grammar (treebank grammar).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">plcfrs:</th><td class="field-body">Probabilistic Linear Context-Free Rewriting System
+(discontinuous treebank grammar).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">ptsg:</th><td class="field-body">Probabilistic Tree-Substitution Grammar.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">dopreduction:</th><td class="field-body">All-fragments PTSG using Goodman&#8217;s reduction.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">doubledop:</th><td class="field-body">PTSG from recurring fragmensts.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param:</th><td class="field-body">Extract a series of grammars according to parameters.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">info:</th><td class="field-body">Print statistics for PLCFRS/bitpar rules.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">merge:</th><td class="field-body">Interpolate given sorted grammars into a single grammar.
+Input can be a rules, lexicon or fragment file.</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal"><span class="pre">input</span></code> is a binarized treebank, or in the <code class="docutils literal"><span class="pre">ptsg</span></code> case, weighted fragments
+in the same format as the output of the <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">fragments</span></code> command;
+<code class="docutils literal"><span class="pre">input</span></code> may contain discontinuous constituents, except for the <code class="docutils literal"><span class="pre">pcfg</span></code> case.
+<code class="docutils literal"><span class="pre">output</span></code> is the base name for the filenames to write the grammar to; the
+filenames will be <code class="docutils literal"><span class="pre">&lt;output&gt;.rules</span></code> and <code class="docutils literal"><span class="pre">&lt;output&gt;.lex</span></code>. NB: both the
+<code class="docutils literal"><span class="pre">info</span></code> and <code class="docutils literal"><span class="pre">merge</span></code> commands expect grammars to be sorted by LHS, such as
+the ones created by this tool.</p>
+<p>Options:</p>
+<dl class="docutils">
+<dt>&#8211;inputfmt=(export|bracket|discbracket|tiger|alpino|dact)</dt>
+<dd>The treebank format [default: export].</dd>
+<dt>&#8211;inputenc=(utf-8|iso-8859-1|...)</dt>
+<dd>Treebank encoding [default: utf-8].</dd>
+<dt>&#8211;dopestimator=(rfe|ewe|shortest|...)</dt>
+<dd>The DOP estimator to use with dopreduction/doubledop [default: rfe].</dd>
+<dt>&#8211;numproc=(1|2|...)</dt>
+<dd>Number of processes to start [default: 1].
+Only relevant for double dop fragment extraction.</dd>
+</dl>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--gzip</span></kbd></td>
+<td>compress output with gzip, view with <code class="docutils literal"><span class="pre">zless</span></code> &amp;c.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--packed</span></kbd></td>
+<td>use packed graph encoding for DOP reduction</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--bitpar</span></kbd></td>
+<td>produce an unbinarized grammar for use with bitpar</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-s <var>X</var></span></kbd></td>
+<td>start symbol to use for PTSG.</td></tr>
+</tbody>
+</table>
+<p>When a PCFG is requested, or the input format is <code class="docutils literal"><span class="pre">bracket</span></code> (Penn format), the
+output will be in bitpar format. Otherwise the grammar is written as a PLCFRS.
+The encoding of the input treebank may be specified. Output encoding will be
+ASCII for the rules, and utf-8 for the lexicon.</p>
+<p>The PLCFRS format is as follows. Rules are delimited by newlines.
+Fields are separated by tabs. The fields are:</p>
+<div class="highlight-python"><div class="highlight"><pre>LHS RHS1    [RHS2]  yield-function  weight
+</pre></div>
+</div>
+<p>The yield function defines how the spans of the RHS nonterminals
+are combined to form the spans of the LHS nonterminal. Components of the yield
+function are comma-separated, 0 refers to a component of the first RHS
+nonterminal, and 1 from the second. Weights are expressed as rational
+fractions.
+The lexicon is defined in a separate file. Lines start with a single word,
+followed by pairs of possible tags and their probabilities:</p>
+<div class="highlight-python"><div class="highlight"><pre>WORD        TAG1    PROB1   [TAG2   PROB2 ...]
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>rules:   S  NP      VP      010     1/2
+         VP_2       VB      NP      0,1     2/3
+         NP NN      0       1/4
+lexicon: Haus       NN      3/10    JJ      1/9
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">Reference</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen.html">gen</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treetransforms.html">treetransforms</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="parser.html" title="parser"
+             >next</a></li>
+        <li class="right" >
+          <a href="gen.html" title="gen"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

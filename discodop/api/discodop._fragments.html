@@ -86,16 +86,8 @@ large treebanks.</li>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.nonfrontier" title="discodop._fragments.nonfrontier"><code class="xref py py-obj docutils literal"><span class="pre">nonfrontier</span></code></a>(sent)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.getctrees" title="discodop._fragments.getctrees"><code class="xref py py-obj docutils literal"><span class="pre">getctrees</span></code></a>(trees1,&nbsp;sents1[,&nbsp;disc,&nbsp;trees2,&nbsp;sents2])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">Ctrees object for disc. binary trees and sentences.</td>
-</tr>
-</tbody>
-</table>
-</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.getctrees" title="discodop._fragments.getctrees"><code class="xref py py-obj docutils literal"><span class="pre">getctrees</span></code></a>(trees1,&nbsp;sents1[,&nbsp;disc,&nbsp;trees2,&nbsp;...])</td>
+<td>Convert binarized Tree objects to Ctrees object.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.readtreebank" title="discodop._fragments.readtreebank"><code class="xref py py-obj docutils literal"><span class="pre">readtreebank</span></code></a>(treebankfile,&nbsp;list&nbsp;labels,&nbsp;...)</td>
 <td>Read a treebank from a given filename.</td>
@@ -108,45 +100,103 @@ large treebanks.</li>
 <dd><p>Find the largest fragments in treebank(s) with the fast tree kernel.</p>
 <ul>
 <li><dl class="first docutils">
-<dt>scenario 1: recurring fragments in single treebank, use:</dt>
-<dd><p class="first last"><code class="docutils literal"><span class="pre">extractfragments(trees1,</span> <span class="pre">sents1,</span> <span class="pre">offset,</span> <span class="pre">end,</span> <span class="pre">labels)</span></code></p>
+<dt>scenario 1: recurring fragments in single treebank, use::</dt>
+<dd><p class="first last">extractfragments(trees1, sents1, offset, end, labels)</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>scenario 2: common fragments in two treebanks:</dt>
-<dd><p class="first last"><code class="docutils literal"><span class="pre">extractfragments(trees1,</span> <span class="pre">sents1,</span> <span class="pre">offset,</span> <span class="pre">end,</span> <span class="pre">labels,</span> <span class="pre">trees2,</span> <span class="pre">sents2)</span></code></p>
+<dt>scenario 2: common fragments in two treebanks::</dt>
+<dd><p class="first last">extractfragments(trees1, sents1, offset, end, labels, trees2, sents2)</p>
 </dd>
 </dl>
 </li>
 </ul>
-<p><code class="docutils literal"><span class="pre">offset</span></code> and <code class="docutils literal"><span class="pre">end</span></code> can be used to divide the work over multiple
-processes; they are indices of <code class="docutils literal"><span class="pre">trees1</span></code> to work on (default is all);
-when <code class="docutils literal"><span class="pre">debug</span></code> is enabled a table of common productions is shown for each
-pair of trees; when <code class="docutils literal"><span class="pre">complement</span></code> is true, the complement of the recurring
-fragments in each pair of trees is extracted as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>end</strong> (<em>offset,</em>) &#8211; can be used to divide the work over multiple
+processes; they are indices of <code class="docutils literal"><span class="pre">trees1</span></code> to work on (pass 0 for both
+to use all);</li>
+<li><strong>approx</strong> &#8211; return approximate counts instead of bitsets.</li>
+<li><strong>debug</strong> &#8211; if True, a table of common productions is printed for each
+pair of trees</li>
+<li><strong>discontinuous</strong> &#8211; if True, return trees with indices as leaves.</li>
+<li><strong>complement</strong> &#8211; if True, the complement of the recurring
+fragments in each pair of trees is extracted as well.</li>
+<li><strong>twoterms</strong> &#8211; only return fragments with at least two terminals.</li>
+<li><strong>adjacent</strong> &#8211; only extract fragments from sentences with adjacent
+indices.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a dictionary; keys are fragments as strings; values are
+either counts (if approx=True), or bitsets.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop._fragments.exactcounts">
-<code class="descclassname">discodop._fragments.</code><code class="descname">exactcounts</code><span class="sig-paren">(</span><em>Ctrees trees1</em>, <em>Ctrees trees2</em>, <em>list bitsets</em>, <em>bool indices=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.exactcounts" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">exactcounts</code><span class="sig-paren">(</span><em>Ctrees trees1</em>, <em>Ctrees trees2</em>, <em>list bitsets</em>, <em>int indices=False</em>, <em>maxnodes=None</em>, <em>limit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.exactcounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get exact counts or indices of occurrence for fragments.</p>
-<p>Given a set of fragments from <code class="docutils literal"><span class="pre">trees1</span></code> as bitsets, find all occurrences
-of those fragments in <code class="docutils literal"><span class="pre">trees2</span></code> (which may be equal to <code class="docutils literal"><span class="pre">trees1</span></code>).</p>
-<p>By default, exact counts are collected. When <code class="docutils literal"><span class="pre">indices</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, a
-multiset of indices is returned for each fragment; the indices point to the
-trees where the fragments (described by the bitsets) occur. This is useful
-to look up the contexts of fragments, or when the order of sentences has
-significance which makes it possible to interpret the set of indices as
-time-series data. The reason we need to do this separately from extracting
-maximal fragments is that a fragment can occur in other trees where it was
-not a maximal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bitsets</strong> (<em>trees1,</em>) &#8211; <code class="docutils literal"><span class="pre">bitsets</span></code> defines fragments of trees in
+<code class="docutils literal"><span class="pre">trees1</span></code> to search for (the needles).</li>
+<li><strong>trees2</strong> &#8211; the trees to search in (haystack); may be equal
+to <code class="docutils literal"><span class="pre">trees2</span></code>.</li>
+<li><strong>indices</strong> &#8211; <p>whether to collect indices or counts.
+:0: return a single count per fragment.
+:1: return a Counter object for each fragment with sentence numbers</p>
+<blockquote>
+<div>and a count per sentence.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">2:</th><td class="field-body">return a Counter object for each fragment with sentence numbers as
+keys and a node number where the fragment occurs in the
+corresponding tree; when a fragment occurs multiple times in a
+tree, only a single occurrence is recorded.</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>maxnodes</strong> &#8211; when searching in multiple treebanks, supply the
+largest number of nodes in a single tree to fix the bitset size;
+can be left out when searching in 1 or 2 treebanks.</li>
+<li><strong>limit</strong> &#8211; only search through first N number of trees from trees2
+(defaults to all trees).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an array of counts, or a list of indices (Counter objects).</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop._fragments.completebitsets">
-<code class="descclassname">discodop._fragments.</code><code class="descname">completebitsets</code><span class="sig-paren">(</span><em>Ctrees trees</em>, <em>list sents</em>, <em>list labels</em>, <em>short maxnodes</em>, <em>bool discontinuous=False</em><span class="sig-paren">)</span> &rarr; dict<a class="headerlink" href="#discodop._fragments.completebitsets" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">completebitsets</code><span class="sig-paren">(</span><em>Ctrees trees</em>, <em>list sents</em>, <em>list labels</em>, <em>short maxnodes</em>, <em>bool discontinuous=False</em>, <em>start=None</em>, <em>end=None</em><span class="sig-paren">)</span> &rarr; dict<a class="headerlink" href="#discodop._fragments.completebitsets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate bitsets corresponding to whole trees in the input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary of trees as strings mapped to their bitsets.</td>
+</tr>
+</tbody>
+</table>
 <p>Important: if multiple treebanks are used, maxnodes should equal
 <code class="docutils literal"><span class="pre">max(trees1.maxnodes,</span> <span class="pre">trees2.maxnodes)</span></code></p>
 </dd></dl>
@@ -234,12 +284,14 @@ as values.</p>
 
 <dl class="function">
 <dt id="discodop._fragments.getctrees">
-<code class="descclassname">discodop._fragments.</code><code class="descname">getctrees</code><span class="sig-paren">(</span><em>trees1</em>, <em>sents1</em>, <em>disc=True</em>, <em>trees2=None</em>, <em>sents2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.getctrees" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<code class="descclassname">discodop._fragments.</code><code class="descname">getctrees</code><span class="sig-paren">(</span><em>trees1</em>, <em>sents1</em>, <em>disc=True</em>, <em>trees2=None</em>, <em>sents2=None</em>, <em>labels=None</em>, <em>prods=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.getctrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert binarized Tree objects to Ctrees object.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Ctrees object for disc. binary trees and sentences.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary with same keys as arguments, where trees1 and
+trees2 are Ctrees object for (disc.) binary trees and sentences.</td>
 </tr>
 </tbody>
 </table>
@@ -250,6 +302,14 @@ as values.</p>
 <code class="descclassname">discodop._fragments.</code><code class="descname">readtreebank</code><span class="sig-paren">(</span><em>treebankfile</em>, <em>list labels</em>, <em>dict prods</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.readtreebank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a treebank from a given filename.</p>
 <p>labels and prods should be re-used when reading multiple treebanks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tuple of Ctrees object and list of sentences.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -272,6 +332,17 @@ as values.</p>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treetransforms.html">treetransforms</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
@@ -306,7 +377,7 @@ as values.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

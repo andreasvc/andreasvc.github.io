@@ -142,7 +142,7 @@
 
 <dl class="method">
 <dt id="discodop.parser.Parser.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><em>sent</em>, <em>tags=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parse</code><span class="sig-paren">(</span><em>sent</em>, <em>tags=None</em>, <em>goldtree=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/parser.html#Parser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a sentence and perform postprocessing.</p>
 <p>Yields a dictionary from parse trees to probabilities for each stage.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -151,8 +151,10 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>sent</strong> &#8211; a sequence of tokens.</li>
-<li><strong>tags</strong> &#8211; if given, will be given to the parser instead of trying
-all possible tags.</li>
+<li><strong>tags</strong> &#8211; optionally, a list of POS tags as strings to be given
+to the parser instead of trying all possible tags.</li>
+<li><strong>goldtree</strong> &#8211; if given, will be used to evaluate pruned parse
+forests.</li>
 </ul>
 </td>
 </tr>
@@ -246,6 +248,17 @@ the parameter file <code class="docutils literal"><span class="pre">params.prm</
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -279,7 +292,7 @@ the parameter file <code class="docutils literal"><span class="pre">params.prm</
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

@@ -77,10 +77,10 @@ example:
         dict(name='pcfg', mode='pcfg',
             split=True, markorigin=True),
         dict(name='plcfrs', mode='plcfrs',
-            prune=True, splitprune=True, k=1000),
+            prune='pcfg', splitprune=True, k=1000),
         dict(name='dop', mode='plcfrs',
-            prune=True, k=50, m=1000,
-            dop=True, usedoubledop=False,
+            prune='plcfrs', k=50, m=1000,
+            dop='doubledop',
             estimator='rfe', objective = 'mpp')
     ],
     traincorpus=dict(
@@ -97,7 +97,7 @@ example:
         method='default', factor='right',
         h=1, v=1),
 
-See the documentation on the available :ref:`parameters <params>`.
+See the documentation on the available :doc:`parameters <params>`.
 These parameters can be invoked by executing::
 
     $ discodop runexp filename.prm

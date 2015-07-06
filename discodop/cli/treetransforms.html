@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>treetransforms &mdash; Disco-DOP 0.5pre1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.5pre1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
+    <link rel="prev" title="treesearch" href="treesearch.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="treesearch.html" title="treesearch"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="treetransforms">
+<h1>treetransforms<a class="headerlink" href="#treetransforms" title="Permalink to this headline">¶</a></h1>
+<p>Treebank binarization and conversion</p>
+<p>Usage: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">treetransforms</span> <span class="pre">&lt;action&gt;</span> <span class="pre">[input</span> <span class="pre">[output]]</span> <span class="pre">[options]</span></code></p>
+<p>where input and output are treebanks; standard in/output is used if not given.
+action is one of:</p>
+<div class="highlight-python"><div class="highlight"><pre>none
+binarize [-h x] [-v x] [--factor=left|right]
+optimalbinarize [-h x] [-v x]
+unbinarize
+introducepreterminals
+splitdisc [--markorigin]
+mergedisc
+transform [--reverse] [--transforms=&lt;NAME1,NAME2...&gt;]
+</pre></div>
+</div>
+<p>options may consist of:</p>
+<dl class="docutils">
+<dt>&#8211;inputfmt=(export|bracket|discbracket|tiger|alpino|dact)</dt>
+<dd>Input treebank format [default: export].</dd>
+<dt>&#8211;outputfmt=(export|bracket|discbracket|dact|conll|mst|tokens|wordpos)</dt>
+<dd>Output treebank format [default: export].
+Selecting the formats <code class="docutils literal"><span class="pre">conll</span></code> or <code class="docutils literal"><span class="pre">mst</span></code> results in an
+unlabeled dependency conversion and requires the use of
+heuristic head rules (<code class="docutils literal"><span class="pre">--headrules</span></code>), to ensure that all
+constituents have a child marked as head. A command line
+interface to perform transformations on treebanks such as
+binarization.</dd>
+</dl>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--fmt=<var>x</var></span></kbd></td>
+<td>Shortcut to specify both input and output format.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>&#8211;inputenc, &#8211;outputenc, &#8211;enc=(utf-8|iso-8859-1|...)</dt>
+<dd>Treebank encoding [default: utf-8].</dd>
+</dl>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--slice=<var>&lt;n:m&gt;</var></span></kbd></td>
+<td>select a range of sentences from input starting with <em>n</em>,
+up to but not including <em>m</em>; as in Python, <em>n</em> or <em>m</em> can be left
+out or negative, and the first index is 0.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--renumber</span></kbd></td>
+<td>Replace sentence IDs with numbers starting from 1,
+padded with 8 spaces.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--maxlen=<var>n</var></span></kbd></td>
+<td>only select sentences with up to <em>n</em> tokens.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--punct=<var>x</var></span></kbd></td>
+<td><p class="first">possible options:</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">remove any punctuation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;move&#8217;:</th><td class="field-body">re-attach punctuation to nearest constituent
+to minimize discontinuity.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;restore&#8217;:</th><td class="field-body">attach punctuation under root node.</td>
+</tr>
+</tbody>
+</table>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--functions=<var>x</var></span></kbd></td>
+<td><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">&#8216;leave&#8217;:</th><td class="field-body">(default): leave syntactic labels as is,</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;remove&#8217;:</th><td class="field-body">strip away hyphen-separated function labels</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate syntactic categories with functions,</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">replace syntactic labels w/grammatical functions.</td>
+</tr>
+</tbody>
+</table>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--morphology=<var>x</var></span></kbd></td>
+<td><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">&#8216;no&#8217; (default):</th><td class="field-body">use POS tags as preterminals</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate morphological information to POS tags,
+e.g., DET/sg.def</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use morphological information as preterminal label</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert node with morphological information between
+POS tag and word, e.g., (DET (sg.def the))</td>
+</tr>
+</tbody>
+</table>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--lemmas=<var>x</var></span></kbd></td>
+<td><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">&#8216;no&#8217; (default):</th><td class="field-body">do not use lemmas.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;add&#8217;:</th><td class="field-body">concatenate lemmas to terminals, e.g., word/lemma</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">&#8216;replace&#8217;:</th><td class="field-body">use lemma instead of terminals</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&#8216;between&#8217;:</th><td class="field-body">insert node with lemma between POS tag and word,
+e.g., (NN (man men))</td>
+</tr>
+</tbody>
+</table>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--ensureroot=<var>x</var></span></kbd></td>
+<td>add root node labeled <code class="docutils literal"><span class="pre">x</span></code> to trees if not already present.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--removeempty</span></kbd></td>
+<td>remove empty / -NONE- terminals.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>&#8211;factor=(left|right)</dt>
+<dd>specify left- or right-factored binarization [default: right].</dd>
+</dl>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h <var>n</var></span></kbd></td>
+<td>horizontal markovization. default: infinite (all siblings)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-v <var>n</var></span></kbd></td>
+<td>vertical markovization. default: 1 (immediate parent only)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--headrules=<var>x</var></span></kbd></td>
+<td>turn on head finding; affects binarization.
+reads rules from file <code class="docutils literal"><span class="pre">x</span></code> (e.g., &#8220;negra.headrules&#8221;).</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--markhead</span></kbd></td>
+<td>include label of the head child in all auxiliary labels
+of binarization.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--leftunary</span></kbd></td>
+<td>make initial / final productions of binarized constituents</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--rightunary</span></kbd></td>
+<td>... unary productions.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--tailmarker</span></kbd></td>
+<td>mark rightmost child (the head if headrules are applied), to
+avoid cyclic rules when <code class="docutils literal"><span class="pre">--leftunary</span></code> and <code class="docutils literal"><span class="pre">--rightunary</span></code>
+are used.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--transforms=<var>x</var></span></kbd></td>
+<td>specify names of tree transformations to apply; for possible
+names, cf. <a class="reference internal" href="../api/discodop.treebanktransforms.html#module-discodop.treebanktransforms" title="discodop.treebanktransforms"><code class="xref py py-mod docutils literal"><span class="pre">discodop.treebanktransforms</span></code></a> module.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--reverse</span></kbd></td>
+<td>reverse the transformations given by <code class="docutils literal"><span class="pre">--transform</span></code></td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#overview">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">Reference</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treesearch.html">treesearch</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">treetransforms</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="treesearch.html" title="treesearch"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Andreas van Cranenburgh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

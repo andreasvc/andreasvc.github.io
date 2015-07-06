@@ -49,7 +49,7 @@
           <div class="body" role="main">
             
   <div class="section" id="parser-parameters">
-<span id="params"></span><h1>Parser parameters<a class="headerlink" href="#parser-parameters" title="Permalink to this headline">¶</a></h1>
+<h1>Parser parameters<a class="headerlink" href="#parser-parameters" title="Permalink to this headline">¶</a></h1>
 <p>A parser is defined by a sequence of stages, and a set of
 global options:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">stages</span><span class="o">=</span><span class="p">[</span>
@@ -173,53 +173,38 @@ using <code class="docutils literal"><span class="pre">default</span></code>.</p
 <tr class="field-even field"><th class="field-name">headrules:</th><td class="field-body"><p class="first">file with rules for finding heads of constituents</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">extraheadrules:</th><td class="field-body"><p class="first">requires <code class="docutils literal"><span class="pre">headrules</span></code> option. One of ...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body">no additional head rules [default]</td>
-</tr>
-<tr class="field-even field"><th class="field-name">&#8216;ptb&#8217;:</th><td class="field-body">use additional PTB-specific head rules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">&#8216;dptb&#8217;:</th><td class="field-body">use PTB head rules with discontinuous WH rules</td>
-</tr>
-</tbody>
-</table>
+<tr class="field-odd field"><th class="field-name">markhead:</th><td class="field-body"><p class="first">whether to prepend head to siblings labels</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">markhead:</th><td class="field-body"><p class="first">whether to prepend head to siblings labels</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">v:</th><td class="field-body"><p class="first">vertical markovization context; default 1; 2 means 1 extra level of
+<tr class="field-even field"><th class="field-name">v:</th><td class="field-body"><p class="first">vertical markovization context; default 1; 2 means 1 extra level of
 parent annotation.</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">h:</th><td class="field-body"><p class="first">horizontal markovization context</p>
+<tr class="field-odd field"><th class="field-name">h:</th><td class="field-body"><p class="first">horizontal markovization context</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">revh:</th><td class="field-body"><p class="first">horizontal markovization context preceding child being generated</p>
+<tr class="field-even field"><th class="field-name">revh:</th><td class="field-body"><p class="first">horizontal markovization context preceding child being generated</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">leftmostunary:</th><td class="field-body"><p class="first">whether to start binarization with unary node</p>
+<tr class="field-odd field"><th class="field-name">leftmostunary:</th><td class="field-body"><p class="first">whether to start binarization with unary node</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rightmostunary:</th><td class="field-body"><p class="first">whether to end binarization with unary node</p>
+<tr class="field-even field"><th class="field-name">rightmostunary:</th><td class="field-body"><p class="first">whether to end binarization with unary node</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">tailmarker:</th><td class="field-body"><p class="first">with headrules, head is last node and can be marked</p>
+<tr class="field-odd field"><th class="field-name">tailmarker:</th><td class="field-body"><p class="first">with headrules, head is last node and can be marked</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">markovthreshold:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">reduce horizontal markovization threshold of auxiliary
+<tr class="field-even field"><th class="field-name" colspan="2">markovthreshold:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">reduce horizontal markovization threshold of auxiliary
 labels with a frequency lower than this threshold.</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">fanout_marks_before_bin:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">whether to add fanout markers before binarization</p>
+<tr class="field-odd field"><th class="field-name" colspan="2">fanout_marks_before_bin:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">whether to add fanout markers before binarization</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">labelfun:</th><td class="field-body"><p class="first last">specify a function from nodes to labels; can be used to change
+<tr class="field-even field"><th class="field-name">labelfun:</th><td class="field-body"><p class="first last">specify a function from nodes to labels; can be used to change
 how labels appear in markovization, e.g., to strip of annotations.</p>
 </td>
 </tr>
@@ -259,38 +244,34 @@ same test set, or to exploit coarse-to-fine pruning.</p>
 </tr>
 <tr class="field-even field"><th class="field-name"><code class="docutils literal"><span class="pre">'plcfrs'</span></code>:</th><td class="field-body">use the agenda-based PLCFRS parser</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2"><code class="docutils literal"><span class="pre">'pcfg-posterior'</span></code>:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Compute inside-outside probabilities (does not
-produce parse trees, can only be used for pruning of next stage).</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2"><code class="docutils literal"><span class="pre">'pcfg-bitpar-nbest'</span></code>:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Use external bitpar parser. Produces n-best list
+<tr class="field-odd field"><th class="field-name" colspan="2"><code class="docutils literal"><span class="pre">'pcfg-bitpar-nbest'</span></code>:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Use external bitpar parser. Produces n-best list
 (up to n=1000) without producing a parse forest; works with
 non-binarized grammars (experimental).</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2"><code class="docutils literal"><span class="pre">'pcfg-bitpar-forest'</span></code>:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Use external bitpar parser (experimental).</td>
+<tr class="field-even field"><th class="field-name" colspan="2"><code class="docutils literal"><span class="pre">'pcfg-bitpar-forest'</span></code>:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Use external bitpar parser (experimental).</td>
 </tr>
-<tr class="field-even field"><th class="field-name"><code class="docutils literal"><span class="pre">'dop-rerank'</span></code>:</th><td class="field-body">Rerank parse trees from previous stage with DOP
+<tr class="field-odd field"><th class="field-name"><code class="docutils literal"><span class="pre">'dop-rerank'</span></code>:</th><td class="field-body">Rerank parse trees from previous stage with DOP
 reduction (experimental).</td>
 </tr>
 </tbody>
 </table>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">prune:</th><td class="field-body"><p class="first">whether to use previous chart to prune this stage</p>
+<tr class="field-even field"><th class="field-name">prune:</th><td class="field-body"><p class="first">specify the name of a previous stage to enable coarse-to-fine pruning.</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">split:</th><td class="field-body"><p class="first">split disc. nodes <code class="docutils literal"><span class="pre">VP_2[101]</span></code> as <code class="docutils literal"><span class="pre">{</span> <span class="pre">VP*[100],</span> <span class="pre">VP*[001]</span> <span class="pre">}</span></code></p>
+<tr class="field-odd field"><th class="field-name">split:</th><td class="field-body"><p class="first">split disc. nodes <code class="docutils literal"><span class="pre">VP_2[101]</span></code> as <code class="docutils literal"><span class="pre">{</span> <span class="pre">VP*[100],</span> <span class="pre">VP*[001]</span> <span class="pre">}</span></code></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">splitprune:</th><td class="field-body"><p class="first">treat <code class="docutils literal"><span class="pre">VP_2[101]</span></code> as <code class="docutils literal"><span class="pre">{VP*[100],</span> <span class="pre">VP*[001]}</span></code> for pruning</p>
+<tr class="field-even field"><th class="field-name">splitprune:</th><td class="field-body"><p class="first">treat <code class="docutils literal"><span class="pre">VP_2[101]</span></code> as <code class="docutils literal"><span class="pre">{VP*[100],</span> <span class="pre">VP*[001]}</span></code> for pruning</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">markorigin:</th><td class="field-body"><p class="first">mark origin of split nodes: <code class="docutils literal"><span class="pre">VP_2</span> <span class="pre">=&gt;</span> <span class="pre">{VP*1,</span> <span class="pre">VP*2}</span></code></p>
+<tr class="field-odd field"><th class="field-name">markorigin:</th><td class="field-body"><p class="first">mark origin of split nodes: <code class="docutils literal"><span class="pre">VP_2</span> <span class="pre">=&gt;</span> <span class="pre">{VP*1,</span> <span class="pre">VP*2}</span></code></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">k:</th><td class="field-body"><p class="first">pruning parameter:</p>
+<tr class="field-even field"><th class="field-name">k:</th><td class="field-body"><p class="first">pruning parameter:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -317,7 +298,8 @@ derivation)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">binarized:</th><td class="field-body"><p class="first">when using <code class="docutils literal"><span class="pre">mode='pcfg-bitpar-nbest'</span></code>, this option can be set to
 <code class="docutils literal"><span class="pre">False</span></code>, to disable the two auxiliary binarizations needed for
-Double-DOP.</p>
+Double-DOP. This enables bitpar to do the binarization internally, which is
+more efficient.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">dop:</th><td class="field-body"><p class="first">enable DOP mode:</p>
@@ -400,7 +382,7 @@ the set of recurring fragments.</p>
 <code class="docutils literal"><span class="pre">('treebank',</span> <span class="pre">level)</span></code>; e.g., <code class="docutils literal"><span class="pre">('ptb',</span> <span class="pre">0)</span></code> for the coarsest level
 of the Penn treebank. For the presets,
 see source of <code class="xref py py-data docutils literal"><span class="pre">discodop.treebanktransforms.MAPPINGS</span></code>.
-Including a stage for each of the collapse-levels in ascending
+Include a stage for each of the collapse-levels in ascending
 order (0, 1, and 2 in the current presets), and then add a stage
 where labels are not collapsed.</p>
 </td>
@@ -660,6 +642,17 @@ a logfile <code class="docutils literal"><span class="pre">output.log</span></co
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -692,7 +685,7 @@ a logfile <code class="docutils literal"><span class="pre">output.log</span></co
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

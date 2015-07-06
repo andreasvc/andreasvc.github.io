@@ -45,6 +45,7 @@
 
 <span class="sd">Follows EVALB as much as possible, and provides some alternative evaluation</span>
 <span class="sd">metrics.&quot;&quot;&quot;</span>
+<span class="c"># pylint: disable=cell-var-from-loop</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span><span class="p">,</span> \
 		<span class="n">unicode_literals</span>
 <span class="kn">import</span> <span class="nn">io</span>
@@ -70,55 +71,6 @@
 	<span class="kn">from</span> <span class="nn">discodop.treedist</span> <span class="kn">import</span> <span class="n">newtreedist</span> <span class="k">as</span> <span class="n">newtreedist</span><span class="p">,</span> <span class="n">newtreedist</span>
 
 <span class="n">SHORTUSAGE</span> <span class="o">=</span> <span class="s">&#39;Usage: </span><span class="si">%s</span><span class="s"> &lt;gold&gt; &lt;parses&gt; [param] [options]&#39;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">USAGE</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span><span class="se">\</span>
-<span class="s">Evaluation of (discontinuous) parse trees, following EVALB as much as possible.</span>
-
-<span class="si">%s</span><span class="s"></span>
-<span class="s">where gold and parses are files with parse trees, param is an EVALB parameter</span>
-<span class="s">file, and options may consist of:</span>
-
-<span class="s">  --cutofflen=n    Overrides the sentence length cutoff of the parameter file.</span>
-<span class="s">  --verbose        Print table with per sentence information.</span>
-<span class="s">  --debug          Print debug information with per sentence bracketings etc.</span>
-<span class="s">  --disconly       Only evaluate discontinuous bracketings (affects bracketing</span>
-<span class="s">                   scores: precision, recall, f-measure, exact match).</span>
-<span class="s">  --goldfmt|--parsesfmt=(</span><span class="si">%s</span><span class="s">)</span>
-<span class="s">                   Specify corpus format [default: export].</span>
-<span class="s">  --fmt=(...)      Shorthand for setting both --goldfmt and --parsesfmt.</span>
-<span class="s">  --goldenc|--parsesenc=(utf-8|iso-8859-1|...)</span>
-<span class="s">                   Specify encoding [default: utf-8].</span>
-<span class="s">  --la             Enable leaf-ancestor evaluation.</span>
-<span class="s">  --ted            Enable tree-edit distance evaluation.</span>
-<span class="s">  --headrules=x    Specify file with rules for head assignment of constituents</span>
-<span class="s">                   that do not already have a child marked as head; this</span>
-<span class="s">                   enables dependency evaluation.</span>
-<span class="s">  --functions=x    &#39;remove&#39;=default: strip functions off labels,</span>
-<span class="s">                   &#39;leave&#39;: leave syntactic labels as is,</span>
-<span class="s">                   &#39;add&#39;: evaluate both syntactic categories and functions,</span>
-<span class="s">                   &#39;replace&#39;: only evaluate function tags.</span>
-<span class="s">  --morphology=x   &#39;no&#39;=default: only evaluate POS tags,</span>
-<span class="s">                   &#39;add&#39;: concatenate morphology tags to POS tags,</span>
-<span class="s">                   &#39;replace&#39;: replace POS tags with morphology tags,</span>
-<span class="s">                   &#39;between&#39;: add morphological node between POS tag and word.</span>
-
-<span class="s">The parameter file should be encoded in UTF-8 and supports the following</span>
-<span class="s">options (in addition to those described in the README of EVALB):</span>
-<span class="s">  DELETE_ROOT_PRETERMS</span>
-<span class="s">                   if nonzero, ignore preterminals directly under the root in</span>
-<span class="s">                   gold trees for scoring purposes.</span>
-<span class="s">  DISC_ONLY        if nonzero, only consider discontinuous bracketings</span>
-<span class="s">                   (affects precision, recall, f-measure, exact match).</span>
-<span class="s">  LA               if nonzero, report leaf-ancestor scores [default: disabled].</span>
-<span class="s">  TED              if nonzero, report tree-edit distance scores; disabled by</span>
-<span class="s">                   default as these are slow to compute.</span>
-<span class="s">  DEBUG            -1 only print summary table</span>
-<span class="s">                   0 additionally, print category / tag breakdowns (default)</span>
-<span class="s">                     (after application of cutoff length).</span>
-<span class="s">                   1 give per-sentence results (&#39;--verbose&#39;)</span>
-<span class="s">                   2 give detailed information for each sentence (&#39;--debug&#39;)</span>
-<span class="s">  MAX_ERROR        this value is ignored, no errors are tolerated.</span>
-<span class="s">                   the parameter is accepted to support usage of unmodified</span>
-<span class="s">                   EVALB parameter files. &#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">SHORTUSAGE</span><span class="p">,</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">READERS</span><span class="p">))</span>
 
 <span class="n">HEADER</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span>
 <span class="s">   Sentence                 Matched   Brackets            Corr   POS</span>
@@ -701,15 +653,12 @@
 		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="n">flags</span> <span class="o">|</span> <span class="n">options</span><span class="p">)</span>
 	<span class="k">except</span> <span class="n">GetoptError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">SHORTUSAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
-	<span class="k">if</span> <span class="s">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">or</span> <span class="s">&#39;-h&#39;</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">USAGE</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
 		<span class="k">print</span><span class="p">(</span><span class="s">&#39;error: Wrong number of arguments.&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">SHORTUSAGE</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">else</span> <span class="n">USAGE</span><span class="p">)</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">SHORTUSAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">goldfile</span><span class="p">,</span> <span class="n">parsesfile</span> <span class="o">=</span> <span class="n">args</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
 	<span class="n">param</span> <span class="o">=</span> <span class="n">readparam</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
@@ -1184,6 +1133,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html#overview">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ref.html">Reference</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -1210,7 +1170,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

@@ -133,10 +133,10 @@ example:</p>
     <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pcfg&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;pcfg&#39;</span><span class="p">,</span>
         <span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">markorigin</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
     <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;plcfrs&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;plcfrs&#39;</span><span class="p">,</span>
-        <span class="n">prune</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">splitprune</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span>
+        <span class="n">prune</span><span class="o">=</span><span class="s">&#39;pcfg&#39;</span><span class="p">,</span> <span class="n">splitprune</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span>
     <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;dop&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;plcfrs&#39;</span><span class="p">,</span>
-        <span class="n">prune</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">dop</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">usedoubledop</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">prune</span><span class="o">=</span><span class="s">&#39;plcfrs&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">dop</span><span class="o">=</span><span class="s">&#39;doubledop&#39;</span><span class="p">,</span>
         <span class="n">estimator</span><span class="o">=</span><span class="s">&#39;rfe&#39;</span><span class="p">,</span> <span class="n">objective</span> <span class="o">=</span> <span class="s">&#39;mpp&#39;</span><span class="p">)</span>
 <span class="p">],</span>
 <span class="n">traincorpus</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
@@ -154,7 +154,7 @@ example:</p>
     <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
 </pre></div>
 </div>
-<p>See the documentation on the available <a class="reference internal" href="params.html#params"><span>parameters</span></a>.
+<p>See the documentation on the available <a class="reference internal" href="params.html"><em>parameters</em></a>.
 These parameters can be invoked by executing:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ discodop runexp filename.prm
 </pre></div>
@@ -282,6 +282,17 @@ formats.</dd>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ref.html">Reference</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli/eval.html">eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/fragments.html">fragments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/gen.html">gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/grammar.html">grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/parser.html">parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/runexp.html">runexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/treedraw.html">treedraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/treesearch.html">treesearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/treetransforms.html">treetransforms</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
@@ -313,7 +324,7 @@ formats.</dd>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Andreas van Cranenburgh.
+        &copy; Copyright 2015, Andreas van Cranenburgh.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
