@@ -54,8 +54,10 @@
 <p>Fragment extraction with tree kernels.</p>
 <p>Implements:</p>
 <ul class="simple">
+<li>van Cranenburgh (2014), Extraction of Phrase-Structure Fragments
+with a Linear Average Time Tree-Kernel</li>
 <li>Sangati et al. (2010), Efficiently extract recurring tree fragments from
-large treebanks.</li>
+large treebanks</li>
 <li>Moschitti (2006): Making Tree Kernels practical for Natural Language Learning</li>
 </ul>
 <p class="rubric">Functions</p>
@@ -65,16 +67,16 @@ large treebanks.</li>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.extractfragments" title="discodop._fragments.extractfragments"><code class="xref py py-obj docutils literal"><span class="pre">extractfragments</span></code></a>(Ctrees&nbsp;trees1,&nbsp;list&nbsp;sents1,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.extractfragments" title="discodop._fragments.extractfragments"><code class="xref py py-obj docutils literal"><span class="pre">extractfragments</span></code></a>(Ctrees&nbsp;trees1,&nbsp;int&nbsp;offset,&nbsp;...)</td>
 <td>Find the largest fragments in treebank(s) with the fast tree kernel.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.exactcounts" title="discodop._fragments.exactcounts"><code class="xref py py-obj docutils literal"><span class="pre">exactcounts</span></code></a>(Ctrees&nbsp;trees1,&nbsp;Ctrees&nbsp;trees2,&nbsp;...)</td>
 <td>Get exact counts or indices of occurrence for fragments.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.completebitsets" title="discodop._fragments.completebitsets"><code class="xref py py-obj docutils literal"><span class="pre">completebitsets</span></code></a>((Ctrees&nbsp;trees,&nbsp;list&nbsp;sents,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.completebitsets" title="discodop._fragments.completebitsets"><code class="xref py py-obj docutils literal"><span class="pre">completebitsets</span></code></a>((Ctrees&nbsp;trees,&nbsp;...[,&nbsp;start,&nbsp;end])</td>
 <td>Generate bitsets corresponding to whole trees in the input.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.allfragments" title="discodop._fragments.allfragments"><code class="xref py py-obj docutils literal"><span class="pre">allfragments</span></code></a>(Ctrees&nbsp;trees,&nbsp;list&nbsp;sents,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.allfragments" title="discodop._fragments.allfragments"><code class="xref py py-obj docutils literal"><span class="pre">allfragments</span></code></a>(Ctrees&nbsp;trees,&nbsp;Vocabulary&nbsp;vocab,&nbsp;...)</td>
 <td>Return all fragments of trees up to maxdepth.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.repl" title="discodop._fragments.repl"><code class="xref py py-obj docutils literal"><span class="pre">repl</span></code></a>(d)</td>
@@ -86,28 +88,28 @@ large treebanks.</li>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.nonfrontier" title="discodop._fragments.nonfrontier"><code class="xref py py-obj docutils literal"><span class="pre">nonfrontier</span></code></a>(sent)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.getctrees" title="discodop._fragments.getctrees"><code class="xref py py-obj docutils literal"><span class="pre">getctrees</span></code></a>(trees1,&nbsp;sents1[,&nbsp;disc,&nbsp;trees2,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop._fragments.getctrees" title="discodop._fragments.getctrees"><code class="xref py py-obj docutils literal"><span class="pre">getctrees</span></code></a>(trees1,&nbsp;sents1[,&nbsp;trees2,&nbsp;sents2,&nbsp;...])</td>
 <td>Convert binarized Tree objects to Ctrees object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.readtreebank" title="discodop._fragments.readtreebank"><code class="xref py py-obj docutils literal"><span class="pre">readtreebank</span></code></a>(treebankfile,&nbsp;list&nbsp;labels,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop._fragments.readtreebank" title="discodop._fragments.readtreebank"><code class="xref py py-obj docutils literal"><span class="pre">readtreebank</span></code></a>(treebankfile,&nbsp;Vocabulary&nbsp;vocab)</td>
 <td>Read a treebank from a given filename.</td>
 </tr>
 </tbody>
 </table>
 <dl class="function">
 <dt id="discodop._fragments.extractfragments">
-<code class="descclassname">discodop._fragments.</code><code class="descname">extractfragments</code><span class="sig-paren">(</span><em>Ctrees trees1</em>, <em>list sents1</em>, <em>int offset</em>, <em>int end</em>, <em>list labels</em>, <em>Ctrees trees2=None</em>, <em>list sents2=None</em>, <em>bool approx=True</em>, <em>bool debug=False</em>, <em>bool discontinuous=False</em>, <em>bool complement=False</em>, <em>bool twoterms=False</em>, <em>bool adjacent=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.extractfragments" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">extractfragments</code><span class="sig-paren">(</span><em>Ctrees trees1</em>, <em>int offset</em>, <em>int end</em>, <em>Vocabulary vocab</em>, <em>Ctrees trees2=None</em>, <em>bool approx=True</em>, <em>bool debug=False</em>, <em>bool discontinuous=False</em>, <em>bool complement=False</em>, <em>bool twoterms=False</em>, <em>bool adjacent=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.extractfragments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the largest fragments in treebank(s) with the fast tree kernel.</p>
 <ul>
 <li><dl class="first docutils">
 <dt>scenario 1: recurring fragments in single treebank, use::</dt>
-<dd><p class="first last">extractfragments(trees1, sents1, offset, end, labels)</p>
+<dd><p class="first last">extractfragments(trees1, offset, end, vocab)</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>scenario 2: common fragments in two treebanks::</dt>
-<dd><p class="first last">extractfragments(trees1, sents1, offset, end, labels, trees2, sents2)</p>
+<dd><p class="first last">extractfragments(trees1, offset, end, vocab, trees2)</p>
 </dd>
 </dl>
 </li>
@@ -187,7 +189,7 @@ can be left out when searching in 1 or 2 treebanks.</li>
 
 <dl class="function">
 <dt id="discodop._fragments.completebitsets">
-<code class="descclassname">discodop._fragments.</code><code class="descname">completebitsets</code><span class="sig-paren">(</span><em>Ctrees trees</em>, <em>list sents</em>, <em>list labels</em>, <em>short maxnodes</em>, <em>bool discontinuous=False</em>, <em>start=None</em>, <em>end=None</em><span class="sig-paren">)</span> &rarr; dict<a class="headerlink" href="#discodop._fragments.completebitsets" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">completebitsets</code><span class="sig-paren">(</span><em>Ctrees trees</em>, <em>Vocabulary vocab</em>, <em>short maxnodes</em>, <em>bool discontinuous=False</em>, <em>start=None</em>, <em>end=None</em><span class="sig-paren">)</span> &rarr; dict<a class="headerlink" href="#discodop._fragments.completebitsets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate bitsets corresponding to whole trees in the input.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -203,7 +205,7 @@ can be left out when searching in 1 or 2 treebanks.</li>
 
 <dl class="function">
 <dt id="discodop._fragments.allfragments">
-<code class="descclassname">discodop._fragments.</code><code class="descname">allfragments</code><span class="sig-paren">(</span><em>Ctrees trees</em>, <em>list sents</em>, <em>list labels</em>, <em>int maxdepth</em>, <em>int maxfrontier=999</em>, <em>bool discontinuous=True</em>, <em>bool indices=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.allfragments" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">allfragments</code><span class="sig-paren">(</span><em>Ctrees trees</em>, <em>Vocabulary vocab</em>, <em>int maxdepth</em>, <em>int maxfrontier=999</em>, <em>bool discontinuous=True</em>, <em>bool indices=False</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.allfragments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return all fragments of trees up to maxdepth.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -284,14 +286,14 @@ as values.</p>
 
 <dl class="function">
 <dt id="discodop._fragments.getctrees">
-<code class="descclassname">discodop._fragments.</code><code class="descname">getctrees</code><span class="sig-paren">(</span><em>trees1</em>, <em>sents1</em>, <em>disc=True</em>, <em>trees2=None</em>, <em>sents2=None</em>, <em>labels=None</em>, <em>prods=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.getctrees" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">getctrees</code><span class="sig-paren">(</span><em>trees1</em>, <em>sents1</em>, <em>trees2=None</em>, <em>sents2=None</em>, <em>vocab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.getctrees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert binarized Tree objects to Ctrees object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary with same keys as arguments, where trees1 and
-trees2 are Ctrees object for (disc.) binary trees and sentences.</td>
+trees2 are Ctrees object for disc. binary trees and sentences.</td>
 </tr>
 </tbody>
 </table>
@@ -299,9 +301,9 @@ trees2 are Ctrees object for (disc.) binary trees and sentences.</td>
 
 <dl class="function">
 <dt id="discodop._fragments.readtreebank">
-<code class="descclassname">discodop._fragments.</code><code class="descname">readtreebank</code><span class="sig-paren">(</span><em>treebankfile</em>, <em>list labels</em>, <em>dict prods</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.readtreebank" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop._fragments.</code><code class="descname">readtreebank</code><span class="sig-paren">(</span><em>treebankfile</em>, <em>Vocabulary vocab</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf8'</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop._fragments.readtreebank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a treebank from a given filename.</p>
-<p>labels and prods should be re-used when reading multiple treebanks.</p>
+<p><code class="docutils literal"><span class="pre">vocab</span></code> should be re-used when reading multiple treebanks.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -332,17 +334,6 @@ trees2 are Ctrees object for (disc.) binary trees and sentences.</td>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../cli/eval.html">eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/fragments.html">fragments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/gen.html">gen</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/grammar.html">grammar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/parser.html">parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/runexp.html">runexp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treedraw.html">treedraw</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treesearch.html">treesearch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treetransforms.html">treetransforms</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">

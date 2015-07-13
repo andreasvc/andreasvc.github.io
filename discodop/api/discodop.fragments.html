@@ -77,13 +77,13 @@ you want to abort, kill the program manually (e.g., press Ctrl-Z and issue
 <tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.readtreebanks" title="discodop.fragments.readtreebanks"><code class="xref py py-obj docutils literal"><span class="pre">readtreebanks</span></code></a>(filename1[,&nbsp;filename2,&nbsp;fmt,&nbsp;...])</td>
 <td>Read one or two treebanks.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.read2ndtreebank" title="discodop.fragments.read2ndtreebank"><code class="xref py py-obj docutils literal"><span class="pre">read2ndtreebank</span></code></a>(filename2,&nbsp;labels,&nbsp;prods[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.read2ndtreebank" title="discodop.fragments.read2ndtreebank"><code class="xref py py-obj docutils literal"><span class="pre">read2ndtreebank</span></code></a>(filename2,&nbsp;vocab[,&nbsp;fmt,&nbsp;...])</td>
 <td>Read a second treebank.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.initworker" title="discodop.fragments.initworker"><code class="xref py py-obj docutils literal"><span class="pre">initworker</span></code></a>(filename1,&nbsp;filename2,&nbsp;limit,&nbsp;encoding)</td>
 <td>Read treebanks for this worker.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.initworkersimple" title="discodop.fragments.initworkersimple"><code class="xref py py-obj docutils literal"><span class="pre">initworkersimple</span></code></a>(trees,&nbsp;sents,&nbsp;disc[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.initworkersimple" title="discodop.fragments.initworkersimple"><code class="xref py py-obj docutils literal"><span class="pre">initworkersimple</span></code></a>(trees,&nbsp;sents[,&nbsp;trees2,&nbsp;sents2])</td>
 <td>Initialization for a worker in which a treebank was already loaded.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.worker" title="discodop.fragments.worker"><code class="xref py py-obj docutils literal"><span class="pre">worker</span></code></a>(*args,&nbsp;**kwds)</td>
@@ -156,13 +156,13 @@ There are at least 2 use cases for this:</p>
 
 <dl class="function">
 <dt id="discodop.fragments.readtreebanks">
-<code class="descclassname">discodop.fragments.</code><code class="descname">readtreebanks</code><span class="sig-paren">(</span><em>filename1</em>, <em>filename2=None</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#readtreebanks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.readtreebanks" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.fragments.</code><code class="descname">readtreebanks</code><span class="sig-paren">(</span><em>filename1</em>, <em>filename2=None</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#readtreebanks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.readtreebanks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read one or two treebanks.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="discodop.fragments.read2ndtreebank">
-<code class="descclassname">discodop.fragments.</code><code class="descname">read2ndtreebank</code><span class="sig-paren">(</span><em>filename2</em>, <em>labels</em>, <em>prods</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#read2ndtreebank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.read2ndtreebank" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.fragments.</code><code class="descname">read2ndtreebank</code><span class="sig-paren">(</span><em>filename2</em>, <em>vocab</em>, <em>fmt=u'bracket'</em>, <em>limit=None</em>, <em>encoding=u'utf8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#read2ndtreebank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.read2ndtreebank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a second treebank.</p>
 </dd></dl>
 
@@ -176,7 +176,7 @@ advantageous with a NUMA architecture.</p>
 
 <dl class="function">
 <dt id="discodop.fragments.initworkersimple">
-<code class="descclassname">discodop.fragments.</code><code class="descname">initworkersimple</code><span class="sig-paren">(</span><em>trees</em>, <em>sents</em>, <em>disc</em>, <em>trees2=None</em>, <em>sents2=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#initworkersimple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.initworkersimple" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">discodop.fragments.</code><code class="descname">initworkersimple</code><span class="sig-paren">(</span><em>trees</em>, <em>sents</em>, <em>trees2=None</em>, <em>sents2=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/fragments.html#initworkersimple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.fragments.initworkersimple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialization for a worker in which a treebank was already loaded.</p>
 </dd></dl>
 
@@ -311,17 +311,6 @@ Remove parentheses around frontier nodes: (NN ) -&gt; NN</p>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../cli/eval.html">eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/fragments.html">fragments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/gen.html">gen</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/grammar.html">grammar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/parser.html">parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/runexp.html">runexp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treedraw.html">treedraw</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treesearch.html">treesearch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treetransforms.html">treetransforms</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">

@@ -77,8 +77,8 @@
 <tr class="row-even"><td><a class="reference internal" href="#discodop.containers.Chart" title="discodop.containers.Chart"><code class="xref py py-obj docutils literal"><span class="pre">Chart</span></code></a></td>
 <td>Base class for charts.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Ctrees" title="discodop.containers.Ctrees"><code class="xref py py-obj docutils literal"><span class="pre">Ctrees</span></code></a>(list&nbsp;trees=None,&nbsp;dict&nbsp;prods=None)</td>
-<td>Auxiliary class to pass around collections of NodeArrays in Python.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Ctrees" title="discodop.containers.Ctrees"><code class="xref py py-obj docutils literal"><span class="pre">Ctrees</span></code></a>()</td>
+<td>An indexed, binarized treebank stored as array.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.containers.LexicalRule" title="discodop.containers.LexicalRule"><code class="xref py py-obj docutils literal"><span class="pre">LexicalRule</span></code></a>(uint32_t&nbsp;lhs,&nbsp;unicode&nbsp;word,&nbsp;...)</td>
 <td>A weighted rule of the form &#8216;non-terminal &#8211;&gt; word&#8217;.</td>
@@ -282,18 +282,12 @@ currently selected weights.</p>
 
 <dl class="class">
 <dt id="discodop.containers.Ctrees">
-<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">Ctrees</code><span class="sig-paren">(</span><em>list trees=None</em>, <em>dict prods=None</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees" title="Permalink to this definition">¶</a></dt>
-<dd><p>Auxiliary class to pass around collections of NodeArrays in Python.</p>
-<p>When trees is given, prods should be given as well.
-When trees is not given, the alloc() method should be called and
-trees added one by one using the add() or addnodes() methods.</p>
-<dl class="method">
-<dt id="discodop.containers.Ctrees.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>self</em>, <em>list tree</em>, <em>dict prods</em>, <em>int lensent</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Incrementally add tree to the node array.</p>
-<p>Useful when dealing with large numbers of Tree objects (say 100,000).</p>
-</dd></dl>
-
+<em class="property">class </em><code class="descclassname">discodop.containers.</code><code class="descname">Ctrees</code><a class="headerlink" href="#discodop.containers.Ctrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>An indexed, binarized treebank stored as array.</p>
+<p>Indexing depends on an external Vocabulary object that maps
+productions and labels to unique integers across different sets of trees.
+First call the alloc() method with (estimated) number of nodes &amp; trees.
+Then add trees one by one using the addnodes() method.</p>
 <dl class="method">
 <dt id="discodop.containers.Ctrees.alloc">
 <code class="descname">alloc</code><span class="sig-paren">(</span><em>self</em>, <em>int numtrees</em>, <em>long numnodes</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.alloc" title="Permalink to this definition">¶</a></dt>
@@ -301,8 +295,20 @@ trees added one by one using the add() or addnodes() methods.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="discodop.containers.Ctrees.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><em>self</em>, <em>int n</em>, <em>Vocabulary vocab</em>, <em>disc=True</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (tree, sent) tuple for given tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Ctrees.extractsent">
+<code class="descname">extractsent</code><span class="sig-paren">(</span><em>self</em>, <em>int n</em>, <em>Vocabulary vocab</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.extractsent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return sentence as a list of strings for given tree.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="discodop.containers.Ctrees.indextrees">
-<code class="descname">indextrees</code><span class="sig-paren">(</span><em>self</em>, <em>dict prods</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.indextrees" title="Permalink to this definition">¶</a></dt>
+<code class="descname">indextrees</code><span class="sig-paren">(</span><em>self</em>, <em>Vocabulary vocab</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.indextrees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create index from productions to trees containing that production.</p>
 <p>Productions are represented as integer IDs, trees are given as sets of
 integer indices.</p>
@@ -387,17 +393,6 @@ item (head) to which it points, along with ranks for its children.</p>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../cli/eval.html">eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/fragments.html">fragments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/gen.html">gen</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/grammar.html">grammar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/parser.html">parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/runexp.html">runexp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treedraw.html">treedraw</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treesearch.html">treesearch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/treetransforms.html">treetransforms</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
