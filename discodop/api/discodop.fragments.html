@@ -65,20 +65,26 @@ you want to abort, kill the program manually (e.g., press Ctrl-Z and issue
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.main" title="discodop.fragments.main"><code class="xref py py-obj docutils literal"><span class="pre">main</span></code></a>([argv])</td>
-<td>Command line interface to fragment extraction.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">APPLY</span></code>(x,&nbsp;_y)</td>
+<td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.regular" title="discodop.fragments.regular"><code class="xref py py-obj docutils literal"><span class="pre">regular</span></code></a>(filenames,&nbsp;numproc,&nbsp;limit,&nbsp;encoding)</td>
-<td>non-batch processing. multiprocessing optional.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.allfragments" title="discodop.fragments.allfragments"><code class="xref py py-obj docutils literal"><span class="pre">allfragments</span></code></a>(trees,&nbsp;sents,&nbsp;maxdepth[,&nbsp;...])</td>
+<td>Return all fragments up to a certain depth, # frontiers.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.batch" title="discodop.fragments.batch"><code class="xref py py-obj docutils literal"><span class="pre">batch</span></code></a>(outputdir,&nbsp;filenames,&nbsp;limit,&nbsp;encoding,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.altrepr" title="discodop.fragments.altrepr"><code class="xref py py-obj docutils literal"><span class="pre">altrepr</span></code></a>(a)</td>
+<td>Rewrite bracketed tree to alternative format.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.batch" title="discodop.fragments.batch"><code class="xref py py-obj docutils literal"><span class="pre">batch</span></code></a>(outputdir,&nbsp;filenames,&nbsp;limit,&nbsp;encoding,&nbsp;...)</td>
 <td>batch processing: three or more treebanks specified.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.readtreebanks" title="discodop.fragments.readtreebanks"><code class="xref py py-obj docutils literal"><span class="pre">readtreebanks</span></code></a>(filename1[,&nbsp;filename2,&nbsp;fmt,&nbsp;...])</td>
-<td>Read one or two treebanks.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.cpu_count" title="discodop.fragments.cpu_count"><code class="xref py py-obj docutils literal"><span class="pre">cpu_count</span></code></a>()</td>
+<td>Return number of CPUs or 1.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.read2ndtreebank" title="discodop.fragments.read2ndtreebank"><code class="xref py py-obj docutils literal"><span class="pre">read2ndtreebank</span></code></a>(filename2,&nbsp;vocab[,&nbsp;fmt,&nbsp;...])</td>
-<td>Read a second treebank.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.debinarize" title="discodop.fragments.debinarize"><code class="xref py py-obj docutils literal"><span class="pre">debinarize</span></code></a>(fragments)</td>
+<td>Debinarize fragments; fragments that fail to debinarize left as-is.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.exactcountworker" title="discodop.fragments.exactcountworker"><code class="xref py py-obj docutils literal"><span class="pre">exactcountworker</span></code></a>(*args,&nbsp;**kwds)</td>
+<td>Worker function for counting of fragments.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.initworker" title="discodop.fragments.initworker"><code class="xref py py-obj docutils literal"><span class="pre">initworker</span></code></a>(filename1,&nbsp;filename2,&nbsp;limit,&nbsp;encoding)</td>
 <td>Read treebanks for this worker.</td>
@@ -86,36 +92,54 @@ you want to abort, kill the program manually (e.g., press Ctrl-Z and issue
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.initworkersimple" title="discodop.fragments.initworkersimple"><code class="xref py py-obj docutils literal"><span class="pre">initworkersimple</span></code></a>(trees,&nbsp;sents[,&nbsp;trees2,&nbsp;sents2])</td>
 <td>Initialization for a worker in which a treebank was already loaded.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.worker" title="discodop.fragments.worker"><code class="xref py py-obj docutils literal"><span class="pre">worker</span></code></a>(*args,&nbsp;**kwds)</td>
-<td>Worker function for fragment extraction.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.iteratefragments" title="discodop.fragments.iteratefragments"><code class="xref py py-obj docutils literal"><span class="pre">iteratefragments</span></code></a>(fragments,&nbsp;newtrees,&nbsp;...)</td>
+<td>Get fragments of fragments.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.exactcountworker" title="discodop.fragments.exactcountworker"><code class="xref py py-obj docutils literal"><span class="pre">exactcountworker</span></code></a>(*args,&nbsp;**kwds)</td>
-<td>Worker function for counting of fragments.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.main" title="discodop.fragments.main"><code class="xref py py-obj docutils literal"><span class="pre">main</span></code></a>([argv])</td>
+<td>Command line interface to fragment extraction.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.workload" title="discodop.fragments.workload"><code class="xref py py-obj docutils literal"><span class="pre">workload</span></code></a>(numtrees,&nbsp;mult,&nbsp;numproc)</td>
-<td>Calculate an even workload.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.printfragments" title="discodop.fragments.printfragments"><code class="xref py py-obj docutils literal"><span class="pre">printfragments</span></code></a>(fragments,&nbsp;counts[,&nbsp;out])</td>
+<td>Dump fragments to standard output or some other file object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.read2ndtreebank" title="discodop.fragments.read2ndtreebank"><code class="xref py py-obj docutils literal"><span class="pre">read2ndtreebank</span></code></a>(filename2,&nbsp;vocab[,&nbsp;fmt,&nbsp;...])</td>
+<td>Read a second treebank.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.readtreebanks" title="discodop.fragments.readtreebanks"><code class="xref py py-obj docutils literal"><span class="pre">readtreebanks</span></code></a>(filename1[,&nbsp;filename2,&nbsp;fmt,&nbsp;...])</td>
+<td>Read one or two treebanks.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.recurringfragments" title="discodop.fragments.recurringfragments"><code class="xref py py-obj docutils literal"><span class="pre">recurringfragments</span></code></a>(trees,&nbsp;sents[,&nbsp;numproc,&nbsp;...])</td>
 <td>Get recurring fragments with exact counts in a single treebank.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.iteratefragments" title="discodop.fragments.iteratefragments"><code class="xref py py-obj docutils literal"><span class="pre">iteratefragments</span></code></a>(fragments,&nbsp;newtrees,&nbsp;...)</td>
-<td>Get fragments of fragments.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.regular" title="discodop.fragments.regular"><code class="xref py py-obj docutils literal"><span class="pre">regular</span></code></a>(filenames,&nbsp;numproc,&nbsp;limit,&nbsp;encoding)</td>
+<td>non-batch processing. multiprocessing optional.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.allfragments" title="discodop.fragments.allfragments"><code class="xref py py-obj docutils literal"><span class="pre">allfragments</span></code></a>(trees,&nbsp;sents,&nbsp;maxdepth[,&nbsp;...])</td>
-<td>Return all fragments up to a certain depth, # frontiers.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">test</span></code>()</td>
+<td>Demonstration of fragment extractor.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.debinarize" title="discodop.fragments.debinarize"><code class="xref py py-obj docutils literal"><span class="pre">debinarize</span></code></a>(fragments)</td>
-<td>Debinarize fragments; fragments that fail to debinarize left as-is.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.worker" title="discodop.fragments.worker"><code class="xref py py-obj docutils literal"><span class="pre">worker</span></code></a>(*args,&nbsp;**kwds)</td>
+<td>Worker function for fragment extraction.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.printfragments" title="discodop.fragments.printfragments"><code class="xref py py-obj docutils literal"><span class="pre">printfragments</span></code></a>(fragments,&nbsp;counts[,&nbsp;out])</td>
-<td>Dump fragments to standard output or some other file object.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.workload" title="discodop.fragments.workload"><code class="xref py py-obj docutils literal"><span class="pre">workload</span></code></a>(numtrees,&nbsp;mult,&nbsp;numproc)</td>
+<td>Calculate an even workload.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.fragments.altrepr" title="discodop.fragments.altrepr"><code class="xref py py-obj docutils literal"><span class="pre">altrepr</span></code></a>(a)</td>
-<td>Rewrite bracketed tree to alternative format.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.fragments.cpu_count" title="discodop.fragments.cpu_count"><code class="xref py py-obj docutils literal"><span class="pre">cpu_count</span></code></a>()</td>
-<td>Return number of CPUs or 1.</td>
-</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<p class="rubric">Exceptions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="function">

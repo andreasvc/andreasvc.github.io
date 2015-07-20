@@ -9,27 +9,34 @@ discodop.treebank
 
    .. autosummary::
    
-      brackettree
-      exporttree
-      exportsplit
       alpinotree
-      writetree
-      writebrackettree
-      writeexporttree
-      writealpinotree
-      writedependencies
+      applyheadrules
+      applypunct
+      brackettree
       dependencies
+      exportsplit
+      exporttree
+      glob
       handlefunctions
       handlemorphology
       incrementaltreereader
+      ishead
+      makedep
+      numbase
+      openread
+      quote
+      readheadrules
+      removeemptynodes
+      removeterminals
       segmentbrackets
       segmentexport
-      quote
-      unquote
       termindices
-      numbase
-      removeterminals
-      removeemptynodes
+      unquote
+      writealpinotree
+      writebrackettree
+      writedependencies
+      writeexporttree
+      writetree
    
    
 
@@ -39,14 +46,21 @@ discodop.treebank
 
    .. autosummary::
    
-      Item
-      CorpusReader
-      BracketCorpusReader
-      DiscBracketCorpusReader
-      NegraCorpusReader
       AlpinoCorpusReader
-      TigerXMLCorpusReader
+      BracketCorpusReader
+      CorpusReader
       DactCorpusReader
+      DiscBracketCorpusReader
+      Item
+      NegraCorpusReader
+      OrderedDict
+      ParentedTree
+      TigerXMLCorpusReader
+      Tree
+      chain
+      count
+      defaultdict
+      islice
    
    
 

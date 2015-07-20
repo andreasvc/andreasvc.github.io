@@ -9,22 +9,53 @@ discodop.disambiguation
 
    .. autosummary::
    
-      getderivations
-      marginalize
-      gettree
-      recoverfragments
-      fragmentsinderiv
-      treeparsing
-      viterbiderivation
-      getsamples
-      doprerank
+      addbitsets
+      binarize
+      bisect_right
+      canonicalize
+      collapseunary
       dopparseprob
+      doprerank
+      exp
+      fragmentsinderiv
       frontiernt
+      fsum
+      getderiv
+      getderivations
+      getsamples
+      gettree
+      isinf
+      lazykbest
+      lcfrsproductions
+      log
+      marginalize
+      mcrerank
+      mergediscnodes
+      nlargest
+      pyintbitcount
+      pyintnextset
+      random
+      recoverfragments
       splitfrag
+      test
+      treeparsing
+      unbinarize
+      viterbiderivation
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Tree
+      attrgetter
+      count
+      defaultdict
+      itemgetter
+      partial
    
    
 

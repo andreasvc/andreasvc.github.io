@@ -9,9 +9,11 @@ discodop.plcfrs
 
    .. autosummary::
    
+      do
       getparent
       merge
       parse
+      test
    
    
 
@@ -23,9 +25,12 @@ discodop.plcfrs
    
       Agenda
       DoubleAgenda
+      DoubleEntry
+      Entry
+      FatLCFRSChart
       LCFRSChart
       SmallLCFRSChart
-      FatLCFRSChart
+      itemgetter
    
    
 

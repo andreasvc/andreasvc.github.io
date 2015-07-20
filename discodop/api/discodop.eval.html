@@ -61,71 +61,74 @@ metrics.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.main" title="discodop.eval.main"><code class="xref py py-obj docutils literal"><span class="pre">main</span></code></a>()</td>
-<td>Command line interface for evaluation.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.readparam" title="discodop.eval.readparam"><code class="xref py py-obj docutils literal"><span class="pre">readparam</span></code></a>(filename)</td>
-<td>Read an EVALB-style parameter file and return a dictionary.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.transitiveclosure" title="discodop.eval.transitiveclosure"><code class="xref py py-obj docutils literal"><span class="pre">transitiveclosure</span></code></a>(eqpairs)</td>
-<td>Transitive closure of (undirected) EQ relations with DFS.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.accuracy" title="discodop.eval.accuracy"><code class="xref py py-obj docutils literal"><span class="pre">accuracy</span></code></a>(reference,&nbsp;candidate)</td>
+<td>Compute fraction of equivalent pairs in two sequences.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.eval.alignsent" title="discodop.eval.alignsent"><code class="xref py py-obj docutils literal"><span class="pre">alignsent</span></code></a>(csent,&nbsp;gsent,&nbsp;gpos)</td>
 <td>Map tokens of <code class="docutils literal"><span class="pre">csent</span></code> onto those of <code class="docutils literal"><span class="pre">gsent</span></code>, and translate indices.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.transform" title="discodop.eval.transform"><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code></a>(tree,&nbsp;sent,&nbsp;pos,&nbsp;gpos,&nbsp;param,&nbsp;grootpos)</td>
-<td>Apply the transformations according to the parameter file.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.parentedbracketings" title="discodop.eval.parentedbracketings"><code class="xref py py-obj docutils literal"><span class="pre">parentedbracketings</span></code></a>(tree[,&nbsp;labeled,&nbsp;...])</td>
-<td>Return the labeled bracketings with parents for a tree.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.bracketings" title="discodop.eval.bracketings"><code class="xref py py-obj docutils literal"><span class="pre">bracketings</span></code></a>(tree[,&nbsp;labeled,&nbsp;dellabel,&nbsp;disconly])</td>
-<td>Return the labeled set of bracketings for a tree.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.bracketing" title="discodop.eval.bracketing"><code class="xref py py-obj docutils literal"><span class="pre">bracketing</span></code></a>(node[,&nbsp;labeled])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.bracketing" title="discodop.eval.bracketing"><code class="xref py py-obj docutils literal"><span class="pre">bracketing</span></code></a>(node[,&nbsp;labeled])</td>
 <td>Generate bracketing <code class="docutils literal"><span class="pre">(label,</span> <span class="pre">indices)</span></code> for a given node.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.strbracketings" title="discodop.eval.strbracketings"><code class="xref py py-obj docutils literal"><span class="pre">strbracketings</span></code></a>(brackets)</td>
-<td>Return a string with a concise representation of a bracketing.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.bracketings" title="discodop.eval.bracketings"><code class="xref py py-obj docutils literal"><span class="pre">bracketings</span></code></a>(tree[,&nbsp;labeled,&nbsp;dellabel,&nbsp;disconly])</td>
+<td>Return the labeled set of bracketings for a tree.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.leafancestorpaths" title="discodop.eval.leafancestorpaths"><code class="xref py py-obj docutils literal"><span class="pre">leafancestorpaths</span></code></a>(tree,&nbsp;dellabel)</td>
-<td>Generate a list of ancestors for each leaf node in a tree.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.pathscore" title="discodop.eval.pathscore"><code class="xref py py-obj docutils literal"><span class="pre">pathscore</span></code></a>(gold,&nbsp;cand)</td>
-<td>Get edit distance for two leaf-ancestor paths.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.leafancestor" title="discodop.eval.leafancestor"><code class="xref py py-obj docutils literal"><span class="pre">leafancestor</span></code></a>(goldtree,&nbsp;candtree,&nbsp;dellabel)</td>
-<td>Sampson, Babarcz (2003): A test of the leaf-ancestor metric [...].</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.treedisteval" title="discodop.eval.treedisteval"><code class="xref py py-obj docutils literal"><span class="pre">treedisteval</span></code></a>(a,&nbsp;b[,&nbsp;includeroot,&nbsp;debug])</td>
-<td>Get tree-distance for two trees and compute the Dice normalization.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.recall" title="discodop.eval.recall"><code class="xref py py-obj docutils literal"><span class="pre">recall</span></code></a>(reference,&nbsp;candidate)</td>
-<td>Get recall score for two multisets.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.precision" title="discodop.eval.precision"><code class="xref py py-obj docutils literal"><span class="pre">precision</span></code></a>(reference,&nbsp;candidate)</td>
-<td>Get precision score for two multisets.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.editdistance" title="discodop.eval.editdistance"><code class="xref py py-obj docutils literal"><span class="pre">editdistance</span></code></a>(seq1,&nbsp;seq2)</td>
+<td>Calculate the Levenshtein edit-distance between two strings.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.eval.f_measure" title="discodop.eval.f_measure"><code class="xref py py-obj docutils literal"><span class="pre">f_measure</span></code></a>(reference,&nbsp;candidate[,&nbsp;alpha])</td>
 <td>Get F-measure of precision and recall for two multisets.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.accuracy" title="discodop.eval.accuracy"><code class="xref py py-obj docutils literal"><span class="pre">accuracy</span></code></a>(reference,&nbsp;candidate)</td>
-<td>Compute fraction of equivalent pairs in two sequences.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.harmean" title="discodop.eval.harmean"><code class="xref py py-obj docutils literal"><span class="pre">harmean</span></code></a>(seq)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.harmean" title="discodop.eval.harmean"><code class="xref py py-obj docutils literal"><span class="pre">harmean</span></code></a>(seq)</td>
 <td>Compute harmonic mean of a sequence of numbers.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.mean" title="discodop.eval.mean"><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></a>(seq)</td>
-<td>Compute arithmetic mean of a sequence.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.eval.intervals" title="discodop.eval.intervals"><code class="xref py py-obj docutils literal"><span class="pre">intervals</span></code></a>(bitset)</td>
 <td>Return a sequence of intervals corresponding to contiguous ranges.</td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.leafancestor" title="discodop.eval.leafancestor"><code class="xref py py-obj docutils literal"><span class="pre">leafancestor</span></code></a>(goldtree,&nbsp;candtree,&nbsp;dellabel)</td>
+<td>Sampson, Babarcz (2003): A test of the leaf-ancestor metric [...].</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.leafancestorpaths" title="discodop.eval.leafancestorpaths"><code class="xref py py-obj docutils literal"><span class="pre">leafancestorpaths</span></code></a>(tree,&nbsp;dellabel)</td>
+<td>Generate a list of ancestors for each leaf node in a tree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.main" title="discodop.eval.main"><code class="xref py py-obj docutils literal"><span class="pre">main</span></code></a>()</td>
+<td>Command line interface for evaluation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.mean" title="discodop.eval.mean"><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></a>(seq)</td>
+<td>Compute arithmetic mean of a sequence.</td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.nozerodiv" title="discodop.eval.nozerodiv"><code class="xref py py-obj docutils literal"><span class="pre">nozerodiv</span></code></a>(func)</td>
 <td>Return <code class="docutils literal"><span class="pre">func()</span></code> as 6-character string but catch zero division.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.editdistance" title="discodop.eval.editdistance"><code class="xref py py-obj docutils literal"><span class="pre">editdistance</span></code></a>(seq1,&nbsp;seq2)</td>
-<td>Calculate the Levenshtein edit-distance between two strings.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.parentedbracketings" title="discodop.eval.parentedbracketings"><code class="xref py py-obj docutils literal"><span class="pre">parentedbracketings</span></code></a>(tree[,&nbsp;labeled,&nbsp;...])</td>
+<td>Return the labeled bracketings with parents for a tree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.pathscore" title="discodop.eval.pathscore"><code class="xref py py-obj docutils literal"><span class="pre">pathscore</span></code></a>(gold,&nbsp;cand)</td>
+<td>Get edit distance for two leaf-ancestor paths.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.precision" title="discodop.eval.precision"><code class="xref py py-obj docutils literal"><span class="pre">precision</span></code></a>(reference,&nbsp;candidate)</td>
+<td>Get precision score for two multisets.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pyintbitcount</span></code>(a)</td>
+<td>Return number of set bits (1s) in a Python integer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.readparam" title="discodop.eval.readparam"><code class="xref py py-obj docutils literal"><span class="pre">readparam</span></code></a>(filename)</td>
+<td>Read an EVALB-style parameter file and return a dictionary.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.recall" title="discodop.eval.recall"><code class="xref py py-obj docutils literal"><span class="pre">recall</span></code></a>(reference,&nbsp;candidate)</td>
+<td>Get recall score for two multisets.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.strbracketings" title="discodop.eval.strbracketings"><code class="xref py py-obj docutils literal"><span class="pre">strbracketings</span></code></a>(brackets)</td>
+<td>Return a string with a concise representation of a bracketing.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.transform" title="discodop.eval.transform"><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code></a>(tree,&nbsp;sent,&nbsp;pos,&nbsp;gpos,&nbsp;param,&nbsp;grootpos)</td>
+<td>Apply the transformations according to the parameter file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.transitiveclosure" title="discodop.eval.transitiveclosure"><code class="xref py py-obj docutils literal"><span class="pre">transitiveclosure</span></code></a>(eqpairs)</td>
+<td>Transitive closure of (undirected) EQ relations with DFS.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.treedisteval" title="discodop.eval.treedisteval"><code class="xref py py-obj docutils literal"><span class="pre">treedisteval</span></code></a>(a,&nbsp;b[,&nbsp;includeroot,&nbsp;debug])</td>
+<td>Get tree-distance for two trees and compute the Dice normalization.</td>
 </tr>
 </tbody>
 </table>
@@ -136,15 +139,24 @@ metrics.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.Evaluator" title="discodop.eval.Evaluator"><code class="xref py py-obj docutils literal"><span class="pre">Evaluator</span></code></a>(param[,&nbsp;keylen])</td>
-<td>Incremental evaluator for syntactic trees.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.TreePairResult" title="discodop.eval.TreePairResult"><code class="xref py py-obj docutils literal"><span class="pre">TreePairResult</span></code></a>(n,&nbsp;gtree,&nbsp;gsent,&nbsp;ctree,&nbsp;...)</td>
-<td>Holds the evaluation result of a pair of trees.</td>
-</tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.EvalAccumulator" title="discodop.eval.EvalAccumulator"><code class="xref py py-obj docutils literal"><span class="pre">EvalAccumulator</span></code></a>([disconly])</td>
 <td>Collect scores of evaluation.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.eval.Evaluator" title="discodop.eval.Evaluator"><code class="xref py py-obj docutils literal"><span class="pre">Evaluator</span></code></a>(param[,&nbsp;keylen])</td>
+<td>Incremental evaluator for syntactic trees.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.eval.TreePairResult" title="discodop.eval.TreePairResult"><code class="xref py py-obj docutils literal"><span class="pre">TreePairResult</span></code></a>(n,&nbsp;gtree,&nbsp;gsent,&nbsp;ctree,&nbsp;...)</td>
+<td>Holds the evaluation result of a pair of trees.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Exceptions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="class">

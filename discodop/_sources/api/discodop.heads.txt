@@ -9,18 +9,26 @@ discodop.heads
 
    .. autosummary::
    
-      ishead
+      applyheadrules
       getheadpos
-      readheadrules
       headfinder
-      ptbheadfinder
-      sethead
-      saveheads
       headstats
+      ishead
+      readheadrules
+      saveheads
+      sethead
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Counter
+      Tree
+      defaultdict
    
    
 

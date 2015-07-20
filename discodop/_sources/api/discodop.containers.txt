@@ -9,6 +9,9 @@ discodop.containers
 
    .. autosummary::
    
+      exp
+      fsum
+      log
       numedges
    
    
@@ -19,14 +22,18 @@ discodop.containers
 
    .. autosummary::
    
-      Grammar
       Chart
+      ChartItem
       Ctrees
-      LexicalRule
-      SmallChartItem
-      FatChartItem
       Edges
+      FatChartItem
+      Grammar
+      LexicalRule
       RankedEdge
+      RoaringBitmap
+      SmallChartItem
+      Tree
+      Vocabulary
    
    
 

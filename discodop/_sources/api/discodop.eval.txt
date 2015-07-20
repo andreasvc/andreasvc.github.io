@@ -9,29 +9,38 @@ discodop.eval
 
    .. autosummary::
    
-      main
-      readparam
-      transitiveclosure
-      alignsent
-      transform
-      parentedbracketings
-      bracketings
-      bracketing
-      strbracketings
-      leafancestorpaths
-      pathscore
-      leafancestor
-      treedisteval
-      recall
-      precision
-      f_measure
       accuracy
-      harmean
-      mean
-      intervals
+      alignsent
+      bitfanout
+      bracketing
+      bracketings
+      dependencies
       disc
-      nozerodiv
       editdistance
+      f_measure
+      functions
+      getbits
+      gnu_getopt
+      handlefunctions
+      harmean
+      intervals
+      leafancestor
+      leafancestorpaths
+      main
+      mean
+      newtreedist
+      nozerodiv
+      parentedbracketings
+      pathscore
+      precision
+      pyintbitcount
+      readparam
+      recall
+      strbracketings
+      transform
+      transitiveclosure
+      treedist
+      treedisteval
    
    
 
@@ -41,12 +50,26 @@ discodop.eval
 
    .. autosummary::
    
-      Evaluator
-      TreePairResult
+      Counter
+      Decimal
+      DrawTree
       EvalAccumulator
+      Evaluator
+      Tree
+      TreePairResult
+      count
+      defaultdict
+      zip_longest
    
    
 
    
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      GetoptError
+      InvalidOperation
    
    

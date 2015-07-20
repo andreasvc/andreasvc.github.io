@@ -63,55 +63,23 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.expandpresets" title="discodop.treebanktransforms.expandpresets"><code class="xref py py-obj docutils literal"><span class="pre">expandpresets</span></code></a>(transformations)</td>
-<td>Expand aliases for presets.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.ancestors" title="discodop.treebanktransforms.ancestors"><code class="xref py py-obj docutils literal"><span class="pre">ancestors</span></code></a>(node)</td>
+<td>Yield ancestors of node from direct parent to root node.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.transform" title="discodop.treebanktransforms.transform"><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code></a>(tree,&nbsp;sent,&nbsp;transformations)</td>
-<td>Perform specified sequence of transformations on a tree.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">base</span></code>(node,&nbsp;match)</td>
+<td>Test whether <code class="docutils literal"><span class="pre">node.label</span></code> equals <code class="docutils literal"><span class="pre">match</span></code> after stripping features.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.reversetransform" title="discodop.treebanktransforms.reversetransform"><code class="xref py py-obj docutils literal"><span class="pre">reversetransform</span></code></a>(tree,&nbsp;transformations)</td>
-<td>Undo specified transformations and remove state splits marked by <code class="docutils literal"><span class="pre">^</span></code>.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.bracketings" title="discodop.treebanktransforms.bracketings"><code class="xref py py-obj docutils literal"><span class="pre">bracketings</span></code></a>(tree)</td>
+<td>Labeled bracketings of a tree.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.collapselabels" title="discodop.treebanktransforms.collapselabels"><code class="xref py py-obj docutils literal"><span class="pre">collapselabels</span></code></a>(trees[,&nbsp;_sents,&nbsp;tbmapping])</td>
 <td>Collapse non-root phrasal labels with specified mapping.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.rrtransform" title="discodop.treebanktransforms.rrtransform"><code class="xref py py-obj docutils literal"><span class="pre">rrtransform</span></code></a>(tree[,&nbsp;morphlevels,&nbsp;...])</td>
-<td>Relational-realizational tree transformation.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.expandpresets" title="discodop.treebanktransforms.expandpresets"><code class="xref py py-obj docutils literal"><span class="pre">expandpresets</span></code></a>(transformations)</td>
+<td>Expand aliases for presets.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.rrbacktransform" title="discodop.treebanktransforms.rrbacktransform"><code class="xref py py-obj docutils literal"><span class="pre">rrbacktransform</span></code></a>(tree[,&nbsp;adjunctionlabel,&nbsp;func])</td>
-<td>Reverse relational-realizational transformation.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.rindex" title="discodop.treebanktransforms.rindex"><code class="xref py py-obj docutils literal"><span class="pre">rindex</span></code></a>(l,&nbsp;v)</td>
-<td>Like list.index(), but go from right to left.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.labels" title="discodop.treebanktransforms.labels"><code class="xref py py-obj docutils literal"><span class="pre">labels</span></code></a>(tree)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">the labels of the children of this node.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.pop" title="discodop.treebanktransforms.pop"><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code></a>(a)</td>
-<td>Remove this node from its parent node, if it has one.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.strip" title="discodop.treebanktransforms.strip"><code class="xref py py-obj docutils literal"><span class="pre">strip</span></code></a>(label)</td>
-<td>Equivalent to the effect of the &#64; operator in tregex.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.ancestors" title="discodop.treebanktransforms.ancestors"><code class="xref py py-obj docutils literal"><span class="pre">ancestors</span></code></a>(node)</td>
-<td>Yield ancestors of node from direct parent to root node.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.bracketings" title="discodop.treebanktransforms.bracketings"><code class="xref py py-obj docutils literal"><span class="pre">bracketings</span></code></a>(tree)</td>
-<td>Labeled bracketings of a tree.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.morphfeats" title="discodop.treebanktransforms.morphfeats"><code class="xref py py-obj docutils literal"><span class="pre">morphfeats</span></code></a>(node)</td>
-<td>Return the morphological features of a preterminal node.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.unifymorphfeat" title="discodop.treebanktransforms.unifymorphfeat"><code class="xref py py-obj docutils literal"><span class="pre">unifymorphfeat</span></code></a>(feats[,&nbsp;percolatefeatures])</td>
-<td>Get the sorted union of features for a sequence of feature vectors.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ftbtransforms</span></code>(name,&nbsp;tree,&nbsp;sent)</td>
+<td>Port of manual FTB enrichments specified in Stanford parser.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.function" title="discodop.treebanktransforms.function"><code class="xref py py-obj docutils literal"><span class="pre">function</span></code></a>(tree)</td>
 <td><table class="docutils field-list" frame="void" rules="none">
@@ -135,6 +103,62 @@
 </table>
 </td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.labels" title="discodop.treebanktransforms.labels"><code class="xref py py-obj docutils literal"><span class="pre">labels</span></code></a>(tree)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">the labels of the children of this node.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">lassytransforms</span></code>(name,&nbsp;tree,&nbsp;_sent)</td>
+<td>Transformations for the Dutch Lassy &amp; Alpino treebanks.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.morphfeats" title="discodop.treebanktransforms.morphfeats"><code class="xref py py-obj docutils literal"><span class="pre">morphfeats</span></code></a>(node)</td>
+<td>Return the morphological features of a preterminal node.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">negratransforms</span></code>(name,&nbsp;tree,&nbsp;sent)</td>
+<td>Negra / Tiger transforms.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.pop" title="discodop.treebanktransforms.pop"><code class="xref py py-obj docutils literal"><span class="pre">pop</span></code></a>(a)</td>
+<td>Remove this node from its parent node, if it has one.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ptbtransforms</span></code>(name,&nbsp;tree,&nbsp;sent)</td>
+<td>Transforms for WSJ section of Penn treebank.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.reversetransform" title="discodop.treebanktransforms.reversetransform"><code class="xref py py-obj docutils literal"><span class="pre">reversetransform</span></code></a>(tree,&nbsp;transformations)</td>
+<td>Undo specified transformations and remove state splits marked by <code class="docutils literal"><span class="pre">^</span></code>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.rindex" title="discodop.treebanktransforms.rindex"><code class="xref py py-obj docutils literal"><span class="pre">rindex</span></code></a>(l,&nbsp;v)</td>
+<td>Like list.index(), but go from right to left.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.rrbacktransform" title="discodop.treebanktransforms.rrbacktransform"><code class="xref py py-obj docutils literal"><span class="pre">rrbacktransform</span></code></a>(tree[,&nbsp;adjunctionlabel,&nbsp;func])</td>
+<td>Reverse relational-realizational transformation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.rrtransform" title="discodop.treebanktransforms.rrtransform"><code class="xref py py-obj docutils literal"><span class="pre">rrtransform</span></code></a>(tree[,&nbsp;morphlevels,&nbsp;...])</td>
+<td>Relational-realizational tree transformation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.strip" title="discodop.treebanktransforms.strip"><code class="xref py py-obj docutils literal"><span class="pre">strip</span></code></a>(label)</td>
+<td>Equivalent to the effect of the &#64; operator in tregex.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebanktransforms.transform" title="discodop.treebanktransforms.transform"><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code></a>(tree,&nbsp;sent,&nbsp;transformations)</td>
+<td>Perform specified sequence of transformations on a tree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebanktransforms.unifymorphfeat" title="discodop.treebanktransforms.unifymorphfeat"><code class="xref py py-obj docutils literal"><span class="pre">unifymorphfeat</span></code></a>(feats[,&nbsp;percolatefeatures])</td>
+<td>Get the sorted union of features for a sequence of feature vectors.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="function">

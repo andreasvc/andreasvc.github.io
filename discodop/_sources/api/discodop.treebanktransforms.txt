@@ -9,26 +9,45 @@ discodop.treebanktransforms
 
    .. autosummary::
    
-      expandpresets
-      transform
-      reversetransform
-      collapselabels
-      rrtransform
-      rrbacktransform
-      rindex
-      labels
-      pop
-      strip
+      addfanoutmarkers
       ancestors
+      base
       bracketings
-      morphfeats
-      unifymorphfeat
+      collapselabels
+      expandpresets
+      ftbtransforms
       function
       functions
+      ishead
+      labels
+      lassytransforms
+      morphfeats
+      negratransforms
+      pop
+      ptbtransforms
+      punctprune
+      quote
+      removefanoutmarkers
+      reversetransform
+      rindex
+      rrbacktransform
+      rrtransform
+      strip
+      transform
+      unifymorphfeat
+      unquote
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ParentedTree
+      Tree
+      islice
    
    
 

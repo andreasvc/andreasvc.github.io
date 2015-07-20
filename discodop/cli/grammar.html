@@ -42,11 +42,15 @@
 <h1>grammar<a class="headerlink" href="#grammar" title="Permalink to this headline">¶</a></h1>
 <p>Read off grammars from treebanks.</p>
 <div class="line-block">
-<div class="line">Usage: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">grammar</span> <span class="pre">&lt;type&gt;</span> <span class="pre">&lt;input&gt;</span> <span class="pre">&lt;output&gt;</span> <span class="pre">[options]</span></code></div>
-<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">param</span> <span class="pre">&lt;parameter-file&gt;</span> <span class="pre">&lt;output-directory&gt;</span></code></div>
-<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">info</span> <span class="pre">&lt;rules-file&gt;</span></code></div>
-<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">merge</span> <span class="pre">(rules|lexicon|fragments)</span> <span class="pre">&lt;input1&gt;</span> <span class="pre">&lt;input2&gt;...</span> <span class="pre">&lt;output&gt;</span></code></div>
+<div class="line">Usage: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">grammar</span> <span class="pre">param</span> <span class="pre">&lt;parameter-file&gt;</span> <span class="pre">&lt;output-directory&gt;</span></code></div>
+<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">grammar</span> <span class="pre">&lt;type&gt;</span> <span class="pre">&lt;input&gt;</span> <span class="pre">&lt;output&gt;</span> <span class="pre">[options]</span></code></div>
+<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">grammar</span> <span class="pre">info</span> <span class="pre">&lt;rules-file&gt;</span></code></div>
+<div class="line">or: <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">grammar</span> <span class="pre">merge</span> <span class="pre">(rules|lexicon|fragments)</span> <span class="pre">&lt;input1&gt;</span> <span class="pre">&lt;input2&gt;...</span> <span class="pre">&lt;output&gt;</span></code></div>
 </div>
+<p>The first format extracts a grammar according to a parameter file.
+See <a class="reference internal" href="../params.html"><em>the documentation on parameter files</em></a>.</p>
+<p>The second format makes it possible to extract simple grammars
+(e.g., no unknown word handling or coarse-to-fine parsing).</p>
 <p><code class="docutils literal"><span class="pre">type</span></code> is one of:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -63,12 +67,7 @@
 </tr>
 <tr class="field-odd field"><th class="field-name">doubledop:</th><td class="field-body">PTSG from recurring fragmensts.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param:</th><td class="field-body">Extract a series of grammars according to parameters.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">info:</th><td class="field-body">Print statistics for PLCFRS/bitpar rules.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">merge:</th><td class="field-body">Interpolate given sorted grammars into a single grammar.
-Input can be a rules, lexicon or fragment file.</td>
+<tr class="field-even field"><th class="field-name">dop1:</th><td class="field-body">PTSG from all fragments up to given depth.</td>
 </tr>
 </tbody>
 </table>
@@ -76,17 +75,27 @@ Input can be a rules, lexicon or fragment file.</td>
 in the same format as the output of the <code class="docutils literal"><span class="pre">discodop</span> <span class="pre">fragments</span></code> command;
 <code class="docutils literal"><span class="pre">input</span></code> may contain discontinuous constituents, except for the <code class="docutils literal"><span class="pre">pcfg</span></code> case.
 <code class="docutils literal"><span class="pre">output</span></code> is the base name for the filenames to write the grammar to; the
-filenames will be <code class="docutils literal"><span class="pre">&lt;output&gt;.rules</span></code> and <code class="docutils literal"><span class="pre">&lt;output&gt;.lex</span></code>. NB: both the
-<code class="docutils literal"><span class="pre">info</span></code> and <code class="docutils literal"><span class="pre">merge</span></code> commands expect grammars to be sorted by LHS, such as
-the ones created by this tool.</p>
+filenames will be <code class="docutils literal"><span class="pre">&lt;output&gt;.rules</span></code> and <code class="docutils literal"><span class="pre">&lt;output&gt;.lex</span></code>.</p>
+<p>Other subcommands:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">info:</th><td class="field-body">Print statistics for PLCFRS/bitpar grammar rules.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">merge:</th><td class="field-body">Interpolate given sorted grammars into a single grammar.
+Input can be a rules, lexicon or fragment file.</td>
+</tr>
+</tbody>
+</table>
+<p>NB: both the <code class="docutils literal"><span class="pre">info</span></code> and <code class="docutils literal"><span class="pre">merge</span></code> commands expect grammars to be sorted by
+LHS, such as the ones created by this tool.</p>
 <p>Options:</p>
 <dl class="docutils">
 <dt>&#8211;inputfmt=(export|bracket|discbracket|tiger|alpino|dact)</dt>
 <dd>The treebank format [default: export].</dd>
 <dt>&#8211;inputenc=(utf-8|iso-8859-1|...)</dt>
 <dd>Treebank encoding [default: utf-8].</dd>
-<dt>&#8211;dopestimator=(rfe|ewe|shortest|...)</dt>
-<dd>The DOP estimator to use with dopreduction/doubledop [default: rfe].</dd>
 <dt>&#8211;numproc=(1|2|...)</dt>
 <dd>Number of processes to start [default: 1].
 Only relevant for double dop fragment extraction.</dd>
@@ -107,6 +116,21 @@ Only relevant for double dop fragment extraction.</dd>
 <tr><td class="option-group">
 <kbd><span class="option">-s <var>X</var></span></kbd></td>
 <td>start symbol to use for PTSG.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>&#8211;dopestimator=(rfe|ewe|shortest|...)</dt>
+<dd>The DOP estimator to use with dopreduction/doubledop [default: rfe].</dd>
+</dl>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--maxdepth=<var>N</var></span>, <span class="option">--maxfrontier=<var>N</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>When extracting a &#8216;dop1&#8217; grammar, the limit on what fragments are
+extracted; 3 or 4 is a reasonable depth limit.</td></tr>
 </tbody>
 </table>
 <p>When a PCFG is requested, or the input format is <code class="docutils literal"><span class="pre">bracket</span></code> (Penn format), the

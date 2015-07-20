@@ -9,30 +9,34 @@ discodop.treetransforms
 
    .. autosummary::
    
-      binarize
-      unbinarize
-      collapseunary
-      introducepreterminals
-      factorconstituent
-      markovthreshold
-      splitdiscnodes
-      mergediscnodes
+      abbr
+      addbitsets
       addfanoutmarkers
-      removefanoutmarkers
+      binarize
+      bitfanout
       canonicalize
-      optimalbinarize
-      minimalbinarization
-      fanout
+      collapseunary
       complexity
       complexityfanout
-      fanoutcomplexity
       contsets
-      abbr
-      getbits
-      addbitsets
-      getyf
       disc
+      factorconstituent
+      fanout
+      fanoutcomplexity
+      getbits
+      getyf
+      introducepreterminals
+      ishead
+      main
+      markovthreshold
+      mergediscnodes
+      minimalbinarization
+      optimalbinarize
+      optimalbinarize_
+      removefanoutmarkers
+      splitdiscnodes
       treebankfanout
+      unbinarize
    
    
 
@@ -42,7 +46,15 @@ discodop.treetransforms
 
    .. autosummary::
    
+      Counter
+      ImmutableTree
+      Iterable
       OrderedSet
+      Set
+      Tree
+      attrgetter
+      defaultdict
+      islice
    
    
 

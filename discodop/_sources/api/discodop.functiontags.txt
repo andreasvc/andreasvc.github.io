@@ -9,13 +9,22 @@ discodop.functiontags
 
    .. autosummary::
    
-      trainfunctionclassifier
       applyfunctionclassifier
+      base
+      basefeatures
       functionfeatures
+      functions
+      trainfunctionclassifier
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Tree
    
    
 

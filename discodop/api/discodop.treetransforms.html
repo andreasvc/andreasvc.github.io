@@ -71,47 +71,23 @@ splitdiscnodes(). Cf. Boyd (2007): Discontinuity revisited.</li>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.binarize" title="discodop.treetransforms.binarize"><code class="xref py py-obj docutils literal"><span class="pre">binarize</span></code></a>(tree[,&nbsp;factor,&nbsp;horzmarkov,&nbsp;...])</td>
-<td>Binarize a Tree object.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.abbr" title="discodop.treetransforms.abbr"><code class="xref py py-obj docutils literal"><span class="pre">abbr</span></code></a>(childlabels)</td>
+<td>Reduce sequences of identical labels.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.unbinarize" title="discodop.treetransforms.unbinarize"><code class="xref py py-obj docutils literal"><span class="pre">unbinarize</span></code></a>(tree[,&nbsp;_sent,&nbsp;expandunary,&nbsp;...])</td>
-<td>Restore a binarized tree to the original n-ary tree.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.collapseunary" title="discodop.treetransforms.collapseunary"><code class="xref py py-obj docutils literal"><span class="pre">collapseunary</span></code></a>(tree[,&nbsp;collapsepos,&nbsp;...])</td>
-<td>Collapse unary nodes into a new node indicated by &#8216;joinchar&#8217;.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.introducepreterminals" title="discodop.treetransforms.introducepreterminals"><code class="xref py py-obj docutils literal"><span class="pre">introducepreterminals</span></code></a>(tree,&nbsp;sent[,&nbsp;ids])</td>
-<td>Add preterminals with artificial POS-tags for terminals with siblings.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.factorconstituent" title="discodop.treetransforms.factorconstituent"><code class="xref py py-obj docutils literal"><span class="pre">factorconstituent</span></code></a>(node[,&nbsp;sep,&nbsp;h,&nbsp;factor,&nbsp;...])</td>
-<td>Binarize one constituent with a left/right factored binarization.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.markovthreshold" title="discodop.treetransforms.markovthreshold"><code class="xref py py-obj docutils literal"><span class="pre">markovthreshold</span></code></a>(trees,&nbsp;n,&nbsp;horzmarkov,&nbsp;vertmarkov)</td>
-<td>Reduce Markov order of binarization labels occurring &lt; n times.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.splitdiscnodes" title="discodop.treetransforms.splitdiscnodes"><code class="xref py py-obj docutils literal"><span class="pre">splitdiscnodes</span></code></a>(tree[,&nbsp;markorigin])</td>
-<td>Boyd (2007): Discontinuity revisited.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.mergediscnodes" title="discodop.treetransforms.mergediscnodes"><code class="xref py py-obj docutils literal"><span class="pre">mergediscnodes</span></code></a>(tree)</td>
-<td>Reverse transformation of <code class="docutils literal"><span class="pre">splitdiscnodes()</span></code>.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.addbitsets" title="discodop.treetransforms.addbitsets"><code class="xref py py-obj docutils literal"><span class="pre">addbitsets</span></code></a>(tree)</td>
+<td>Turn tree into an ImmutableTree and add bitset attribute.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.addfanoutmarkers" title="discodop.treetransforms.addfanoutmarkers"><code class="xref py py-obj docutils literal"><span class="pre">addfanoutmarkers</span></code></a>(tree)</td>
 <td>Mark discontinuous constituents with &#8216;_n&#8217; where n = # gaps + 1.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.removefanoutmarkers" title="discodop.treetransforms.removefanoutmarkers"><code class="xref py py-obj docutils literal"><span class="pre">removefanoutmarkers</span></code></a>(tree)</td>
-<td>Remove fanout marks.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.binarize" title="discodop.treetransforms.binarize"><code class="xref py py-obj docutils literal"><span class="pre">binarize</span></code></a>(tree[,&nbsp;factor,&nbsp;horzmarkov,&nbsp;...])</td>
+<td>Binarize a Tree object.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.canonicalize" title="discodop.treetransforms.canonicalize"><code class="xref py py-obj docutils literal"><span class="pre">canonicalize</span></code></a>(tree)</td>
 <td>Restore canonical linear precedence order; tree is modified in-place.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.optimalbinarize" title="discodop.treetransforms.optimalbinarize"><code class="xref py py-obj docutils literal"><span class="pre">optimalbinarize</span></code></a>(tree[,&nbsp;sep,&nbsp;headdriven,&nbsp;h,&nbsp;...])</td>
-<td>Recursively binarize a tree, optimizing for given function.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.minimalbinarization" title="discodop.treetransforms.minimalbinarization"><code class="xref py py-obj docutils literal"><span class="pre">minimalbinarization</span></code></a>(tree,&nbsp;score[,&nbsp;sep,&nbsp;...])</td>
-<td>Find optimal binarization according to a scoring function.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.fanout" title="discodop.treetransforms.fanout"><code class="xref py py-obj docutils literal"><span class="pre">fanout</span></code></a>(tree)</td>
-<td>Return fan-out of constituent.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.collapseunary" title="discodop.treetransforms.collapseunary"><code class="xref py py-obj docutils literal"><span class="pre">collapseunary</span></code></a>(tree[,&nbsp;collapsepos,&nbsp;...])</td>
+<td>Collapse unary nodes into a new node indicated by &#8216;joinchar&#8217;.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.complexity" title="discodop.treetransforms.complexity"><code class="xref py py-obj docutils literal"><span class="pre">complexity</span></code></a>(tree)</td>
 <td>The degree of the time complexity of parsing with this rule.</td>
@@ -119,29 +95,59 @@ splitdiscnodes(). Cf. Boyd (2007): Discontinuity revisited.</li>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.complexityfanout" title="discodop.treetransforms.complexityfanout"><code class="xref py py-obj docutils literal"><span class="pre">complexityfanout</span></code></a>(tree)</td>
 <td>Return a tuple with the complexity and fan-out of a subtree.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.fanoutcomplexity" title="discodop.treetransforms.fanoutcomplexity"><code class="xref py py-obj docutils literal"><span class="pre">fanoutcomplexity</span></code></a>(tree)</td>
-<td>Return a tuple with the fan-out and complexity of a subtree.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.contsets" title="discodop.treetransforms.contsets"><code class="xref py py-obj docutils literal"><span class="pre">contsets</span></code></a>(nodes)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.contsets" title="discodop.treetransforms.contsets"><code class="xref py py-obj docutils literal"><span class="pre">contsets</span></code></a>(nodes)</td>
 <td>Partition children into continuous subsets.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.abbr" title="discodop.treetransforms.abbr"><code class="xref py py-obj docutils literal"><span class="pre">abbr</span></code></a>(childlabels)</td>
-<td>Reduce sequences of identical labels.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.disc" title="discodop.treetransforms.disc"><code class="xref py py-obj docutils literal"><span class="pre">disc</span></code></a>(node)</td>
+<td>Test whether a particular node has a discontinuous yield.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.factorconstituent" title="discodop.treetransforms.factorconstituent"><code class="xref py py-obj docutils literal"><span class="pre">factorconstituent</span></code></a>(node[,&nbsp;sep,&nbsp;h,&nbsp;factor,&nbsp;...])</td>
+<td>Binarize one constituent with a left/right factored binarization.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.fanout" title="discodop.treetransforms.fanout"><code class="xref py py-obj docutils literal"><span class="pre">fanout</span></code></a>(tree)</td>
+<td>Return fan-out of constituent.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.fanoutcomplexity" title="discodop.treetransforms.fanoutcomplexity"><code class="xref py py-obj docutils literal"><span class="pre">fanoutcomplexity</span></code></a>(tree)</td>
+<td>Return a tuple with the fan-out and complexity of a subtree.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.getbits" title="discodop.treetransforms.getbits"><code class="xref py py-obj docutils literal"><span class="pre">getbits</span></code></a>(bitset)</td>
 <td>Iterate over the indices of set bits in a bitset.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.addbitsets" title="discodop.treetransforms.addbitsets"><code class="xref py py-obj docutils literal"><span class="pre">addbitsets</span></code></a>(tree)</td>
-<td>Turn tree into an ImmutableTree and add bitset attribute.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.getyf" title="discodop.treetransforms.getyf"><code class="xref py py-obj docutils literal"><span class="pre">getyf</span></code></a>(left,&nbsp;right)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.getyf" title="discodop.treetransforms.getyf"><code class="xref py py-obj docutils literal"><span class="pre">getyf</span></code></a>(left,&nbsp;right)</td>
 <td>Return the yield function for two subtrees with bitsets.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.disc" title="discodop.treetransforms.disc"><code class="xref py py-obj docutils literal"><span class="pre">disc</span></code></a>(node)</td>
-<td>Test whether a particular node has a discontinuous yield.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.introducepreterminals" title="discodop.treetransforms.introducepreterminals"><code class="xref py py-obj docutils literal"><span class="pre">introducepreterminals</span></code></a>(tree,&nbsp;sent[,&nbsp;ids])</td>
+<td>Add preterminals with artificial POS-tags for terminals with siblings.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.treebankfanout" title="discodop.treetransforms.treebankfanout"><code class="xref py py-obj docutils literal"><span class="pre">treebankfanout</span></code></a>(trees)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">main</span></code>()</td>
+<td>Command line interface for applying tree(bank) transforms.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.markovthreshold" title="discodop.treetransforms.markovthreshold"><code class="xref py py-obj docutils literal"><span class="pre">markovthreshold</span></code></a>(trees,&nbsp;n,&nbsp;horzmarkov,&nbsp;vertmarkov)</td>
+<td>Reduce Markov order of binarization labels occurring &lt; n times.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.mergediscnodes" title="discodop.treetransforms.mergediscnodes"><code class="xref py py-obj docutils literal"><span class="pre">mergediscnodes</span></code></a>(tree)</td>
+<td>Reverse transformation of <code class="docutils literal"><span class="pre">splitdiscnodes()</span></code>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.minimalbinarization" title="discodop.treetransforms.minimalbinarization"><code class="xref py py-obj docutils literal"><span class="pre">minimalbinarization</span></code></a>(tree,&nbsp;score[,&nbsp;sep,&nbsp;...])</td>
+<td>Find optimal binarization according to a scoring function.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.optimalbinarize" title="discodop.treetransforms.optimalbinarize"><code class="xref py py-obj docutils literal"><span class="pre">optimalbinarize</span></code></a>(tree[,&nbsp;sep,&nbsp;headdriven,&nbsp;h,&nbsp;...])</td>
+<td>Recursively binarize a tree, optimizing for given function.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">optimalbinarize_</span></code>(tree,&nbsp;fun,&nbsp;sep,&nbsp;headdriven,&nbsp;...)</td>
+<td>Helper function for postorder / bottom-up binarization.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.removefanoutmarkers" title="discodop.treetransforms.removefanoutmarkers"><code class="xref py py-obj docutils literal"><span class="pre">removefanoutmarkers</span></code></a>(tree)</td>
+<td>Remove fanout marks.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.splitdiscnodes" title="discodop.treetransforms.splitdiscnodes"><code class="xref py py-obj docutils literal"><span class="pre">splitdiscnodes</span></code></a>(tree[,&nbsp;markorigin])</td>
+<td>Boyd (2007): Discontinuity revisited.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treetransforms.treebankfanout" title="discodop.treetransforms.treebankfanout"><code class="xref py py-obj docutils literal"><span class="pre">treebankfanout</span></code></a>(trees)</td>
 <td>Get maximal fan-out of a list of trees.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treetransforms.unbinarize" title="discodop.treetransforms.unbinarize"><code class="xref py py-obj docutils literal"><span class="pre">unbinarize</span></code></a>(tree[,&nbsp;_sent,&nbsp;expandunary,&nbsp;...])</td>
+<td>Restore a binarized tree to the original n-ary tree.</td>
 </tr>
 </tbody>
 </table>

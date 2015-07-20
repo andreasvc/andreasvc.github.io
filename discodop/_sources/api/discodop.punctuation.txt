@@ -9,17 +9,25 @@ discodop.punctuation
 
    .. autosummary::
    
-      ispunct
-      punctremove
-      punctprune
-      punctroot
-      punctlower
-      punctraise
+      applypunct
       balancedpunctraise
+      ispunct
+      punctlower
+      punctprune
+      punctraise
+      punctremove
+      punctroot
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ParentedTree
+      Tree
    
    
 

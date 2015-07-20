@@ -9,11 +9,12 @@ discodop.treedist
 
    .. autosummary::
    
+      geteditstats
+      newtreedist
       prepare
       strdist
+      test
       treedist
-      newtreedist
-      geteditstats
    
    
 
@@ -23,9 +24,11 @@ discodop.treedist
 
    .. autosummary::
    
-      Terminal
       AnnotatedTree
       EditStats
+      Terminal
+      Tree
+      deque
    
    
 

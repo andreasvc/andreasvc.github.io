@@ -59,37 +59,25 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.parse" title="discodop.pcfg.parse"><code class="xref py py-obj docutils literal"><span class="pre">parse</span></code></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;tags,&nbsp;start])</td>
-<td>A CKY parser modeled after Bodenstab&#8217;s &#8216;fast grammar loop&#8217;.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">doinsideoutside</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">insidescores</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">outsidescores</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.minmaxmatrices" title="discodop.pcfg.minmaxmatrices"><code class="xref py py-obj docutils literal"><span class="pre">minmaxmatrices</span></code></a>(nonterminals,&nbsp;lensent)</td>
-<td>Create matrices to track minima and maxima for binary splits.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">chartmatrix</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.parse_bitpar" title="discodop.pcfg.parse_bitpar"><code class="xref py py-obj docutils literal"><span class="pre">parse_bitpar</span></code></a>(grammar,&nbsp;rulesfile,&nbsp;...[,&nbsp;tags])</td>
-<td>Parse a sentence with bitpar, given filenames of rules and lexicon.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.bitpar_nbest" title="discodop.pcfg.bitpar_nbest"><code class="xref py py-obj docutils literal"><span class="pre">bitpar_nbest</span></code></a>(nbest,&nbsp;SparseCFGChart&nbsp;chart)</td>
+<td>Put bitpar&#8217;s list of n-best derivations into the chart.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.bitpar_yap_forest" title="discodop.pcfg.bitpar_yap_forest"><code class="xref py py-obj docutils literal"><span class="pre">bitpar_yap_forest</span></code></a>(forest,&nbsp;SparseCFGChart&nbsp;chart)</td>
 <td>Read bitpar YAP parse forest (-y option) into a Chart object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.bitpar_nbest" title="discodop.pcfg.bitpar_nbest"><code class="xref py py-obj docutils literal"><span class="pre">bitpar_nbest</span></code></a>(nbest,&nbsp;SparseCFGChart&nbsp;chart)</td>
-<td>Put bitpar&#8217;s list of n-best derivations into the chart.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.minmaxmatrices" title="discodop.pcfg.minmaxmatrices"><code class="xref py py-obj docutils literal"><span class="pre">minmaxmatrices</span></code></a>(nonterminals,&nbsp;lensent)</td>
+<td>Create matrices to track minima and maxima for binary splits.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.parse" title="discodop.pcfg.parse"><code class="xref py py-obj docutils literal"><span class="pre">parse</span></code></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;tags,&nbsp;start])</td>
+<td>A CKY parser modeled after Bodenstab&#8217;s &#8216;fast grammar loop&#8217;.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.pcfg.parse_bitpar" title="discodop.pcfg.parse_bitpar"><code class="xref py py-obj docutils literal"><span class="pre">parse_bitpar</span></code></a>(grammar,&nbsp;rulesfile,&nbsp;...[,&nbsp;tags])</td>
+<td>Parse a sentence with bitpar, given filenames of rules and lexicon.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.pcfg.renumber" title="discodop.pcfg.renumber"><code class="xref py py-obj docutils literal"><span class="pre">renumber</span></code></a>(deriv)</td>
 <td>Replace terminals of CF-derivation (string) with indices.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pprint_matrix</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">test</span></code>()</td>
 <td></td>
 </tr>
 </tbody>

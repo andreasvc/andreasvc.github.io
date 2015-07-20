@@ -89,11 +89,11 @@
 <span class="sd">	&gt;&gt;&gt; sent = &quot;is Mary happy&quot;.split()</span>
 <span class="sd">	&gt;&gt;&gt; print(&#39;\\n&#39;.join(printrule(r, yf)  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">	...		for r, yf in lcfrsproductions(tree, sent)))</span>
-<span class="sd">	010	S =&gt; VP_2 NP</span>
-<span class="sd">	0,1	VP_2 =&gt; V ADJ</span>
-<span class="sd">	is	V =&gt; Epsilon</span>
-<span class="sd">	happy	ADJ =&gt; Epsilon</span>
-<span class="sd">	Mary	NP =&gt; Epsilon&quot;&quot;&quot;</span>
+<span class="sd">	010	S VP_2 NP</span>
+<span class="sd">	0,1	VP_2 V ADJ</span>
+<span class="sd">	is	V Epsilon</span>
+<span class="sd">	happy	ADJ Epsilon</span>
+<span class="sd">	Mary	NP Epsilon&quot;&quot;&quot;</span>
 	<span class="n">leaves</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">()</span>
 	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">leaves</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">leaves</span><span class="p">):</span>
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;indices should be unique. indices: </span><span class="si">%r</span><span class="se">\n</span><span class="s">tree: </span><span class="si">%s</span><span class="s">&#39;</span>
@@ -251,13 +251,16 @@
 <span class="sd">	:param maxfrontier: limit number of frontier non-terminals; not yet</span>
 <span class="sd">		implemented.</span>
 <span class="sd">	:param iterate, complement, numproc: cf. fragments.recurringfragments()</span>
-<span class="sd">	:returns: a tuple (grammar, altweights, backtransform)</span>
-<span class="sd">		altweights is a dictionary containing alternate weights.&quot;&quot;&quot;</span>
-
+<span class="sd">	:returns: a tuple (grammar, altweights, backtransform, fragments)</span>
+<span class="sd">		:grammar: a sequence of productions.</span>
+<span class="sd">		:altweights: a dictionary containing alternate weights.</span>
+<span class="sd">		:backtransform: needed to recover trees from compressed derivations.</span>
+<span class="sd">		:fragments: a sequence of the fragments used to build the grammar,</span>
+<span class="sd">		in the same order as they appear in ``grammar``.&quot;&quot;&quot;</span>
 	<span class="kn">from</span> <span class="nn">discodop.fragments</span> <span class="kn">import</span> <span class="n">recurringfragments</span>
-	<span class="n">fragments</span> <span class="o">=</span> <span class="n">recurringfragments</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">numproc</span><span class="p">,</span>
-			<span class="n">maxdepth</span><span class="o">=</span><span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="o">=</span><span class="n">maxfrontier</span><span class="p">,</span> <span class="n">iterate</span><span class="o">=</span><span class="n">iterate</span><span class="p">,</span>
-			<span class="n">complement</span><span class="o">=</span><span class="n">complement</span><span class="p">)</span>
+	<span class="n">fragments</span> <span class="o">=</span> <span class="n">recurringfragments</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">numproc</span><span class="p">,</span> <span class="n">disc</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">indices</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxdepth</span><span class="o">=</span><span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="o">=</span><span class="n">maxfrontier</span><span class="p">,</span>
+			<span class="n">iterate</span><span class="o">=</span><span class="n">iterate</span><span class="p">,</span> <span class="n">complement</span><span class="o">=</span><span class="n">complement</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">dopgrammar</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span> <span class="n">binarized</span><span class="o">=</span><span class="n">binarized</span><span class="p">,</span>
 			<span class="n">extrarules</span><span class="o">=</span><span class="n">extrarules</span><span class="p">)</span>
 
@@ -268,7 +271,13 @@
 
 <span class="sd">	:param maxdepth: restrict fragments to `1 &lt; depth &lt; maxdepth`.</span>
 <span class="sd">	:param maxfrontier: limit number of frontier non-terminals; not yet</span>
-<span class="sd">		implemented.&quot;&quot;&quot;</span>
+<span class="sd">		implemented.</span>
+<span class="sd">	:returns: a tuple (grammar, altweights, backtransform, fragments)</span>
+<span class="sd">		:grammar: a sequence of productions.</span>
+<span class="sd">		:altweights: a dictionary containing alternate weights.</span>
+<span class="sd">		:backtransform: needed to recover trees from compressed derivations.</span>
+<span class="sd">		:fragments: a sequence of the fragments used to build the grammar,</span>
+<span class="sd">		in the same order as they appear in ``grammar``.&quot;&quot;&quot;</span>
 	<span class="kn">from</span> <span class="nn">discodop.fragments</span> <span class="kn">import</span> <span class="n">allfragments</span>
 	<span class="n">fragments</span> <span class="o">=</span> <span class="n">allfragments</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">maxdepth</span><span class="p">,</span> <span class="n">maxfrontier</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">dopgrammar</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">binarized</span><span class="o">=</span><span class="n">binarized</span><span class="p">,</span>
@@ -286,22 +295,22 @@
 <span class="sd">	terminal and tag: ``tag@word``.</span>
 
 <span class="sd">	:param fragments: a dictionary of fragments from binarized trees, with</span>
-<span class="sd">		occurrences as values (a mapping of sentence number to counts).</span>
+<span class="sd">		occurrences as values (a mapping of sentence numbers to counts).</span>
 <span class="sd">	:param binarized: Whether the resulting grammar should be binarized;</span>
 <span class="sd">		this may be False when bitpar is used which applies its own</span>
 <span class="sd">		binarization.</span>
 <span class="sd">	:param extrarules: Additional rules to add to the grammar.</span>
-<span class="sd">	:returns: a tuple (grammar, altweights, backtransform)</span>
+<span class="sd">	:returns: a tuple (grammar, altweights, backtransform, fragments)</span>
 <span class="sd">		altweights is a dictionary containing alternate weights.&quot;&quot;&quot;</span>
 	<span class="k">def</span> <span class="nf">getweight</span><span class="p">(</span><span class="n">frag</span><span class="p">,</span> <span class="n">terminals</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;:returns: frequency, EWE, and other weights for fragment.&quot;&quot;&quot;</span>
-		<span class="n">freq</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">fragments</span><span class="p">[</span><span class="n">frag</span><span class="p">,</span> <span class="n">terminals</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+		<span class="n">freq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">[</span><span class="n">frag</span><span class="p">,</span> <span class="n">terminals</span><span class="p">])</span>
 		<span class="n">root</span> <span class="o">=</span> <span class="n">frag</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">frag</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)]</span>
 		<span class="n">nonterms</span> <span class="o">=</span> <span class="n">frag</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 		<span class="c"># Sangati &amp; Zuidema (2011, eq. 5)</span>
 		<span class="c"># FIXME: verify that this formula is equivalent to Bod (2003).</span>
-		<span class="n">ewe</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">fragmentcount</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-				<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fragments</span><span class="p">[</span><span class="n">frag</span><span class="p">,</span> <span class="n">terminals</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+		<span class="n">ewe</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">fragmentcount</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+				<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">fragments</span><span class="p">[</span><span class="n">frag</span><span class="p">,</span> <span class="n">terminals</span><span class="p">])</span>
 		<span class="c"># Bonnema (2003, p. 34)</span>
 		<span class="n">bon</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="n">nonterms</span> <span class="o">*</span> <span class="p">(</span><span class="n">freq</span> <span class="o">/</span> <span class="n">ntfd</span><span class="p">[</span><span class="n">root</span><span class="p">])</span>
 		<span class="n">short</span> <span class="o">=</span> <span class="mf">0.5</span>
@@ -314,8 +323,8 @@
 	<span class="c"># build index of the number of fragments extracted from a tree for ewe</span>
 	<span class="n">fragmentcount</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 	<span class="k">for</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">fragments</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-		<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="n">indices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-			<span class="n">fragmentcount</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="n">cnt</span>
+		<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+			<span class="n">fragmentcount</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 	<span class="c"># ntfd: frequency of a non-terminal node in treebank</span>
 	<span class="n">ntfd</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">trees</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">subtrees</span><span class="p">())</span>
 
@@ -360,9 +369,9 @@
 	<span class="c"># fix order of grammar rules</span>
 	<span class="n">grammar</span> <span class="o">=</span> <span class="n">sortgrammar</span><span class="p">(</span><span class="n">grammar</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 	<span class="c"># align fragments and backtransform with corresponding grammar rules</span>
-	<span class="n">fragments</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">((</span><span class="n">frag</span><span class="p">,</span> <span class="n">fragments</span><span class="p">[</span><span class="n">frag</span><span class="p">])</span> <span class="k">for</span> <span class="n">frag</span> <span class="ow">in</span>
+	<span class="n">fragments</span> <span class="o">=</span> <span class="p">[(</span><span class="n">frag</span><span class="p">,</span> <span class="n">fragments</span><span class="p">[</span><span class="n">frag</span><span class="p">])</span> <span class="k">for</span> <span class="n">frag</span> <span class="ow">in</span>
 			<span class="p">(</span><span class="n">backtransform</span><span class="p">[</span><span class="n">rule</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">grammar</span> <span class="k">if</span> <span class="n">rule</span> <span class="ow">in</span>
-				<span class="n">backtransform</span><span class="p">))</span>
+				<span class="n">backtransform</span><span class="p">)]</span>
 	<span class="n">backtransform</span> <span class="o">=</span> <span class="p">[</span><span class="n">backtransform</span><span class="p">[</span><span class="n">rule</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">grammar</span>
 			<span class="k">if</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">backtransform</span><span class="p">]</span>
 	<span class="c"># relative frequences as probabilities (don&#39;t normalize shortest &amp; bon)</span>
@@ -453,18 +462,18 @@
 <span class="sd">	&gt;&gt;&gt; prods, template = flatten(tree, sent, ids, {}, True)</span>
 <span class="sd">	&gt;&gt;&gt; print(&#39;\\n&#39;.join(printrule(r, yf) for r, yf in prods))</span>
 <span class="sd">	... # doctest: +NORMALIZE_WHITESPACE</span>
-<span class="sd">	01	ROOT =&gt; ROOT}&lt;0&gt; $.@.</span>
-<span class="sd">	010	ROOT}&lt;0&gt; =&gt; S_2 $,@,</span>
-<span class="sd">	,	$,@, =&gt; Epsilon</span>
-<span class="sd">	.	$.@. =&gt; Epsilon</span>
+<span class="sd">	01	ROOT ROOT}&lt;0&gt; $.@.</span>
+<span class="sd">	010	ROOT}&lt;0&gt; S_2 $,@,</span>
+<span class="sd">	,	$,@, Epsilon</span>
+<span class="sd">	.	$.@. Epsilon</span>
 <span class="sd">	&gt;&gt;&gt; print(template)</span>
 <span class="sd">	(ROOT {0} (ROOT|&lt;$,&gt;_2 {1} {2}))</span>
 <span class="sd">	&gt;&gt;&gt; prods, template = flatten(tree, sent, ids, {}, False)</span>
 <span class="sd">	&gt;&gt;&gt; print(&#39;\\n&#39;.join(printrule(r, yf) for r, yf in prods))</span>
 <span class="sd">	... # doctest: +NORMALIZE_WHITESPACE</span>
-<span class="sd">	0102	ROOT =&gt; S_2 $,@, $.@.</span>
-<span class="sd">	,	$,@, =&gt; Epsilon</span>
-<span class="sd">	.	$.@. =&gt; Epsilon</span>
+<span class="sd">	0102	ROOT S_2 $,@, $.@.</span>
+<span class="sd">	,	$,@, Epsilon</span>
+<span class="sd">	.	$.@. Epsilon</span>
 <span class="sd">	&gt;&gt;&gt; print(template)</span>
 <span class="sd">	(ROOT {0} (ROOT|&lt;$,&gt;_2 {1} {2}))&quot;&quot;&quot;</span>
 	<span class="kn">from</span> <span class="nn">discodop.treetransforms</span> <span class="kn">import</span> <span class="n">factorconstituent</span><span class="p">,</span> <span class="n">addbitsets</span>
@@ -705,7 +714,7 @@
 <div class="viewcode-block" id="printrule"><a class="viewcode-back" href="../../api/discodop.grammar.html#discodop.grammar.printrule">[docs]</a><span class="k">def</span> <span class="nf">printrule</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">yf</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;:returns: a string representation of a rule.&quot;&quot;&quot;</span>
 	<span class="n">yfstr</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">yf</span><span class="p">)</span>
-	<span class="n">result</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s"> =&gt; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
 			<span class="n">yfstr</span><span class="p">,</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
 	<span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
 		<span class="k">return</span> <span class="n">result</span>
@@ -777,22 +786,6 @@
 			<span class="n">lexicon</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
 		<span class="n">lexicon</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
 	<span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rules</span><span class="p">),</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lexicon</span><span class="p">)</span>
-
-</div>
-<div class="viewcode-block" id="write_lncky_grammar"><a class="viewcode-back" href="../../api/discodop.grammar.html#discodop.grammar.write_lncky_grammar">[docs]</a><span class="k">def</span> <span class="nf">write_lncky_grammar</span><span class="p">(</span><span class="n">rules</span><span class="p">,</span> <span class="n">lexicon</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;Convert a bitpar grammar to the format of Mark Jonhson&#39;s cky parser.&quot;&quot;&quot;</span>
-	<span class="n">grammar</span> <span class="o">=</span> <span class="p">[]</span>
-	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">rules</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">):</span>
-		<span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-		<span class="n">p</span><span class="p">,</span> <span class="n">rule</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-		<span class="n">grammar</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> --&gt; </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">rule</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rule</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
-	<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">):</span>
-		<span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-		<span class="n">word</span><span class="p">,</span> <span class="n">tags</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-		<span class="n">tags</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tags</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">tags</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
-		<span class="n">grammar</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> --&gt; </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">)</span>
-	<span class="k">assert</span> <span class="s">&#39;VROOT&#39;</span> <span class="ow">in</span> <span class="n">grammar</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">grammar</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="subsetgrammar"><a class="viewcode-back" href="../../api/discodop.grammar.html#discodop.grammar.subsetgrammar">[docs]</a><span class="k">def</span> <span class="nf">subsetgrammar</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
@@ -981,7 +974,7 @@
 	<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
 	<span class="n">shortoptions</span> <span class="o">=</span> <span class="s">&#39;hs:&#39;</span>
 	<span class="n">options</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;help&#39;</span><span class="p">,</span> <span class="s">&#39;gzip&#39;</span><span class="p">,</span> <span class="s">&#39;packed&#39;</span><span class="p">,</span> <span class="s">&#39;bitpar&#39;</span><span class="p">,</span> <span class="s">&#39;inputfmt=&#39;</span><span class="p">,</span> <span class="s">&#39;inputenc=&#39;</span><span class="p">,</span>
-			<span class="s">&#39;dopestimator=&#39;</span><span class="p">,</span> <span class="s">&#39;numproc=&#39;</span><span class="p">)</span>
+			<span class="s">&#39;dopestimator=&#39;</span><span class="p">,</span> <span class="s">&#39;maxdepth=&#39;</span><span class="p">,</span> <span class="s">&#39;maxfrontier=&#39;</span><span class="p">,</span> <span class="s">&#39;numproc=&#39;</span><span class="p">)</span>
 	<span class="k">try</span><span class="p">:</span>
 		<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">gnu_getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">shortoptions</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 		<span class="n">model</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -992,8 +985,8 @@
 		<span class="k">print</span><span class="p">(</span><span class="n">SHORTUSAGE</span><span class="p">)</span>
 		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 	<span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
-	<span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;pcfg&#39;</span><span class="p">,</span> <span class="s">&#39;plcfrs&#39;</span><span class="p">,</span> <span class="s">&#39;dopreduction&#39;</span><span class="p">,</span> <span class="s">&#39;doubledop&#39;</span><span class="p">,</span> <span class="s">&#39;ptsg&#39;</span><span class="p">,</span>
-			<span class="s">&#39;param&#39;</span><span class="p">,</span> <span class="s">&#39;info&#39;</span><span class="p">,</span> <span class="s">&#39;merge&#39;</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;pcfg&#39;</span><span class="p">,</span> <span class="s">&#39;plcfrs&#39;</span><span class="p">,</span> <span class="s">&#39;dopreduction&#39;</span><span class="p">,</span> <span class="s">&#39;doubledop&#39;</span><span class="p">,</span> <span class="s">&#39;dop1&#39;</span><span class="p">,</span>
+			<span class="s">&#39;ptsg&#39;</span><span class="p">,</span> <span class="s">&#39;param&#39;</span><span class="p">,</span> <span class="s">&#39;info&#39;</span><span class="p">,</span> <span class="s">&#39;merge&#39;</span><span class="p">):</span>
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unrecognized model: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;dopestimator&#39;</span><span class="p">,</span> <span class="s">&#39;rfe&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;rfe&#39;</span><span class="p">,</span> <span class="s">&#39;ewe&#39;</span><span class="p">,</span> <span class="s">&#39;shortest&#39;</span><span class="p">):</span>
 		<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unrecognized estimator: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">opts</span><span class="p">[</span><span class="s">&#39;dopestimator&#39;</span><span class="p">])</span>
@@ -1057,6 +1050,11 @@
 		<span class="n">grammar</span><span class="p">,</span> <span class="n">backtransform</span><span class="p">,</span> <span class="n">altweights</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">doubledop</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span>
 				<span class="n">numproc</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--numproc&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
 				<span class="n">binarized</span><span class="o">=</span><span class="s">&#39;--bitpar&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;dop1&#39;</span><span class="p">:</span>
+		<span class="n">grammar</span><span class="p">,</span> <span class="n">backtransform</span><span class="p">,</span> <span class="n">altweights</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">dop1</span><span class="p">(</span><span class="n">trees</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span>
+				<span class="n">maxdepth</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--maxdepth&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+				<span class="n">maxfrontier</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;--maxfrontier&#39;</span><span class="p">,</span> <span class="mi">999</span><span class="p">)),</span>
+				<span class="n">binarized</span><span class="o">=</span><span class="s">&#39;--bitpar&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">)</span>
 	<span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;ptsg&#39;</span><span class="p">:</span>
 		<span class="n">grammar</span><span class="p">,</span> <span class="n">backtransform</span><span class="p">,</span> <span class="n">altweights</span> <span class="o">=</span> <span class="n">compiletsg</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span>
 				<span class="n">binarized</span><span class="o">=</span><span class="s">&#39;--bitpar&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">)</span>
@@ -1117,9 +1115,9 @@
 		<span class="s">&#39;dop1&#39;</span><span class="p">,</span> <span class="s">&#39;dopgrammar&#39;</span><span class="p">,</span> <span class="s">&#39;compiletsg&#39;</span><span class="p">,</span> <span class="s">&#39;sortgrammar&#39;</span><span class="p">,</span> <span class="s">&#39;flatten&#39;</span><span class="p">,</span>
 		<span class="s">&#39;nodefreq&#39;</span><span class="p">,</span> <span class="s">&#39;TreeDecorator&#39;</span><span class="p">,</span> <span class="s">&#39;DiscTree&#39;</span><span class="p">,</span> <span class="s">&#39;quotelabel&#39;</span><span class="p">,</span> <span class="s">&#39;UniqueIDs&#39;</span><span class="p">,</span>
 		<span class="s">&#39;rangeheads&#39;</span><span class="p">,</span> <span class="s">&#39;ranges&#39;</span><span class="p">,</span> <span class="s">&#39;defaultparse&#39;</span><span class="p">,</span> <span class="s">&#39;printrule&#39;</span><span class="p">,</span> <span class="s">&#39;cartpi&#39;</span><span class="p">,</span>
-		<span class="s">&#39;write_lcfrs_grammar&#39;</span><span class="p">,</span> <span class="s">&#39;write_lncky_grammar&#39;</span><span class="p">,</span> <span class="s">&#39;subsetgrammar&#39;</span><span class="p">,</span>
-		<span class="s">&#39;grammarinfo&#39;</span><span class="p">,</span> <span class="s">&#39;grammarstats&#39;</span><span class="p">,</span> <span class="s">&#39;splitweight&#39;</span><span class="p">,</span> <span class="s">&#39;convertweight&#39;</span><span class="p">,</span>
-		<span class="s">&#39;stripweight&#39;</span><span class="p">,</span> <span class="s">&#39;sumrules&#39;</span><span class="p">,</span> <span class="s">&#39;sumlex&#39;</span><span class="p">,</span> <span class="s">&#39;sumfrags&#39;</span><span class="p">,</span> <span class="s">&#39;merge&#39;</span><span class="p">]</span>
+		<span class="s">&#39;write_lcfrs_grammar&#39;</span><span class="p">,</span> <span class="s">&#39;subsetgrammar&#39;</span><span class="p">,</span> <span class="s">&#39;grammarinfo&#39;</span><span class="p">,</span> <span class="s">&#39;grammarstats&#39;</span><span class="p">,</span>
+		<span class="s">&#39;splitweight&#39;</span><span class="p">,</span> <span class="s">&#39;convertweight&#39;</span><span class="p">,</span> <span class="s">&#39;stripweight&#39;</span><span class="p">,</span> <span class="s">&#39;sumrules&#39;</span><span class="p">,</span> <span class="s">&#39;sumlex&#39;</span><span class="p">,</span>
+		<span class="s">&#39;sumfrags&#39;</span><span class="p">,</span> <span class="s">&#39;merge&#39;</span><span class="p">]</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
 	<span class="n">main</span><span class="p">()</span>

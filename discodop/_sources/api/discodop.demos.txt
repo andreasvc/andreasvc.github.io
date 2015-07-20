@@ -9,13 +9,25 @@ discodop.demos
 
    .. autosummary::
    
-      tree_adjoining_grammar
-      dependencygrammar
       bitext
+      dependencygrammar
+      exp
+      main
+      parse
+      test
+      tree_adjoining_grammar
+      treebankgrammar
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Grammar
+      Tree
    
    
 

@@ -84,29 +84,35 @@ signatures from words, the flow is as follows:</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.externaltagging" title="discodop.lexicon.externaltagging"><code class="xref py py-obj docutils literal"><span class="pre">externaltagging</span></code></a>(usetagger,&nbsp;model,&nbsp;sents,&nbsp;...)</td>
+<td>Use an external tool to tag a list of sentences.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.getlexmodel" title="discodop.lexicon.getlexmodel"><code class="xref py py-obj docutils literal"><span class="pre">getlexmodel</span></code></a>(sigs,&nbsp;words,&nbsp;_lexicon,&nbsp;...[,&nbsp;...])</td>
+<td>Compute a smoothed lexical model.</td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.getunknownwordmodel" title="discodop.lexicon.getunknownwordmodel"><code class="xref py py-obj docutils literal"><span class="pre">getunknownwordmodel</span></code></a>(tagged_sents,&nbsp;...)</td>
 <td>Collect statistics for an unknown word model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.replaceraretrainwords" title="discodop.lexicon.replaceraretrainwords"><code class="xref py py-obj docutils literal"><span class="pre">replaceraretrainwords</span></code></a>(tagged_sents,&nbsp;...)</td>
-<td>Replace train set words not in lexicon w/signature from unknownword().</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.replaceraretestwords" title="discodop.lexicon.replaceraretestwords"><code class="xref py py-obj docutils literal"><span class="pre">replaceraretestwords</span></code></a>(sent,&nbsp;unknownword,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.replaceraretestwords" title="discodop.lexicon.replaceraretestwords"><code class="xref py py-obj docutils literal"><span class="pre">replaceraretestwords</span></code></a>(sent,&nbsp;unknownword,&nbsp;...)</td>
 <td>Replace test set words not in lexicon w/signature from unknownword().</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.replaceraretrainwords" title="discodop.lexicon.replaceraretrainwords"><code class="xref py py-obj docutils literal"><span class="pre">replaceraretrainwords</span></code></a>(tagged_sents,&nbsp;...)</td>
+<td>Replace train set words not in lexicon w/signature from unknownword().</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.simplesmoothlexicon" title="discodop.lexicon.simplesmoothlexicon"><code class="xref py py-obj docutils literal"><span class="pre">simplesmoothlexicon</span></code></a>(lexmodel[,&nbsp;epsilon])</td>
 <td>Collect new lexical productions.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.getlexmodel" title="discodop.lexicon.getlexmodel"><code class="xref py py-obj docutils literal"><span class="pre">getlexmodel</span></code></a>(sigs,&nbsp;words,&nbsp;_lexicon,&nbsp;...[,&nbsp;...])</td>
-<td>Compute a smoothed lexical model.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.smoothlexicon" title="discodop.lexicon.smoothlexicon"><code class="xref py py-obj docutils literal"><span class="pre">smoothlexicon</span></code></a>(grammar,&nbsp;P_wordtag)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.smoothlexicon" title="discodop.lexicon.smoothlexicon"><code class="xref py py-obj docutils literal"><span class="pre">smoothlexicon</span></code></a>(grammar,&nbsp;P_wordtag)</td>
 <td>Replace lexical probabilities using given unknown word model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.unknownword6" title="discodop.lexicon.unknownword6"><code class="xref py py-obj docutils literal"><span class="pre">unknownword6</span></code></a>(word,&nbsp;loc,&nbsp;lexicon)</td>
-<td>Model 6 of the Stanford parser (for WSJ treebank).</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.tagmangle" title="discodop.lexicon.tagmangle"><code class="xref py py-obj docutils literal"><span class="pre">tagmangle</span></code></a>(a,&nbsp;splitchar,&nbsp;overridetag,&nbsp;tagmap)</td>
+<td>Function to filter tags after they are produced by the tagger.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.unknownword4" title="discodop.lexicon.unknownword4"><code class="xref py py-obj docutils literal"><span class="pre">unknownword4</span></code></a>(word,&nbsp;loc,&nbsp;_lexicon)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.unknownword4" title="discodop.lexicon.unknownword4"><code class="xref py py-obj docutils literal"><span class="pre">unknownword4</span></code></a>(word,&nbsp;loc,&nbsp;_lexicon)</td>
 <td>Model 4 of the Stanford parser.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.unknownword6" title="discodop.lexicon.unknownword6"><code class="xref py py-obj docutils literal"><span class="pre">unknownword6</span></code></a>(word,&nbsp;loc,&nbsp;lexicon)</td>
+<td>Model 6 of the Stanford parser (for WSJ treebank).</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.unknownwordbase" title="discodop.lexicon.unknownwordbase"><code class="xref py py-obj docutils literal"><span class="pre">unknownwordbase</span></code></a>(word,&nbsp;_loc,&nbsp;_lexicon)</td>
 <td>BaseUnknownWordModel of the Stanford parser.</td>
@@ -114,12 +120,15 @@ signatures from words, the flow is as follows:</p>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.unknownwordftb" title="discodop.lexicon.unknownwordftb"><code class="xref py py-obj docutils literal"><span class="pre">unknownwordftb</span></code></a>(word,&nbsp;loc,&nbsp;_lexicon)</td>
 <td>Model 2 for French of the Stanford parser.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.lexicon.externaltagging" title="discodop.lexicon.externaltagging"><code class="xref py py-obj docutils literal"><span class="pre">externaltagging</span></code></a>(usetagger,&nbsp;model,&nbsp;sents,&nbsp;...)</td>
-<td>Use an external tool to tag a list of sentences.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.lexicon.tagmangle" title="discodop.lexicon.tagmangle"><code class="xref py py-obj docutils literal"><span class="pre">tagmangle</span></code></a>(a,&nbsp;splitchar,&nbsp;overridetag,&nbsp;tagmap)</td>
-<td>Function to filter tags after they are produced by the tagger.</td>
-</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="function">

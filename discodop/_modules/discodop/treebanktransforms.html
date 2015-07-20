@@ -80,9 +80,6 @@
 		<span class="s">&#39;km2003simple&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;splitIN4,splitPercent,splitPoss,splitCC,unaryDT,&#39;</span>
 			<span class="s">&#39;unaryRB,splitAux2,splitSGapped,splitBaseNP,dominatesV,&#39;</span>
 			<span class="s">&#39;splitNPADV,markDitransV,MARK-YEAR&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">),</span>
-		<span class="s">&#39;km2003noheads&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;splitIN4,splitPercent,splitPoss,splitCC,unaryDT,&#39;</span>
-			<span class="s">&#39;unaryRB,splitAux2,splitSGapped,splitBaseNP,dominatesV,&#39;</span>
-			<span class="s">&#39;MARK-YEAR&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">),</span>
 		<span class="s">&#39;fraser2013tiger&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;elimNKCJ,addUnary,APPEND-FUNC,addCase,lexPrep,&#39;</span>
 			<span class="s">&#39;PUNCT,adjAttach,relPath,whFeat,nounSeq,properChunks,markAP,&#39;</span>
 			<span class="s">&#39;subConjType,VPfeat,noHead,noSubj,MARK-YEAR&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">),</span>
@@ -1210,7 +1207,7 @@
 
 </div>
 <span class="k">def</span> <span class="nf">base</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;Test whether ``node.label`` equals ``match&#39; after stripping features.&quot;&quot;&quot;</span>
+	<span class="sd">&quot;&quot;&quot;Test whether ``node.label`` equals ``match`` after stripping features.&quot;&quot;&quot;</span>
 	<span class="k">return</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">match</span>
 			<span class="ow">or</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">match</span> <span class="o">+</span> <span class="n">STATESPLIT</span><span class="p">)</span>
 			<span class="ow">or</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">match</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span><span class="p">))</span>

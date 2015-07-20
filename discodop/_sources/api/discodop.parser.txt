@@ -9,15 +9,31 @@ discodop.parser
 
    .. autosummary::
    
+      alignsent
+      applyfunctionclassifier
+      applypunct
       doparsing
+      exp
       exportbitpargrammar
+      gnu_getopt
       initworker
+      log
+      main
+      nlargest
+      openread
       probstr
+      prunechart
+      punctprune
       readgrammars
+      readheadrules
       readinputbitparstyle
+      replaceraretestwords
+      saveheads
       which
       worker
       workerfunc
+      wraps
+      writetree
    
    
 
@@ -28,10 +44,20 @@ discodop.parser
    .. autosummary::
    
       DictObj
+      Grammar
+      ParentedTree
       Parser
+      itemgetter
+      map
    
    
 
    
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      GetoptError
    
    

@@ -59,27 +59,39 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">applypunct</span></code>(method,&nbsp;tree,&nbsp;sent)</td>
+<td>Apply <code class="docutils literal"><span class="pre">remove,</span> <span class="pre">move,</span> <span class="pre">moveall,</span> <span class="pre">prune,</span> <span class="pre">or</span> <span class="pre">root</span></code> punctuation strategy.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.punctuation.balancedpunctraise" title="discodop.punctuation.balancedpunctraise"><code class="xref py py-obj docutils literal"><span class="pre">balancedpunctraise</span></code></a>(tree,&nbsp;sent)</td>
+<td>Move balanced punctuation <code class="docutils literal"><span class="pre">&quot;</span> <span class="pre">'</span> <span class="pre">-</span> <span class="pre">(</span> <span class="pre">)</span> <span class="pre">[</span> <span class="pre">]</span></code> to a common constituent.</td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.punctuation.ispunct" title="discodop.punctuation.ispunct"><code class="xref py py-obj docutils literal"><span class="pre">ispunct</span></code></a>(word,&nbsp;tag)</td>
 <td>Test whether a word and/or tag is punctuation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.punctuation.punctremove" title="discodop.punctuation.punctremove"><code class="xref py py-obj docutils literal"><span class="pre">punctremove</span></code></a>(tree,&nbsp;sent)</td>
-<td>Remove any punctuation nodes, and any empty ancestors.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.punctuation.punctlower" title="discodop.punctuation.punctlower"><code class="xref py py-obj docutils literal"><span class="pre">punctlower</span></code></a>(tree,&nbsp;sent)</td>
+<td>Find suitable constituent for punctuation marks and add it there.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.punctuation.punctprune" title="discodop.punctuation.punctprune"><code class="xref py py-obj docutils literal"><span class="pre">punctprune</span></code></a>(tree,&nbsp;sent)</td>
 <td>Remove quotes and period at sentence beginning and end.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.punctuation.punctroot" title="discodop.punctuation.punctroot"><code class="xref py py-obj docutils literal"><span class="pre">punctroot</span></code></a>(tree,&nbsp;sent)</td>
-<td>Move punctuation directly under ROOT, as in the Negra annotation.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.punctuation.punctlower" title="discodop.punctuation.punctlower"><code class="xref py py-obj docutils literal"><span class="pre">punctlower</span></code></a>(tree,&nbsp;sent)</td>
-<td>Find suitable constituent for punctuation marks and add it there.</td>
-</tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.punctuation.punctraise" title="discodop.punctuation.punctraise"><code class="xref py py-obj docutils literal"><span class="pre">punctraise</span></code></a>(tree,&nbsp;sent[,&nbsp;rootpreterms])</td>
 <td>Attach punctuation nodes to an appropriate constituent.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.punctuation.balancedpunctraise" title="discodop.punctuation.balancedpunctraise"><code class="xref py py-obj docutils literal"><span class="pre">balancedpunctraise</span></code></a>(tree,&nbsp;sent)</td>
-<td>Move balanced punctuation <code class="docutils literal"><span class="pre">&quot;</span> <span class="pre">'</span> <span class="pre">-</span> <span class="pre">(</span> <span class="pre">)</span> <span class="pre">[</span> <span class="pre">]</span></code> to a common constituent.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.punctuation.punctremove" title="discodop.punctuation.punctremove"><code class="xref py py-obj docutils literal"><span class="pre">punctremove</span></code></a>(tree,&nbsp;sent)</td>
+<td>Remove any punctuation nodes, and any empty ancestors.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.punctuation.punctroot" title="discodop.punctuation.punctroot"><code class="xref py py-obj docutils literal"><span class="pre">punctroot</span></code></a>(tree,&nbsp;sent)</td>
+<td>Move punctuation directly under ROOT, as in the Negra annotation.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="function">

@@ -56,14 +56,20 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.getparent" title="discodop.plcfrs.getparent"><code class="xref py py-obj docutils literal"><span class="pre">getparent</span></code></a>(i)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">do</span></code>(sent,&nbsp;grammar)</td>
+<td>Parse sentence with grammar and print 10 best derivations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.getparent" title="discodop.plcfrs.getparent"><code class="xref py py-obj docutils literal"><span class="pre">getparent</span></code></a>(i)</td>
 <td>Python version of Cython-only _parent() function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.merge" title="discodop.plcfrs.merge"><code class="xref py py-obj docutils literal"><span class="pre">merge</span></code></a>(*iterables[,&nbsp;key])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.merge" title="discodop.plcfrs.merge"><code class="xref py py-obj docutils literal"><span class="pre">merge</span></code></a>(*iterables[,&nbsp;key])</td>
 <td>Generator that performs an n-way merge of sorted iterables.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.parse" title="discodop.plcfrs.parse"><code class="xref py py-obj docutils literal"><span class="pre">parse</span></code></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;tags,&nbsp;start,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.parse" title="discodop.plcfrs.parse"><code class="xref py py-obj docutils literal"><span class="pre">parse</span></code></a>(sent,&nbsp;Grammar&nbsp;grammar[,&nbsp;tags,&nbsp;start,&nbsp;...])</td>
 <td>Parse sentence and produce a chart.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">test</span></code>()</td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -80,14 +86,20 @@
 <tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.DoubleAgenda" title="discodop.plcfrs.DoubleAgenda"><code class="xref py py-obj docutils literal"><span class="pre">DoubleAgenda</span></code></a>([iterable])</td>
 <td>Priority Queue where priorities are C doubles.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.LCFRSChart" title="discodop.plcfrs.LCFRSChart"><code class="xref py py-obj docutils literal"><span class="pre">LCFRSChart</span></code></a>(Grammar&nbsp;grammar,&nbsp;list&nbsp;sent[,&nbsp;...])</td>
-<td>A chart for LCFRS grammars.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">DoubleEntry</span></code></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.SmallLCFRSChart" title="discodop.plcfrs.SmallLCFRSChart"><code class="xref py py-obj docutils literal"><span class="pre">SmallLCFRSChart</span></code></a>(Grammar&nbsp;grammar,&nbsp;list&nbsp;sent)</td>
-<td>For sentences that fit into a single machine word.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Entry</span></code></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.FatLCFRSChart" title="discodop.plcfrs.FatLCFRSChart"><code class="xref py py-obj docutils literal"><span class="pre">FatLCFRSChart</span></code></a>(Grammar&nbsp;grammar,&nbsp;list&nbsp;sent[,&nbsp;...])</td>
 <td>LCFRS chart that supports longer sentences.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.plcfrs.LCFRSChart" title="discodop.plcfrs.LCFRSChart"><code class="xref py py-obj docutils literal"><span class="pre">LCFRSChart</span></code></a>(Grammar&nbsp;grammar,&nbsp;list&nbsp;sent[,&nbsp;...])</td>
+<td>A chart for LCFRS grammars.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.plcfrs.SmallLCFRSChart" title="discodop.plcfrs.SmallLCFRSChart"><code class="xref py py-obj docutils literal"><span class="pre">SmallLCFRSChart</span></code></a>(Grammar&nbsp;grammar,&nbsp;list&nbsp;sent)</td>
+<td>For sentences that fit into a single machine word.</td>
 </tr>
 </tbody>
 </table>

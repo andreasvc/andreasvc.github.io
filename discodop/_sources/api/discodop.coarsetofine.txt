@@ -9,17 +9,28 @@ discodop.coarsetofine
 
    .. autosummary::
    
-      prunechart
+      addbitsets
       bitparkbestitems
-      whitelistfromposteriors
-      whitelistfromposteriors_matrix
-      posteriorthreshold
+      doctftest
+      fanout
       getinside
       getoutside
+      lazykbest
+      mergediscnodes
+      posteriorthreshold
+      prunechart
+      test
+      unbinarize
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Tree
    
    
 

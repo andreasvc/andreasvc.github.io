@@ -19,10 +19,11 @@ discodop.tree
 
    .. autosummary::
    
-      Tree
+      DiscTree
+      ImmutableParentedTree
       ImmutableTree
       ParentedTree
-      ImmutableParentedTree
+      Tree
    
    
 

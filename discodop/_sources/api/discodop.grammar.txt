@@ -9,34 +9,37 @@ discodop.grammar
 
    .. autosummary::
    
-      lcfrsproductions
-      treebankgrammar
-      dopreduction
-      doubledop
+      cartpi
+      compiletsg
+      convertweight
+      defaultparse
       dop1
       dopgrammar
-      compiletsg
-      sortgrammar
+      dopreduction
+      doubledop
       flatten
+      grammarinfo
+      grammarstats
+      lcfrsproductions
+      main
+      merge
+      mul
       nodefreq
+      openread
+      printrule
       quotelabel
       rangeheads
       ranges
-      defaultparse
-      printrule
-      cartpi
-      write_lcfrs_grammar
-      write_lncky_grammar
-      subsetgrammar
-      grammarinfo
-      grammarstats
+      sortgrammar
       splitweight
-      convertweight
       stripweight
-      sumrules
-      sumlex
+      subsetgrammar
       sumfrags
-      merge
+      sumlex
+      sumrules
+      termindices
+      treebankgrammar
+      write_lcfrs_grammar
    
    
 
@@ -46,9 +49,18 @@ discodop.grammar
 
    .. autosummary::
    
-      TreeDecorator
+      Counter
       DiscTree
+      ImmutableTree
+      OrderedDict
+      Tree
+      TreeDecorator
       UniqueIDs
+      count
+      defaultdict
+      islice
+      itemgetter
+      repeat
    
    
 

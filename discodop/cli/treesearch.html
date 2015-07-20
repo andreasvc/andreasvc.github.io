@@ -63,36 +63,39 @@ bracket, discbracket, or export format.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">xpath:</th><td class="field-body">arbitrary xpath queries; files are dact XML corpora.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">regex:</th><td class="field-body">search through tokenized sentences with Python regexps</td>
+<tr class="field-even field"><th class="field-name">regex:</th><td class="field-body">search through tokenized sentences with Python regexps.</td>
 </tr>
 </tbody>
 </table>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-c</span>, <span class="option">--counts</span></kbd></td>
-<td>report counts</td></tr>
+<td>Report counts.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-s</span>, <span class="option">--sents</span></kbd></td>
-<td>output sentences (default)</td></tr>
+<td>Output sentences (default).</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-t</span>, <span class="option">--trees</span></kbd></td>
-<td>output visualizations of trees</td></tr>
+<td>Output visualizations of trees.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-b</span>, <span class="option">--brackets</span></kbd></td>
-<td>output raw trees in the original corpus format</td></tr>
+<td>Output raw trees in the original corpus format.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--file</span></kbd></td>
-<td>read query from filename given as first argument</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-o</span>, <span class="option">--only-matching</span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>only output the matching portion
-with <code class="docutils literal"><span class="pre">--sents</span></code>, <code class="docutils literal"><span class="pre">--trees</span></code>, and <code class="docutils literal"><span class="pre">--brackets</span></code></td></tr>
+<td>Read query from filename given as first argument.</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-m <var>N</var></span>, <span class="option">--max-count=<var>N</var></span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>with <code class="docutils literal"><span class="pre">--counts</span></code>: only consider first n sentences;
-otherwise: stop after n matches.</td></tr>
+<tr><td>&nbsp;</td><td>Stop after finding n matches.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--slice=<var>&lt;N:M&gt;</var></span></kbd></td>
+<td>Only search in sentences N to M of each file; either N or
+M may be left out; slice indexing is 1-based and inclusive.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--only-matching</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Only output the matching portion
+with <code class="docutils literal"><span class="pre">--sents</span></code>, <code class="docutils literal"><span class="pre">--trees</span></code>, and <code class="docutils literal"><span class="pre">--brackets</span></code>.</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-n</span>, <span class="option">--line-number</span></kbd></td>
 </tr>
@@ -101,7 +104,7 @@ its input file.</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-M <var>X</var></span>, <span class="option">--macros=<var>X</var></span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>file with macros</td></tr>
+<tr><td>&nbsp;</td><td>A file with macros.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--numthreads=<var>X</var></span></kbd></td>
 <td>Number of concurrent threads to use.</td></tr>

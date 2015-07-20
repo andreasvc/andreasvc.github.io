@@ -71,29 +71,35 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Grammar" title="discodop.containers.Grammar"><code class="xref py py-obj docutils literal"><span class="pre">Grammar</span></code></a>(rule_tuples_or_str[,&nbsp;lexicon,&nbsp;...])</td>
-<td>A grammar object which stores rules compactly, indexed in various ways.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.Chart" title="discodop.containers.Chart"><code class="xref py py-obj docutils literal"><span class="pre">Chart</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Chart" title="discodop.containers.Chart"><code class="xref py py-obj docutils literal"><span class="pre">Chart</span></code></a></td>
 <td>Base class for charts.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ChartItem</span></code></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Ctrees" title="discodop.containers.Ctrees"><code class="xref py py-obj docutils literal"><span class="pre">Ctrees</span></code></a>()</td>
 <td>An indexed, binarized treebank stored as array.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.LexicalRule" title="discodop.containers.LexicalRule"><code class="xref py py-obj docutils literal"><span class="pre">LexicalRule</span></code></a>(uint32_t&nbsp;lhs,&nbsp;unicode&nbsp;word,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.Edges" title="discodop.containers.Edges"><code class="xref py py-obj docutils literal"><span class="pre">Edges</span></code></a></td>
+<td>A static array with a fixed number of Edge structs.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.FatChartItem" title="discodop.containers.FatChartItem"><code class="xref py py-obj docutils literal"><span class="pre">FatChartItem</span></code></a></td>
+<td>Item where bitvector is a fixed-width static array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.Grammar" title="discodop.containers.Grammar"><code class="xref py py-obj docutils literal"><span class="pre">Grammar</span></code></a>(rule_tuples_or_str[,&nbsp;lexicon,&nbsp;...])</td>
+<td>A grammar object which stores rules compactly, indexed in various ways.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.LexicalRule" title="discodop.containers.LexicalRule"><code class="xref py py-obj docutils literal"><span class="pre">LexicalRule</span></code></a>(uint32_t&nbsp;lhs,&nbsp;unicode&nbsp;word,&nbsp;...)</td>
 <td>A weighted rule of the form &#8216;non-terminal &#8211;&gt; word&#8217;.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.RankedEdge" title="discodop.containers.RankedEdge"><code class="xref py py-obj docutils literal"><span class="pre">RankedEdge</span></code></a></td>
+<td>A derivation with backpointers.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.SmallChartItem" title="discodop.containers.SmallChartItem"><code class="xref py py-obj docutils literal"><span class="pre">SmallChartItem</span></code></a>(label,&nbsp;vec)</td>
 <td>Item with word sized bitvector.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.FatChartItem" title="discodop.containers.FatChartItem"><code class="xref py py-obj docutils literal"><span class="pre">FatChartItem</span></code></a></td>
-<td>Item where bitvector is a fixed-width static array.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.containers.Edges" title="discodop.containers.Edges"><code class="xref py py-obj docutils literal"><span class="pre">Edges</span></code></a></td>
-<td>A static array with a fixed number of Edge structs.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.containers.RankedEdge" title="discodop.containers.RankedEdge"><code class="xref py py-obj docutils literal"><span class="pre">RankedEdge</span></code></a></td>
-<td>A derivation with backpointers.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Vocabulary</span></code>()</td>
+<td>A mapping of productions, labels, words to integers.</td>
 </tr>
 </tbody>
 </table>
@@ -312,6 +318,12 @@ Then add trees one by one using the addnodes() method.</p>
 <dd><p>Create index from productions to trees containing that production.</p>
 <p>Productions are represented as integer IDs, trees are given as sets of
 integer indices.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="discodop.containers.Ctrees.printrepr">
+<code class="descname">printrepr</code><span class="sig-paren">(</span><em>self</em>, <em>int n</em>, <em>Vocabulary vocab</em><span class="sig-paren">)</span><a class="headerlink" href="#discodop.containers.Ctrees.printrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print repr of a tree for debugging purposes.</p>
 </dd></dl>
 
 </dd></dl>

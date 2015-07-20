@@ -9,12 +9,15 @@ discodop.estimates
 
    .. autosummary::
    
+      exp
       getestimates
       getpcfgestimates
-      getpcfgestimates
+      getpcfgestimatesrec
       inside
       outsidelr
       simpleinside
+      test
+      testestimates
    
    
 

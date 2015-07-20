@@ -59,11 +59,17 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.filterlabels" title="discodop.treesearch.filterlabels"><code class="xref py py-obj docutils literal"><span class="pre">filterlabels</span></code></a>(line,&nbsp;nofunc,&nbsp;nomorph)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.cpu_count" title="discodop.treesearch.cpu_count"><code class="xref py py-obj docutils literal"><span class="pre">cpu_count</span></code></a>()</td>
+<td>Return number of CPUs or 1.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.filterlabels" title="discodop.treesearch.filterlabels"><code class="xref py py-obj docutils literal"><span class="pre">filterlabels</span></code></a>(line,&nbsp;nofunc,&nbsp;nomorph)</td>
 <td>Remove morphological and/or grammatical function labels from tree(s).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.cpu_count" title="discodop.treesearch.cpu_count"><code class="xref py py-obj docutils literal"><span class="pre">cpu_count</span></code></a>()</td>
-<td>Return number of CPUs or 1.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">main</span></code>()</td>
+<td><ol class="upperroman simple" start="151">
+<li></li>
+</ol>
+</td>
 </tr>
 </tbody>
 </table>
@@ -74,23 +80,29 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.CorpusSearcher" title="discodop.treesearch.CorpusSearcher"><code class="xref py py-obj docutils literal"><span class="pre">CorpusSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
-<td>Abstract base class to wrap corpus files that can be queried.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorpusInfo</span></code>(len,&nbsp;numwords,&nbsp;numnodes,&nbsp;maxnodes)</td>
+<td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.TgrepSearcher" title="discodop.treesearch.TgrepSearcher"><code class="xref py py-obj docutils literal"><span class="pre">TgrepSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
-<td>Search a corpus with tgrep2.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.CorpusSearcher" title="discodop.treesearch.CorpusSearcher"><code class="xref py py-obj docutils literal"><span class="pre">CorpusSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
+<td>Abstract base class to wrap corpus files that can be queried.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.DactSearcher" title="discodop.treesearch.DactSearcher"><code class="xref py py-obj docutils literal"><span class="pre">DactSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
 <td>Search a dact corpus with xpath.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.RegexSearcher" title="discodop.treesearch.RegexSearcher"><code class="xref py py-obj docutils literal"><span class="pre">RegexSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
-<td>Search a plain text file in UTF-8 with regular expressions.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.NoFuture" title="discodop.treesearch.NoFuture"><code class="xref py py-obj docutils literal"><span class="pre">NoFuture</span></code></a>(func,&nbsp;arg)</td>
-<td>A non-asynchronous version of concurrent.futures.Future.</td>
-</tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.FIFOOrederedDict" title="discodop.treesearch.FIFOOrederedDict"><code class="xref py py-obj docutils literal"><span class="pre">FIFOOrederedDict</span></code></a>(limit)</td>
 <td>FIFO cache with maximum number of elements based on OrderedDict.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FragmentSearcher</span></code>(files[,&nbsp;macros,&nbsp;...])</td>
+<td>Search for fragments in a bracket treebank.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.NoFuture" title="discodop.treesearch.NoFuture"><code class="xref py py-obj docutils literal"><span class="pre">NoFuture</span></code></a>(func,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>A non-asynchronous version of concurrent.futures.Future.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treesearch.RegexSearcher" title="discodop.treesearch.RegexSearcher"><code class="xref py py-obj docutils literal"><span class="pre">RegexSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
+<td>Search a plain text file in UTF-8 with regular expressions.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treesearch.TgrepSearcher" title="discodop.treesearch.TgrepSearcher"><code class="xref py py-obj docutils literal"><span class="pre">TgrepSearcher</span></code></a>(files[,&nbsp;macros,&nbsp;numthreads])</td>
+<td>Search a corpus with tgrep2.</td>
 </tr>
 </tbody>
 </table>
@@ -114,15 +126,18 @@ pass 1 to disable threading.</li>
 </table>
 <dl class="method">
 <dt id="discodop.treesearch.CorpusSearcher.batchcounts">
-<code class="descname">batchcounts</code><span class="sig-paren">(</span><em>queries</em>, <em>subset=None</em>, <em>limit=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.batchcounts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.batchcounts" title="Permalink to this definition">¶</a></dt>
+<code class="descname">batchcounts</code><span class="sig-paren">(</span><em>queries</em>, <em>subset=None</em>, <em>start=None</em>, <em>end=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.batchcounts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.batchcounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Like counts, but executes a sequence of queries.</p>
 <p>Useful in combination with <code class="docutils literal"><span class="pre">pandas.DataFrame</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a dict of the form
-<code class="docutils literal"><span class="pre">{corpus1:</span> <span class="pre">{query1:</span> <span class="pre">nummatches,</span> <span class="pre">query2:</span> <span class="pre">nummatches,</span> <span class="pre">...},</span> <span class="pre">...}</span></code>.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>end</strong> (<em>start,</em>) &#8211; the interval of sentences to query in each corpus;
+by default, all sentences are queried. 1-based, inclusive.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dict of the form
+<code class="docutils literal"><span class="pre">{corpus1:</span> <span class="pre">{query1:</span> <span class="pre">count1,</span> <span class="pre">query2:</span> <span class="pre">count2,</span> <span class="pre">...},</span> <span class="pre">...}</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -130,7 +145,7 @@ pass 1 to disable threading.</li>
 
 <dl class="method">
 <dt id="discodop.treesearch.CorpusSearcher.counts">
-<code class="descname">counts</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>limit=None</em>, <em>indices=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.counts" title="Permalink to this definition">¶</a></dt>
+<code class="descname">counts</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>start=None</em>, <em>end=None</em>, <em>indices=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.counts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run query and return a dict of the form {corpus1: nummatches, ...}.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -140,9 +155,9 @@ pass 1 to disable threading.</li>
 <li><strong>query</strong> &#8211; the search query</li>
 <li><strong>subset</strong> &#8211; an iterable of filenames to run the query on; by default
 all filenames are used.</li>
-<li><strong>limit</strong> &#8211; the maximum number of sentences to query per corpus; by
-default, all sentences are queried.</li>
-<li><strong>indices</strong> &#8211; if True, return a multiset of indices of matching
+<li><strong>end</strong> (<em>start,</em>) &#8211; the interval of sentences to query in each corpus;
+by default, all sentences are queried. 1-based, inclusive.</li>
+<li><strong>indices</strong> &#8211; if True, return a sequence of indices of matching
 occurrences, instead of an integer count.</li>
 </ul>
 </td>
@@ -153,7 +168,7 @@ occurrences, instead of an integer count.</li>
 
 <dl class="method">
 <dt id="discodop.treesearch.CorpusSearcher.extract">
-<code class="descname">extract</code><span class="sig-paren">(</span><em>filename</em>, <em>start</em>, <em>end</em>, <em>nofunc=False</em>, <em>nomorph=False</em>, <em>sents=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.extract" title="Permalink to this definition">¶</a></dt>
+<code class="descname">extract</code><span class="sig-paren">(</span><em>filename</em>, <em>indices</em>, <em>nofunc=False</em>, <em>nomorph=False</em>, <em>sents=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract a range of trees / sentences.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -161,8 +176,8 @@ occurrences, instead of an integer count.</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>filename</strong> &#8211; one of the filenames in <code class="docutils literal"><span class="pre">self.files</span></code></li>
-<li><strong>start</strong> &#8211; start index (0-based, excluding empty lines)</li>
-<li><strong>end</strong> &#8211; end index (idem)</li>
+<li><strong>indices</strong> &#8211; iterable of indices of sentences to extract
+(1-based, excluding empty lines)</li>
 <li><strong>sents</strong> &#8211; if True, return sentences instead of trees.
 Sentences are strings with space-separated tokens.</li>
 <li><strong>nomorph</strong> (<em>nofunc,</em>) &#8211; same as for <code class="docutils literal"><span class="pre">trees()</span></code> method.</li>
@@ -178,13 +193,15 @@ Sentences are strings with space-separated tokens.</li>
 
 <dl class="method">
 <dt id="discodop.treesearch.CorpusSearcher.sents">
-<code class="descname">sents</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>maxresults=100</em>, <em>brackets=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.sents" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sents</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>start=None</em>, <em>end=None</em>, <em>maxresults=100</em>, <em>brackets=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.sents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run query and return matching sentences.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>end</strong> (<em>start,</em>) &#8211; the interval of sentences to query in each corpus;
+by default, all sentences are queried. 1-based, inclusive.</li>
 <li><strong>maxresults</strong> &#8211; the maximum number of matches to return.</li>
 <li><strong>brackets</strong> &#8211; if True, return trees as they appear in the treebank,
 match is a string with the matching subtree.
@@ -205,13 +222,15 @@ by the query.</p>
 
 <dl class="method">
 <dt id="discodop.treesearch.CorpusSearcher.trees">
-<code class="descname">trees</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>maxresults=10</em>, <em>nofunc=False</em>, <em>nomorph=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.trees" title="Permalink to this definition">¶</a></dt>
+<code class="descname">trees</code><span class="sig-paren">(</span><em>query</em>, <em>subset=None</em>, <em>start=None</em>, <em>end=None</em>, <em>maxresults=10</em>, <em>nofunc=False</em>, <em>nomorph=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#CorpusSearcher.trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.CorpusSearcher.trees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run query and return list of matching trees.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>end</strong> (<em>start,</em>) &#8211; the interval of sentences to query in each corpus;
+by default, all sentences are queried. 1-based, inclusive.</li>
 <li><strong>maxresults</strong> &#8211; the maximum number of matches to return.</li>
 <li><strong>nomorph</strong> (<em>nofunc,</em>) &#8211; whether to remove / add function tags and
 morphological features from trees.</li>
@@ -261,7 +280,7 @@ appears in a query.</td>
 
 <dl class="class">
 <dt id="discodop.treesearch.NoFuture">
-<em class="property">class </em><code class="descclassname">discodop.treesearch.</code><code class="descname">NoFuture</code><span class="sig-paren">(</span><em>func</em>, <em>arg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#NoFuture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.NoFuture" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">discodop.treesearch.</code><code class="descname">NoFuture</code><span class="sig-paren">(</span><em>func</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/treesearch.html#NoFuture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.treesearch.NoFuture" title="Permalink to this definition">¶</a></dt>
 <dd><p>A non-asynchronous version of concurrent.futures.Future.</p>
 <dl class="method">
 <dt id="discodop.treesearch.NoFuture.result">

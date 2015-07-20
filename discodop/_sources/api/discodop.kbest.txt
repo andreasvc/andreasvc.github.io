@@ -11,10 +11,17 @@ discodop.kbest
    
       getderiv
       lazykbest
+      test
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      itemgetter
    
    
 

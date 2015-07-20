@@ -9,15 +9,19 @@ discodop.gen
 
    .. autosummary::
    
-      gen
+      arraytoyf
       chooserule
       compose
+      gen
+      main
+      namedtuple
       parsefrac
-      read_lcfrs_grammar
+      random
       read_bitpar_grammar
+      read_lcfrs_grammar
       splitgrammar
+      test
       yfarray
-      arraytoyf
    
    
 
@@ -30,6 +34,8 @@ discodop.gen
       Grammar
       LexicalRule
       Rule
+      array
+      defaultdict
    
    
 

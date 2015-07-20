@@ -9,17 +9,16 @@ discodop.pcfg
 
    .. autosummary::
    
-      parse
-      doinsideoutside
-      insidescores
-      outsidescores
-      minmaxmatrices
-      chartmatrix
-      parse_bitpar
-      bitpar_yap_forest
       bitpar_nbest
+      bitpar_yap_forest
+      exp
+      minmaxmatrices
+      parse
+      parse_bitpar
+      pylog
       renumber
-      pprint_matrix
+      test
+      unlink
    
    
 
@@ -32,6 +31,8 @@ discodop.pcfg
       CFGChart
       DenseCFGChart
       SparseCFGChart
+      Tree
+      count
    
    
 

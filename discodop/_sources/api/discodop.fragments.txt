@@ -9,30 +9,53 @@ discodop.fragments
 
    .. autosummary::
    
-      main
-      regular
+      APPLY
+      allfragments
+      altrepr
       batch
-      readtreebanks
-      read2ndtreebank
+      binarize
+      cpu_count
+      debinarize
+      exactcountworker
+      gnu_getopt
       initworker
       initworkersimple
-      worker
-      exactcountworker
-      workload
-      recurringfragments
+      introducepreterminals
       iteratefragments
-      allfragments
-      debinarize
+      main
       printfragments
-      altrepr
-      cpu_count
+      read2ndtreebank
+      readtreebanks
+      recurringfragments
+      regular
+      test
+      unbinarize
+      worker
+      workerfunc
+      workload
    
    
 
    
    
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Tree
+      Vocabulary
+      count
+      defaultdict
+      map
+   
    
 
    
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      GetoptError
    
    

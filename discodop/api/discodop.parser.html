@@ -69,22 +69,25 @@
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.initworker" title="discodop.parser.initworker"><code class="xref py py-obj docutils literal"><span class="pre">initworker</span></code></a>(parser,&nbsp;printprob,&nbsp;usetags,&nbsp;...)</td>
 <td>Load parser for a worker process.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.probstr" title="discodop.parser.probstr"><code class="xref py py-obj docutils literal"><span class="pre">probstr</span></code></a>(prob)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">main</span></code>()</td>
+<td>Handle command line arguments.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.probstr" title="discodop.parser.probstr"><code class="xref py py-obj docutils literal"><span class="pre">probstr</span></code></a>(prob)</td>
 <td>Render probability / number of subtrees as string.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.readgrammars" title="discodop.parser.readgrammars"><code class="xref py py-obj docutils literal"><span class="pre">readgrammars</span></code></a>(resultdir,&nbsp;stages[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.readgrammars" title="discodop.parser.readgrammars"><code class="xref py py-obj docutils literal"><span class="pre">readgrammars</span></code></a>(resultdir,&nbsp;stages[,&nbsp;...])</td>
 <td>Read the grammars from a previous experiment.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.readinputbitparstyle" title="discodop.parser.readinputbitparstyle"><code class="xref py py-obj docutils literal"><span class="pre">readinputbitparstyle</span></code></a>(infile)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.readinputbitparstyle" title="discodop.parser.readinputbitparstyle"><code class="xref py py-obj docutils literal"><span class="pre">readinputbitparstyle</span></code></a>(infile)</td>
 <td>Yields lists of tokens, where &#8216;nn&#8217; identifies a sentence break.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.which" title="discodop.parser.which"><code class="xref py py-obj docutils literal"><span class="pre">which</span></code></a>(program)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.which" title="discodop.parser.which"><code class="xref py py-obj docutils literal"><span class="pre">which</span></code></a>(program)</td>
 <td>Return first match for program in search path.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.worker" title="discodop.parser.worker"><code class="xref py py-obj docutils literal"><span class="pre">worker</span></code></a>(*args,&nbsp;**kwds)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.worker" title="discodop.parser.worker"><code class="xref py py-obj docutils literal"><span class="pre">worker</span></code></a>(*args,&nbsp;**kwds)</td>
 <td>Parse a single sentence.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.parser.workerfunc" title="discodop.parser.workerfunc"><code class="xref py py-obj docutils literal"><span class="pre">workerfunc</span></code></a>(func)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.parser.workerfunc" title="discodop.parser.workerfunc"><code class="xref py py-obj docutils literal"><span class="pre">workerfunc</span></code></a>(func)</td>
 <td>Wrap a multiprocessing worker function to produce a full traceback.</td>
 </tr>
 </tbody>
@@ -102,6 +105,15 @@
 <tr class="row-even"><td><a class="reference internal" href="#discodop.parser.Parser" title="discodop.parser.Parser"><code class="xref py py-obj docutils literal"><span class="pre">Parser</span></code></a>(prm[,&nbsp;funcclassifier])</td>
 <td>A coarse-to-fine parser based on a given set of parameters.</td>
 </tr>
+</tbody>
+</table>
+<p class="rubric">Exceptions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="class">

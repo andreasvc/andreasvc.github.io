@@ -59,17 +59,17 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.lcfrsproductions" title="discodop.grammar.lcfrsproductions"><code class="xref py py-obj docutils literal"><span class="pre">lcfrsproductions</span></code></a>(tree,&nbsp;sent[,&nbsp;frontiers])</td>
-<td>Read off LCFRS productions from a tree with indices and a sentence.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.cartpi" title="discodop.grammar.cartpi"><code class="xref py py-obj docutils literal"><span class="pre">cartpi</span></code></a>(seq)</td>
+<td>The cartesian product of a sequence of iterables.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.treebankgrammar" title="discodop.grammar.treebankgrammar"><code class="xref py py-obj docutils literal"><span class="pre">treebankgrammar</span></code></a>(trees,&nbsp;sents[,&nbsp;extrarules])</td>
-<td>Induce a probabilistic LCFRS with relative frequencies of productions.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.compiletsg" title="discodop.grammar.compiletsg"><code class="xref py py-obj docutils literal"><span class="pre">compiletsg</span></code></a>(fragments[,&nbsp;binarized])</td>
+<td>Compile a set of weighted fragments (i.e., a TSG) into a grammar.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.dopreduction" title="discodop.grammar.dopreduction"><code class="xref py py-obj docutils literal"><span class="pre">dopreduction</span></code></a>(trees,&nbsp;sents[,&nbsp;packedgraph,&nbsp;...])</td>
-<td>Induce a reduction of DOP to an LCFRS.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.convertweight" title="discodop.grammar.convertweight"><code class="xref py py-obj docutils literal"><span class="pre">convertweight</span></code></a>(weight)</td>
+<td>Convert a weight in a string to a float.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.doubledop" title="discodop.grammar.doubledop"><code class="xref py py-obj docutils literal"><span class="pre">doubledop</span></code></a>(trees,&nbsp;sents[,&nbsp;debug,&nbsp;binarized,&nbsp;...])</td>
-<td>Extract a Double-DOP grammar from a treebank.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.defaultparse" title="discodop.grammar.defaultparse"><code class="xref py py-obj docutils literal"><span class="pre">defaultparse</span></code></a>(wordstags[,&nbsp;rightbranching])</td>
+<td>A default parse to generate when parsing fails.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.dop1" title="discodop.grammar.dop1"><code class="xref py py-obj docutils literal"><span class="pre">dop1</span></code></a>(trees,&nbsp;sents[,&nbsp;maxdepth,&nbsp;maxfrontier,&nbsp;...])</td>
 <td>Return an all-fragments DOP1 model with relative frequencies.</td>
@@ -77,31 +77,34 @@
 <tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.dopgrammar" title="discodop.grammar.dopgrammar"><code class="xref py py-obj docutils literal"><span class="pre">dopgrammar</span></code></a>(trees,&nbsp;fragments[,&nbsp;binarized,&nbsp;...])</td>
 <td>Create a DOP grammar from a set of fragments and occurrences.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.compiletsg" title="discodop.grammar.compiletsg"><code class="xref py py-obj docutils literal"><span class="pre">compiletsg</span></code></a>(fragments[,&nbsp;binarized])</td>
-<td>Compile a set of weighted fragments (i.e., a TSG) into a grammar.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.dopreduction" title="discodop.grammar.dopreduction"><code class="xref py py-obj docutils literal"><span class="pre">dopreduction</span></code></a>(trees,&nbsp;sents[,&nbsp;packedgraph,&nbsp;...])</td>
+<td>Induce a reduction of DOP to an LCFRS.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.sortgrammar" title="discodop.grammar.sortgrammar"><code class="xref py py-obj docutils literal"><span class="pre">sortgrammar</span></code></a>(grammar[,&nbsp;altweights])</td>
-<td>Sort grammar productions in three clusters: phrasal, binarized, lexical.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.doubledop" title="discodop.grammar.doubledop"><code class="xref py py-obj docutils literal"><span class="pre">doubledop</span></code></a>(trees,&nbsp;sents[,&nbsp;debug,&nbsp;binarized,&nbsp;...])</td>
+<td>Extract a Double-DOP grammar from a treebank.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.flatten" title="discodop.grammar.flatten"><code class="xref py py-obj docutils literal"><span class="pre">flatten</span></code></a>(tree,&nbsp;sent,&nbsp;ids,&nbsp;backtransform,&nbsp;...)</td>
 <td>Auxiliary function for Double-DOP.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.nodefreq" title="discodop.grammar.nodefreq"><code class="xref py py-obj docutils literal"><span class="pre">nodefreq</span></code></a>(tree,&nbsp;dectree,&nbsp;subtreefd,&nbsp;nonterminalfd)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.grammarinfo" title="discodop.grammar.grammarinfo"><code class="xref py py-obj docutils literal"><span class="pre">grammarinfo</span></code></a>(grammar[,&nbsp;dump])</td>
+<td>Print some statistics on a grammar, before it goes through Grammar().</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.grammarstats" title="discodop.grammar.grammarstats"><code class="xref py py-obj docutils literal"><span class="pre">grammarstats</span></code></a>(filename)</td>
+<td>Print statistics for PLCFRS/bitpar grammar (sorted by LHS).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.lcfrsproductions" title="discodop.grammar.lcfrsproductions"><code class="xref py py-obj docutils literal"><span class="pre">lcfrsproductions</span></code></a>(tree,&nbsp;sent[,&nbsp;frontiers])</td>
+<td>Read off LCFRS productions from a tree with indices and a sentence.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">main</span></code>()</td>
+<td>Command line interface to create grammars from treebanks.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.merge" title="discodop.grammar.merge"><code class="xref py py-obj docutils literal"><span class="pre">merge</span></code></a>(filenames,&nbsp;outfilename,&nbsp;sumfunc,&nbsp;key)</td>
+<td>Interpolate weights of given files.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.nodefreq" title="discodop.grammar.nodefreq"><code class="xref py py-obj docutils literal"><span class="pre">nodefreq</span></code></a>(tree,&nbsp;dectree,&nbsp;subtreefd,&nbsp;nonterminalfd)</td>
 <td>Auxiliary function for DOP reduction.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.quotelabel" title="discodop.grammar.quotelabel"><code class="xref py py-obj docutils literal"><span class="pre">quotelabel</span></code></a>(label)</td>
-<td>Escapes two things: parentheses and non-ascii characters.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.rangeheads" title="discodop.grammar.rangeheads"><code class="xref py py-obj docutils literal"><span class="pre">rangeheads</span></code></a>(s)</td>
-<td>Return first element of each range in a sorted sequence of numbers.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.ranges" title="discodop.grammar.ranges"><code class="xref py py-obj docutils literal"><span class="pre">ranges</span></code></a>(s)</td>
-<td>Partition s into a sequence of lists corresponding to contiguous ranges.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.defaultparse" title="discodop.grammar.defaultparse"><code class="xref py py-obj docutils literal"><span class="pre">defaultparse</span></code></a>(wordstags[,&nbsp;rightbranching])</td>
-<td>A default parse to generate when parsing fails.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.printrule" title="discodop.grammar.printrule"><code class="xref py py-obj docutils literal"><span class="pre">printrule</span></code></a>(r,&nbsp;yf[,&nbsp;w])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.printrule" title="discodop.grammar.printrule"><code class="xref py py-obj docutils literal"><span class="pre">printrule</span></code></a>(r,&nbsp;yf[,&nbsp;w])</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -112,44 +115,41 @@
 </table>
 </td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.cartpi" title="discodop.grammar.cartpi"><code class="xref py py-obj docutils literal"><span class="pre">cartpi</span></code></a>(seq)</td>
-<td>The cartesian product of a sequence of iterables.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.quotelabel" title="discodop.grammar.quotelabel"><code class="xref py py-obj docutils literal"><span class="pre">quotelabel</span></code></a>(label)</td>
+<td>Escapes two things: parentheses and non-ascii characters.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.write_lcfrs_grammar" title="discodop.grammar.write_lcfrs_grammar"><code class="xref py py-obj docutils literal"><span class="pre">write_lcfrs_grammar</span></code></a>(grammar[,&nbsp;bitpar])</td>
-<td>Write a grammar in a simple text file format.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.rangeheads" title="discodop.grammar.rangeheads"><code class="xref py py-obj docutils literal"><span class="pre">rangeheads</span></code></a>(s)</td>
+<td>Return first element of each range in a sorted sequence of numbers.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.write_lncky_grammar" title="discodop.grammar.write_lncky_grammar"><code class="xref py py-obj docutils literal"><span class="pre">write_lncky_grammar</span></code></a>(rules,&nbsp;lexicon,&nbsp;out[,&nbsp;...])</td>
-<td>Convert a bitpar grammar to the format of Mark Jonhson&#8217;s cky parser.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.ranges" title="discodop.grammar.ranges"><code class="xref py py-obj docutils literal"><span class="pre">ranges</span></code></a>(s)</td>
+<td>Partition s into a sequence of lists corresponding to contiguous ranges.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.subsetgrammar" title="discodop.grammar.subsetgrammar"><code class="xref py py-obj docutils literal"><span class="pre">subsetgrammar</span></code></a>(a,&nbsp;b)</td>
-<td>Test whether grammar a is a subset of b.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.sortgrammar" title="discodop.grammar.sortgrammar"><code class="xref py py-obj docutils literal"><span class="pre">sortgrammar</span></code></a>(grammar[,&nbsp;altweights])</td>
+<td>Sort grammar productions in three clusters: phrasal, binarized, lexical.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.grammarinfo" title="discodop.grammar.grammarinfo"><code class="xref py py-obj docutils literal"><span class="pre">grammarinfo</span></code></a>(grammar[,&nbsp;dump])</td>
-<td>Print some statistics on a grammar, before it goes through Grammar().</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.grammarstats" title="discodop.grammar.grammarstats"><code class="xref py py-obj docutils literal"><span class="pre">grammarstats</span></code></a>(filename)</td>
-<td>Print statistics for PLCFRS/bitpar grammar (sorted by LHS).</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.splitweight" title="discodop.grammar.splitweight"><code class="xref py py-obj docutils literal"><span class="pre">splitweight</span></code></a>(weight)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.splitweight" title="discodop.grammar.splitweight"><code class="xref py py-obj docutils literal"><span class="pre">splitweight</span></code></a>(weight)</td>
 <td>Convert a weight / fraction in a string to a float / tuple.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.convertweight" title="discodop.grammar.convertweight"><code class="xref py py-obj docutils literal"><span class="pre">convertweight</span></code></a>(weight)</td>
-<td>Convert a weight in a string to a float.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.stripweight" title="discodop.grammar.stripweight"><code class="xref py py-obj docutils literal"><span class="pre">stripweight</span></code></a>(line)</td>
 <td>Extract rule without weight.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.sumrules" title="discodop.grammar.sumrules"><code class="xref py py-obj docutils literal"><span class="pre">sumrules</span></code></a>(iterable,&nbsp;n)</td>
-<td>Given a sorted iterable of rules, sum weights of identical rules.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.subsetgrammar" title="discodop.grammar.subsetgrammar"><code class="xref py py-obj docutils literal"><span class="pre">subsetgrammar</span></code></a>(a,&nbsp;b)</td>
+<td>Test whether grammar a is a subset of b.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.sumlex" title="discodop.grammar.sumlex"><code class="xref py py-obj docutils literal"><span class="pre">sumlex</span></code></a>(iterable,&nbsp;n)</td>
-<td>Given a sorted lexicon iterable, sum weights of word/tag pairs.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.sumfrags" title="discodop.grammar.sumfrags"><code class="xref py py-obj docutils literal"><span class="pre">sumfrags</span></code></a>(iterable,&nbsp;n)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.sumfrags" title="discodop.grammar.sumfrags"><code class="xref py py-obj docutils literal"><span class="pre">sumfrags</span></code></a>(iterable,&nbsp;n)</td>
 <td>Sum weights for runs of identical fragments.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.merge" title="discodop.grammar.merge"><code class="xref py py-obj docutils literal"><span class="pre">merge</span></code></a>(filenames,&nbsp;outfilename,&nbsp;sumfunc,&nbsp;key)</td>
-<td>Interpolate weights of given files.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.sumlex" title="discodop.grammar.sumlex"><code class="xref py py-obj docutils literal"><span class="pre">sumlex</span></code></a>(iterable,&nbsp;n)</td>
+<td>Given a sorted lexicon iterable, sum weights of word/tag pairs.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.sumrules" title="discodop.grammar.sumrules"><code class="xref py py-obj docutils literal"><span class="pre">sumrules</span></code></a>(iterable,&nbsp;n)</td>
+<td>Given a sorted iterable of rules, sum weights of identical rules.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.grammar.treebankgrammar" title="discodop.grammar.treebankgrammar"><code class="xref py py-obj docutils literal"><span class="pre">treebankgrammar</span></code></a>(trees,&nbsp;sents[,&nbsp;extrarules])</td>
+<td>Induce a probabilistic LCFRS with relative frequencies of productions.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.grammar.write_lcfrs_grammar" title="discodop.grammar.write_lcfrs_grammar"><code class="xref py py-obj docutils literal"><span class="pre">write_lcfrs_grammar</span></code></a>(grammar[,&nbsp;bitpar])</td>
+<td>Write a grammar in a simple text file format.</td>
 </tr>
 </tbody>
 </table>
@@ -181,11 +181,11 @@ they are ignored.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sent</span> <span class="o">=</span> <span class="s">&quot;is Mary happy&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">printrule</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">yf</span><span class="p">)</span>  
 <span class="gp">... </span>            <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">yf</span> <span class="ow">in</span> <span class="n">lcfrsproductions</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">)))</span>
-<span class="go">010     S =&gt; VP_2 NP</span>
-<span class="go">0,1     VP_2 =&gt; V ADJ</span>
-<span class="go">is      V =&gt; Epsilon</span>
-<span class="go">happy   ADJ =&gt; Epsilon</span>
-<span class="go">Mary    NP =&gt; Epsilon</span>
+<span class="go">010     S VP_2 NP</span>
+<span class="go">0,1     VP_2 V ADJ</span>
+<span class="go">is      V Epsilon</span>
+<span class="go">happy   ADJ Epsilon</span>
+<span class="go">Mary    NP Epsilon</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -254,8 +254,12 @@ implemented.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tuple (grammar, altweights, backtransform)
-altweights is a dictionary containing alternate weights.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tuple (grammar, altweights, backtransform, fragments)
+:grammar: a sequence of productions.
+:altweights: a dictionary containing alternate weights.
+:backtransform: needed to recover trees from compressed derivations.
+:fragments: a sequence of the fragments used to build the grammar,
+in the same order as they appear in <code class="docutils literal"><span class="pre">grammar</span></code>.</p>
 </td>
 </tr>
 </tbody>
@@ -270,11 +274,19 @@ altweights is a dictionary containing alternate weights.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>maxdepth</strong> &#8211; restrict fragments to <cite>1 &lt; depth &lt; maxdepth</cite>.</li>
 <li><strong>maxfrontier</strong> &#8211; limit number of frontier non-terminals; not yet
 implemented.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tuple (grammar, altweights, backtransform, fragments)
+:grammar: a sequence of productions.
+:altweights: a dictionary containing alternate weights.
+:backtransform: needed to recover trees from compressed derivations.
+:fragments: a sequence of the fragments used to build the grammar,
+in the same order as they appear in <code class="docutils literal"><span class="pre">grammar</span></code>.</p>
 </td>
 </tr>
 </tbody>
@@ -297,7 +309,7 @@ terminal and tag: <code class="docutils literal"><span class="pre">tag&#64;word<
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>fragments</strong> &#8211; a dictionary of fragments from binarized trees, with
-occurrences as values (a mapping of sentence number to counts).</li>
+occurrences as values (a mapping of sentence numbers to counts).</li>
 <li><strong>binarized</strong> &#8211; Whether the resulting grammar should be binarized;
 this may be False when bitpar is used which applies its own
 binarization.</li>
@@ -305,7 +317,7 @@ binarization.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tuple (grammar, altweights, backtransform)
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tuple (grammar, altweights, backtransform, fragments)
 altweights is a dictionary containing alternate weights.</p>
 </td>
 </tr>
@@ -373,18 +385,18 @@ output is a tuple (prods, frag). Trees are in the form of strings.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prods</span><span class="p">,</span> <span class="n">template</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">printrule</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">yf</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">yf</span> <span class="ow">in</span> <span class="n">prods</span><span class="p">))</span>
 <span class="gp">... </span>
-<span class="go">01      ROOT =&gt; ROOT}&lt;0&gt; $.@.</span>
-<span class="go">010     ROOT}&lt;0&gt; =&gt; S_2 $,@,</span>
-<span class="go">,       $,@, =&gt; Epsilon</span>
-<span class="go">.       $.@. =&gt; Epsilon</span>
+<span class="go">01      ROOT ROOT}&lt;0&gt; $.@.</span>
+<span class="go">010     ROOT}&lt;0&gt; S_2 $,@,</span>
+<span class="go">,       $,@, Epsilon</span>
+<span class="go">.       $.@. Epsilon</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 <span class="go">(ROOT {0} (ROOT|&lt;$,&gt;_2 {1} {2}))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prods</span><span class="p">,</span> <span class="n">template</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">sent</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">printrule</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">yf</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">yf</span> <span class="ow">in</span> <span class="n">prods</span><span class="p">))</span>
 <span class="gp">... </span>
-<span class="go">0102    ROOT =&gt; S_2 $,@, $.@.</span>
-<span class="go">,       $,@, =&gt; Epsilon</span>
-<span class="go">.       $.@. =&gt; Epsilon</span>
+<span class="go">0102    ROOT S_2 $,@, $.@.</span>
+<span class="go">,       $,@, Epsilon</span>
+<span class="go">.       $.@. Epsilon</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 <span class="go">(ROOT {0} (ROOT|&lt;$,&gt;_2 {1} {2}))</span>
 </pre></div>
@@ -596,12 +608,6 @@ point numbers (e.g., <code class="docutils literal"><span class="pre">0.666</spa
 </dl>
 </li>
 </ul>
-</dd></dl>
-
-<dl class="function">
-<dt id="discodop.grammar.write_lncky_grammar">
-<code class="descclassname">discodop.grammar.</code><code class="descname">write_lncky_grammar</code><span class="sig-paren">(</span><em>rules</em>, <em>lexicon</em>, <em>out</em>, <em>encoding=u'utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/discodop/grammar.html#write_lncky_grammar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#discodop.grammar.write_lncky_grammar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a bitpar grammar to the format of Mark Jonhson&#8217;s cky parser.</p>
 </dd></dl>
 
 <dl class="function">

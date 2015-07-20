@@ -9,22 +9,33 @@ discodop.lexicon
 
    .. autosummary::
    
-      getunknownwordmodel
-      replaceraretrainwords
-      replaceraretestwords
-      simplesmoothlexicon
+      externaltagging
       getlexmodel
+      getunknownwordmodel
+      replaceraretestwords
+      replaceraretrainwords
+      simplesmoothlexicon
       smoothlexicon
-      unknownword6
+      tagmangle
       unknownword4
+      unknownword6
       unknownwordbase
       unknownwordftb
-      externaltagging
-      tagmangle
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Counter
+      Fraction
+      OrderedDict
+      Popen
+      defaultdict
+      itemgetter
    
    
 

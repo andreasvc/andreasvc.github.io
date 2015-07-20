@@ -60,38 +60,32 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.initworker" title="discodop.runexp.initworker"><code class="xref py py-obj docutils literal"><span class="pre">initworker</span></code></a>(params)</td>
-<td>Set global parameter object.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">binarizetree</span></code>(tree,&nbsp;binarization,&nbsp;...)</td>
+<td>Binarize a single tree.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.startexp" title="discodop.runexp.startexp"><code class="xref py py-obj docutils literal"><span class="pre">startexp</span></code></a>(prm[,&nbsp;resultdir,&nbsp;rerun])</td>
-<td>Execute an experiment.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.loadtraincorpus" title="discodop.runexp.loadtraincorpus"><code class="xref py py-obj docutils literal"><span class="pre">loadtraincorpus</span></code></a>(corpusfmt,&nbsp;traincorpus,&nbsp;...)</td>
-<td>Load the training corpus.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.getposmodel" title="discodop.runexp.getposmodel"><code class="xref py py-obj docutils literal"><span class="pre">getposmodel</span></code></a>(postagging,&nbsp;train_tagged_sents)</td>
-<td>Apply unknown word model to sentences before extracting grammar.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.dobinarization" title="discodop.runexp.dobinarization"><code class="xref py py-obj docutils literal"><span class="pre">dobinarization</span></code></a>(trees,&nbsp;sents,&nbsp;binarization,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.dobinarization" title="discodop.runexp.dobinarization"><code class="xref py py-obj docutils literal"><span class="pre">dobinarization</span></code></a>(trees,&nbsp;sents,&nbsp;binarization,&nbsp;...)</td>
 <td>Apply binarization to treebank.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.getgrammars" title="discodop.runexp.getgrammars"><code class="xref py py-obj docutils literal"><span class="pre">getgrammars</span></code></a>(trees,&nbsp;sents,&nbsp;stages,&nbsp;...)</td>
-<td>Read off the requested grammars.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.doparsing" title="discodop.runexp.doparsing"><code class="xref py py-obj docutils literal"><span class="pre">doparsing</span></code></a>(**kwds)</td>
 <td>Parse a set of sentences using worker processes.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.worker" title="discodop.runexp.worker"><code class="xref py py-obj docutils literal"><span class="pre">worker</span></code></a>(*args,&nbsp;**kwds)</td>
-<td>Parse a sentence using global Parser object, and evaluate incrementally.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.getgrammars" title="discodop.runexp.getgrammars"><code class="xref py py-obj docutils literal"><span class="pre">getgrammars</span></code></a>(trees,&nbsp;sents,&nbsp;stages,&nbsp;...)</td>
+<td>Read off the requested grammars.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.writeresults" title="discodop.runexp.writeresults"><code class="xref py py-obj docutils literal"><span class="pre">writeresults</span></code></a>(results,&nbsp;params)</td>
-<td>Write parsing results to files in same format as the original corpus.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.getposmodel" title="discodop.runexp.getposmodel"><code class="xref py py-obj docutils literal"><span class="pre">getposmodel</span></code></a>(postagging,&nbsp;train_tagged_sents)</td>
+<td>Apply unknown word model to sentences before extracting grammar.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.oldeval" title="discodop.runexp.oldeval"><code class="xref py py-obj docutils literal"><span class="pre">oldeval</span></code></a>(results,&nbsp;goldbrackets)</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.initworker" title="discodop.runexp.initworker"><code class="xref py py-obj docutils literal"><span class="pre">initworker</span></code></a>(params)</td>
+<td>Set global parameter object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.loadtraincorpus" title="discodop.runexp.loadtraincorpus"><code class="xref py py-obj docutils literal"><span class="pre">loadtraincorpus</span></code></a>(corpusfmt,&nbsp;traincorpus,&nbsp;...)</td>
+<td>Load the training corpus.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">main</span></code>([argv])</td>
+<td>Parse command line arguments.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.oldeval" title="discodop.runexp.oldeval"><code class="xref py py-obj docutils literal"><span class="pre">oldeval</span></code></a>(results,&nbsp;goldbrackets)</td>
 <td>Simple evaluation.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.readtepacoc" title="discodop.runexp.readtepacoc"><code class="xref py py-obj docutils literal"><span class="pre">readtepacoc</span></code></a>()</td>
-<td>Read the tepacoc test set.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.parsetepacoc" title="discodop.runexp.parsetepacoc"><code class="xref py py-obj docutils literal"><span class="pre">parsetepacoc</span></code></a>([stages,&nbsp;trainmaxwords,&nbsp;...])</td>
 <td>Parse the tepacoc test set.</td>
@@ -99,6 +93,30 @@
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.readparam" title="discodop.runexp.readparam"><code class="xref py py-obj docutils literal"><span class="pre">readparam</span></code></a>(filename)</td>
 <td>Parse a parameter file.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.readtepacoc" title="discodop.runexp.readtepacoc"><code class="xref py py-obj docutils literal"><span class="pre">readtepacoc</span></code></a>()</td>
+<td>Read the tepacoc test set.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.startexp" title="discodop.runexp.startexp"><code class="xref py py-obj docutils literal"><span class="pre">startexp</span></code></a>(prm[,&nbsp;resultdir,&nbsp;rerun])</td>
+<td>Execute an experiment.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">test</span></code>()</td>
+<td>Run <code class="docutils literal"><span class="pre">sample.prm</span></code>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.runexp.worker" title="discodop.runexp.worker"><code class="xref py py-obj docutils literal"><span class="pre">worker</span></code></a>(*args,&nbsp;**kwds)</td>
+<td>Parse a sentence using global Parser object, and evaluate incrementally.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.runexp.writeresults" title="discodop.runexp.writeresults"><code class="xref py py-obj docutils literal"><span class="pre">writeresults</span></code></a>(results,&nbsp;params)</td>
+<td>Write parsing results to files in same format as the original corpus.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="function">

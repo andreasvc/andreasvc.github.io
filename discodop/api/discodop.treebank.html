@@ -59,68 +59,74 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.brackettree" title="discodop.treebank.brackettree"><code class="xref py py-obj docutils literal"><span class="pre">brackettree</span></code></a>(treestr,&nbsp;sent,&nbsp;brackets,&nbsp;strtermre)</td>
-<td>Parse a single tree presented in (disc)bracket format.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.exporttree" title="discodop.treebank.exporttree"><code class="xref py py-obj docutils literal"><span class="pre">exporttree</span></code></a>(block[,&nbsp;functions,&nbsp;morphology,&nbsp;...])</td>
-<td>Get tree, sentence from tree in export format given as list of lines.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.exportsplit" title="discodop.treebank.exportsplit"><code class="xref py py-obj docutils literal"><span class="pre">exportsplit</span></code></a>(line)</td>
-<td>Take a line in export format and split into fields.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.alpinotree" title="discodop.treebank.alpinotree"><code class="xref py py-obj docutils literal"><span class="pre">alpinotree</span></code></a>(block[,&nbsp;functions,&nbsp;morphology,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.alpinotree" title="discodop.treebank.alpinotree"><code class="xref py py-obj docutils literal"><span class="pre">alpinotree</span></code></a>(block[,&nbsp;functions,&nbsp;morphology,&nbsp;...])</td>
 <td>Get tree, sent from tree in Alpino format given as etree XML object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writetree" title="discodop.treebank.writetree"><code class="xref py py-obj docutils literal"><span class="pre">writetree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;fmt[,&nbsp;comment,&nbsp;...])</td>
-<td>Convert a tree to a string representation in the given treebank format.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.brackettree" title="discodop.treebank.brackettree"><code class="xref py py-obj docutils literal"><span class="pre">brackettree</span></code></a>(treestr,&nbsp;sent,&nbsp;brackets,&nbsp;strtermre)</td>
+<td>Parse a single tree presented in (disc)bracket format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.writebrackettree" title="discodop.treebank.writebrackettree"><code class="xref py py-obj docutils literal"><span class="pre">writebrackettree</span></code></a>(tree,&nbsp;sent)</td>
-<td>Return a tree in bracket notation with words as terminals.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writeexporttree" title="discodop.treebank.writeexporttree"><code class="xref py py-obj docutils literal"><span class="pre">writeexporttree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;comment,&nbsp;...)</td>
-<td>Return string with given tree in Negra&#8217;s export format.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.writealpinotree" title="discodop.treebank.writealpinotree"><code class="xref py py-obj docutils literal"><span class="pre">writealpinotree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;commentstr)</td>
-<td>Return XML string with tree in AlpinoXML format.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writedependencies" title="discodop.treebank.writedependencies"><code class="xref py py-obj docutils literal"><span class="pre">writedependencies</span></code></a>(tree,&nbsp;sent,&nbsp;fmt)</td>
-<td>Convert tree to unlabeled dependencies in <cite>mst</cite> or <cite>conll</cite> format.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.dependencies" title="discodop.treebank.dependencies"><code class="xref py py-obj docutils literal"><span class="pre">dependencies</span></code></a>(root)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.dependencies" title="discodop.treebank.dependencies"><code class="xref py py-obj docutils literal"><span class="pre">dependencies</span></code></a>(root)</td>
 <td>Lin (1995): A Dependency-based Method for Evaluating [...] Parsers.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.handlefunctions" title="discodop.treebank.handlefunctions"><code class="xref py py-obj docutils literal"><span class="pre">handlefunctions</span></code></a>(action,&nbsp;tree[,&nbsp;pos,&nbsp;top,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.exportsplit" title="discodop.treebank.exportsplit"><code class="xref py py-obj docutils literal"><span class="pre">exportsplit</span></code></a>(line)</td>
+<td>Take a line in export format and split into fields.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.exporttree" title="discodop.treebank.exporttree"><code class="xref py py-obj docutils literal"><span class="pre">exporttree</span></code></a>(block[,&nbsp;functions,&nbsp;morphology,&nbsp;...])</td>
+<td>Get tree, sentence from tree in export format given as list of lines.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.handlefunctions" title="discodop.treebank.handlefunctions"><code class="xref py py-obj docutils literal"><span class="pre">handlefunctions</span></code></a>(action,&nbsp;tree[,&nbsp;pos,&nbsp;top,&nbsp;...])</td>
 <td>Add function tags to phrasal labels e.g., &#8216;VP&#8217; =&gt; &#8216;VP-HD&#8217;.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.handlemorphology" title="discodop.treebank.handlemorphology"><code class="xref py py-obj docutils literal"><span class="pre">handlemorphology</span></code></a>(action,&nbsp;lemmaaction,&nbsp;...[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.handlemorphology" title="discodop.treebank.handlemorphology"><code class="xref py py-obj docutils literal"><span class="pre">handlemorphology</span></code></a>(action,&nbsp;lemmaaction,&nbsp;...[,&nbsp;...])</td>
 <td>Augment/replace preterminal label with morphological information.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.incrementaltreereader" title="discodop.treebank.incrementaltreereader"><code class="xref py py-obj docutils literal"><span class="pre">incrementaltreereader</span></code></a>(treeinput[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.incrementaltreereader" title="discodop.treebank.incrementaltreereader"><code class="xref py py-obj docutils literal"><span class="pre">incrementaltreereader</span></code></a>(treeinput[,&nbsp;...])</td>
 <td>Incremental corpus reader.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.segmentbrackets" title="discodop.treebank.segmentbrackets"><code class="xref py py-obj docutils literal"><span class="pre">segmentbrackets</span></code></a>(brackets[,&nbsp;strict])</td>
-<td>Co-routine that accepts one line at a time.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">makedep</span></code>(root,&nbsp;deps)</td>
+<td>Traverse a head-marked tree and extract dependencies.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.segmentexport" title="discodop.treebank.segmentexport"><code class="xref py py-obj docutils literal"><span class="pre">segmentexport</span></code></a>(morphology,&nbsp;functions[,&nbsp;strict])</td>
-<td>Co-routine that accepts one line at a time.</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.numbase" title="discodop.treebank.numbase"><code class="xref py py-obj docutils literal"><span class="pre">numbase</span></code></a>(key)</td>
+<td>Split file name in numeric and string components to use as sort key.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">openread</span></code>(filename[,&nbsp;encoding])</td>
+<td>Open text file for reading; decompress .gz files on-the-fly.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.quote" title="discodop.treebank.quote"><code class="xref py py-obj docutils literal"><span class="pre">quote</span></code></a>(word)</td>
 <td>Quote parentheses and replace None with &#8216;&#8217;.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.unquote" title="discodop.treebank.unquote"><code class="xref py py-obj docutils literal"><span class="pre">unquote</span></code></a>(word)</td>
-<td>Reverse quoting of parentheses, frontier spans.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.termindices" title="discodop.treebank.termindices"><code class="xref py py-obj docutils literal"><span class="pre">termindices</span></code></a>(treestr)</td>
-<td>Replace terminals in a tree string with consecutive indices.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.numbase" title="discodop.treebank.numbase"><code class="xref py py-obj docutils literal"><span class="pre">numbase</span></code></a>(key)</td>
-<td>Split file name in numeric and string components to use as sort key.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.removeemptynodes" title="discodop.treebank.removeemptynodes"><code class="xref py py-obj docutils literal"><span class="pre">removeemptynodes</span></code></a>(tree,&nbsp;sent)</td>
+<td>Remove any empty nodes, and any empty ancestors.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.removeterminals" title="discodop.treebank.removeterminals"><code class="xref py py-obj docutils literal"><span class="pre">removeterminals</span></code></a>(tree,&nbsp;sent,&nbsp;func)</td>
 <td>Remove any terminals for which func is True, and any empty ancestors.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.removeemptynodes" title="discodop.treebank.removeemptynodes"><code class="xref py py-obj docutils literal"><span class="pre">removeemptynodes</span></code></a>(tree,&nbsp;sent)</td>
-<td>Remove any empty nodes, and any empty ancestors.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.segmentbrackets" title="discodop.treebank.segmentbrackets"><code class="xref py py-obj docutils literal"><span class="pre">segmentbrackets</span></code></a>(brackets[,&nbsp;strict])</td>
+<td>Co-routine that accepts one line at a time.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.segmentexport" title="discodop.treebank.segmentexport"><code class="xref py py-obj docutils literal"><span class="pre">segmentexport</span></code></a>(morphology,&nbsp;functions[,&nbsp;strict])</td>
+<td>Co-routine that accepts one line at a time.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.termindices" title="discodop.treebank.termindices"><code class="xref py py-obj docutils literal"><span class="pre">termindices</span></code></a>(treestr)</td>
+<td>Replace terminals in a tree string with consecutive indices.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.unquote" title="discodop.treebank.unquote"><code class="xref py py-obj docutils literal"><span class="pre">unquote</span></code></a>(word)</td>
+<td>Reverse quoting of parentheses, frontier spans.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writealpinotree" title="discodop.treebank.writealpinotree"><code class="xref py py-obj docutils literal"><span class="pre">writealpinotree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;commentstr)</td>
+<td>Return XML string with tree in AlpinoXML format.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.writebrackettree" title="discodop.treebank.writebrackettree"><code class="xref py py-obj docutils literal"><span class="pre">writebrackettree</span></code></a>(tree,&nbsp;sent)</td>
+<td>Return a tree in bracket notation with words as terminals.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writedependencies" title="discodop.treebank.writedependencies"><code class="xref py py-obj docutils literal"><span class="pre">writedependencies</span></code></a>(tree,&nbsp;sent,&nbsp;fmt)</td>
+<td>Convert tree to unlabeled dependencies in <cite>mst</cite> or <cite>conll</cite> format.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.writeexporttree" title="discodop.treebank.writeexporttree"><code class="xref py py-obj docutils literal"><span class="pre">writeexporttree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;comment,&nbsp;...)</td>
+<td>Return string with given tree in Negra&#8217;s export format.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.writetree" title="discodop.treebank.writetree"><code class="xref py py-obj docutils literal"><span class="pre">writetree</span></code></a>(tree,&nbsp;sent,&nbsp;n,&nbsp;fmt[,&nbsp;comment,&nbsp;...])</td>
+<td>Convert a tree to a string representation in the given treebank format.</td>
 </tr>
 </tbody>
 </table>
@@ -131,29 +137,29 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.Item" title="discodop.treebank.Item"><code class="xref py py-obj docutils literal"><span class="pre">Item</span></code></a>(tree,&nbsp;sent,&nbsp;comment,&nbsp;block)</td>
-<td>A treebank item.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.AlpinoCorpusReader" title="discodop.treebank.AlpinoCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">AlpinoCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<td>Corpus reader for the Dutch Alpino treebank in XML format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.CorpusReader" title="discodop.treebank.CorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">CorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;ensureroot,&nbsp;...])</td>
-<td>Abstract corpus reader.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.BracketCorpusReader" title="discodop.treebank.BracketCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">BracketCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.BracketCorpusReader" title="discodop.treebank.BracketCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">BracketCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Corpus reader for phrase-structures in bracket notation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.DiscBracketCorpusReader" title="discodop.treebank.DiscBracketCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">DiscBracketCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.CorpusReader" title="discodop.treebank.CorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">CorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;ensureroot,&nbsp;...])</td>
+<td>Abstract corpus reader.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.DactCorpusReader" title="discodop.treebank.DactCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">DactCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<td>Corpus reader for Alpino trees in Dact format (DB XML).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.DiscBracketCorpusReader" title="discodop.treebank.DiscBracketCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">DiscBracketCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>A corpus reader for discontinuous trees in bracket notation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.Item" title="discodop.treebank.Item"><code class="xref py py-obj docutils literal"><span class="pre">Item</span></code></a>(tree,&nbsp;sent,&nbsp;comment,&nbsp;block)</td>
+<td>A treebank item.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.NegraCorpusReader" title="discodop.treebank.NegraCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">NegraCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Read a corpus in the Negra export format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.AlpinoCorpusReader" title="discodop.treebank.AlpinoCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">AlpinoCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
-<td>Corpus reader for the Dutch Alpino treebank in XML format.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.treebank.TigerXMLCorpusReader" title="discodop.treebank.TigerXMLCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">TigerXMLCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.TigerXMLCorpusReader" title="discodop.treebank.TigerXMLCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">TigerXMLCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Corpus reader for the Tiger XML format.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.treebank.DactCorpusReader" title="discodop.treebank.DactCorpusReader"><code class="xref py py-obj docutils literal"><span class="pre">DactCorpusReader</span></code></a>(path[,&nbsp;encoding,&nbsp;...])</td>
-<td>Corpus reader for Alpino trees in Dact format (DB XML).</td>
 </tr>
 </tbody>
 </table>

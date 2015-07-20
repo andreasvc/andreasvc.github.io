@@ -59,30 +59,39 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.heads.ishead" title="discodop.heads.ishead"><code class="xref py py-obj docutils literal"><span class="pre">ishead</span></code></a>(tree)</td>
-<td>Test whether this node is the head of the parent constituent.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">applyheadrules</span></code>(tree,&nbsp;headrules)</td>
+<td>Apply head rules and set head attribute of nodes.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.heads.getheadpos" title="discodop.heads.getheadpos"><code class="xref py py-obj docutils literal"><span class="pre">getheadpos</span></code></a>(node)</td>
 <td>Get head word dominated by this node.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.heads.readheadrules" title="discodop.heads.readheadrules"><code class="xref py py-obj docutils literal"><span class="pre">readheadrules</span></code></a>(filename)</td>
-<td>Read a file containing heuristic rules for head assignment.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.heads.headfinder" title="discodop.heads.headfinder"><code class="xref py py-obj docutils literal"><span class="pre">headfinder</span></code></a>(tree,&nbsp;headrules[,&nbsp;headlabels])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.heads.headfinder" title="discodop.heads.headfinder"><code class="xref py py-obj docutils literal"><span class="pre">headfinder</span></code></a>(tree,&nbsp;headrules[,&nbsp;headlabels])</td>
 <td>Use head finding rules to select one child of tree node as head.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">ptbheadfinder</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#discodop.heads.sethead" title="discodop.heads.sethead"><code class="xref py py-obj docutils literal"><span class="pre">sethead</span></code></a>(child)</td>
-<td>Mark node as head in an auxiliary field.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#discodop.heads.saveheads" title="discodop.heads.saveheads"><code class="xref py py-obj docutils literal"><span class="pre">saveheads</span></code></a>(tree,&nbsp;tailmarker)</td>
-<td>Store head as grammatical function when inferrable from binarization.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#discodop.heads.headstats" title="discodop.heads.headstats"><code class="xref py py-obj docutils literal"><span class="pre">headstats</span></code></a>(trees)</td>
 <td>Collect some information useful for writing headrules.</td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.heads.ishead" title="discodop.heads.ishead"><code class="xref py py-obj docutils literal"><span class="pre">ishead</span></code></a>(tree)</td>
+<td>Test whether this node is the head of the parent constituent.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.heads.readheadrules" title="discodop.heads.readheadrules"><code class="xref py py-obj docutils literal"><span class="pre">readheadrules</span></code></a>(filename)</td>
+<td>Read a file containing heuristic rules for head assignment.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#discodop.heads.saveheads" title="discodop.heads.saveheads"><code class="xref py py-obj docutils literal"><span class="pre">saveheads</span></code></a>(tree,&nbsp;tailmarker)</td>
+<td>Store head as grammatical function when inferrable from binarization.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#discodop.heads.sethead" title="discodop.heads.sethead"><code class="xref py py-obj docutils literal"><span class="pre">sethead</span></code></a>(child)</td>
+<td>Mark node as head in an auxiliary field.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="function">

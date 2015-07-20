@@ -9,7 +9,12 @@ discodop.treedraw
 
    .. autosummary::
    
+      disc
+      escape
+      incrementaltreereader
       latexlabel
+      main
+      test
    
    
 
@@ -20,6 +25,12 @@ discodop.treedraw
    .. autosummary::
    
       DrawTree
+      OrderedDict
+      Tree
+      chain
+      defaultdict
+      islice
+      itemgetter
    
    
 

@@ -9,19 +9,33 @@ discodop._fragments
 
    .. autosummary::
    
-      extractfragments
-      exactcounts
-      completebitsets
       allfragments
-      repl
-      pygetsent
-      nonfrontier
+      binarize
+      completebitsets
+      exactcounts
+      exactcountssubset
+      extractfragments
       getctrees
+      lcfrsproductions
+      nonfrontier
+      printrule
+      pygetsent
       readtreebank
+      repl
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Counter
+      RoaringBitmap
+      Tree
+      islice
+      partial
    
    
 
