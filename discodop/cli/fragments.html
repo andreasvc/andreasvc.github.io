@@ -23,13 +23,24 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" /> 
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
+    <link rel="up" title="Command line options" href="../discodop.html" />
+    <link rel="next" title="gen" href="gen.html" />
+    <link rel="prev" title="eval" href="eval.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="gen.html" title="gen"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="eval.html" title="eval"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../discodop.html" accesskey="U">Command line options</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,36 +62,30 @@ Output contains lines of the form &#8220;tree&lt;TAB&gt;frequency&#8221;.
 Frequencies refer to the first treebank by default.
 Output is sent to stdout; to save the results, redirect to a file.</p>
 <p>Options:</p>
-<dl class="docutils">
-<dt>&#8211;fmt=(export|bracket|discbracket|tiger|alpino|dact)</dt>
-<dd>when format is not <code class="docutils literal"><span class="pre">bracket</span></code>, work with discontinuous trees;
-output is in <code class="docutils literal"><span class="pre">discbracket</span></code> format:
-tree&lt;TAB&gt;sentence&lt;TAB&gt;frequency
-where <code class="docutils literal"><span class="pre">tree</span></code> has indices as leaves, referring to elements of
-<code class="docutils literal"><span class="pre">sentence</span></code>, a space separated list of words.</dd>
-</dl>
 <table class="docutils option-list" frame="void" rules="none">
 <col class="option" />
 <col class="description" />
 <tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--fmt=<var>&lt;export|bracket|discbracket|tiger|alpino|dact&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>when format is not <code class="docutils literal"><span class="pre">bracket</span></code>, work with discontinuous trees;
+output is in <code class="docutils literal"><span class="pre">discbracket</span></code> format:
+tree&lt;TAB&gt;sentence&lt;TAB&gt;frequency
+where <code class="docutils literal"><span class="pre">tree</span></code> has indices as leaves, referring to elements of
+<code class="docutils literal"><span class="pre">sentence</span></code>, a space separated list of words.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-o <var>file</var></span></kbd></td>
 <td>Write output to <code class="docutils literal"><span class="pre">file</span></code> instead of stdout.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--indices</span></kbd></td>
 <td>report sets of 0-based indices instead of frequencies.</td></tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>&#8211;cover=n[,m]</dt>
-<dd>include all non-maximal/non-recurring fragments up to depth <code class="docutils literal"><span class="pre">n</span></code>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--cover=<var>&lt;n[,m]&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>include all non-maximal/non-recurring fragments up to depth <code class="docutils literal"><span class="pre">n</span></code>
 of first treebank; optionally, limit number of substitution
-sites to <code class="docutils literal"><span class="pre">m</span></code>.</dd>
-</dl>
-<table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
+sites to <code class="docutils literal"><span class="pre">m</span></code>.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--complete</span></kbd></td>
 <td>find complete matches of fragments from treebank1 (needle) in
@@ -166,7 +171,15 @@ default: (NP (DT a) (NN ))</td></tr>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="gen.html" title="gen"
+             >next</a></li>
+        <li class="right" >
+          <a href="eval.html" title="eval"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../discodop.html" >Command line options</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

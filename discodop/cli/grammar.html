@@ -23,13 +23,24 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" /> 
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
+    <link rel="up" title="Command line options" href="../discodop.html" />
+    <link rel="next" title="parser" href="parser.html" />
+    <link rel="prev" title="gen" href="gen.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="parser.html" title="parser"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="gen.html" title="gen"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../discodop.html" accesskey="U">Command line options</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -91,19 +102,23 @@ Input can be a rules, lexicon or fragment file.</td>
 <p>NB: both the <code class="docutils literal"><span class="pre">info</span></code> and <code class="docutils literal"><span class="pre">merge</span></code> commands expect grammars to be sorted by
 LHS, such as the ones created by this tool.</p>
 <p>Options:</p>
-<dl class="docutils">
-<dt>&#8211;inputfmt=(export|bracket|discbracket|tiger|alpino|dact)</dt>
-<dd>The treebank format [default: export].</dd>
-<dt>&#8211;inputenc=(utf-8|iso-8859-1|...)</dt>
-<dd>Treebank encoding [default: utf-8].</dd>
-<dt>&#8211;numproc=(1|2|...)</dt>
-<dd>Number of processes to start [default: 1].
-Only relevant for double dop fragment extraction.</dd>
-</dl>
 <table class="docutils option-list" frame="void" rules="none">
 <col class="option" />
 <col class="description" />
 <tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--inputfmt=<var>&lt;export|bracket|discbracket|tiger|alpino|dact&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The treebank format [default: export].</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--inputenc=<var>&lt;utf-8|iso-8859-1|...&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Treebank encoding [default: utf-8].</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--numproc=<var>&lt;1|2|...&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Number of processes to start [default: 1].
+Only relevant for double dop fragment extraction.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--gzip</span></kbd></td>
 <td>compress output with gzip, view with <code class="docutils literal"><span class="pre">zless</span></code> &amp;c.</td></tr>
@@ -116,16 +131,10 @@ Only relevant for double dop fragment extraction.</dd>
 <tr><td class="option-group">
 <kbd><span class="option">-s <var>X</var></span></kbd></td>
 <td>start symbol to use for PTSG.</td></tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>&#8211;dopestimator=(rfe|ewe|shortest|...)</dt>
-<dd>The DOP estimator to use with dopreduction/doubledop [default: rfe].</dd>
-</dl>
-<table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--dopestimator=<var>&lt;rfe|ewe|shortest|...&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The DOP estimator to use with dopreduction/doubledop [default: rfe].</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">--maxdepth=<var>N</var></span>, <span class="option">--maxfrontier=<var>N</var></span></kbd></td>
 </tr>
@@ -194,7 +203,15 @@ lexicon: Haus       NN      3/10    JJ      1/9
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="parser.html" title="parser"
+             >next</a></li>
+        <li class="right" >
+          <a href="gen.html" title="gen"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../discodop.html" >Command line options</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

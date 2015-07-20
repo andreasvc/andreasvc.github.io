@@ -23,13 +23,24 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" /> 
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
+    <link rel="up" title="Command line options" href="../discodop.html" />
+    <link rel="next" title="Parser parameters" href="../params.html" />
+    <link rel="prev" title="treesearch" href="treesearch.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="../params.html" title="Parser parameters"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="treesearch.html" title="treesearch"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../discodop.html" accesskey="U">Command line options</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,35 +66,31 @@ transform [--reverse] [--transforms=&lt;NAME1,NAME2...&gt;]
 </pre></div>
 </div>
 <p>options may consist of:</p>
-<dl class="docutils">
-<dt>&#8211;inputfmt=(export|bracket|discbracket|tiger|alpino|dact)</dt>
-<dd>Input treebank format [default: export].</dd>
-<dt>&#8211;outputfmt=(export|bracket|discbracket|dact|conll|mst|tokens|wordpos)</dt>
-<dd>Output treebank format [default: export].
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--inputfmt=<var>&lt;export|bracket|discbracket|tiger|alpino|dact&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Input treebank format [default: export].</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--outputfmt=<var>&lt;export|bracket|discbracket|dact|conll|mst|tokens|wordpos&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Output treebank format [default: export].
 Selecting the formats <code class="docutils literal"><span class="pre">conll</span></code> or <code class="docutils literal"><span class="pre">mst</span></code> results in an
 unlabeled dependency conversion and requires the use of
 heuristic head rules (<code class="docutils literal"><span class="pre">--headrules</span></code>), to ensure that all
 constituents have a child marked as head. A command line
 interface to perform transformations on treebanks such as
-binarization.</dd>
-</dl>
-<table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
+binarization.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--fmt=<var>x</var></span></kbd></td>
 <td>Shortcut to specify both input and output format.</td></tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>&#8211;inputenc, &#8211;outputenc, &#8211;enc=(utf-8|iso-8859-1|...)</dt>
-<dd>Treebank encoding [default: utf-8].</dd>
-</dl>
-<table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--inputenc</span>, <span class="option">--outputenc</span>, <span class="option">--enc=<var>&lt;utf-8|iso-8859-1|...&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Treebank encoding [default: utf-8].</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--slice=<var>&lt;n:m&gt;</var></span></kbd></td>
 <td>select a range of sentences from input starting with <em>n</em>,
@@ -173,16 +180,10 @@ e.g., (NN (man men))</td>
 <tr><td class="option-group">
 <kbd><span class="option">--removeempty</span></kbd></td>
 <td>remove empty / -NONE- terminals.</td></tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>&#8211;factor=(left|right)</dt>
-<dd>specify left- or right-factored binarization [default: right].</dd>
-</dl>
-<table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--factor=<var>&lt;left|right&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>specify left- or right-factored binarization [default: right].</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-h <var>n</var></span></kbd></td>
 <td>horizontal markovization. default: infinite (all siblings)</td></tr>
@@ -252,7 +253,15 @@ names, cf. <a class="reference internal" href="../api/discodop.treebanktransform
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="../params.html" title="Parser parameters"
+             >next</a></li>
+        <li class="right" >
+          <a href="treesearch.html" title="treesearch"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../discodop.html" >Command line options</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

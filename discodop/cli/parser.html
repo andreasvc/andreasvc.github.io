@@ -23,13 +23,24 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" /> 
+    <link rel="top" title="Disco-DOP 0.5pre1 documentation" href="../index.html" />
+    <link rel="up" title="Command line options" href="../discodop.html" />
+    <link rel="next" title="runexp" href="runexp.html" />
+    <link rel="prev" title="grammar" href="grammar.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="runexp.html" title="runexp"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="grammar.html" title="grammar"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../discodop.html" accesskey="U">Command line options</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -68,16 +79,10 @@ newlines (like bitpar).</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--tags</span></kbd></td>
 <td>Tokens are of the form <code class="docutils literal"><span class="pre">word/POS</span></code>; give both to parser.</td></tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>&#8211;fmt=(export|bracket|discbracket|alpino|conll|mst|wordpos)</dt>
-<dd>Format of output [default: discbracket].</dd>
-</dl>
-<table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--fmt=<var>&lt;export|bracket|discbracket|alpino|conll|mst|wordpos&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Format of output [default: discbracket].</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--numproc=<var>k</var></span></kbd></td>
 <td>Launch k processes, to exploit multiple cores.</td></tr>
@@ -109,16 +114,10 @@ probable derivation (MPD) ranked highest. With a PTSG such as
 DOP, it is possible to aim for the most probable parse (MPP)
 instead, whose probability is the sum of any number of the
 k-best derivations.</td></tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>&#8211;obj=(mpd|mpp|mcc|shortest|sl-dop)</dt>
-<dd>Objective function to maximize [default: mpd].</dd>
-</dl>
-<table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--obj=<var>&lt;mpd|mpp|mcc|shortest|sl-dop&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Objective function to maximize [default: mpd].</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-m <var>x</var></span></kbd></td>
 <td>Use x derivations to approximate objective functions;
@@ -163,7 +162,15 @@ mpd and shortest require only 1.</td></tr>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="runexp.html" title="runexp"
+             >next</a></li>
+        <li class="right" >
+          <a href="grammar.html" title="grammar"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Disco-DOP 0.5pre1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../ref.html" >Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../discodop.html" >Command line options</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
