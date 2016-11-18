@@ -1,0 +1,37 @@
+
+PhD thesis errata
+=================
+
+Original version: http://dare.uva.nl/document/2/177511
+Revised version: http://andreasvc.github.io/phdthesis_v1.1.pdf
+
+Major additions:
+----------------
+- Sec 2.2: add paragraph explaining role of binarization.
+- Sec 2.6: fix argument about complexity. Square of total number of nodes in
+  treebank is not relevant. Quadratic to linear speedup adds up due to number
+  of tree pairs (square of number of trees).
+- Table 3.8: add table with F1 scores restricted to discontinuous constituents.
+- p. 137 comparing variance of literary and quality ratings may be problematic
+  due to scale difference; add footnote mentioning this, and explanation that
+  predictability of ratings from features is not the same as variance of
+  ratings by themselves.
+- Include top 10 best/worst novels according to survey in appendix.
+
+Corrections:
+------------
+- Turn self-citations of incorporated papers into chapter references.
+- p. 8 obviously absurd -> highly improbable.
+- Fig 1.2 reverse arc between <the, book>.
+- Sec. 2.6: Stats on discontinuous fragments redundant with sec. 2.4; removed.
+- Table 3.3: Negra, "this work" should be vanCraBod2013, to make it clear that
+  the grammar is without refinements and function tags.
+- Sec 3.6.4: Reported proportion of gold items for PCFG is incorrect; add note.
+- p. 99: two different p-values are reported for the correlation of literary
+  and quality ratings; the one in the figure is correct.
+- Sec 7.2.5 is redundant, removed; except for Salganik citation, moved to ch. 5.
+  NB this changes the section numbering.
+- Many minor spelling fixes.
+
+
+Duesseldorf, November 18, 2016
