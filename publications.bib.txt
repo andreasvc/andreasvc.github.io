@@ -152,7 +152,7 @@
   title={These are not the Stereotypes You are Looking For: Bias and Fairness in Authorial Gender Attribution},
   author={Koolen, Corina and van Cranenburgh, Andreas},
   year={2017},
-  booktitle={Proceedings of the First Ethics in NLP workshop}
+  booktitle={Proceedings of the First Ethics in NLP workshop},
   pages={12--22},
   url={http://aclweb.org/anthology/W17-1602}
 }
