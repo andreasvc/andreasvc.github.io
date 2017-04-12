@@ -79,8 +79,56 @@ Profiles: <a href="https://scholar.google.nl/citations?user=Y745fFYAAAAJ&hl=en">
     Proceedings of EACL, pp. 1228-1238.<br>
     <a href="http://aclweb.org/anthology/E17-1115">http://aclweb.org/anthology/E17-1115</a>
     (<a href="https://github.com/andreasvc/literariness">code</a>;
-	<a href="eacl2017pres.pdf">slides</a>)
+	<a href="eacl2017pres.pdf">slides</a>;
+	<a href="javascript:toggle('eacl2017qa');">Q&amp;A</a>)
 </p>
+<div id="eacl2017qa" style="display: none; text-indent: 0em;">
+Summary of Q&amp;A (questions paraphrased, improved answers):
+<ul>
+<li>Micheal Strube: <em>Your model fails to characterize art! The research
+		question mentions the goal of finding textual conventions, but
+		literature is the polar opposite of that. What about e.g., Beckett?</em><br>
+	Characterizing capital-A Art was not the goal; the goal was merely to
+	empirically characterize the notion of literature that readers have. Yes,
+	it can be argued that literature inherently breaks conventions, especially
+	over longer periods when new styles develop (but this work is on
+	contemporary novels from a 5-year period, so this diachronic perspective is
+	beyond the scope of this work). However, at the same time the "literary
+	novel" can be said to form a genre with its own conventions, and the
+	results of the paper agree with that hypothesis. Either way, concepts can
+	be defined both through differences and commonalities w.r.t. non-members
+	and members, respectively; in order for a predictive model to generalize,
+	finding commonalities is a natural goal and arguably inherent to doing
+	science. It would also be possible to charactize literature by its differences
+	w.r.t. a suitably chosen, large corpus of "conventional" language; this
+	would be an interesting study for future work.
+<li>Walter Daelemans: <em>You showed that the ratings of highly literary
+		novels have smaller confidence intervals. Could this be because these
+		novels were more prominently covered in the media?</em><br>
+	All of these novels were popular, by virtue of the corpus selection: being
+	bestsellers or most borrowed from libraries. Note that the novel rated
+	least literary in the corpus, Fifty shades of Grey, probably received the
+	most media attention. An intuitive explanation for the smaller confidence
+	intervals for the novels rated as more literary is that, in general,
+	prototypical members of a concept are easy to agree on, while degrees of
+	less prototypical members (e.g., suspense novels) are more difficult to
+	agree on.
+<li><em>What is the effect of author gender?</em><br>
+	The corpus is approximately balanced in terms of number of novels by men versus women;
+	however, in terms of literary ratings the distribution is not balanced. All
+	of the chick lit novels are by women, while the highly rated novels by Dutch authors
+	are predominantly by male authors. This is a bias of the dataset. For more
+	details on the relationship of author gender and style,
+	see the <a href="http://aclweb.org/anthology/W17-1602">paper</a>
+	that I co-authored in the Ethics in NLP workshop.
+<li><em>Does syntax perform poorly compared to bag-of-words features?</em><br>
+	The syntactic features only gave a modest improvement when <em>added</em>
+	to the basic and lexical features. This means that there is a large
+	overlap with the word bigrams, but each on its own show comparable
+	performance. However, aside from the scores, in terms of interpretation
+	the syntactic features are still more useful than bag-of-words features.
+</ul>
+</div>
 
 <p>Andreas van Cranenburgh, Remko Scha, Rens Bod (2016).<br>
     Data-Oriented Parsing with Discontinuous Constituents and Function Tags.<br>
