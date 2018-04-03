@@ -157,11 +157,14 @@
   url={http://aclweb.org/anthology/W17-1602}
 }
 
-@article{koolen2017blue,
+@article{koolen2018blue,
   author={Koolen, Corina and van Cranenburgh, Andreas},
   title={Blue eyes and porcelain cheeks: Computational extraction of physical descriptions from Dutch chick lit and literary novels},
-  year={2017},
-  journal={Digital Scholarship Humanities},
-  note={to appear},
-  url={https://doi.org/10.1093/llc/fqx016},
+  year={2018},
+  journal={Digital Scholarship in the Humanities},
+  volume={33},
+  number={1},
+  pages={59--71}
+  date={1 April 2018},
+  url={https://academic.oup.com/dsh/article/3091837},
 }
