@@ -110,6 +110,15 @@
   url={http://aclweb.org/anthology/W15-0902}
 }
 
+@article{vancranenburgh2016machine,
+	title={Machine Learning Literature using Textual Features},
+	year={2016},
+	author={van Cranenburgh, Andreas},
+	journal={Tiny Transactions on Computer Science},
+	volume={4},
+	url={http://tinytocs.ece.utexas.edu/papers/tinytocs4_paper_cranenburgh.pdf}
+}
+
 @inproceedings{jautze2016topic,
   title={Topic Modeling Literary Quality},
   author={Kim Jautze and Andreas van Cranenburgh and Corina Koolen},
@@ -167,4 +176,13 @@
   pages={59--71}
   date={1 April 2018},
   url={https://academic.oup.com/dsh/article/3091837},
+}
+
+@InProceedings{bladier2018supertagging,
+    author={Bladier, Tatiana and van Cranenburgh, Andreas and Samih, Younes and Kallmeyer, Laura},
+    title={German and French Neural Supertagging Experiments for LTAG Parsing},
+    year={2018},
+    booktitle={Proceedings of ACL 2018, Student Research Workshop},
+    pages={59--66},
+    url={http://aclweb.org/anthology/P18-3009}
 }
