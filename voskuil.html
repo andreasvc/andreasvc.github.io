@@ -1,0 +1,445 @@
+<!DOCTYPE html><html>
+<head><meta charset=utf-8>
+<title>Voskuil_Buurman coref</title>
+<style>
+body { margin: 3em; max-width: 50em; }
+span { font-weight: bold; }
+span.n { font-weight: normal; }
+span.q { color: green; font-weight: normal; }
+.ansi2html-content {
+	display: inline; white-space: pre-wrap; word-wrap: break-word;
+	background: black; }
+.div_foreground { color: #AAAAAA; padding: .5em; }
+.div_background { background-color: #000000; }
+.div_foreground > .bold,.bold > .div_foreground, div.div_foreground
+	> pre > .bold { color: #FFFFFF; font-weight: normal; }
+.inv_foreground { color: #000000; }
+.inv_background { background-color: #AAAAAA; }
+.ansi32 { color: #00cd00; }
+.ansi33 { color: #cdcd00; }
+</style>
+<script>
+function highlight(ev) {
+    var cls = ev.target.className;
+    var elems = document.getElementsByClassName(cls)
+    for (var n in elems)
+        elems[n].style = 'background: yellow; ';
+}
+function unhighlight(ev) {
+    var cls = ev.target.className;
+    var elems = document.getElementsByClassName(cls)
+    for (var n in elems)
+        elems[n].style = '';
+}
+function addhighlighting() {
+    var elems = document.getElementsByTagName('span');
+    for (var n in elems) {
+        if (elems[n].className.charAt(0) == 'c') {
+            elems[n].onmouseover = highlight;
+            elems[n].onmouseout = unhighlight;
+        }
+    }
+}
+function hl1(id) {
+    document.getElementById(id).style = 'background: lightblue; ';
+}
+function hl2(id) {
+    document.getElementById(id).style = 'background: lightcoral; ';
+}
+function nohl(id) {
+    document.getElementById(id).style = '';
+}
+</script>
+</head>
+<body onLoad="addhighlighting()">
+<p>Move mouse over bracketed text to highlight coreference.
+Move mouse over direct speech to highlight speaker and addressee.<br>
+Legend:
+<span class="n">[ Singleton ]</span>
+<span style="background: yellow">[ Coreference ]</span>
+<span style="background: lightblue">[ Speaker ]</span>
+<span style="background: lightcoral">[ Addressee ]</span>
+<span class="q">' Direct speech '</span>
+
+<p> In <span id="m1" class="c1">[het achterhuis]</span> was [een groothandel in wc-potten] gevestigd . Er werkte één man . <span id="m3" class="c3">[Hij]</span> kwam om negen uur , als <span id="m4" class="c4">[ik]</span> al naar [<span id="m5" class="c4">[mijn]</span> werk] was , en vertrok om vijf uur , voor <span id="m6" class="c4">[ik]</span> terugkeerde . <span id="m8" class="c8">[Nicolien]</span> hoorde <span id="m9" class="c3">[hem]</span> langskomen als <span id="m10" class="c8">[ze]</span> bezig was met <span id="m7" class="c7">[de afwas]</span> . <span id="m14" class="c7">[Hij]</span> kwam dan over [het portaaltje] , klom de negen treden naar <span id="m12" class="c1">[het achterhuis]</span> op , opende [<span id="m15" class="c7">[zijn]</span> voordeur] en sloot <span id="m16" class="c8">[haar]</span> zachtjes achter <span id="m17" class="c7">[zich]</span> . De rest van de dag merkte <span id="m18" class="c8">[ze]</span> niets van <span id="m19" class="c7">[hem]</span> , tot <span id="m20" class="c7">[hij]</span> weer wegging . Er kwamen ook geen bezoekers .</p>
+<p><span class=q onmouseover="hl1('m24'); hl2('m27'); " onmouseout="nohl('m24'); nohl('m27'); "> ' <span id="m22" class="c21">[Het]</span> is <span id="m21" class="c21">[een oude man]</span> , denk <span id="m23" class="c8">[ik]</span> , '</span> zei <span id="m24" class="c8">[ze]</span> .</p>
+<p><span class=q onmouseover="hl1('m27'); hl2('m24'); " onmouseout="nohl('m27'); nohl('m24'); "> ' Heb <span id="m25" class="c8">[je]</span> <span id="m26" class="c21">[hem]</span> dan gezien ? '</span> vroeg <span id="m27" class="c4">[ik]</span> .</p>
+<p><span class=q onmouseover="hl1('m24'); hl2('m27'); " onmouseout="nohl('m24'); nohl('m27'); "> ' Nee , <span id="m29" class="c21">[dat]</span> kan <span id="m28" class="c8">[ik]</span> horen . '</span></p>
+<p> Er werd gebeld . Toen <span id="m33" class="c4">[ik]</span> opendeed , stond er <span id="m30" class="c21">[een oude man]</span> met [grijs , golvend haar] , in [een slecht zittend] , wat te ruim , grijs kostuum .</p>
+<p><span class=q onmouseover="hl1('m37'); " onmouseout="nohl('m37'); "> ' <span id="m36" class="c21">[Ik]</span> ben <span id="m34" class="c21">[de directeur van [Fecalo]</span>] , van hierachter , '</span> zei <span id="m37" class="c21">[hij]</span> .<span class=q onmouseover="hl1('m37'); " onmouseout="nohl('m37'); "> ' Mag <span id="m38" class="c21">[ik]</span> [u] iets vragen ? '</span></p>
+<p> <span id="m40" class="c4">[Ik]</span> vroeg <span id="m41" class="c21">[hem]</span> binnen te komen . <span id="m43" class="c43">[Hij]</span> stelde <span id="m44" class="c43">[zich]</span> voor , maar <span id="m45" class="c4">[ik]</span> vergat [<span id="m46" class="c43">[zijn]</span> naam] meteen weer . [We] zaten net <span id="m47" class="c47">[een borrel]</span> te drinken . <span id="m49" class="c4">[Ik]</span> bood <span id="m50" class="c43">[hem]</span> er ook een aan . <span id="m51" class="c43">[Hij]</span> sloeg <span id="m52" class="c47">[dat]</span> niet af .<span class=q onmouseover="hl1('m57'); " onmouseout="nohl('m57'); "> ' [De kwestie] is dat [wij] gaan verhuizen , '</span> zei <span id="m57" class="c43">[hij]</span> toen <span id="m58" class="c43">[hij]</span> [een slok] had genomen ,<span class=q onmouseover="hl1('m57'); hl2('m65'); " onmouseout="nohl('m57'); nohl('m65'); "> ' en nu wilde <span id="m59" class="c43">[ik]</span> <span id="m60" class="c4">[u]</span> vragen of <span id="m61" class="c4">[u]</span> misschien [de post] zoudt willen doorzenden als <span id="m62" class="c62">[dat]</span> <span id="m63" class="c62">[zich]</span> mocht voordoen . '</span><span class=q onmouseover="hl1('m65'); hl2('m57'); " onmouseout="nohl('m65'); nohl('m57'); "> ' <span id="m64" class="c43">[U]</span> gaat verhuizen ! '</span> zei <span id="m65" class="c4">[ik]</span> verrast .</p>
+<p> <span id="m66" class="c43">[Hij]</span> knikte .<span class=q onmouseover="hl1('m57'); hl2('m65'); " onmouseout="nohl('m57'); nohl('m65'); "> ' Eind van deze maand . '</span></p>
+<p><span class=q onmouseover="hl1('m65'); hl2('m57'); " onmouseout="nohl('m65'); nohl('m57'); "> ' <span id="m67" class="c62">[Dat]</span> is jammer . '</span></p>
+<p><span class=q onmouseover="hl1('m57'); hl2('m65'); " onmouseout="nohl('m57'); nohl('m65'); "> ' <span id="m68" class="c43">[Ik]</span> vind <span id="m69" class="c62">[het]</span> ook jammer , maar <span id="m70" class="c62">[het]</span> kon niet anders . '</span>
+</p>
+
+
+
+<div class="div_foreground div_background">
+<pre class="ansi2html-content"><span class="ansi33">mention detection</span>
+'<span class="ansi32">een groothandel in wc-potten</span>' number=sg gender=n person=? human=0 inquote=0 head=groothandel neclass=None
+'<span class="ansi32">het achterhuis</span>' number=sg gender=n person=? human=0 inquote=0 head=achterhuis neclass=None
+'<span class="ansi32">mijn werk</span>' number=sg gender=n person=? human=0 inquote=0 head=werk neclass=None
+'<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=Hij neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 head=ik neclass=None
+'<span class="ansi32">mijn</span>' number=sg gender=mf person=1 human=1 inquote=0 head=mijn neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 head=ik neclass=None
+'<span class="ansi32">de afwas</span>' number=sg gender=? person=? human=? inquote=0 head=afwas neclass=None
+'<span class="ansi32">Nicolien</span>' number=sg gender=f person=? human=1 inquote=0 head=Nicolien neclass=PER
+'<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 head=hem neclass=None
+'<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 head=ze neclass=None
+'<span class="ansi32">het portaaltje</span>' number=sg gender=n person=? human=0 inquote=0 head=portaaltje neclass=None
+'<span class="ansi32">het achterhuis</span>' number=sg gender=n person=? human=0 inquote=0 head=achterhuis neclass=None
+'<span class="ansi32">zijn voordeur</span>' number=sg gender=n person=? human=0 inquote=0 head=voordeur neclass=None
+'<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=Hij neclass=None
+'<span class="ansi32">zijn</span>' number=sg gender=mn person=3 human=? inquote=0 head=zijn neclass=None
+'<span class="ansi32">haar</span>' number=sg gender=f person=3 human=1 inquote=0 head=haar neclass=None
+'<span class="ansi32">zich</span>' number=sg gender=? person=3 human=? inquote=0 head=zich neclass=None
+'<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 head=ze neclass=None
+'<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 head=hem neclass=None
+'<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=hij neclass=None
+'<span class="ansi32">een oude man</span>' number=sg gender=m person=? human=1 inquote=1 head=man neclass=None
+'<span class="ansi32">Het</span>' number=sg gender=n person=3 human=0 inquote=1 head=Het neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 head=ik neclass=None
+'<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 head=ze neclass=None
+'<span class="ansi32">je</span>' number=sg gender=mf person=2 human=1 inquote=1 head=je neclass=None
+'<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=1 head=hem neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 head=ik neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 head=ik neclass=None
+'<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1 head=dat neclass=None
+'<span class="ansi32">een oude man</span>' number=sg gender=m person=? human=1 inquote=0 head=man neclass=None
+'<span class="ansi32">grijs , golvend haar</span>' number=sg gender=n person=? human=0 inquote=0 head=haar neclass=None
+'<span class="ansi32">een slecht zittend</span>' number=? gender=? person=? human=? inquote=0 head=zittend neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 head=ik neclass=None
+'<span class="ansi32">de directeur van Fecalo</span>' number=sg gender=mf person=? human=1 inquote=1 head=directeur neclass=None
+'<span class="ansi32">Fecalo</span>' number=sg gender=n person=? human=0 inquote=1 head=Fecalo neclass=ORG
+'<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=1 head=Ik neclass=None
+'<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=hij neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 head=ik neclass=None
+'<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1 head=u neclass=None
+'<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=0 head=Ik neclass=None
+'<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 head=hem neclass=None
+'<span class="ansi32">zijn naam</span>' number=sg gender=n person=? human=0 inquote=0 head=naam neclass=None
+'<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=Hij neclass=None
+'<span class="ansi32">zich</span>' number=sg gender=? person=3 human=? inquote=0 head=zich neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 head=ik neclass=None
+'<span class="ansi32">zijn</span>' number=sg gender=mn person=3 human=? inquote=0 head=zijn neclass=None
+'<span class="ansi32">een borrel</span>' number=sg gender=n person=? human=0 inquote=0 head=borrel neclass=None
+'<span class="ansi32">We</span>' number=pl gender=mf person=1 human=1 inquote=0 head=We neclass=None
+'<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=0 head=Ik neclass=None
+'<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 head=hem neclass=None
+'<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=Hij neclass=None
+'<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=0 head=dat neclass=None
+'<span class="ansi32">De kwestie</span>' number=sg gender=? person=? human=? inquote=1 head=kwestie neclass=None
+'<span class="ansi32">een slok</span>' number=sg gender=? person=? human=? inquote=0 head=slok neclass=None
+'<span class="ansi32">de post</span>' number=pl human=? gender=n person=? inquote=1 head=post neclass=None
+'<span class="ansi32">wij</span>' number=pl gender=mf person=1 human=1 inquote=1 head=wij neclass=None
+'<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=hij neclass=None
+'<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=hij neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 head=ik neclass=None
+'<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1 head=u neclass=None
+'<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1 head=u neclass=None
+'<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1 head=dat neclass=None
+'<span class="ansi32">zich</span>' number=both gender=? person=3 human=? inquote=1 head=zich neclass=None
+'<span class="ansi32">U</span>' number=sg gender=mf person=2 human=1 inquote=1 head=U neclass=None
+'<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 head=ik neclass=None
+'<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 head=Hij neclass=None
+'<span class="ansi32">Dat</span>' number=sg gender=n person=3 human=0 inquote=1 head=Dat neclass=None
+'<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=1 head=Ik neclass=None
+'<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1 head=het neclass=None
+'<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1 head=het neclass=None
+<span class="ansi33">speaker identification (11 quotations)</span>
+attributed <span class="ansi32">' Het is een oude man , denk ik , '</span>
+	to mention directly after: '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+attributed <span class="ansi32">' Heb je hem dan gezien ? '</span>
+	to mention directly after: '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+attributed <span class="ansi32">' Ik ben de directeur van Fecalo , van hierachter , '</span>
+	to mention directly after: '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+attributed <span class="ansi32">' De kwestie is dat wij gaan verhuizen , '</span>
+	to mention directly after: '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+attributed <span class="ansi32">' U gaat verhuizen ! '</span>
+	to mention directly after: '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+'<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 <span class="ansi32">' Het is een oude man , denk ik , '</span>
+	addresses '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 <span class="ansi32">' Heb je hem dan gezien ? '</span>
+attributed <span class="ansi32">' Nee , dat kan ik horen . '</span>
+	to previous addressee '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+attributed <span class="ansi32">' Mag ik u iets vragen ? '</span>
+	to previous speaker '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+attributed <span class="ansi32">' en nu wilde ik u vragen of u misschien de post zoudt willen doorzenden als dat zich mocht voordoen . '</span>
+	to previous speaker '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+'<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 <span class="ansi32">' en nu wilde ik u vragen of u misschien de post zoudt willen doorzenden als dat zich mocht voordoen . '</span>
+	addresses '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 <span class="ansi32">' U gaat verhuizen ! '</span>
+attributed <span class="ansi32">' Eind van deze maand . '</span>
+	to previous addressee '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+attributed <span class="ansi32">' Dat is jammer . '</span>
+	to previous addressee '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+attributed <span class="ansi32">' Ik vind het ook jammer , maar het kon niet anders . '</span>
+	to previous addressee '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+<span class="ansi33">string match (relaxed=False)</span>
+Linked  0 1 '<span class="ansi32">het achterhuis</span>' number=sg gender=n person=? human=0 inquote=0
+	4 12 '<span class="ansi32">het achterhuis</span>' number=sg gender=n person=? human=0 inquote=0
+Linked  7 3 '<span class="ansi32">een oude man</span>' number=sg gender=m person=? human=1 inquote=1
+	11 6 '<span class="ansi32">een oude man</span>' number=sg gender=m person=? human=1 inquote=0
+<span class="ansi33">string match (relaxed=True)</span>
+<span class="ansi33">precise constructs</span>
+Linked  7 3 '<span class="ansi32">een oude man</span>' number=sg gender=mn person=? human=? inquote=1
+	7 1 '<span class="ansi32">Het</span>' number=sg gender=mn person=3 human=? inquote=1
+Linked  12 3 '<span class="ansi32">de directeur van Fecalo</span>' number=sg gender=mf person=? human=1 inquote=1
+	12 1 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=1
+Linked  15 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	15 2 '<span class="ansi32">zich</span>' number=sg gender=m person=3 human=1 inquote=0
+Linked  19 35 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1
+	19 36 '<span class="ansi32">zich</span>' number=sg gender=n person=3 human=0 inquote=1
+<span class="ansi33">strict head match 5</span>
+<span class="ansi33">strict head match 6</span>
+<span class="ansi33">strict head match 7</span>
+<span class="ansi33">proper head match (relaxed=False)</span>
+<span class="ansi33">proper head match (relaxed=True)</span>
+<span class="ansi33">pronoun resolution</span>
+Linked  2 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	2 10 '<span class="ansi32">mijn</span>' number=sg gender=mf person=1 human=1 inquote=0
+Linked  2 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	2 21 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+Linked  2 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	8 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+Linked  2 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	11 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+Linked  2 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	14 0 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+Linked  2 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	15 6 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+Linked  2 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	17 0 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+Linked  2 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	20 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+2 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	2 21 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	2 7 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	2 0 su 1 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	2 10 det 9 '<span class="ansi32">mijn</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	2 10 obj1 1 '<span class="ansi32">mijn werk</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0 i-within-i or &gt;
+	0 4 su 1 '<span class="ansi32">een groothandel in wc-potten</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0
+	0 1 obj1 2 '<span class="ansi32">het achterhuis</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0
+3 2 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+	3 5 su 1 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	3 0 su 1 '<span class="ansi32">Nicolien</span>' number=sg gender=f person=? human=1 inquote=0 prohibited=1 coargument
+	3 2 obj1 1 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	3 9 obj1 1 '<span class="ansi32">de afwas</span>' number=sg gender=? person=? human=? inquote=0 prohibited=0 i-within-i or &gt;
+	2 21 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=0
+	2 7 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=0
+	2 0 su 1 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  2 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	3 2 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+3 5 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+	3 5 su 1 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	3 0 su 1 '<span class="ansi32">Nicolien</span>' number=sg gender=f person=? human=1 inquote=0 prohibited=0
+Linked  3 0 '<span class="ansi32">Nicolien</span>' number=sg gender=f person=? human=1 inquote=0
+	3 5 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+4 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	4 0 su 1 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	4 21 obj1 1 '<span class="ansi32">haar</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	4 17 obj1 1 '<span class="ansi32">zijn voordeur</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0 i-within-i or &gt;
+	4 24 obj1 1 '<span class="ansi32">zich</span>' number=sg gender=? person=3 human=? inquote=0 prohibited=0 i-within-i or &gt;
+	4 17 det 1 '<span class="ansi32">zijn</span>' number=sg gender=mn person=3 human=? inquote=0 prohibited=0 i-within-i or &gt;
+	4 12 obj1 2 '<span class="ansi32">het achterhuis</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0 i-within-i or &gt;
+	4 4 obj1 1 '<span class="ansi32">het portaaltje</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0 i-within-i or &gt;
+	3 5 su 2 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=0
+	3 0 su 2 '<span class="ansi32">Nicolien</span>' number=sg gender=f person=? human=1 inquote=0 prohibited=0
+	3 2 obj1 2 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 coargument
+	3 9 obj1 1 '<span class="ansi32">de afwas</span>' number=sg gender=? person=? human=? inquote=0 prohibited=0
+Linked  3 9 '<span class="ansi32">de afwas</span>' number=sg gender=m person=? human=1 inquote=0
+	4 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+4 17 '<span class="ansi32">zijn</span>' number=sg gender=mn person=3 human=? inquote=0
+	4 0 su 2 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  4 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	4 17 '<span class="ansi32">zijn</span>' number=sg gender=m person=3 human=1 inquote=0
+4 21 '<span class="ansi32">haar</span>' number=sg gender=f person=3 human=1 inquote=0
+	4 0 su 3 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+	4 21 obj1 1 '<span class="ansi32">haar</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	4 17 obj1 1 '<span class="ansi32">zijn voordeur</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0
+	4 24 obj1 1 '<span class="ansi32">zich</span>' number=sg gender=? person=3 human=? inquote=0 prohibited=0 i-within-i or &gt;
+	4 17 det 3 '<span class="ansi32">zijn</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+	4 12 obj1 2 '<span class="ansi32">het achterhuis</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0
+	4 4 obj1 1 '<span class="ansi32">het portaaltje</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0
+	3 5 su 2 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=0
+Linked  3 5 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+	4 21 '<span class="ansi32">haar</span>' number=sg gender=f person=3 human=1 inquote=0
+4 24 '<span class="ansi32">zich</span>' number=sg gender=? person=3 human=? inquote=0
+	4 0 su 3 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  4 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	4 24 '<span class="ansi32">zich</span>' number=sg gender=m person=3 human=1 inquote=0
+5 6 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+	5 12 su 1 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	5 6 su 1 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	5 9 obj1 1 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	4 0 su 4 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+	4 21 obj1 3 '<span class="ansi32">haar</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=0
+Linked  4 21 '<span class="ansi32">haar</span>' number=sg gender=f person=3 human=1 inquote=0
+	5 6 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+5 9 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+	5 12 su 1 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	5 6 su 4 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=1 coargument
+	5 9 obj1 1 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	4 0 su 4 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  4 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	5 9 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+5 12 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	5 12 su 1 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	5 6 su 4 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=0
+	5 9 obj1 5 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  5 9 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+	5 12 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+7 12 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+	7 12 su 1 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	7 8 su 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=0
+	7 1 su 3 '<span class="ansi32">Het</span>' number=sg gender=mn person=3 human=? inquote=1 prohibited=1
+	7 3 predc 3 '<span class="ansi32">een oude man</span>' number=sg gender=mn person=? human=? inquote=1 prohibited=1
+	5 12 su 6 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+	5 6 su 4 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=0
+Linked  5 6 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+	7 12 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+8 3 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=1
+	8 9 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	8 2 su 1 '<span class="ansi32">je</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=1 coargument
+	8 3 obj1 1 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=1 prohibited=1 i-within-i or &gt;
+	7 12 su 5 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=1
+	7 8 su 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=0
+	7 1 su 3 '<span class="ansi32">Het</span>' number=sg gender=mn person=3 human=? inquote=1 prohibited=0
+Linked  7 1 '<span class="ansi32">Het</span>' number=sg gender=m person=3 human=1 inquote=1
+	8 3 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=1
+9 3 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1
+	9 5 su 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=1 i-within-i or &gt;
+	9 3 obj1 1 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=1 i-within-i or &gt;
+	8 9 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=1
+	8 2 su 1 '<span class="ansi32">je</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=1 coargument
+	8 3 obj1 4 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=1 prohibited=0
+	7 12 su 5 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0 prohibited=1
+	7 8 su 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=0
+	7 1 su 4 '<span class="ansi32">Het</span>' number=sg gender=m person=3 human=1 inquote=1 prohibited=0
+	7 3 predc 4 '<span class="ansi32">een oude man</span>' number=sg gender=mn person=? human=? inquote=1 prohibited=0
+Linked  7 3 '<span class="ansi32">een oude man</span>' number=sg gender=n person=? human=0 inquote=1
+	9 3 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1
+12 13 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	12 13 su 1 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	12 1 su 2 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=0
+	12 6 obj1 1 '<span class="ansi32">Fecalo</span>' number=sg gender=n person=? human=0 inquote=1 prohibited=1
+	12 3 predc 2 '<span class="ansi32">de directeur van Fecalo</span>' number=sg gender=mf person=? human=1 inquote=1 prohibited=1
+	11 6 su 5 '<span class="ansi32">een oude man</span>' number=sg gender=m person=? human=1 inquote=0 prohibited=0
+Linked  11 6 '<span class="ansi32">een oude man</span>' number=sg gender=m person=? human=1 inquote=0
+	12 13 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+14 2 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+	14 0 su 9 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=1 coargument
+	14 2 obj2 1 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	13 2 su 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=1 coargument
+	13 3 obj2 1 '<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=0
+	12 13 su 6 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  12 13 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	14 2 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+15 8 '<span class="ansi32">zijn</span>' number=sg gender=mn person=3 human=? inquote=0
+	15 6 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=1 coargument
+	15 0 su 2 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  15 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	15 8 '<span class="ansi32">zijn</span>' number=sg gender=m person=3 human=1 inquote=0
+17 2 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+	17 0 su 9 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=1 coargument
+	17 2 obj2 1 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	16 0 su 1 '<span class="ansi32">We</span>' number=pl gender=mf person=1 human=1 inquote=0 prohibited=0
+	16 3 obj1 1 '<span class="ansi32">een borrel</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0
+	15 6 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=1
+	15 0 su 3 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  15 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	17 2 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+18 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	18 0 su 1 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	18 2 obj1 1 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=0 prohibited=0 i-within-i or &gt;
+	17 0 su 9 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=0
+	17 2 obj2 4 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  17 2 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0
+	18 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+18 2 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=0
+	18 0 su 5 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 coargument
+	18 2 obj1 1 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=0 prohibited=1 i-within-i or &gt;
+	17 0 su 9 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=0
+	17 2 obj2 5 '<span class="ansi32">hem</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1
+	16 0 su 1 '<span class="ansi32">We</span>' number=pl gender=mf person=1 human=1 inquote=0 prohibited=0
+	16 3 obj1 1 '<span class="ansi32">een borrel</span>' number=sg gender=n person=? human=0 inquote=0 prohibited=0
+Linked  16 3 '<span class="ansi32">een borrel</span>' number=sg gender=n person=? human=0 inquote=0
+	18 2 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=0
+19 11 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	19 35 su 2 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=1 i-within-i or &gt;
+	19 27 su 1 '<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=1 i-within-i or &gt;
+	19 23 su 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=0 i-within-i or &gt;
+	19 13 su 1 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0 i-within-i or &gt;
+	19 11 su 1 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	19 5 su 1 '<span class="ansi32">wij</span>' number=pl gender=mf person=1 human=1 inquote=1 prohibited=1
+	19 1 su 1 '<span class="ansi32">De kwestie</span>' number=sg gender=? person=? human=? inquote=1 prohibited=1
+	19 29 obj1 1 '<span class="ansi32">de post</span>' number=pl human=? gender=n person=? inquote=1 prohibited=1 i-within-i or &gt;
+	19 14 obj1 1 '<span class="ansi32">een slok</span>' number=sg gender=? person=? human=? inquote=0 prohibited=0 i-within-i or &gt;
+	19 36 se 2 '<span class="ansi32">zich</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=1 i-within-i or &gt;
+	19 24 obj2 1 '<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=1 i-within-i or &gt;
+	18 0 su 5 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  18 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	19 11 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+19 13 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	19 35 su 2 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=0 i-within-i or &gt;
+	19 27 su 1 '<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=0 i-within-i or &gt;
+	19 23 su 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=0 i-within-i or &gt;
+	19 13 su 1 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	19 11 su 6 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  19 11 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	19 13 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+21 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	21 0 su 1 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1 i-within-i or &gt;
+	20 7 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=0
+	20 1 su 1 '<span class="ansi32">U</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=0
+	19 35 su 2 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=0
+	19 27 su 1 '<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=0
+	19 23 su 1 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=0
+	19 13 su 7 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=0
+Linked  19 13 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	21 0 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0
+23 1 '<span class="ansi32">Dat</span>' number=sg gender=n person=3 human=0 inquote=1
+	23 1 su 1 '<span class="ansi32">Dat</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=1 i-within-i or &gt;
+	21 0 su 8 '<span class="ansi32">Hij</span>' number=sg gender=m person=3 human=1 inquote=0 prohibited=1
+	20 7 su 9 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0 prohibited=1
+	20 1 su 1 '<span class="ansi32">U</span>' number=sg gender=mf person=2 human=1 inquote=1 prohibited=0
+	19 35 su 2 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=0
+Linked  19 35 '<span class="ansi32">dat</span>' number=sg gender=n person=3 human=0 inquote=1
+	23 1 '<span class="ansi32">Dat</span>' number=sg gender=n person=3 human=0 inquote=1
+24 3 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1
+	24 8 su 1 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=0 i-within-i or &gt;
+	24 1 su 1 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=1 coargument
+	24 3 obj1 1 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=1 i-within-i or &gt;
+	23 1 su 3 '<span class="ansi32">Dat</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=0
+Linked  23 1 '<span class="ansi32">Dat</span>' number=sg gender=n person=3 human=0 inquote=1
+	24 3 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1
+24 8 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1
+	24 8 su 1 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=1 i-within-i or &gt;
+	24 1 su 1 '<span class="ansi32">Ik</span>' number=sg gender=mf person=1 human=1 inquote=1 prohibited=1
+	24 3 obj1 4 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1 prohibited=0
+Linked  24 3 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1
+	24 8 '<span class="ansi32">het</span>' number=sg gender=n person=3 human=0 inquote=1
+<span class="ansi33">pronouns in quotations</span>
+Linked  7 12 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+	7 8 '<span class="ansi32">ik</span>' number=sg gender=f person=1 human=1 inquote=1
+Linked  7 12 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+	8 2 '<span class="ansi32">je</span>' number=sg gender=f person=2 human=1 inquote=1
+Linked  7 12 '<span class="ansi32">ze</span>' number=sg gender=f person=3 human=1 inquote=0
+	9 5 '<span class="ansi32">ik</span>' number=sg gender=f person=1 human=1 inquote=1
+Linked  12 13 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	12 1 '<span class="ansi32">Ik</span>' number=sg gender=m person=1 human=1 inquote=1
+Linked  12 13 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	13 2 '<span class="ansi32">ik</span>' number=sg gender=m person=1 human=1 inquote=1
+Linked  19 11 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	19 23 '<span class="ansi32">ik</span>' number=sg gender=m person=1 human=1 inquote=1
+Linked  19 24 '<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1
+	19 27 '<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1
+Linked  20 7 '<span class="ansi32">ik</span>' number=sg gender=mf person=1 human=1 inquote=0
+	19 24 '<span class="ansi32">u</span>' number=sg gender=mf person=2 human=1 inquote=1
+Linked  19 11 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	20 1 '<span class="ansi32">U</span>' number=sg gender=m person=2 human=1 inquote=1
+Linked  19 11 '<span class="ansi32">hij</span>' number=sg gender=m person=3 human=1 inquote=0
+	24 1 '<span class="ansi32">Ik</span>' number=sg gender=m person=1 human=1 inquote=1
+</pre></div>
+
+</body></html>
