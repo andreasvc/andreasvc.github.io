@@ -221,10 +221,20 @@
 	title={Vector space explorations of literary language},
 	year={2019},
 	journal={Language Resources and Evaluation},
-	month={Feb},
-	day={09},
+	volume="53",
+	number="4",
+	pages="625--650",
 	abstract="Literary novels are said to distinguish themselves from other novels through conventions associated with literariness. We investigate the task of predicting the literariness of novels as perceived by readers, based on a large reader survey of contemporary Dutch novels. Previous research showed that ratings of literariness are predictable from texts to a substantial extent using machine learning, suggesting that it may be possible to explain the consensus among readers on which novels are literary as a consensus on the kind of writing style that characterizes literature. Although we have not yet collected human judgments to establish the influence of writing style directly (we use a survey with judgments based on the titles of novels), we can try to analyze the behavior of machine learning models on particular text fragments as a proxy for human judgments. In order to explore aspects of the texts associated with literariness, we divide the texts of the novels in chunks of 2--3 pages and create vector space representations using topic models (Latent Dirichlet Allocation) and neural document embeddings (Distributed Bag-of-Words Paragraph Vectors). We analyze the semantic complexity of the novels using distance measures, supporting the notion that literariness can be partly explained as a deviation from the norm. Furthermore, we build predictive models and identify specific keywords and stylistic markers related to literariness. While genre plays a role, we find that the greater part of factors affecting judgments of literariness are explicable in bag-of-words terms,even in short text fragments and among novels with higher literary ratings. The code and notebook used to produce the results in this paper are available at https://github.com/andreasvc/litvecspace.",
 	issn={1574-0218},
 	doi={10.1007/s10579-018-09442-4},
 	url={https://doi.org/10.1007/s10579-018-09442-4}
+}
+
+@inproceedings{vancranenburgh2019literary,
+  author={Andreas van Cranenburgh and Corina Koolen},
+  year={2019},
+  title={The Literary Pepsi Challenge: intrinsic and extrinsic factors in judging literary quality},
+  booktitle={Digital Humanities 2019: Conference Abstracts},
+  address={Utrecht, The Netherlands},
+  url={http://andreasvc.github.io/dh2019.pdf},
 }
