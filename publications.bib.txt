@@ -248,3 +248,14 @@
   pages={27--54},
   url={https://clinjournal.org/clinj/article/view/91},
 }
+
+@article{koolen2020survey,
+	author = {Corina Koolen  and  Karina van Dalen-Oskam  and  Andreas van Cranenburgh  and  Erica Nagelhout},
+	title = {Literary quality in the eye of the {Dutch} reader: The National Reader Survey},
+	journal = "Poetics",
+	year = "2020",
+	issn = "0304-422X",
+	doi = "https://doi.org/10.1016/j.poetic.2020.101439",
+	url = "http://www.sciencedirect.com/science/article/pii/S0304422X1830278X",
+	keywords = "Readers, Literary quality, Popular fiction, Bestsellers, Survey"
+}
