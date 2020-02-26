@@ -173,8 +173,7 @@
   journal={Digital Scholarship in the Humanities},
   volume={33},
   number={1},
-  pages={59--71}
-  date={1 April 2018},
+  pages={59--71},
   url={https://academic.oup.com/dsh/article/3091837},
 }
 
@@ -198,7 +197,7 @@
 
 @InProceedings{vancranenburgh2018active,
   author={van Cranenburgh, Andreas},
-  title={Active {DOP}: A constituency treebank annotation tool with online learning}
+  title={Active {DOP}: A constituency treebank annotation tool with online learning},
   year={2018},
   booktitle={Proceedings of COLING system demonstrations},
   pages={38--42},
