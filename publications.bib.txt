@@ -258,3 +258,31 @@
 	url = "http://www.sciencedirect.com/science/article/pii/S0304422X1830278X",
 	keywords = "Readers, Literary quality, Popular fiction, Bestsellers, Survey"
 }
+
+@inproceedings{tulkens2020embarrassingly,
+    title = {Embarrassingly Simple Unsupervised Aspect Extraction},
+    author = {Tulkens, St{\'e}phan  and  van Cranenburgh, Andreas},
+    booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
+    year = "2020",
+    url = "https://www.aclweb.org/anthology/2020.acl-main.290",
+    doi = "10.18653/v1/2020.acl-main.290",
+    pages = "3182--3187",
+}
+
+@misc{devries2020bertje,
+	title = {{BERTje}: {A} {Dutch} {BERT} {Model}},
+	author = {Vries, Wietse de and van Cranenburgh, Andreas and Bisazza, Arianna and Caselli, Tommaso and Noord, Gertjan van and Nissim, Malvina},
+	year = {2019},
+	url = {http://arxiv.org/abs/1912.09582},
+	howpublished = {arXiv:1912.09582},
+	month = dec,
+}
+
+@inproceedings{devries2020bertjelayers,
+	title = {What's so special about {BERT}'s layers? {A} closer look at the {NLP} pipeline in monolingual and multilingual models},
+	author = {de Vries, Wietse and van Cranenburgh, Andreas and Nissim, Malvina},
+	year = {2020},
+	booktitle={Findings of EMNLP},
+	url = {http://arxiv.org/abs/2004.06499},
+	month = apr,
+}
