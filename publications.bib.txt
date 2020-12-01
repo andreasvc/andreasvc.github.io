@@ -271,18 +271,36 @@
 
 @misc{devries2020bertje,
 	title = {{BERTje}: {A} {Dutch} {BERT} {Model}},
-	author = {Vries, Wietse de and van Cranenburgh, Andreas and Bisazza, Arianna and Caselli, Tommaso and Noord, Gertjan van and Nissim, Malvina},
+	author = {de Vries, Wietse and van Cranenburgh, Andreas and Bisazza, Arianna and Caselli, Tommaso and Noord, Gertjan van and Nissim, Malvina},
 	year = {2019},
 	url = {http://arxiv.org/abs/1912.09582},
 	howpublished = {arXiv:1912.09582},
 	month = dec,
 }
 
-@inproceedings{devries2020bertjelayers,
+@inproceedings{devries2020bertlayers,
 	title = {What's so special about {BERT}'s layers? {A} closer look at the {NLP} pipeline in monolingual and multilingual models},
-	author = {de Vries, Wietse and van Cranenburgh, Andreas and Nissim, Malvina},
+	author = {de Vries, Wietse  and  van Cranenburgh, Andreas  and  Nissim, Malvina},
 	year = {2020},
-	booktitle={Findings of EMNLP},
-	url = {http://arxiv.org/abs/2004.06499},
-	month = apr,
+	booktitle = {Findings of EMNLP},
+	pages = {4339--4350},
+	url = {https://www.aclweb.org/anthology/2020.findings-emnlp.389},
+}
+
+@inproceedings{vancranenburgh2020blind,
+    title = {Results of a Single Blind Literary Taste Test with Short Anonymized Novel Fragments},
+    author = {van Cranenburgh, Andreas  and  Koolen, Corina},
+    year = {2020},
+    booktitle = {Proceedings of LaTeCH-CLfL},
+    pages = {121--126},
+    url = {https://www.aclweb.org/anthology/2020.latechclfl-1.14},
+}
+
+@inproceedings{poot2020benchmark,
+    title = {A Benchmark of Rule-Based and Neural Coreference Resolution in {Dutch} Novels and News},
+    author = {Poot, Corb{\`e}n  and  van Cranenburgh, Andreas},
+    year = "2020",
+    booktitle = {Proceedings of CRAC},
+    pages = {79--90},
+    url = {https://www.aclweb.org/anthology/2020.crac-1.9},
 }
