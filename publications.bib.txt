@@ -304,3 +304,15 @@
     pages = {79--90},
     url = {https://www.aclweb.org/anthology/2020.crac-1.9},
 }
+
+@article{luoto2021dataset,
+	title = {Psycholinguistic dataset on language use in 1145 novels published in {English} and {Dutch}},
+	author = {Luoto, Severi  and  van Cranenburgh, Andreas},
+	year = {2021},
+	journal = {Data in Brief},
+	volume = {34},
+	pages = {106655},
+	issn = {2352-3409},
+	url = {https://doi.org/10.1016/j.dib.2020.106655},
+	keywords = {Stylometry, Literature, LIWC, Psycholinguistics, Corpus linguistics, Digital humanities, Sex, Sexual orientation},
+}
