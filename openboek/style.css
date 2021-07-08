@@ -1,0 +1,87 @@
+@font-face {
+    font-family: 'gothic';
+    src: url('Franklin Gothic Medium Regular.ttf') format('truetype');;
+}
+
+html body{
+	font-family: 'gothic';
+	scroll-behavior: smooth;
+}
+body {
+    overflow-x: hidden;
+}
+#scroll{
+	width: 40px;
+	height: 40px;
+	position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: pulsate 2s infinite;
+    border-radius: 999px;
+    padding: 10px;
+}
+
+#scrolldown{
+	width: 30px;
+    height: 30px;
+    margin-left: -5px;
+    margin-top: -7px;
+}
+.row{
+    min-height: 500px;
+}
+@-webkit-keyframes pulsate {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(220,0,45, 0.4);
+    }
+    70% {
+        -webkit-box-shadow: 0 0 0 20px rgba(220,0,45, 0);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(220,0,45, 0);
+    }
+}
+
+@keyframes pulsate {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgba(220,0,45, 0.4);
+        box-shadow: 0 0 0 0 rgba(220,0,45, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 20px rgba(220,0,45, 0);
+        box-shadow: 0 0 0 20px rgba(220,0,45, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(220,0,45, 0);
+        box-shadow: 0 0 0 0 rgba(220,0,45, 0);
+    }
+}
+
+h1{
+	font-size: bold;
+}
+.first-row h2{
+	color: #DC002D;
+}
+img{
+	max-width: 100%;
+}
+.col-md-6, .col-sm-12, .col{
+	align-self: center;
+}
+.container .row{
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+
+.first-row{
+	height: 100vh;
+	text-align: center;
+}
+@media screen and (max-width: 576px) {
+    button{
+        margin: 0 auto !important;
+        display: table !important;
+    }
+}
