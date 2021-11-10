@@ -220,9 +220,9 @@
   title={Vector space explorations of literary language},
   year={2019},
   journal={Language Resources and Evaluation},
-  volume="53",
-  number="4",
-  pages="625--650",
+  volume={53},
+  number={4},
+  pages={625--650},
   abstract="Literary novels are said to distinguish themselves from other novels through conventions associated with literariness. We investigate the task of predicting the literariness of novels as perceived by readers, based on a large reader survey of contemporary Dutch novels. Previous research showed that ratings of literariness are predictable from texts to a substantial extent using machine learning, suggesting that it may be possible to explain the consensus among readers on which novels are literary as a consensus on the kind of writing style that characterizes literature. Although we have not yet collected human judgments to establish the influence of writing style directly (we use a survey with judgments based on the titles of novels), we can try to analyze the behavior of machine learning models on particular text fragments as a proxy for human judgments. In order to explore aspects of the texts associated with literariness, we divide the texts of the novels in chunks of 2--3 pages and create vector space representations using topic models (Latent Dirichlet Allocation) and neural document embeddings (Distributed Bag-of-Words Paragraph Vectors). We analyze the semantic complexity of the novels using distance measures, supporting the notion that literariness can be partly explained as a deviation from the norm. Furthermore, we build predictive models and identify specific keywords and stylistic markers related to literariness. While genre plays a role, we find that the greater part of factors affecting judgments of literariness are explicable in bag-of-words terms,even in short text fragments and among novels with higher literary ratings. The code and notebook used to produce the results in this paper are available at https://github.com/andreasvc/litvecspace.",
   issn={1574-0218},
   doi={10.1007/s10579-018-09442-4},
@@ -251,11 +251,11 @@
 @article{koolen2020survey,
 	author = {Corina Koolen  and  Karina van Dalen-Oskam  and  Andreas van Cranenburgh  and  Erica Nagelhout},
 	title = {Literary quality in the eye of the {Dutch} reader: The National Reader Survey},
-	journal = "Poetics",
-	year = "2020",
-	issn = "0304-422X",
-	doi = "https://doi.org/10.1016/j.poetic.2020.101439",
-	url = "http://www.sciencedirect.com/science/article/pii/S0304422X1830278X",
+	journal = {Poetics},
+	year = {2020},
+	issn = {0304-422X},
+	doi = {https://doi.org/10.1016/j.poetic.2020.101439},
+	url = {http://www.sciencedirect.com/science/article/pii/S0304422X1830278X},
 	keywords = "Readers, Literary quality, Popular fiction, Bestsellers, Survey"
 }
 
@@ -263,10 +263,10 @@
     title = {Embarrassingly Simple Unsupervised Aspect Extraction},
     author = {Tulkens, St{\'e}phan  and  van Cranenburgh, Andreas},
     booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
-    year = "2020",
-    url = "https://www.aclweb.org/anthology/2020.acl-main.290",
-    doi = "10.18653/v1/2020.acl-main.290",
-    pages = "3182--3187",
+    year = {2020},
+    url = {https://www.aclweb.org/anthology/2020.acl-main.290},
+    doi = {10.18653/v1/2020.acl-main.290},
+    pages = {3182--3187},
 }
 
 @misc{devries2020bertje,
@@ -299,7 +299,7 @@
 @inproceedings{poot2020benchmark,
     title = {A Benchmark of Rule-Based and Neural Coreference Resolution in {Dutch} Novels and News},
     author = {Poot, Corb{\`e}n  and  van Cranenburgh, Andreas},
-    year = "2020",
+    year = {2020},
     booktitle = {Proceedings of CRAC},
     pages = {79--90},
     url = {https://www.aclweb.org/anthology/2020.crac-1.9},
@@ -315,4 +315,26 @@
 	issn = {2352-3409},
 	url = {https://doi.org/10.1016/j.dib.2020.106655},
 	keywords = {Stylometry, Literature, LIWC, Psycholinguistics, Corpus linguistics, Digital humanities, Sex, Sexual orientation},
+}
+
+@inproceedings{van-cranenburgh-ketzan-2021-stylometric,
+    title = {Stylometric Literariness Classification: the Case of {Stephen King}},
+    author = {van Cranenburgh, Andreas  and
+      Ketzan, Erik},
+    booktitle = {Proceedings of LaTeCH-CLfL},
+    year = {2021},
+    url = {https://aclanthology.org/2021.latechclfl-1.21},
+    pages = {189--197},
+}
+
+@inproceedings{van-cranenburgh-etal-2021-hybrid,
+    title = {A Hybrid Rule-Based and Neural Coreference Resolution System with an Evaluation on {D}utch Literature},
+    author = {van Cranenburgh, Andreas  and
+      Ploeger, Esther  and
+      van den Berg, Frank  and
+      Th{\"u}ss, Remi},
+    booktitle = {Proceedings of CRAC},
+    year = {2021},
+    url = {https://aclanthology.org/2021.crac-1.5},
+    pages = {47--56},
 }
