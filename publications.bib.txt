@@ -253,9 +253,9 @@
 	title = {Literary quality in the eye of the {Dutch} reader: The National Reader Survey},
 	journal = {Poetics},
 	year = {2020},
+    volume = {79},
 	issn = {0304-422X},
-	doi = {https://doi.org/10.1016/j.poetic.2020.101439},
-	url = {http://www.sciencedirect.com/science/article/pii/S0304422X1830278X},
+	url = {https://doi.org/10.1016/j.poetic.2020.101439},
 	keywords = "Readers, Literary quality, Popular fiction, Bestsellers, Survey"
 }
 
@@ -317,7 +317,7 @@
 	keywords = {Stylometry, Literature, LIWC, Psycholinguistics, Corpus linguistics, Digital humanities, Sex, Sexual orientation},
 }
 
-@inproceedings{van-cranenburgh-ketzan-2021-stylometric,
+@inproceedings{vancranenburgh2021stylometric,
     title = {Stylometric Literariness Classification: the Case of {Stephen King}},
     author = {van Cranenburgh, Andreas  and
       Ketzan, Erik},
@@ -327,7 +327,7 @@
     pages = {189--197},
 }
 
-@inproceedings{van-cranenburgh-etal-2021-hybrid,
+@inproceedings{vancranenburgh2021hybrid,
     title = {A Hybrid Rule-Based and Neural Coreference Resolution System with an Evaluation on {D}utch Literature},
     author = {van Cranenburgh, Andreas  and
       Ploeger, Esther  and
@@ -337,4 +337,16 @@
     year = {2021},
     url = {https://aclanthology.org/2021.crac-1.5},
     pages = {47--56},
+}
+
+@article{vancranenburgh2022openboek,
+    author={van Cranenburgh, Andreas  and  van Noord, Gertjan},
+    year={2022},
+	title={OpenBoek: A Corpus of Literary Coreference and Entities with an Exploration of Historical Spelling Normalization},
+    journal={Computational Linguistics in the Netherlands Journal},
+    volume={12},
+    month={Dec.},
+    pages={235–251},
+    url={https://clinjournal.org/clinj/article/view/157},
+	abstract="We present OpenBoek: a corpus of 103k tokens of classic Dutch novels with annotated coreference and entities. The corpus has several properties that are challenging for current coreference models: long documents (fragments of 10k+ words each), domain-specific literary phenomena, and 19th century Dutch spelling. Spelling normalization is added to the corpus as an additional annotation layer, using a data-driven rule-based spelling normalization tool. Normalizations are added using meta-annotation, such that evaluation can be performed with annotations on the original texts without losing token alignment. This tool enables the application of parsing and coreference systems originally developed for modern Dutch. We evaluate parsing and coreference systems on the OpenBoek dataset and find that spelling normalization gives a substantial increase in performance. The OpenBoek corpus is available under an open license at https://andreasvc.github.io/openboek/ ",
 }
