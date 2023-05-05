@@ -350,3 +350,14 @@
     url={https://clinjournal.org/clinj/article/view/157},
 	abstract="We present OpenBoek: a corpus of 103k tokens of classic Dutch novels with annotated coreference and entities. The corpus has several properties that are challenging for current coreference models: long documents (fragments of 10k+ words each), domain-specific literary phenomena, and 19th century Dutch spelling. Spelling normalization is added to the corpus as an additional annotation layer, using a data-driven rule-based spelling normalization tool. Normalizations are added using meta-annotation, such that evaluation can be performed with annotations on the original texts without losing token alignment. This tool enables the application of parsing and coreference systems originally developed for modern Dutch. We evaluate parsing and coreference systems on the OpenBoek dataset and find that spelling normalization gives a substantial increase in performance. The OpenBoek corpus is available under an open license at https://andreasvc.github.io/openboek/ ",
 }
+
+@inproceedings{vancranenburgh2023qa,
+    title={Direct Speech Quote Attribution for {D}utch Literature},
+    author={van Cranenburgh, Andreas  and  van den Berg, Frank},
+    booktitle={Proceedings of LaTeCH-CLfL},
+    year={2023},
+    url={https://aclanthology.org/2023.latechclfl-1.6},
+    pages={45--62},
+    abstract="We present a dataset and system for quote attribution in Dutch literature. The system is implemented as a neural module in an existing NLP pipeline for Dutch literature (dutchcoref; van Cranenburgh, 2019). Our contributions are as follows. First, we provide guidelines for Dutch quote attribution and annotate 3,056 quotes in fragments of 42 Dutch literary novels, both contemporary and classic. Second, we present three neural quote attribution classifiers, optimizing for precision, recall, and F1. Third, we perform an evaluation and analysis of quote attribution performance, showing that in particular, quotes with an implicit speaker are challenging, and that such quotes are prevalent in contemporary fiction (57{\%}, compared to 32{\%} for classic novels). On the task of quote attribution, we achieve an improvement over the rule-based baseline of 8.0{\%} F1 points on contemporary fiction and 1.9{\%} F1 points on classic novels. Code, data, and models are available at https://github.com/frenkvdberg/dutchqa",
+}
+
