@@ -361,3 +361,33 @@
     abstract="We present a dataset and system for quote attribution in Dutch literature. The system is implemented as a neural module in an existing NLP pipeline for Dutch literature (dutchcoref; van Cranenburgh, 2019). Our contributions are as follows. First, we provide guidelines for Dutch quote attribution and annotate 3,056 quotes in fragments of 42 Dutch literary novels, both contemporary and classic. Second, we present three neural quote attribution classifiers, optimizing for precision, recall, and F1. Third, we perform an evaluation and analysis of quote attribution performance, showing that in particular, quotes with an implicit speaker are challenging, and that such quotes are prevalent in contemporary fiction (57{\%}, compared to 32{\%} for classic novels). On the task of quote attribution, we achieve an improvement over the rule-based baseline of 8.0{\%} F1 points on contemporary fiction and 1.9{\%} F1 points on classic novels. Code, data, and models are available at https://github.com/frenkvdberg/dutchqa",
 }
 
+@article{visser2023distant,
+	author={Visser Solissa, Noa  and  van Cranenburgh, Andreas},
+	year={2023},
+    title={A Distant Reading of Gender Bias in Dutch Literary Prizes},
+	journal={Digital Humanities Benelux journal},
+	volume={5},
+    url={https://journal.dhbenelux.org/wp-content/uploads/2023/09/DH_Benelux_Journal_Volume_5_3_Visser.pdf}
+}
+
+@inproceedings{zundert2023character,
+	author={van Zundert, Joris
+		and  van Cranenburgh, Andreas
+		and  Roel Smeets},
+	year={2023},
+    title={Putting Dutchcoref to the Test: Character Detection and Gender Dynamics in Contemporary Dutch Novels},
+    booktitle={Computational Humanities Research conference},
+	pages={757--771},
+    url={https://ceur-ws.org/Vol-3558/paper9264.pdf}
+}
+
+@InCollection{toral2024literary,
+	author={Antonio Toral and  Andreas van Cranenburgh and Tia Nutters},
+	year={2024},
+    title={Literary-adapted machine translation in a well-resourced language pair: Explorations with More Data and Wider Contexts},
+    booktitle={Computer-Assisted Literary Translation, edited By Andrew Rothwell, Andy Way, Roy Youdale. Routledge},
+	chapter={1},
+	editor={Andrew Rothwell  and  Andy Way  and  Roy Youdale},
+	publisher={Routledge},
+	url={https://www.routledge.com/Computer-Assisted-Literary-Translation/Rothwell-Way-Youdale/p/book/9781032413006}
+}
