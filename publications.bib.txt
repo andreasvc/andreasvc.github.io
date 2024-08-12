@@ -405,6 +405,22 @@
 	url={https://clinjournal.org/clinj/article/view/178}
 }
 
+@inproceedings{tsiwah2024semantic,
+    author = {Tsiwah, Frank
+		and Mayya, Anas
+		and van Cranenburgh, Andreas},
+    year = "2024",
+    title = {Semantic-based {NLP} techniques discriminate schizophrenia and {W}ernicke's aphasia based on spontaneous speech},
+    booktitle = "Proceedings of the Fifth Workshop on Resources and ProcessIng of linguistic, para-linguistic and extra-linguistic Data from people with various forms of cognitive/psychiatric/developmental impairments @LREC-COLING 2024",
+    pages = "1--8",
+    editor = "Kokkinakis, Dimitrios  and
+      Fraser, Kathleen C.  and
+      Themistocleous, Charalambos K.  and
+      Fors, Kristina Lundholm  and
+      Tsanas, Athanasios  and
+      Ohman, Fredrik",
+    url = "https://aclanthology.org/2024.rapid-1.1",
+}
 
 @inbook{vancranenburgh2024strongweak,
 	author={van Cranenburgh, Andreas},
