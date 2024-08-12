@@ -382,7 +382,9 @@
 }
 
 @InCollection{toral2024literary,
-	author={Antonio Toral and  Andreas van Cranenburgh and Tia Nutters},
+	author={Toral, Antonio
+		and  van Cranenburgh, Andreas
+		and  Nutters, Tia},
 	year={2024},
     title={Literary-adapted machine translation in a well-resourced language pair: Explorations with More Data and Wider Contexts},
     booktitle={Computer-Assisted Literary Translation, edited By Andrew Rothwell, Andy Way, Roy Youdale. Routledge},
@@ -390,4 +392,27 @@
 	editor={Andrew Rothwell  and  Andy Way  and  Roy Youdale},
 	publisher={Routledge},
 	url={https://www.routledge.com/Computer-Assisted-Literary-Translation/Rothwell-Way-Youdale/p/book/9781032413006}
+}
+
+@article{wolters2024spelling,
+	author={Andre Wolters
+		and  van Cranenburgh, Andreas},
+	year={2024},
+	title={Historical Dutch Spelling Normalization with Pretrained Language Models},
+	journal={Computational Linguistics in the Netherlands Journal},
+	volume={13},
+	pages={147--171},
+	url={https://clinjournal.org/clinj/article/view/178}
+}
+
+
+@inbook{vancranenburgh2024strongweak,
+	author={van Cranenburgh, Andreas},
+	title={Dutch Strong and Weak Pronouns as a Stylistic Marker of Literariness},
+	year={2024},
+	booktitle={Digital Stylistics in Romance Studies and Beyond},
+	pages={217--234},
+	editor={Hesselbach, Robert and Calvo Tello, Jos\'e and Henny-Krahmer, Ulrike and Sch\"och, Christof and Schl\"or, Daniel},
+	publisher={Heidelberg University Publishing},
+	url={https://doi.org/10.17885/heiup.1157.c19373}
 }
