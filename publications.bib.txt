@@ -432,3 +432,20 @@
 	publisher={Heidelberg University Publishing},
 	url={https://doi.org/10.17885/heiup.1157.c19373}
 }
+
+@inbook{vancranenburgh2024genres,
+	author={van Cranenburgh, Andreas
+		and Allen, Laura
+		and Sharoff, Serge
+		and van Dalen-Oskam, Karina},
+	year={2024},
+	title={Computational methods for the analysis of fiction genres},
+	booktitle={Multidisciplinary Views on Discourse Genre},
+	editor={Ninke Stukker
+		and John A. Bateman
+		and Danielle McNamara
+		and Wilbert Spooren},
+	publisher={Routledge},
+	pages={135--167},
+	url={https://doi.org/10.4324/9781003335603-6}
+}
