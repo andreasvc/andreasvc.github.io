@@ -449,3 +449,15 @@
 	pages={135--167},
 	url={https://doi.org/10.4324/9781003335603-6}
 }
+
+@article{agapitos2024seneca,
+	author={Agapitos, Paschalis
+		and van Cranenburgh, Andreas},
+	year={2024},
+	title={A Stylometric Analysis of Seneca's disputed plays: Authorship Verification of Octavia and Hercules Oetaeus},
+	journal={Journal of Computational Literary Studies},
+	volume={3},
+	issue={1},
+	pages={1--32},
+	url={https://doi.org/10.48694/jcls.3919}
+}
