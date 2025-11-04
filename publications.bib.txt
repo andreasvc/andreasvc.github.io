@@ -387,7 +387,7 @@
 		and  Nutters, Tia},
 	year={2024},
     title={Literary-adapted machine translation in a well-resourced language pair: Explorations with More Data and Wider Contexts},
-    booktitle={Computer-Assisted Literary Translation, edited By Andrew Rothwell, Andy Way, Roy Youdale. Routledge},
+    booktitle={Computer-Assisted Literary Translation},
 	chapter={1},
 	editor={Andrew Rothwell  and  Andy Way  and  Roy Youdale},
 	publisher={Routledge},
