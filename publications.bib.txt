@@ -461,3 +461,19 @@
 	pages={1--32},
 	url={https://doi.org/10.48694/jcls.3919}
 }
+
+@article{visser2026lto,
+	author={Visser Solissa, Noa
+		and  Paul Sheridan
+		and  Mikael Onsj\"o
+		and  van Cranenburgh, Andreas
+		and  Federico Pianzola},
+	year={2026},
+	title={A Classification Benchmark Based on the Literary Theme Ontology},
+	journal={Journal of Open Humanities Data},
+	volume={12},
+	issue={31},
+	pages={1--16},
+	url={https://doi.org/10.5334/johd.480}
+}
+
