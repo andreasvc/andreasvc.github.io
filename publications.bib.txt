@@ -462,6 +462,16 @@
 	url={https://doi.org/10.48694/jcls.3919}
 }
 
+@article{visser2025event,
+	author={Visser Solissa, Noa  and  van Cranenburgh, Andreas  and  Pianzola, Federico},
+	year={2025}
+	title={Event Detection between Literary Studies and NLP: A Survey, a Narratological Reflection, and a Case Study},
+	journal={Journal of Computational Literary Studies},
+	volume={4},
+	issue={1},
+	url={https://doi.org/10.48694/jcls.4215},
+}
+
 @article{visser2026lto,
 	author={Visser Solissa, Noa
 		and  Paul Sheridan
