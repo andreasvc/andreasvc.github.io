@@ -487,3 +487,22 @@
 	url={https://doi.org/10.5334/johd.480}
 }
 
+@inproceedings{mahadeshwar2026rag,
+  author={Mahadeshwar, Ruhi and Cranenburgh, Andreas van and Caselli, Tommaso and Nissim, Malvina},
+  year={2026},
+  title={Evaluating the Impact of Source Diversity for RAG in Historical Research},
+  booktitle={Proceedings of LREC},
+  pages={716--734},
+  url={https://doi.org/10.63317/4yz9z3uvzasd},
+}
+
+@article{vanderzande2026ssd
+	author={Perry {van der Zande} and Andreas {van Cranenburgh} and Frank Tsiwah},
+	year={2026},
+	title={From thought to language: Comparing schizophrenia spectrum disorders and Wernicke's aphasia with machine learning and {LLMs}},
+	journal={Schizophrenia Research: Cognition},
+	volume={45},
+	pages={100443},
+	issn={2215-0013},
+	url={https://doi.org/10.1016/j.scog.2026.100443},
+}
