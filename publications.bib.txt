@@ -464,7 +464,7 @@
 
 @article{visser2025event,
 	author={Visser Solissa, Noa  and  van Cranenburgh, Andreas  and  Pianzola, Federico},
-	year={2025}
+	year={2025},
 	title={Event Detection between Literary Studies and NLP: A Survey, a Narratological Reflection, and a Case Study},
 	journal={Journal of Computational Literary Studies},
 	volume={4},
@@ -496,7 +496,7 @@
   url={https://doi.org/10.63317/4yz9z3uvzasd},
 }
 
-@article{vanderzande2026ssd
+@article{vanderzande2026ssd,
 	author={Perry {van der Zande} and Andreas {van Cranenburgh} and Frank Tsiwah},
 	year={2026},
 	title={From thought to language: Comparing schizophrenia spectrum disorders and Wernicke's aphasia with machine learning and {LLMs}},
