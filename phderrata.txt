@@ -35,3 +35,15 @@ Corrections:
 
 
 Duesseldorf, November 18, 2016
+
+
+Version 1.1.1
+-------------
+Updated PDF at http://andreasvc.github.io/phdthesis_v1.1.pdf
+
+Corrections:
+- p. 114: "and more direct speech" -> "and less direct speech"
+- p. 102: citation "Berenike Herrmann et al., 2015" corrected to "Herrmann et al., 2015".
+
+Groningen, July 16, 2026
+
