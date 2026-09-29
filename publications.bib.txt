@@ -508,7 +508,7 @@
 }
 
 @inproceedings{vancranenburgh2026golemcoref,
-    author = "Van Cranenburgh, Andreas  and
+    author = "van Cranenburgh, Andreas  and
       Yang, Xiaoyan  and
       Alvanita  and
       Di Domenico, Cecilia Nicole  and
